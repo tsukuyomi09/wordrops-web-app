@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="page-wrapper h-screen flex items-center justify-center bg-cover " style="background-image: url('bg-image.jpg'); height: 100vh;">
+        <div class="wrapper flex-col bg-gray-100  p-8  rounded-lg">
+            <h2 class="mb-4 text-xl font-bold border-amber-600	" style="color: rgb(120 53 15);">Create Account</h2>
+            <form id="registrationForm" class="flex-col mb-16">
+
+                <input id="regUserName" class="p-2 rounded-lg mb-4 border border-solid" style="border-color: rgb(120 53 15);" type="text" id="regUserName" placeholder="Username" required>
+                <br>
+                <input id="regEmail" class="p-2 rounded-lg mb-4 border border-solid" style="border-color: rgb(120 53 15);" type="email"placeholder="Email" required>
+                <br>
+                <input id="regPassword" class="p-2 rounded-lg mb-4 border border-solid" style="border-color: rgb(120 53 15);" type="password"placeholder="Password" autocomplete="new-password" required>
+                <br>
+                <button class="p-2 border-2 text-white rounded-lg" style="background-color: rgb(120 53 15);" type="submit">SIGN UP</button>
+
+            </form>
+            <h2 class="mb-4 text-xl font-bold" style="color: rgb(120 53 15);">Login</h2>
+            <form  id="loginForm" class="flex-col" autocomplete="off">
+
+                <input id="loginUserName" class="p-2 rounded-lg mb-4 border border-solid" style="border-color: rgb(120 53 15);" type="text"  placeholder="Username" required>
+                <br>
+                <input id="loginPassword" class="p-2 rounded-lg mb-4 border border-solid" style="border-color: rgb(120 53 15);" type="password" placeholder="Password" autocomplete="new-password" required>
+                <br>
+                <button class="p-2 border-2 text-white bg-orange-800 rounded-lg" style="background-color: rgb(120 53 15);" type="submit">SIGN IN</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="./login.js"></script>
+</body>
+</html>
