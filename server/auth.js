@@ -49,7 +49,6 @@ const login = (req, res) => {
 
     
     req.on("end", () => {
-        console.log(`body: ${body}`);
         const {loginUserName, loginPassword} = JSON.parse(body);
 
         if (!loginUserName || !loginPassword){
@@ -61,18 +60,21 @@ const login = (req, res) => {
             .then(result => {
  
                 if (result.rows.length > 0 && result.rows[0].password === loginPassword) {
-                    user_id = result.rows[0].user_id
-                    const sessionId = createSession(user_id)
-                    console.log(`Nuovo Login: ${loginUserName}`);
-                    res.writeHead(200, { 
-                        "Content-Type": "application/json",
-                        "Set-Cookie": `sessionId=${sessionId}; HttpOnly; Max-Age=3600;`
-                    });
-                    res.end(JSON.stringify({ message: "You are now logged in", redirectUrl: "/public/main.html", user_id}));                
+                    return createSession(result.rows[0].user_id)
                 } else {
-                    res.writeHead(401, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ message: "Credenziali errate" }));
+                    res.writeHead(401, {"Content-Type": "application/json"});
+                    return res.end("Invalid Credentials")
                 }
+            })
+
+            .then(sessionId => {
+                console.log(`Nuovo Login: ${loginUserName}`);
+                console.log(`sessionId: ${sessionId}`);
+                res.writeHead(200, { 
+                    "Content-Type": "application/json",
+                    "Set-Cookie": `sessionId=${sessionId}; HttpOnly; Max-Age=3600;`
+                });
+                res.end(JSON.stringify({ message: "You are now logged in", redirectUrl: "/public/main.html"})); 
             })
             .catch(err => {
                 // Gestione degli errori nel caso di fallimento della query
