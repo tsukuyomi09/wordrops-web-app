@@ -46,7 +46,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             headers: {
                 "Content-type": "application/json"
             },
-            credentials: "include",
+            credentials: 'include',
             body: JSON.stringify({loginUserName, loginPassword})
         });
 
@@ -55,8 +55,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             alert(data.message);
             document.getElementById('loginForm').reset();
             console.log(data.redirectUrl)
-            if (data.redirectUrl && data.user_id) {
-                sessionStorage.setItem('user_id', data.user_id);
+            if (data.redirectUrl) {
                 setTimeout(() => {
                     window.location.href = data.redirectUrl;
                 }, 1000);

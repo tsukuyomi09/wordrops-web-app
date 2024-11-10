@@ -1,13 +1,14 @@
 const { client } = require("./database");
 
-const createItem = (req, res) => {
+const createItem = (req, res,) => {
     let body = "";
     req.on("data", chunk => {
         body += chunk.toString();
     });
     req.on("end", () => {
+        const user_id = req.user_id
+
         const item = JSON.parse(body).item;
-        const user_id = req.headers['authorization']?.split(' ')[1];
 
         if (!user_id) {
             res.writeHead(400); // 400 Bad Request
@@ -28,24 +29,13 @@ const createItem = (req, res) => {
     });
 };
 
-const getItems = (req, res) => {
-    const user_id = req.headers['authorization']?.split(' ')[1];
-    if (!user_id) {
-        res.writeHead(400); // 400 Bad Request
-        res.end("ID utente mancante nel header Authorization");
-        return;
-    }
-
-    const query = "SELECT * FROM items WHERE user_id_ref = $1";
-    client.query(query, [user_id])
-        .then(result => {
-            if (result.rows.length === 0) {
-                res.writeHead(404, { "Content-Type": "application/json" }); // 404 Not Found
-                res.end(JSON.stringify({ message: "Nessun oggetto trovato per questo utente" }));
-            } else {
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(result.rows)); // Restituisce gli oggetti trovati
-            }
+const getItems = (req, res,) => {
+    const user_id = req.user_id
+    const itemsQuery = "SELECT * FROM items WHERE user_id_ref = $1";
+    client.query(itemsQuery, [user_id])
+        .then(itemResult => {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(itemResult.rows)); // Restituisce gli oggetti trovati
         })
         .catch(err => {
             console.error("Errore durante il recupero:", err);
@@ -55,15 +45,8 @@ const getItems = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-    const itemId = req.url.split("/")[2];
-    const user_id = req.headers['authorization']?.split(' ')[1];
-
-    if (!user_id) {
-        res.writeHead(400); // 400 Bad Request
-        res.end("ID utente mancante nel header Authorization");
-        return;
-    }
-    
+    const user_id = req.user_id
+    const itemId = req.url.split('/').pop();
     const query = "DELETE FROM items WHERE id = $1 and user_id_ref = $2 RETURNING *";
     client.query(query, [itemId, user_id])
         .then(result => {

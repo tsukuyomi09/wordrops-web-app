@@ -1,28 +1,17 @@
+
+
 const formInput = document.getElementById("p-input");
 const contentWrapper = document.getElementById("content-wrapper");
 const newItemContainer = document.querySelector(".new-item-container");
-let user_id = null;
-
-window.addEventListener("DOMContentLoaded", function () {
-    user_id = sessionStorage.getItem("user_id"); 
-    console.log(`addEventListener: ${user_id}`)
-    if (user_id) {
-        document.getElementById("pagewrap").classList.remove("hidden");
-        fetchItems()
-    } else {
-        window.location.href = "./register.html"; 
-        return // Reindirizza se non autenticato
-    }
-});
-
 
 function fetchItems() {
     fetch("http://127.0.0.1:3000/items",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${user_id}`  // Aggiungi l'ID come header Authorization
-        }
+             // Aggiungi l'ID come header Authorization
+        },
+        credentials: "include"
         
     })
     .then(response => {
@@ -36,6 +25,7 @@ function fetchItems() {
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
+        console.log("Response status:", error.response ? error.response.status : "nessuna risposta");
     });
 }
 
@@ -75,9 +65,8 @@ function submitText(event){
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${user_id}`  // Aggiungi l'ID come header Authorization
         },
-        // credentials: 'include',
+        credentials: 'include',
         body: JSON.stringify({ item: newItemValue }),
     })
     .then(response => {
@@ -87,7 +76,6 @@ function submitText(event){
         return response.json();
     })
     .then(data => {
-        console.log("Elemento aggiunto:", data);
         formInput.value = ""
         fetchItems()
 
@@ -109,7 +97,6 @@ function removeItem(event){
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${user_id}`  // Aggiungi l'ID come header Authorization
         },
         credentials: 'include'
     })
@@ -130,5 +117,6 @@ function removeItem(event){
 
 }
 
+fetchItems();
 
 
