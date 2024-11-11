@@ -1,7 +1,8 @@
 const http = require("http");
 const PORT = 3000;
 const { connectDB } = require("./database");
-const authRoutes = require("./auth");
+const getRoutes = require("./register");
+const logRoutes = require("./login");
 const itemRoutes = require("./items");
 const checkSession = require("./checksession")
 const allowedOrigin = "http://127.0.0.1:5500";
@@ -25,9 +26,9 @@ const server = http.createServer((req, res) => {
 
     // Rotte che non richiedono autenticazione
     if (req.method === "POST" && req.url === "/login") {
-        authRoutes.login(req, res);
+        logRoutes.login(req, res);
     } else if (req.method === "POST" && req.url === "/register") {
-        authRoutes.register(req, res);
+        getRoutes.register(req, res);
     } else if (req.method === "GET" && req.url === "/verifyuser") {
         // Verifica la sessione per questa richiesta GET
         checkSession(req, res, () => {
