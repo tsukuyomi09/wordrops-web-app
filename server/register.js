@@ -1,5 +1,5 @@
 const { client } = require("./database");
-const { createSession } = require("./sessions")
+const { sendWelcomeEmail } = require("./email-service");
 const argon2 = require('argon2');
 
 const register = async (req, res) => {
@@ -25,9 +25,9 @@ const register = async (req, res) => {
 
         try {
             hashedPassword = await argon2.hash(userPassword, {
-                type: argon2.argon2id,      // Tipo di hashing Argon2id
-                memoryCost: 19456,          // Memoria utilizzata in KiB (19 MiB)
-                timeCost: 2,                // Numero di iterazioni
+                type: argon2.argon2id,    
+                memoryCost: 19456,        
+                timeCost: 2,         
                 parallelism: 1 
             });
         } catch (err) {
@@ -40,8 +40,8 @@ const register = async (req, res) => {
         try {
             const query = "INSERT INTO users (email, password, username) VALUES ($1, $2, $3) RETURNING *";
             const result = await client.query(query, [userEmail, hashedPassword, userName])
-
             console.log(`Nuovo utente registrato: ${userName}`);
+            sendWelcomeEmail(userEmail, userName);
             res.writeHead(201);
             res.end(JSON.stringify(result.rows[0])); // Restituisce i dati dell'utente registrato
         } catch (err) {
