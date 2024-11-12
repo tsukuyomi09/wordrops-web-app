@@ -6,7 +6,7 @@ const logRoutes = require("./login");
 const itemRoutes = require("./items");
 const checkSession = require("./checksession")
 const allowedOrigin = "http://127.0.0.1:5500";
-const { joinQueue } = require("./queue")
+const { joinQueue, leaveQueue, checkQueue } = require("./queue")
 
 
 connectDB();
@@ -47,9 +47,15 @@ const server = http.createServer((req, res) => {
                 itemRoutes.getItems(req, res);
             } else if (req.method === "DELETE" && req.url.startsWith("/items/")) {
                 itemRoutes.deleteItem(req, res);
+            } else if (req.method === "GET" && req.url === "/queue") {
+                console.log("Ricevuta richiesta GET per queue");
+                checkQueue(req, res);
             } else if (req.method === "POST" && req.url === "/queue") {
                 console.log("Ricevuta richiesta POST per queue");
                 joinQueue(req, res);
+            } else if (req.method === "DELETE" && req.url === "/queue") {
+                console.log("Ricevuta richiesta DELETE per queue");
+                leaveQueue(req, res);
             } else {
                 res.writeHead(404, { "Content-Type": "text/plain" });
                 res.end("Not Found");

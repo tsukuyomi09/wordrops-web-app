@@ -1,8 +1,33 @@
 
-
 const formInput = document.getElementById("p-input");
 const contentWrapper = document.getElementById("content-wrapper");
 const newItemContainer = document.querySelector(".new-item-container");
+
+document.addEventListener("DOMContentLoaded", () => {
+    checkQueueStatus()
+});
+
+
+function checkQueueStatus() {
+    fetch("http://127.0.0.1:3000/queue", {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.inQueue) {
+            // L'utente è già in coda
+            setButton("Abbandona", "DELETE");
+        } else {
+            // L'utente non è in coda
+            setButton("Nuova Partita", "POST");
+        }
+    })
+    .catch(error => {
+        console.error('Errore nel verificare lo stato della coda:', error);
+    });
+    };
+
 
 function fetchItems() {
     fetch("http://127.0.0.1:3000/items",{
@@ -27,7 +52,11 @@ function fetchItems() {
         console.error("Errore durante il recupero degli elementi:", error);
         console.log("Response status:", error.response ? error.response.status : "nessuna risposta");
     });
+
 }
+
+fetchItems();
+
 
 function displayItems(items) {
 
@@ -117,28 +146,34 @@ function removeItem(event){
 
 }
 
-function joinQueue() {
+function toggleQueue(method) {
     fetch("http://127.0.0.1:3000/queue", {
-        method: 'POST',
+        method: method,  // Usa il metodo passato (POST o DELETE)
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include',  
-        body: JSON.stringify({ action: 'join' })
+        credentials: 'include',  // Includi i cookie di sessione // Passa l'azione di toggle
     })
-    .then(response => response.json())
+    .then(response => response.json())  // Converte la risposta in JSON
     .then(data => {
         if (data.success) {
-            alert("Sei stato messo in coda!");
+            // Se l'utente è stato aggiunto o rimosso con successo
+            alert(method === "POST" ? "Sei stato messo in coda!" : "Sei stato rimosso dalla coda.");
+            checkQueueStatus();  // Ricarica lo stato del pulsante
         } else {
-            alert("Errore nell'aggiungere l'utente alla coda.");
+            alert("Errore nell'aggiornare lo stato della coda.");
         }
     })
-    .catch(error => {
-        console.error('Errore di rete:', error);
-    });
+    .catch(error => console.error('Errore nella richiesta:', error));
 }
 
-fetchItems();
+function setButton(buttonText, method) {
+    const queueButton = document.getElementById("queue-button");
+    queueButton.textContent = buttonText;  // Cambia il testo del pulsante
+    queueButton.onclick = function() {
+        toggleQueue(method);  // Imposta l'azione corretta al clic
+    };
+}
+
 
 
