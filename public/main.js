@@ -117,6 +117,28 @@ function removeItem(event){
 
 }
 
+function joinQueue() {
+    fetch("http://127.0.0.1:3000/queue", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',  
+        body: JSON.stringify({ action: 'join' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Sei stato messo in coda!");
+        } else {
+            alert("Errore nell'aggiungere l'utente alla coda.");
+        }
+    })
+    .catch(error => {
+        console.error('Errore di rete:', error);
+    });
+}
+
 fetchItems();
 
 
