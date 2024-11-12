@@ -1,0 +1,85 @@
+const { client } = require("./database");
+
+
+const getGameIdForUser = (user_id) => {
+    const getGameIdQuery = `SELECT game_id FROM players_in_game WHERE user_id = $1 LIMIT 1`;
+    
+    return client.query(getGameIdQuery, [user_id]);
+};
+
+const removePlayerFromGame = (game_id, user_id) => {
+    const removePlayerQuery = `DELETE FROM players_in_game WHERE game_id = $1 AND user_id = $2`;
+    
+    return client.query(removePlayerQuery, [game_id, user_id]);
+};
+
+const checkPlayerCountInGame = (game_id) => {
+    const checkPlayerCountQuery = `SELECT COUNT(*) FROM players_in_game WHERE game_id = $1`;
+    
+    return client.query(checkPlayerCountQuery, [game_id]);
+};
+
+
+const deleteGameIfEmpty = (game_id) => {
+    const deleteGameQuery = `DELETE FROM games WHERE game_id = $1`;
+    
+    return client.query(deleteGameQuery, [game_id]);
+};
+
+const abandonGame = (req, res) => {
+    const user_id = req.user_id;
+
+    // 1. Recupera il game_id associato al giocatore
+    getGameIdForUser(user_id)
+        .then(result => {
+            if (result.rows.length === 0) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: "L'utente non è associato a nessun gioco." }));
+                return null;  // Esci dalla catena delle promesse
+            }
+
+            const game_id = result.rows[0].game_id;
+            console.log(`partita ${game_id} rimosso dalla lista`);
+
+            // 2. Rimuovi il giocatore dalla partita
+            return removePlayerFromGame(game_id, user_id).then(() => game_id); // passa game_id alla prossima .then()
+        })
+        .then(game_id => {
+            if (game_id === null) return; // Esci se non c'è un game_id valido
+
+            console.log(`Giocatore ${user_id} rimosso dalla partita ${game_id}`);
+
+            // 3. Verifica il numero di giocatori nella partita
+            return checkPlayerCountInGame(game_id).then(result => ({ result, game_id })); // ritorna entrambi i valori
+        })
+        .then(({ result, game_id }) => {
+            if (game_id === undefined) return; // Esci se non c'è un game_id valido
+
+            const playerCount = parseInt(result.rows[0].count);
+
+            if (playerCount === 0) {
+                return deleteGameIfEmpty(game_id)
+                    .then(() => {
+                        console.log(`La partita ${game_id} è stata cancellata, non ci sono più giocatori.`);
+                        res.writeHead(200, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ 
+                            message: `La partita ${game_id} è stata cancellata`,
+                            inGame: false
+                        }));
+                    });
+            } else {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ message: `Giocatore ${user_id} rimosso, ma la partita ${game_id} ha ancora giocatori` }));
+            }
+        })
+        .catch(err => {
+            console.error(`Errore:`, err);
+            if (!res.headersSent) { // Controlla che la risposta non sia già stata inviata
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ error: "Si è verificato un errore nel processo" }));
+            }
+        });
+};
+
+
+module.exports = { abandonGame };
