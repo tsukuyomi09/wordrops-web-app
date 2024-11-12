@@ -90,5 +90,19 @@ const leaveQueue = (req, res,) => {
     });
 };
 
+function monitorQueue() {
+    const countQuery = "SELECT COUNT(*) FROM queue";
+    return client.query(countQuery)
+        .then(result => {
+            const playersWaitingInQueue = parseInt(result.rows[0].count, 10);
+            console.log(`playersWaitingInQueue: ${playersWaitingInQueue}`)
+            return playersWaitingInQueue;
+        })
+        .catch(err => {
+            console.error("Errore nel monitoraggio della queue:", err);
+            throw err;  // Riporta l'errore a chi chiama la funzione
+        });
+}
 
-module.exports = { joinQueue, leaveQueue, checkQueue };
+
+module.exports = { joinQueue, leaveQueue, checkQueue, monitorQueue };
