@@ -6,12 +6,14 @@ const logRoutes = require("./login");
 const itemRoutes = require("./items");
 const checkSession = require("./checksession")
 const allowedOrigin = "http://127.0.0.1:5500";
-const { joinQueue, leaveQueue, checkQueue } = require("./queue")
+const { joinQueue, leaveQueue, checkQueue, monitorQueue } = require("./queue")
 
 
 connectDB();
 
 const server = http.createServer((req, res) => {
+
+    setInterval(monitorQueue, 3000)
 
     res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, OPTIONS");
