@@ -29,20 +29,6 @@ const createItem = (req, res,) => {
     });
 };
 
-const getItems = (req, res,) => {
-    const user_id = req.user_id
-    const itemsQuery = "SELECT * FROM items WHERE user_id_ref = $1";
-    client.query(itemsQuery, [user_id])
-        .then(itemResult => {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify(itemResult.rows)); // Restituisce gli oggetti trovati
-        })
-        .catch(err => {
-            console.error("Errore durante il recupero:", err);
-            res.writeHead(500);
-            res.end("Errore del server");
-        });
-};
 
 const deleteItem = (req, res) => {
     const user_id = req.user_id
@@ -60,4 +46,4 @@ const deleteItem = (req, res) => {
         });
 };
 
-module.exports = { createItem, getItems, deleteItem };
+module.exports = { createItem, deleteItem };

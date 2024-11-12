@@ -8,6 +8,9 @@ const checkSession = require("./checksession")
 const allowedOrigin = "http://127.0.0.1:5500";
 const { joinGame, checkIfInGameQuery } = require("./game")
 const { abandonGame } = require("./abandon-game")
+const { getDashboardData } = require("./dashboard-data")
+
+getDashboardData
 
 
 
@@ -59,8 +62,8 @@ const server = http.createServer((req, res) => {
 
             if (req.method === "POST" && req.url === "/items") {
                 itemRoutes.createItem(req, res);
-            } else if (req.method === "GET" && req.url === "/items") {
-                itemRoutes.getItems(req, res);
+            } else if (req.method === "GET" && req.url === "/dashboard-data") {
+                getDashboardData(req, res);
             } else if (req.method === "DELETE" && req.url.startsWith("/items/")) {
                 itemRoutes.deleteItem(req, res);
             } else if (req.method === "GET" && req.url === "/game") {

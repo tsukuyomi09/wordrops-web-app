@@ -2,12 +2,15 @@
 const formInput = document.getElementById("p-input");
 const contentWrapper = document.getElementById("content-wrapper");
 const newItemContainer = document.querySelector(".new-item-container");
+const usernameDashboard = document.getElementById("username");
+
 document.addEventListener('DOMContentLoaded', function() {
     checkIfWaitingForGame();
 });
 
-function fetchItems() {
-    fetch("http://127.0.0.1:3000/items",{
+
+function fetchdashboardData() {
+    fetch("http://127.0.0.1:3000/dashboard-data",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
@@ -23,7 +26,8 @@ function fetchItems() {
         return response.json();
     })
     .then(data => {
-        displayItems(data); // Mostra gli elementi ricevuti
+
+        displayItems(data.username, data.items); // Mostra gli elementi ricevuti
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
@@ -32,7 +36,7 @@ function fetchItems() {
 
 }
 
-fetchItems();
+fetchdashboardData();
 
 
 function checkIfWaitingForGame() {
@@ -57,7 +61,10 @@ function checkIfWaitingForGame() {
 
 
 
-function displayItems(items) {
+function displayItems(username, items) {
+
+    const usernameDashboard = document.getElementById("username");
+    usernameDashboard.textContent = username;
 
     contentWrapper.innerHTML = '';
 
