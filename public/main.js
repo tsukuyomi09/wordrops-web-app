@@ -2,35 +2,15 @@
 const formInput = document.getElementById("p-input");
 const contentWrapper = document.getElementById("content-wrapper");
 const newItemContainer = document.querySelector(".new-item-container");
+const usernameDashboard = document.getElementById("username");
 
-document.addEventListener("DOMContentLoaded", () => {
-    checkQueueStatus()
+document.addEventListener('DOMContentLoaded', function() {
+    checkIfWaitingForGame();
 });
 
 
-function checkQueueStatus() {
-    fetch("http://127.0.0.1:3000/queue", {
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.inQueue) {
-            // L'utente è già in coda
-            setButton("Abbandona", "DELETE");
-        } else {
-            // L'utente non è in coda
-            setButton("Nuova Partita", "POST");
-        }
-    })
-    .catch(error => {
-        console.error('Errore nel verificare lo stato della coda:', error);
-    });
-    };
-
-
-function fetchItems() {
-    fetch("http://127.0.0.1:3000/items",{
+function fetchdashboardData() {
+    fetch("http://127.0.0.1:3000/dashboard-data",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
@@ -46,7 +26,8 @@ function fetchItems() {
         return response.json();
     })
     .then(data => {
-        displayItems(data); // Mostra gli elementi ricevuti
+
+        displayItems(data.username, data.items); // Mostra gli elementi ricevuti
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
@@ -55,10 +36,35 @@ function fetchItems() {
 
 }
 
-fetchItems();
+fetchdashboardData();
 
 
-function displayItems(items) {
+function checkIfWaitingForGame() {
+    fetch("http://127.0.0.1:3000/game", {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.inGame) {
+            // L'utente è già in una partita
+            setButton("Abbandona", "DELETE");
+        } else {
+            // L'utente non è in una partita
+            setButton("Nuova Partita", "POST");
+        }
+    })
+    .catch(error => {
+        console.error('Errore nel verificare lo stato della partita:', error);
+    });
+}
+
+
+
+function displayItems(username, items) {
+
+    const usernameDashboard = document.getElementById("username");
+    usernameDashboard.textContent = username;
 
     contentWrapper.innerHTML = '';
 
@@ -147,22 +153,20 @@ function removeItem(event){
 }
 
 function toggleQueue(method) {
-    fetch("http://127.0.0.1:3000/queue", {
-        method: method,  // Usa il metodo passato (POST o DELETE)
+    fetch("http://127.0.0.1:3000/game", {
+        method: method,
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include',  // Includi i cookie di sessione // Passa l'azione di toggle
+        credentials: 'include',
     })
-    .then(response => response.json())  // Converte la risposta in JSON
+    .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            // Se l'utente è stato aggiunto o rimosso con successo
-            alert(method === "POST" ? "Sei stato messo in coda!" : "Sei stato rimosso dalla coda.");
-            checkQueueStatus();  // Ricarica lo stato del pulsante
-        } else {
-            alert("Errore nell'aggiornare lo stato della coda.");
-        }
+        // Mostra un messaggio diverso in base al metodo
+        alert(method === "POST" ? "Sei stato messo in coda!" : "Sei stato rimosso dalla coda.");
+        
+        // Aggiorna lo stato del pulsante
+        checkIfWaitingForGame();
     })
     .catch(error => console.error('Errore nella richiesta:', error));
 }

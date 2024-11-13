@@ -6,14 +6,31 @@ const logRoutes = require("./login");
 const itemRoutes = require("./items");
 const checkSession = require("./checksession")
 const allowedOrigin = "http://127.0.0.1:5500";
-const { joinQueue, leaveQueue, checkQueue, monitorQueue } = require("./queue")
+const { joinGame, checkIfInGameQuery } = require("./game")
+const { abandonGame } = require("./abandon-game")
+const { getDashboardData } = require("./dashboard-data")
+
+getDashboardData
+
 
 
 connectDB();
 
 const server = http.createServer((req, res) => {
 
-    setInterval(monitorQueue, 3000)
+    // setInterval(() => {
+    //     monitorQueue()
+    //         .then(playersWaitingInQueue => {
+    //             // Se ci sono 5 o più giocatori in coda
+    //             if (playersWaitingInQueue >= 5) {
+    //                 // Chiamare la funzione che gestisce la creazione del gioco
+    //                 createGame(playersWaitingInQueue);
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.error('Errore nel monitorare la coda:', err);
+    //         });
+    // }, 3000);
 
     res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, OPTIONS");
@@ -45,19 +62,19 @@ const server = http.createServer((req, res) => {
 
             if (req.method === "POST" && req.url === "/items") {
                 itemRoutes.createItem(req, res);
-            } else if (req.method === "GET" && req.url === "/items") {
-                itemRoutes.getItems(req, res);
+            } else if (req.method === "GET" && req.url === "/dashboard-data") {
+                getDashboardData(req, res);
             } else if (req.method === "DELETE" && req.url.startsWith("/items/")) {
                 itemRoutes.deleteItem(req, res);
-            } else if (req.method === "GET" && req.url === "/queue") {
-                console.log("Ricevuta richiesta GET per queue");
-                checkQueue(req, res);
-            } else if (req.method === "POST" && req.url === "/queue") {
-                console.log("Ricevuta richiesta POST per queue");
-                joinQueue(req, res);
-            } else if (req.method === "DELETE" && req.url === "/queue") {
-                console.log("Ricevuta richiesta DELETE per queue");
-                leaveQueue(req, res);
+            } else if (req.method === "GET" && req.url === "/game") {
+                console.log("Ricevuta richiesta GET per checkIfInQueue");
+                checkIfInGameQuery(req, res);
+            } else if (req.method === "POST" && req.url === "/game") {
+                console.log("Ricevuta richiesta POST per joinGame");
+                joinGame(req, res);
+            } else if (req.method === "DELETE" && req.url === "/game") {
+                console.log("Ricevuta richiesta DELETE per abandonGame");
+                abandonGame(req, res);
             } else {
                 res.writeHead(404, { "Content-Type": "text/plain" });
                 res.end("Not Found");
