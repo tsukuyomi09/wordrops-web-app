@@ -8,11 +8,38 @@
 </head>
 <body>
     <div id="page-wrap" class="w-full">
-        <div class="w-full h-screen flex flex-col items-center justify-top p-10" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./images/queue-bg.jpg'); background-size: cover; background-position: center;">
-
+        <div class="w-full h-screen flex flex-col items-center justify-top p-10"
+        style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./images/queue-bg-library.jpg'); 
+               background-size: 100% 100%; 
+               background-repeat: no-repeat; 
+               background-position: center;">
             <div class="flex flex-col items-center justify-top gap-10 mt-10 h-screen">
-                <h1 class="text-4xl font-extrabold text-white-800 leading-tight text-center">in attesa di altri giocatori</h1>
+                <h1 class="text-4xl font-extrabold text-white leading-tight text-center">In attesa di altri giocatori</h1>
                 <img src="images/queue-spinner.gif" alt="Spinner di caricamento" class="w-20 h-20">
+            <div class="queue w-full h-full flex flex-col items-center justify-top p-6">
+                <h2 class="text-2xl font-semibold text-white mb-4">PLAYERS</h2>
+                <div id="players-grid" class="flex space-x-6 overflow-x-auto p-4">
+
+                    <div id="player-container">
+                        <ul id="player-list" class="w-full max-w-lg space-y-4">
+                            <li class="flex flex-col items-center space-y-4 px-6 py-4  bg-gray-800 rounded-lg shadow-lg">
+                                <img id="username-avatar" src="" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-white">
+                                <h3 id="username" class="text-white text-lg font-semibold">trevis</h3>
+                            </li>
+                            <!-- Gli avatar e gli username degli utenti in coda verranno aggiunti dinamicamente -->
+                        </ul>
+                    </div>
+                    <div id="player-container">
+                        <ul id="player-list" class="w-full max-w-lg space-y-4">
+                            <li class="flex flex-col items-center space-y-4 px-6 py-4 bg-gray-800 rounded-lg shadow-lg">
+                                <img id="username-avatar" src="" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-white">
+                                <h3 id="username" class="text-white text-lg font-semibold">trevis</h3>
+                            </li>
+                            <!-- Gli avatar e gli username degli utenti in coda verranno aggiunti dinamicamente -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </div>
