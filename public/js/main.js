@@ -4,13 +4,9 @@ const contentWrapper = document.getElementById("content-wrapper");
 const newItemContainer = document.querySelector(".new-item-container");
 const usernameDashboard = document.getElementById("username");
 
-document.addEventListener('DOMContentLoaded', function() {
-    checkIfWaitingForGame();
-});
-
 
 function fetchdashboardData() {
-    fetch("http://127.0.0.1:3000/dashboard-data",{
+    fetch("http://127.0.0.1:3000/item",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
@@ -37,28 +33,6 @@ function fetchdashboardData() {
 }
 
 fetchdashboardData();
-
-
-function checkIfWaitingForGame() {
-    fetch("http://127.0.0.1:3000/game", {
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.inGame) {
-            // L'utente è già in una partita
-            setButton("Abbandona", "DELETE");
-        } else {
-            // L'utente non è in una partita
-            setButton("Nuova Partita", "POST");
-        }
-    })
-    .catch(error => {
-        console.error('Errore nel verificare lo stato della partita:', error);
-    });
-}
-
 
 
 function displayItems(username, items) {
@@ -96,7 +70,7 @@ function submitText(event){
     }
 
     // richiesta fetch
-    fetch("http://127.0.0.1:3000/items", {
+    fetch("http://127.0.0.1:3000/item", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -112,7 +86,7 @@ function submitText(event){
     })
     .then(data => {
         formInput.value = ""
-        fetchItems()
+        fetchdashboardData()
 
     })
     .catch(error => {
@@ -127,8 +101,8 @@ function removeItem(event){
     const parentDiv = thisButton.closest('.item-container');
 
     const itemId = thisButton.getAttribute("data-id")
-    
-    fetch(`http://127.0.0.1:3000/items/${itemId}`, {
+    console.log(itemId)
+    fetch(`http://127.0.0.1:3000/item/${itemId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -143,7 +117,7 @@ function removeItem(event){
     })
     .then(data => {
         console.log("Item removed:", data);
-        fetchItems()
+        fetchdashboardData()
 
     })
     .catch(error => {
@@ -152,9 +126,9 @@ function removeItem(event){
 
 }
 
-function toggleQueue(method) {
-    fetch("http://127.0.0.1:3000/game", {
-        method: method,
+function joinQueue() {
+    fetch("http://127.0.0.1:3000/gamequeue", {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -162,22 +136,25 @@ function toggleQueue(method) {
     })
     .then(response => response.json())
     .then(data => {
-        // Mostra un messaggio diverso in base al metodo
-        alert(method === "POST" ? "Sei stato messo in coda!" : "Sei stato rimosso dalla coda.");
-        
-        // Aggiorna lo stato del pulsante
-        checkIfWaitingForGame();
+        if (data.game_id) {
+            // Redirect manuale dopo aver ricevuto la risposta dal server
+            const redirectUrl = `http://127.0.0.1:3000/gamequeue/${data.game_id}`;
+            console.log('Reindirizzamento a:', redirectUrl);  // Verifica l'URL di destinazione
+            window.location.href = redirectUrl;
+        } else {
+            console.error('Errore: nessun game_id ricevuto');
+        }
     })
-    .catch(error => console.error('Errore nella richiesta:', error));
+    .catch(error => {
+        console.error('Errore nella richiesta per unirsi alla coda:', error);
+    });
 }
 
-function setButton(buttonText, method) {
-    const queueButton = document.getElementById("queue-button");
-    queueButton.textContent = buttonText;  // Cambia il testo del pulsante
-    queueButton.onclick = function() {
-        toggleQueue(method);  // Imposta l'azione corretta al clic
-    };
-}
+
+
+
+
+
 
 
 
