@@ -9,7 +9,7 @@ document.getElementById("registrationForm").addEventListener("submit", async (e)
     console.log(`password: ${userPassword}`)
 
     try{
-        const response = await fetch("https://focused-wonder-production.up.railway.app//register", {
+        const response = await fetch("https://focused-wonder-production.up.railway.app/register", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -41,7 +41,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const loginPassword = document.getElementById("loginPassword").value;
 
     try {
-        const response = await fetch("https://focused-wonder-production.up.railway.app//login", {
+        const response = await fetch("https://focused-wonder-production.up.railway.app/login", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
