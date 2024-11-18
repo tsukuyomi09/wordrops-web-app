@@ -70,7 +70,8 @@ function displayItems(username, items) {
     items.forEach(item => {
         // Clona il template
         const newItem = newItemContainer.cloneNode(true); // Clona il contenuto del template
-
+        
+        newItem.style.display = 'block';
         // Popola i dati
         newItem.querySelector(".new-p").textContent = item.item; // Aggiungi il testo dell'item
         const removeButton = newItem.querySelector(".remove-button")
