@@ -9,7 +9,7 @@ document.getElementById("registrationForm").addEventListener("submit", async (e)
     console.log(`password: ${userPassword}`)
 
     try{
-        const response = await fetch("https://focused-wonder-production.up.railway.app/register", {
+        const response = await fetch("https://focused-wonder-production.up.railway.app", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
