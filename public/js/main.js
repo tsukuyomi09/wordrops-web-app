@@ -4,6 +4,31 @@ const contentWrapper = document.getElementById("content-wrapper");
 const newItemContainer = document.querySelector(".new-item-container");
 const usernameDashboard = document.getElementById("username");
 
+async function checkSessionStatus() {
+    try {
+        const response = await fetch('/check-session', {
+            method: 'GET',  // Usa il metodo GET per inviare la richiesta
+            credentials: 'same-origin' // Invia i cookie con la richiesta
+        });
+
+        const data = await response.json();
+
+        if (data.sessionActive) {
+            // Se la sessione è attiva, reindirizza l'utente alla pagina del dashboard
+             // Cambia la destinazione in base alla tua app
+        } else {
+            window.location.href = '/register';
+            console.log('Sessione non attiva. Permesso di registrarsi.');
+        }
+
+    } catch (error) {
+        console.error('Errore durante il controllo della sessione:', error);
+    }
+}
+
+// Verifica se l'utente ha una sessione attiva appena carica la pagina
+checkSessionStatus();
+
 
 function fetchdashboardData() {
     fetch("http://127.0.0.1:3000/item",{
@@ -138,7 +163,7 @@ function joinQueue() {
     .then(data => {
         if (data.game_id) {
             // Redirect manuale dopo aver ricevuto la risposta dal server
-            const redirectUrl = `http://127.0.0.1:3000/gamequeue/${data.game_id}`;
+            const redirectUrl = `gamequeue/${data.game_id}`;
             console.log('Reindirizzamento a:', redirectUrl);  // Verifica l'URL di destinazione
             window.location.href = redirectUrl;
         } else {

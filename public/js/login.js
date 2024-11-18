@@ -53,7 +53,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         if (response.ok) {
             alert('Login effettuato');
             document.getElementById('loginForm').reset();
-            window.location.href = '/dashboard.html';
+            window.location.href = '/dashboard';
 
         } else {
             alert('Credenziali errate');
