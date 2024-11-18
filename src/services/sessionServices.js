@@ -1,7 +1,13 @@
-const { client } = require("./database");
+const { client } = require('../database/db'); 
+const crypto = require("crypto");
+
+async function createLoginSession(user_id) {
+    const sessionId = await createSession(user_id);
+    return sessionId;
+}
 
 const generateSessionId = () => {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+    return crypto.randomBytes(16).toString("hex") + Date.now().toString(36);
 }
 
 const createSession = async (user_id) => {
@@ -18,4 +24,5 @@ const createSession = async (user_id) => {
 };
 
 
-module.exports = { createSession};
+
+module.exports = { createLoginSession, createSession };

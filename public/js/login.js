@@ -40,32 +40,25 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const loginUserName = document.getElementById("loginUserName").value;
     const loginPassword = document.getElementById("loginPassword").value;
 
-    try{
+    try {
         const response = await fetch("http://127.0.0.1:3000/login", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
             credentials: 'include',
-            body: JSON.stringify({loginUserName, loginPassword})
+            body: JSON.stringify({ loginUserName, loginPassword })
         });
 
         if (response.ok) {
-            const data = await response.json()
-            alert(data.message);
+            alert('Login effettuato');
             document.getElementById('loginForm').reset();
-            console.log(data.redirectUrl)
-            if (data.redirectUrl) {
-                setTimeout(() => {
-                    window.location.href = data.redirectUrl;
-                }, 1000);
-            }
-        } else {
-            const errorData = await response.json();
-            alert(`Errore: ${errorData.message}`);
-        }
+            window.location.href = '/dashboard';
 
-    } catch (error){
-        alert(`Si è verificato un errore durante il login: ${error}`);
+        } else {
+            alert('Credenziali errate');
+        }
+    } catch (error) {
+        console.error('Errore durante il login:', error);
     }
-})
+});
