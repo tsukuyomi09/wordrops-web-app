@@ -18,7 +18,7 @@ async function checkSessionStatus() {
         } else {
             if (currentPath !== '/') {
                 // Se non siamo su /register e la sessione non è attiva, vai su /register
-                window.location.href = '/';
+                window.location.href = '/dashboard';
             }
             // Se siamo su /register e la sessione non è attiva, non fare nulla
         }
