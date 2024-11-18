@@ -36,7 +36,7 @@ function loadPlayers(gameId) {
 
 // uscire dalla queue
 function abandonQueue() {
-    fetch("http://127.0.0.1:3000https://focused-wonder-production.up.railway.app/gameQueue", {
+    fetch("https://focused-wonder-production.up.railway.app/gameQueue", {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
