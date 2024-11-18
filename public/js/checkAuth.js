@@ -1,6 +1,6 @@
 async function checkSessionStatus() {
     try {
-        const response = await fetch('/check-session', {
+        const response = await fetch('https://focused-wonder-production.up.railway.app/check-session', {
             method: 'GET', // Usa il metodo GET per inviare la richiesta
             credentials: 'same-origin' // Invia i cookie con la richiesta
         });
@@ -10,15 +10,15 @@ async function checkSessionStatus() {
         const currentPath = window.location.pathname; // Ottieni il percorso corrente (es. /register o /dashboard)
 
         if (data.sessionActive) {
-            if (currentPath === '/register') {
+            if (currentPath === '/') {
                 // Se siamo su /register e la sessione è attiva, vai su /dashboard
                 window.location.href = '/dashboard';
             } 
             // Per qualunque altra pagina, non fare nulla se la sessione è attiva
         } else {
-            if (currentPath !== '/register') {
+            if (currentPath !== '/') {
                 // Se non siamo su /register e la sessione non è attiva, vai su /register
-                window.location.href = '/register';
+                window.location.href = '/';
             }
             // Se siamo su /register e la sessione non è attiva, non fare nulla
         }
