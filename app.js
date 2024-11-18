@@ -15,7 +15,7 @@ app.use(express.json());
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
-app.get('/register', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'register.html'));
 });
 app.get('/game', (req, res) => {
