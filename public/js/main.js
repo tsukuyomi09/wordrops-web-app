@@ -127,7 +127,7 @@ function removeItem(event){
 
     const itemId = thisButton.getAttribute("data-id")
     console.log(itemId)
-    fetch(`https://focused-wonder-production.up.railway.app/${itemId}`, {
+    fetch(`https://focused-wonder-production.up.railway.app/item/${itemId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
