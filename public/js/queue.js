@@ -46,7 +46,7 @@ function abandonQueue() {
     .then(response => response.json())
     .then(data => {
         alert("Hai abbandonato la coda.");
-        window.location.href = '../dashboard.html';
+        window.location.href = '/dashboard';
     })
     .catch(error => {
         console.error('Errore nella richiesta per abbandonare la coda:', error);

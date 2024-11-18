@@ -9,9 +9,8 @@ async function checkSessionStatus() {
 
         if (data.sessionActive) {
             // Se la sessione è attiva, reindirizza l'utente alla pagina del dashboard
-            window.location.href = '/dashboard.html'; // Cambia la destinazione in base alla tua app
+            window.location.href = '/dashboard'; // Cambia la destinazione in base alla tua app
         } else {
-            // Se la sessione non è attiva, lascia l'utente sulla pagina di registrazione
             console.log('Sessione non attiva. Permesso di registrarsi.');
         }
 
