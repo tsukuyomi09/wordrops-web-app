@@ -7,7 +7,7 @@ const checkSession = require('../middlewares/checkSession');
 
 router.get('/gamequeue/:game_id', checkSession,  (req, res) => {
     // Renderizza la pagina della coda senza passare dati
-    res.sendFile(path.join(__dirname, '../../public', 'gamequeue.html'));
+    res.sendFile(path.join(__dirname, '../../views', 'gamequeue.html'));
 });
 
 // inizializza queue
