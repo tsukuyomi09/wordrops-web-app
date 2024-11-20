@@ -31,7 +31,7 @@ checkSessionStatus();
 
 
 function fetchdashboardData() {
-    fetch("https://focused-wonder-production.up.railway.app/item",{
+    fetch("/item",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
@@ -96,7 +96,7 @@ function submitText(event){
     }
 
     // richiesta fetch
-    fetch("https://focused-wonder-production.up.railway.app/item", {
+    fetch("/item", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -128,7 +128,7 @@ function removeItem(event){
 
     const itemId = thisButton.getAttribute("data-id")
     console.log(itemId)
-    fetch(`https://focused-wonder-production.up.railway.app/item/${itemId}`, {
+    fetch(`/item/${itemId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -153,7 +153,7 @@ function removeItem(event){
 }
 
 function joinQueue() {
-    fetch("https://focused-wonder-production.up.railway.app/gamequeue", {
+    fetch("/gamequeue", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

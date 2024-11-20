@@ -12,6 +12,7 @@ connectDB();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
+
 // Routes
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
@@ -32,7 +33,6 @@ app.get('/classifiche', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'classifiche.html'));
 });
 
-
 const registerRoutes = require('./src/routes/registerRoutes');
 const loginRoutes = require('./src/routes/loginRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
@@ -40,6 +40,7 @@ const itemsRoutes = require('./src/routes/itemsRoutes');
 const queueRoutes = require('./src/routes/queueRoutes');
 const playersQueue = require('./src/routes/playersQueue');
 const verifyLogIn = require('./src/routes/verifyLogIn');
+
 
 
 app.use(verifyLogIn);
