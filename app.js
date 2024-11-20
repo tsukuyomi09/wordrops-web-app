@@ -38,6 +38,9 @@ app.get('/storie', (req, res) => {
 app.get('/classifiche', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'classifiche.html'));
 });
+app.get('/image', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'image.html'));
+});
 
 const registerRoutes = require('./src/routes/registerRoutes');
 const loginRoutes = require('./src/routes/loginRoutes');

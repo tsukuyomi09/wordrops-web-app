@@ -115,12 +115,16 @@ function logout(){
         },
         credentials: 'include',
     })
-    .then(response => response.json())
     .then(response => {
         if (response.ok) {
-            window.location.href = "/";
+            window.location.href = "/"; 
         } else {
-            console.error('Errore: Problema con il logout');
+            return response.json(); 
+        }
+    })
+    .then(errorData => {
+        if (errorData && errorData.error) {
+            console.error('Errore durante il logout: ', errorData.error);
         }
     })
     .catch(error => {
