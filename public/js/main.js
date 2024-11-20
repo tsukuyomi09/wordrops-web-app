@@ -17,7 +17,7 @@ async function checkSessionStatus() {
             // Se la sessione è attiva, reindirizza l'utente alla pagina del dashboard
              // Cambia la destinazione in base alla tua app
         } else {
-            window.location.href = '/';
+            window.location.href = '/register';
             console.log('Sessione non attiva. Permesso di registrarsi.');
         }
 
@@ -81,76 +81,6 @@ function displayItems(username, items) {
     });
 }
 
-function submitText(event){
-
-    event.preventDefault();
-    const newItemValue = formInput.value
-
-    if (!newItemValue) {
-        const errorMessage = document.querySelector(".error-message-div");
-        errorMessage.style.display = "block";
-        setTimeout( () => {
-            errorMessage.style.display = "none";
-        }, 2000)
-        return;
-    }
-
-    // richiesta fetch
-    fetch("/item", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify({ item: newItemValue }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        formInput.value = ""
-        fetchdashboardData()
-
-    })
-    .catch(error => {
-        console.error("Errore durante l'invio:", error);
-    });
-}
-
-function removeItem(event){
-
-    event.preventDefault();
-    const thisButton = event.target
-    const parentDiv = thisButton.closest('.item-container');
-
-    const itemId = thisButton.getAttribute("data-id")
-    console.log(itemId)
-    fetch(`/item/${itemId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: 'include'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Item removed:", data);
-        fetchdashboardData()
-
-    })
-    .catch(error => {
-        console.error("Errore durante l'invio:", error);
-    });
-
-}
 
 function joinQueue() {
     fetch("/gamequeue", {
@@ -177,29 +107,27 @@ function joinQueue() {
 }
 
 
-function logout() {
+function logout(){
     fetch("/logout", {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
-        credentials: 'include', // Importante per includere i cookie nelle richieste
+        credentials: 'include',
     })
+    .then(response => response.json())
     .then(response => {
         if (response.ok) {
-            return response.json(); // Solo se la risposta è ok, processiamo i dati
+            window.location.href = "/";
+        } else {
+            console.error('Errore: Problema con il logout');
         }
-        throw new Error('Errore nel logout');
-    })
-    .then(data => {
-        console.log(data.message);  // Qui puoi loggare il messaggio che ricevi dal backend
-        window.location.href = "/"; // Redirect dopo logout
     })
     .catch(error => {
-        console.error('Errore: ', error);
+        console.error('Errore: Problema con il logout: ', error);
     });
-}
 
+}
 
 
 
