@@ -17,7 +17,7 @@ async function checkSessionStatus() {
             // Se la sessione è attiva, reindirizza l'utente alla pagina del dashboard
              // Cambia la destinazione in base alla tua app
         } else {
-            window.location.href = '/register';
+            window.location.href = '/';
             console.log('Sessione non attiva. Permesso di registrarsi.');
         }
 
@@ -175,6 +175,31 @@ function joinQueue() {
         console.error('Errore nella richiesta per unirsi alla coda:', error);
     });
 }
+
+
+function logout() {
+    fetch("/logout", {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Importante per includere i cookie nelle richieste
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json(); // Solo se la risposta è ok, processiamo i dati
+        }
+        throw new Error('Errore nel logout');
+    })
+    .then(data => {
+        console.log(data.message);  // Qui puoi loggare il messaggio che ricevi dal backend
+        window.location.href = "/"; // Redirect dopo logout
+    })
+    .catch(error => {
+        console.error('Errore: ', error);
+    });
+}
+
 
 
 

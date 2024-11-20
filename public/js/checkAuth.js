@@ -30,4 +30,4 @@ async function checkSessionStatus() {
 }
 
 // Verifica lo stato della sessione appena carica la pagina
-checkSessionStatus();
+document.addEventListener('DOMContentLoaded', checkSessionStatus);
