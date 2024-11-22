@@ -106,6 +106,11 @@ function joinQueue() {
     });
 }
 
+document.getElementById('toggle-slider').addEventListener('click', () => {
+    const slider = document.getElementById('avatarSlider');
+    slider.classList.toggle('show');
+  });
+
 
 function logout(){
     fetch("/logout", {

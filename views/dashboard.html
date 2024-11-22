@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>    
+    <title>No Ordinary Writers</title> 
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
@@ -14,12 +15,13 @@
 <body>
     <div id="pagewrap" class="w-full">
         <div class="w-full h-screen flex flex-col items-center justify-top relative" style="background-image: url('./images/dashboard-background.png'); background-size: cover; background-position: center;" >
+
             <div class="flex flex-row items-start justify-between rounded-lg shadow-md gap-4">
                 <button id="logout-button" class="mt-4 text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mb-2 transition duration-300" onclick="logout()">log out</button>
                 <div class="username_container mb-20 p-4 px-10 bg-gray-900 bg-opacity-60 rounded-bl-lg rounded-br-lg inline-block">
                     <h2 id="username" class="text-white text-2xl font-extrabold"></h2>
                 </div>
-                <button class="mt-4 text-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">cambia avatar</button>
+                <button id="toggle-slider" class="mt-4 text-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">cambia avatar</button>
             </div>
             <div class="avatar-container">
                 <img class="h-48 w-42 object-cover" src="./images/avatars/resize-avatar-cyber.png" alt="">
