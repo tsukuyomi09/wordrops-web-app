@@ -62,3 +62,5 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         console.error('Errore durante il login:', error);
     }
 });
+
+

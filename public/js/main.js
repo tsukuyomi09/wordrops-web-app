@@ -1,15 +1,12 @@
-
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
 
 
-
 function fetchdashboardData() {
-    fetch("/item",{
+    fetch("/dashboardData",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
-             // Aggiungi l'ID come header Authorization
         },
         credentials: "include"
     })
@@ -34,9 +31,8 @@ function displayItems(username) {
     usernameDashboard.textContent = username;
 
 }
+
 fetchdashboardData();
-
-
 
 
 function joinQueue() {

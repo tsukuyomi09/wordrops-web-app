@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const checkSession = require('../middlewares/checkSession');
+const checkAuth = require('../middlewares/checkAuthToken');
 
 
-router.get("/check-session", checkSession, async (req, res) => {
-    res.json({ sessionActive: true, userId: req.user_id });
+router.get("/check-session", checkAuth, async (req, res) => {
+    res.json({ sessionActive: true, userId: req.user_id, username: req.username });
 });
 
 module.exports = router;
