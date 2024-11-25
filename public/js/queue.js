@@ -36,7 +36,7 @@ function loadPlayers(gameId) {
 
 // uscire dalla queue
 function abandonQueue() {
-    fetch("http://127.0.0.1:3000/gameQueue", {
+    fetch("/gameQueue", {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

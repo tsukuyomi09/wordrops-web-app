@@ -8,8 +8,8 @@ router.get("/item", checkSession, async (req, res) => {
     try {
         const user_id = req.user_id;
 
-        // Query combinata per ottenere username e items
-        const query = `SELECT u.username, i.* FROM users u LEFT JOIN items i ON u.user_id = i.user_id_ref WHERE u.user_id = $1`;
+        // Query per ottenere solo lo username
+        const query = `SELECT username FROM users WHERE user_id = $1`;
         const result = await client.query(query, [user_id]);
 
         if (result.rows.length === 0) {
@@ -17,15 +17,14 @@ router.get("/item", checkSession, async (req, res) => {
         }
 
         const username = result.rows[0].username;
-        res.status(200).json({
-            username: username,
-            items: result.rows, 
-        });
+        res.status(200).json({ username: username });
+
     } catch (err) {
-        console.error("Errore durante il recupero:", err);
+        console.error("Errore durante il recupero dello username:", err);
         res.status(500).json({ error: "Errore del server" });
     }
 });
+
     
     
 router.post("/item", checkSession, async (req, res) => {

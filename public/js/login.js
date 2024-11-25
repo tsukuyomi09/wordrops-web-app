@@ -9,7 +9,7 @@ document.getElementById("registrationForm").addEventListener("submit", async (e)
     console.log(`password: ${userPassword}`)
 
     try{
-        const response = await fetch("http://127.0.0.1:3000/register", {
+        const response = await fetch("/register", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -41,7 +41,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     const loginPassword = document.getElementById("loginPassword").value;
 
     try {
-        const response = await fetch("http://127.0.0.1:3000/login", {
+        const response = await fetch("/login", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"

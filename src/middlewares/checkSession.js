@@ -1,26 +1,33 @@
-const { client } = require('../database/db'); 
+const { client } = require('../database/db');
 
 const checkSession = (req, res, next) => {
     // Estrai il sessionId dai cookies
     const cookies = req.headers.cookie;
-    const sessionId = cookies && cookies.split('; ').find(c => c.startsWith('sessionId=')).split('=')[1];
+    const sessionCookie = cookies && cookies.split('; ').find(c => c.startsWith('sessionId='));
 
-    if (!sessionId) {
-        return res.status(401).json({ message: "Sessione non valida o non presente." });
+    // Verifica se il sessionId è presente
+    if (!sessionCookie) {
+        return res.status(401).json({ sessionActive: false, message: "Sessione non valida o non presente." });
     }
+
+    // Estrai il valore del sessionId
+    const sessionId = sessionCookie.split('=')[1];
 
     // Query per verificare la sessione nel database
     const sessionQuery = "SELECT user_id FROM sessions WHERE session_id = $1";
 
     client.query(sessionQuery, [sessionId])
         .then(result => {
+            // Verifica se il sessionId esiste nel database
             if (result.rows.length === 0) {
-                return res.status(404).json({ message: "Sessione non trovata per questo utente." });
+                return res.status(401).json({ sessionActive: false, message: "Sessione non valida o scaduta." });
             }
 
-            // Aggiungi l'user_id alla richiesta
+            // Aggiungi l'user_id alla richiesta per l'utilizzo successivo
             req.user_id = result.rows[0].user_id;
-            next(); // Continua con la richiesta alla rotta successiva
+
+            // Passa al middleware o alla rotta successiva
+            next();
         })
         .catch(err => {
             console.error("Errore durante il recupero della sessione:", err);
