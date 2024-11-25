@@ -1,33 +1,7 @@
 
 const formInput = document.getElementById("p-input");
-const contentWrapper = document.getElementById("content-wrapper");
-const newItemContainer = document.querySelector(".new-item-container");
 const usernameDashboard = document.getElementById("username");
 
-async function checkSessionStatus() {
-    try {
-        const response = await fetch('/check-session', {
-            method: 'GET',  // Usa il metodo GET per inviare la richiesta
-            credentials: 'same-origin' // Invia i cookie con la richiesta
-        });
-
-        const data = await response.json();
-
-        if (data.sessionActive) {
-            // Se la sessione è attiva, reindirizza l'utente alla pagina del dashboard
-             // Cambia la destinazione in base alla tua app
-        } else {
-            window.location.href = '/register';
-            console.log('Sessione non attiva. Permesso di registrarsi.');
-        }
-
-    } catch (error) {
-        console.error('Errore durante il controllo della sessione:', error);
-    }
-}
-
-// Verifica se l'utente ha una sessione attiva appena carica la pagina
-checkSessionStatus();
 
 
 function fetchdashboardData() {
@@ -38,7 +12,6 @@ function fetchdashboardData() {
              // Aggiungi l'ID come header Authorization
         },
         credentials: "include"
-        
     })
     .then(response => {
         if (!response.ok) {
@@ -47,8 +20,7 @@ function fetchdashboardData() {
         return response.json();
     })
     .then(data => {
-
-        displayItems(data.username, data.items); // Mostra gli elementi ricevuti
+        displayItems(data.username); // Mostra gli elementi ricevuti
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
@@ -57,29 +29,14 @@ function fetchdashboardData() {
 
 }
 
-fetchdashboardData();
-
-
-function displayItems(username, items) {
-
+function displayItems(username) {
     const usernameDashboard = document.getElementById("username");
     usernameDashboard.textContent = username;
 
-    contentWrapper.innerHTML = '';
-
-    items.forEach(item => {
-        // Clona il template
-        const newItem = newItemContainer.cloneNode(true); // Clona il contenuto del template
-        
-        newItem.style.display = 'block';
-        // Popola i dati
-        newItem.querySelector(".new-p").textContent = item.item; // Aggiungi il testo dell'item
-        const removeButton = newItem.querySelector(".remove-button")
-        removeButton.setAttribute("data-id", item.id);
-        // Aggiungi il nuovo nodo al contenitore principale
-        contentWrapper.appendChild(newItem);
-    });
 }
+fetchdashboardData();
+
+
 
 
 function joinQueue() {
