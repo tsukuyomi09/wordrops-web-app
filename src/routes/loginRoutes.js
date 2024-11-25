@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,  // Il cookie non può essere letto tramite JavaScript
             maxAge: 3600 * 1000,  // La durata del cookie (1 ora)
-            secure: True,  // Usa HTTP durante lo sviluppo
+            secure: true,  // Usa HTTP durante lo sviluppo
             sameSite: 'Strict',  // Impedisce l'invio in richieste cross-origin
         });
         res.status(200).json({ success: true });
