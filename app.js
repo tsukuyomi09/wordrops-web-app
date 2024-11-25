@@ -1,4 +1,5 @@
 require('dotenv').config();
+console.log(process.env.NODE_ENV);
 const express = require('express');
 const path = require('path');
 const { connectDB } = require("./src/database/db");
