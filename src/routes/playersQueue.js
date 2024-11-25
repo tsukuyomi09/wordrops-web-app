@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { client } = require('../database/db'); 
-const checkSession = require('../middlewares/checkSession');
+const checkAuth = require('../middlewares/checkAuthToken');
 
 
-router.get('/gamequeue/:game_id/players', checkSession,  async (req, res) => {
+router.get('/gamequeue/:game_id/players', checkAuth, async (req, res) => {
     const { game_id } = req.params;  // Ottieni il game_id dal parametro della rotta
 
     const query = `

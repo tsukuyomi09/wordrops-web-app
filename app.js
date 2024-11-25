@@ -2,13 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { connectDB } = require("./src/database/db");
+const cookieParser = require('cookie-parser');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 connectDB();
 
-
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
@@ -45,7 +47,7 @@ app.get('/image', (req, res) => {
 const registerRoutes = require('./src/routes/registerRoutes');
 const loginRoutes = require('./src/routes/loginRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
-const itemsRoutes = require('./src/routes/itemsRoutes');
+const dashboardDataRoutes = require('./src/routes/dashboardData');
 const queueRoutes = require('./src/routes/queueRoutes');
 const playersQueue = require('./src/routes/playersQueue');
 const verifyLogIn = require('./src/routes/verifyLogIn');
@@ -57,7 +59,7 @@ app.use(verifyLogIn);
 app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(dashboardRoutes);
-app.use(itemsRoutes);
+app.use(dashboardDataRoutes);
 app.use(queueRoutes);
 app.use(playersQueue);
 

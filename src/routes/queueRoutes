@@ -2,16 +2,16 @@ const express = require('express');
 const path = require('path');
 const router = express.Router();
 const { client } = require('../database/db'); 
-const checkSession = require('../middlewares/checkSession');
+const checkAuth = require('../middlewares/checkAuthToken');
 
 
-router.get('/gamequeue/:game_id', checkSession,  (req, res) => {
+router.get('/gamequeue/:game_id', checkAuth,  (req, res) => {
     // Renderizza la pagina della coda senza passare dati
     res.sendFile(path.join(__dirname, '../../views', 'gamequeue.html'));
 });
 
 // inizializza queue
-router.post("/gamequeue", checkSession, async (req, res) => {
+router.post("/gamequeue", checkAuth, async (req, res) => {
     const user_id = req.user_id;
     try {
         const checkAvailableGameQuery = `
@@ -78,7 +78,7 @@ const createNewGame = async (res, user_id) => {
 };
 
 // abandon queue
-router.delete("/gamequeue", checkSession, async (req, res) => {
+router.delete("/gamequeue", checkAuth, async (req, res) => {
     const user_id = req.user_id;
 
     // 1. Recupera il game_id associato al giocatore
