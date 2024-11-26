@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const checkAuth = require('../middlewares/checkAuthToken');
+const checkUserStatus = require('../middlewares/checkUserStatus');
 
 
 let gameQueue = []; // Array per la coda dei giocatori
@@ -39,6 +40,7 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
                 console.log(`Nessun socket trovato per ${player.username} con socketId ${player.socketId}`);
             }
         });
+        console.log(preGameQueue);
         req.io.to(gameId).emit('game-ready', 'Pronti alla partita!');
     } else {
         res.json({ status: 'in-queue', message: 'In attesa di altri giocatori', gameQueue });
