@@ -1,12 +1,25 @@
 require('dotenv').config();
-console.log(process.env.NODE_ENV);
+
 const express = require('express');
 const path = require('path');
+const http = require("http")
+const socketio = require("socket.io")
 const { connectDB } = require("./src/database/db");
 const cookieParser = require('cookie-parser');
 
 
 const app = express();
+const server = http.createServer(app)
+const io = socketio(server);
+
+io.on("connection", socket => {
+    console.log('Nuovo client connesso:', socket.id);
+
+    socket.on('disconnect', (reason) => {
+        console.log("Disconnesso dal server per:", reason);
+    });
+})
+
 const port = process.env.PORT || 3000;
 
 connectDB();
@@ -17,11 +30,13 @@ app.use(express.json());
 
 
 app.use((req, res, next) => {
+    req.io = io;
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     next();
 });
+
 
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
@@ -50,6 +65,7 @@ const loginRoutes = require('./src/routes/loginRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
 const dashboardDataRoutes = require('./src/routes/dashboardData');
 const queueRoutes = require('./src/routes/queueRoutes');
+const queueRoutesNew = require('./src/routes/queueRoutesNew');
 const playersQueue = require('./src/routes/playersQueue');
 const verifyLogIn = require('./src/routes/verifyLogIn');
 const logout = require('./src/routes/logout');
@@ -62,9 +78,10 @@ app.use(loginRoutes);
 app.use(dashboardRoutes);
 app.use(dashboardDataRoutes);
 app.use(queueRoutes);
+app.use(queueRoutesNew);
 app.use(playersQueue);
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

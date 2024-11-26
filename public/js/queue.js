@@ -34,21 +34,3 @@ function loadPlayers(gameId) {
         });
 }
 
-// uscire dalla queue
-function abandonQueue() {
-    fetch("/gameQueue", {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert("Hai abbandonato la coda.");
-        window.location.href = '/dashboard';
-    })
-    .catch(error => {
-        console.error('Errore nella richiesta per abbandonare la coda:', error);
-    });
-}

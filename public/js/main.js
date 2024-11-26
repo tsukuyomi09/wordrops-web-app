@@ -1,6 +1,22 @@
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
 
+let socket;
+let socketId = null;
+
+function initSocket() {
+    return new Promise(resolve => {
+        socket = io(); // Inizializza la connessione WebSocket
+
+        // Quando il WebSocket è connesso, salva il socketId
+        socket.on('connect', () => {
+            socketId = socket.id;
+            console.log("Socket connesso con ID:", socketId);
+            resolve();  // Una volta connesso, risolvi la promessa
+        });
+    });
+}
+
 
 function fetchdashboardData() {
     fetch("/dashboardData",{
@@ -34,35 +50,101 @@ function displayItems(username) {
 
 fetchdashboardData();
 
+let isInQueue = false;  
 
-function joinQueue() {
-    fetch("/gamequeue", {
-        method: 'POST',
+function toggleQueue() {
+    if (isInQueue) {
+        // L'utente è già in coda, quindi lo rimuoviamo
+        abandonQueue();  // Funzione per rimuovere l'utente dalla coda
+    } else {
+        // L'utente non è in coda, quindi lo aggiungiamo
+        joinQueue();  // Funzione per aggiungere l'utente alla coda
+    }
+}
+
+
+async function joinQueue() {
+    console.log("Tentativo di connessione al WebSocket...");
+
+    // Inizializza la connessione WebSocket e aspetta che si connetta
+    await initSocket();
+
+    // Quando la connessione è avvenuta, possiamo fare il fetch con socketId
+    if (socketId) {
+        try {
+            const response = await fetch("/gamequeueNew", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ socketId })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.status === "in-queue") {
+                alert("In attesa di altri giocatori");
+            } else if (data.status === "pre-game") {
+                alert('Sei pronto a partire?');
+            } else {
+                console.error('Stato sconosciuto ricevuto:', data);
+            }
+        } catch (error) {
+            console.error('Errore nella richiesta per unirsi alla coda:', error);
+        }
+    } else {
+        console.log("Impossibile ottenere il socketId.");
+    }
+}
+
+
+function abandonQueue() {
+
+    console.log("Esecuzione di abandonQueue");
+    if (socket) { 
+        console.log("Socket esiste, procedo con la disconnessione...");
+        socket.disconnect();
+        socket = null;
+        console.log("Connessione Socket.IO chiusa");
+    } else {
+        console.log("Nessun socket da chiudere.");
+    }
+
+    
+    fetch("/gamequeueNew", {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.game_id) {
-            // Redirect manuale dopo aver ricevuto la risposta dal server
-            const redirectUrl = `gamequeue/${data.game_id}`;
-            console.log('Reindirizzamento a:', redirectUrl);  // Verifica l'URL di destinazione
-            window.location.href = redirectUrl;
-        } else {
-            console.error('Errore: nessun game_id ricevuto');
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
         }
+        return response.json();
+    })
+    .then(() => {
+        alert("Hai abbandonato la coda.");
     })
     .catch(error => {
-        console.error('Errore nella richiesta per unirsi alla coda:', error);
+        console.error('Errore nella richiesta per abbandonare la coda:', error);
     });
 }
 
-document.getElementById('toggle-slider').addEventListener('click', () => {
-    const slider = document.getElementById('avatarSlider');
-    slider.classList.toggle('show');
-  });
+function updateButton() {
+    const button = document.getElementById('queue-button');
+    if (isInQueue) {
+        button.innerHTML = 'ABBANDONA <br> PARTITA';  // Cambia il testo del bottone
+    } else {
+        button.innerHTML = 'NUOVA <br> PARTITA';  // Cambia il testo del bottone
+    }
+}
 
 
 function logout(){
