@@ -204,6 +204,29 @@ function abandonQueue() {
 
 
 
+
+// Seleziona tutti gli avatar
+const avatars = document.querySelectorAll('.avatar');
+
+// Aggiungi l'evento click a ciascun avatar
+avatars.forEach(avatar => {
+    avatar.addEventListener('click', () => {
+        // Deseleziona tutti gli avatar (li riporta a bg-blue-200)
+        avatars.forEach(item => {
+            item.classList.remove('bg-blue-600');
+            item.classList.add('bg-blue-200');
+        });
+
+        // Seleziona l'avatar cliccato
+        avatar.classList.remove('bg-blue-200');
+        avatar.classList.add('bg-blue-600');
+
+
+    });
+});
+
+
+
 function logout(){
     fetch("/logout", {
         method: 'DELETE',
