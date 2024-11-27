@@ -52,40 +52,43 @@
         <div class="w-full h-screen flex flex-col items-center justify-top relative" style="background-image: url('./images/dashboard-background.png'); background-size: cover; background-position: center;" >
 
             <div id="avatarContainer" class="hidden flex justify-center items-center p-50 fixed inset-0 bg-black z-10 bg-opacity-80">
-                <button id="close-avatar" onclick="document.getElementById('avatarContainer').classList.add('hidden');"  class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
+                <button id="close-avatar-menu" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
                     X
                 </button>
-                <div class="grid grid-cols-4 grid-rows-4 gap-4 p-6 rounded shadow-lg">
-                    <!-- Aggiungi qui i div con le immagini -->
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/boa-icon-chibi.png" alt="Avatar">
+                <div class="flex flex-col justify-center items-center h-screen">
+                    <div class="grid grid-cols-4 grid-rows-3 gap-4 p-6 rounded shadow-lg">
+                        <!-- Aggiungi qui i div con le immagini -->
+                        <div data-avatar="boa-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer" >
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/boa-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="nami-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/nami-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="luffy-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/luffy-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="zoro-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/zoro-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="sanji-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/sanji-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="panda-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/panda-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="shanks-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/shanks-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="robin-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/robin-icon-chibi.png" alt="Avatar">
+                        </div>
+                        <div data-avatar="chopper-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
+                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/chopper-icon-chibi.png" alt="Avatar">
+                        </div>
+                        
                     </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/nami-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/luffy-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/zoro-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/sanji-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" class="w-4/5 h-4/5 object-contain" src="./images/avatars/panda-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/shanks-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/robin-icon-chibi.png" alt="Avatar">
-                    </div>
-                    <div class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                        <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/chopper-icon-chibi.png" alt="Avatar">
-                    </div>
-                    
-                </div>
+                    <button id="select-avatar-button" class="bg-blue-500 text-white py-2 px-4 rounded" disabled>Seleziona</button>
+                </div>            
             </div>
             
             <div class="flex flex-row items-start justify-between rounded-lg shadow-md gap-4">
@@ -97,7 +100,7 @@
                 <button id="toggle-slider" onclick="document.getElementById('avatarContainer').classList.remove('hidden');" class="mt-4 text-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">cambia avatar</button>
             </div>
             <div class="avatar-container">
-                <img class="h-48 w-42 object-cover" src="./images/avatars/resize-avatar-cyber.png" alt="">
+                <img id="main-avatar" class="h-32 w-22" src="./images/avatars/luffy-icon-chibi.png" alt="">
             </div>
 
                 

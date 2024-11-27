@@ -92,6 +92,46 @@ function initSocket() {
     });
 }
 
+function fetchAvatarData() {
+    // Controlla se l'avatar è già salvato nel localStorage
+    const avatar = localStorage.getItem("avatar");
+
+    if (avatar) {
+        // Se l'avatar è già presente nel localStorage, usa direttamente l'immagine
+        updateAvatarImage(avatar);
+    } else {
+        // Altrimenti, fai la fetch per ottenere l'avatar dal server
+        fetch("/avatar", {
+            method: "GET",  // Metodo GET per ottenere l'avatar
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include"  // Include il cookie per l'autenticazione
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Errore nella rete");
+            }
+            return response.json();  // Ottieni i dati in formato JSON
+        })
+        .then(data => {
+            const avatar = data.avatar;
+            // Memorizza l'avatar nel localStorage per evitare future richieste
+            localStorage.setItem("avatar", avatar);
+            updateAvatarImage(avatar);
+        })
+        .catch(error => {
+            console.error("Errore durante il recupero dell'avatar:", error);
+        });
+    }
+}
+
+// Funzione per aggiornare l'immagine dell'avatar
+function updateAvatarImage(avatar) {
+    const avatarContainer = document.getElementById("main-avatar");
+    avatarContainer.src = `./images/avatars/${avatar}.png`;  // Imposta il nuovo avatar
+}
+
 
 function fetchdashboardData() {
     fetch("/dashboardData",{
@@ -123,20 +163,13 @@ function displayItems(username) {
 
 }
 
+fetchAvatarData();
 fetchdashboardData();
 
+
+
+
 let isInQueue = false;  
-
-function toggleQueue() {
-    if (isInQueue) {
-        // L'utente è già in coda, quindi lo rimuoviamo
-        abandonQueue();  // Funzione per rimuovere l'utente dalla coda
-    } else {
-        // L'utente non è in coda, quindi lo aggiungiamo
-        joinQueue();  // Funzione per aggiungere l'utente alla coda
-    }
-}
-
 
 async function joinQueue() {
     console.log("Tentativo di connessione al WebSocket...");
@@ -165,7 +198,6 @@ async function joinQueue() {
         console.log("Impossibile ottenere il socketId.");
     }
 }
-
 
 function abandonQueue() {
 
@@ -203,28 +235,84 @@ function abandonQueue() {
 }
 
 
-
-
 // Seleziona tutti gli avatar
 const avatars = document.querySelectorAll('.avatar');
+const mainAvatar = document.getElementById('main-avatar');
+const avatarContainer = document.getElementById('avatarContainer');
+const selectButton = document.getElementById('select-avatar-button');
+const closeButton = document.getElementById('close-avatar-menu');
+let selectedAvatar = null;
 
 // Aggiungi l'evento click a ciascun avatar
 avatars.forEach(avatar => {
     avatar.addEventListener('click', () => {
-        // Deseleziona tutti gli avatar (li riporta a bg-blue-200)
+        // Deseleziona tutti gli avatar
         avatars.forEach(item => {
             item.classList.remove('bg-blue-600');
             item.classList.add('bg-blue-200');
         });
 
-        // Seleziona l'avatar cliccato
         avatar.classList.remove('bg-blue-200');
         avatar.classList.add('bg-blue-600');
-
-
+        selectedAvatar = avatar.getAttribute('data-avatar');
+        const selectedAvatarImg = avatar.querySelector('img').src;
+        mainAvatar.src = selectedAvatarImg;
+        selectButton.disabled = false;
     });
 });
 
+selectButton.addEventListener('click', () => {
+    if (selectedAvatar) {
+        fetch('/avatar', {
+            method: 'POST',
+            body: JSON.stringify({ avatar: selectedAvatar }), // Passiamo l'avatar selezionato
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Avatar selezionato e salvato:', data);
+            localStorage.setItem('avatar', selectedAvatar);
+            closeMenu(); 
+        })
+        .catch(error => {
+            console.error('Errore nella selezione dell\'avatar:', error);
+        });
+    }
+});
+
+closeButton.addEventListener('click', () => {
+    if (selectedAvatar) {
+        fetch('/avatar', {
+            method: 'POST',
+            body: JSON.stringify({ avatar: selectedAvatar }), // Passiamo l'avatar selezionato
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Gestisci la risposta (ad esempio, chiudi il menu o mostra un messaggio di successo)
+            console.log('Avatar selezionato e salvato:', data);
+            localStorage.setItem('avatar', selectedAvatar);
+            closeMenu(); // Chiudi il menu
+        })
+        .catch(error => {
+            console.error('Errore nella selezione dell\'avatar:', error);
+        });
+    } else {
+        // Se non è stato selezionato nessun avatar, chiudi semplicemente il menu senza fare fetch
+        closeMenu();
+    }
+});
+
+function closeMenu() {
+    // Qui metti la logica per chiudere il menu degli avatar, ad esempio:
+    avatarContainer.classList.add('hidden'); // Nascondi il menu
+    selectedAvatar = null; // Resetta la selezione
+    selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
+}
 
 
 function logout(){
