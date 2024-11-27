@@ -1,3 +1,12 @@
+window.onpopstate = function(event) {
+    console.log("L'utente ha cliccato 'Indietro'");
+    // Qui puoi eseguire qualsiasi funzione, ad esempio:
+    abandonQueue()
+};
+
+// Aggiungi uno stato iniziale
+history.pushState(null, null, location.href);
+
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
 const waitingOverlay = document.getElementById('waiting-overlay');
