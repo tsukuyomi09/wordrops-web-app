@@ -14,6 +14,11 @@ function initSocket() {
             console.log("Socket connesso con ID:", socketId);
             resolve();  // Una volta connesso, risolvi la promessa
         });
+
+        // Listener per quando il gioco è pronto
+        socket.on('game-ready', (message) => {
+            alert(message); // Mostra l'alert
+        });
     });
 }
 
