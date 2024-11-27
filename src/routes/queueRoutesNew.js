@@ -44,7 +44,9 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
             req.io.to(gameId).emit('game-ready', 'Partita trovata! Pronto a giocare?');
         }, 3000);
     } else {
-        res.json({ status: 'in-queue', message: 'In attesa di altri giocatori', gameQueue });
+        setTimeout(() => {
+            req.io.to(gameId).emit('in-queue', 'In attesa di altri giocatori');
+        }, 1000);
     }
 
 });

@@ -16,6 +16,10 @@ function initSocket() {
         });
 
         // Listener per quando il gioco è pronto
+        socket.on('in-queue', (message) => {
+            alert(message); // Mostra l'alert
+        });
+
         socket.on('game-ready', (message) => {
             alert(message); // Mostra l'alert
         });
