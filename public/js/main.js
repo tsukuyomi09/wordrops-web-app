@@ -1,7 +1,26 @@
 window.onpopstate = function(event) {
     console.log("L'utente ha cliccato 'Indietro'");
     // Qui puoi eseguire qualsiasi funzione, ad esempio:
-    abandonQueue()
+    fetch("/gamequeueNew", {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        setTimeout(() => {
+            waitingOverlay.classList.add('hidden');
+        }, 1500);
+        return response.json();
+    })
+
+    .catch(error => {
+        console.error('Errore nella richiesta per abbandonare la coda:', error);
+    });
 };
 
 // Aggiungi uno stato iniziale
