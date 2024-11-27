@@ -3,6 +3,7 @@ const usernameDashboard = document.getElementById("username");
 
 let socket;
 let socketId = null;
+let countdownStarted = false;
 
 function initSocket() {
     return new Promise(resolve => {
@@ -22,6 +23,36 @@ function initSocket() {
 
         socket.on('game-ready', (message) => {
             alert(message); // Mostra l'alert
+        });
+
+        socket.on('countdown', (seconds) => {
+            if (!countdownStarted) {
+                document.getElementById('countdown-overlay').style.display = 'flex';
+                countdownStarted = true; // Imposta il flag per evitare di farlo più volte
+            }            
+            document.getElementById('countdown-seconds').innerText = seconds;
+
+        });
+
+        socket.on("not-ready", (message) => {
+            console.log(message); // Mostra il messaggio nella console
+        
+            // Modifica la UI
+            document.getElementById('countdown-seconds').style.display = 'none'; // Nascondi il countdown
+            document.getElementById('countdown').innerText = "Sei stato rimosso dal game"; // Cambia il testo
+            document.getElementById('ready-btn').style.display = 'none'; // Nascondi il pulsante "Sono pronto"
+        
+            // Dopo 2 secondi, nascondi l'overlay e ripristina la UI
+            setTimeout(() => {
+                document.getElementById('countdown-overlay').style.removeProperty('display');
+                document.getElementById('countdown-seconds').style.display = 'block'; // Rendi visibile di nuovo il countdown
+                document.getElementById('ready-btn').style.display = 'block'; // Mostra il pulsante "Sono pronto"
+                document.getElementById('countdown').innerText = "Partita trovata, Inizio in:"; // Ripristina il testo iniziale
+
+                countdownStarted = false;
+                socket.disconnect();
+                socket = null;
+            }, 2000); // Aspetta 2 secondi prima di ripristinare la UI
         });
 
         socket.on("queueAbandoned", (data) => {

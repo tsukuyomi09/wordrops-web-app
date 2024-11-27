@@ -41,7 +41,7 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
         });
         console.log(preGameQueue);
         setTimeout(() => {
-            req.io.to(gameId).emit('game-ready', 'Partita trovata! Pronto a giocare?');
+            startCountdown(req.io, gameId);
         }, 3000);
     } else {
         // Aggiungi il messaggio solo al singolo giocatore che si è appena unito
@@ -80,6 +80,28 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
     });
     res.json({ status: 'idle', message: 'Utente rimosso dalla coda', gameQueue });
 });
+
+
+function startCountdown(io, gameId) {
+    let countdown = 10; 
+
+    const countdownInterval = setInterval(() => {
+        // Prima inviamo il countdown al client
+        io.to(gameId).emit('countdown', countdown);
+
+        if (countdown <= 0) {
+            clearInterval(countdownInterval); // Ferma il countdown
+            delete preGameQueue[gameId]; // Rimuove il gioco dalla coda
+
+            // Invia il messaggio 'queueAbandoned' a tutti i giocatori dopo un breve ritardo
+            setTimeout(() => {
+                io.to(gameId).emit('not-ready', 'Sei Stato rimosso dalla queue');
+            }, 1000);
+        } 
+
+        countdown--; // Decrementa il tempo rimanente
+    }, 1000); // Esegui ogni secondo
+}
 
 
 module.exports = router;
