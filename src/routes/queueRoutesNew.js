@@ -24,6 +24,14 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
     // Aggiungi l'utente alla gameQueue con un timestamp
     gameQueue.push({ id: userId, username, socketId, timestamp: Date.now(), pronto: null });
     console.log('Stato aggiornato della gameQueue:', gameQueue);
+    const socket = req.io.sockets.sockets.get(socketId);
+    if (socket) {
+        setTimeout(() => {
+            socket.emit('in-queue', 'In attesa di altri giocatori');
+        }, 1000);
+    } else {
+        console.log(`Nessun socket trovato per ${username} con socketId ${socketId}`);
+    }
 
     // Controlla se ci sono 5 giocatori nella coda
     if (gameQueue.length >= 5) {
@@ -43,17 +51,7 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
         setTimeout(() => {
             startCountdown(req.io, gameId);
         }, 3000);
-    } else {
-        // Aggiungi il messaggio solo al singolo giocatore che si è appena unito
-        const socket = req.io.sockets.sockets.get(socketId);
-        if (socket) {
-            setTimeout(() => {
-                socket.emit('in-queue', 'In attesa di altri giocatori');
-            }, 1000);
-        } else {
-            console.log(`Nessun socket trovato per ${username} con socketId ${socketId}`);
-        }
-    }
+    } 
 
     return res.status(200).json({ message: 'Utente aggiunto alla coda' });
 });

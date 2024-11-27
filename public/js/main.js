@@ -1,5 +1,7 @@
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
+const waitingOverlay = document.getElementById('waiting-overlay');
+
 
 let socket;
 let socketId = null;
@@ -18,7 +20,7 @@ function initSocket() {
 
         // Listener per quando il gioco è pronto
         socket.on('in-queue', (message) => {
-            alert(message); // Mostra l'alert
+            waitingOverlay.classList.remove('hidden');
         });
 
         socket.on('game-ready', (message) => {
@@ -27,6 +29,7 @@ function initSocket() {
 
         socket.on('countdown', (seconds) => {
             if (!countdownStarted) {
+                waitingOverlay.classList.add('hidden');
                 document.getElementById('countdown-overlay').style.display = 'flex';
                 countdownStarted = true; // Imposta il flag per evitare di farlo più volte
             }            
@@ -56,8 +59,7 @@ function initSocket() {
         });
 
         socket.on("queueAbandoned", (data) => {
-            console.log(data.message); // Mostra il messaggio nella console
-            alert(data.message); // Mostra un avviso all'utente
+            waitingOverlay.classList.add('hidden');
         });
     });
 }
@@ -161,24 +163,17 @@ function abandonQueue() {
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
         }
+        setTimeout(() => {
+            waitingOverlay.classList.add('hidden');
+        }, 1500);
         return response.json();
     })
-    .then(() => {
-        alert("Hai abbandonato la coda.");
-    })
+
     .catch(error => {
         console.error('Errore nella richiesta per abbandonare la coda:', error);
     });
 }
 
-function updateButton() {
-    const button = document.getElementById('queue-button');
-    if (isInQueue) {
-        button.innerHTML = 'ABBANDONA <br> PARTITA';  // Cambia il testo del bottone
-    } else {
-        button.innerHTML = 'NUOVA <br> PARTITA';  // Cambia il testo del bottone
-    }
-}
 
 
 function logout(){
