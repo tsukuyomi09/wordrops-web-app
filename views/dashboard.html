@@ -14,8 +14,22 @@
 </head>
 <body>
     <div id="pagewrap" class="w-full">
+        <div id="countdown-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-10 hidden">
+            <!-- Contenitore che usa flex-col per allineare il testo sopra e i secondi sotto -->
+            <div class="flex flex-col items-center">
+                <!-- Testo sopra i secondi -->
+                <div id="countdown" class="text-white text-2xl mb-2">
+                    Partita trovata, Inizio in:
+                </div>
+                <!-- I secondi in rosso e grande -->
+                <h2 id="countdown-seconds" class="text-red-600 text-9xl font-bold">10</h2>
+                <button id="ready-btn" class="mt-40 px-6 py-3 bg-blue-500 text-white font-semibold text-lg rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    Sono pronto
+                </button>
+            </div>
+        </div>
+        
         <div class="w-full h-screen flex flex-col items-center justify-top relative" style="background-image: url('./images/dashboard-background.png'); background-size: cover; background-position: center;" >
-
             <div class="flex flex-row items-start justify-between rounded-lg shadow-md gap-4">
                 <button id="logout-button" class="mt-4 text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mb-2 transition duration-300" onclick="logout()">log out</button>
                 <div class="username_container mb-20 p-4 px-10 bg-gray-900 bg-opacity-60 rounded-bl-lg rounded-br-lg inline-block">
