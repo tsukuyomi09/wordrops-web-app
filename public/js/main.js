@@ -19,6 +19,11 @@ function initSocket() {
         socket.on('game-ready', (message) => {
             alert(message); // Mostra l'alert
         });
+
+        socket.on("queueAbandoned", (data) => {
+            console.log(data.message); // Mostra il messaggio nella console
+            alert(data.message); // Mostra un avviso all'utente
+        });
     });
 }
 
@@ -70,11 +75,8 @@ function toggleQueue() {
 
 async function joinQueue() {
     console.log("Tentativo di connessione al WebSocket...");
-
-    // Inizializza la connessione WebSocket e aspetta che si connetta
     await initSocket();
 
-    // Quando la connessione è avvenuta, possiamo fare il fetch con socketId
     if (socketId) {
         try {
             const response = await fetch("/gamequeueNew", {
@@ -90,15 +92,7 @@ async function joinQueue() {
                 throw new Error(`Errore HTTP: ${response.status}`);
             }
 
-            const data = await response.json();
-
-            if (data.status === "in-queue") {
-                alert("In attesa di altri giocatori");
-            } else if (data.status === "pre-game") {
-                alert('Sei pronto a partire?');
-            } else {
-                console.error('Stato sconosciuto ricevuto:', data);
-            }
+            console.log("Richiesta per unirsi alla coda completata con successo.");
         } catch (error) {
             console.error('Errore nella richiesta per unirsi alla coda:', error);
         }

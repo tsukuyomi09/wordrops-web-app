@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const checkAuth = require('../middlewares/checkAuthToken');
-const checkUserStatus = require('../middlewares/checkUserStatus');
 
 
 let gameQueue = []; // Array per la coda dei giocatori
@@ -23,12 +22,12 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
     }
 
     // Aggiungi l'utente alla gameQueue con un timestamp
-    gameQueue.push({ id: userId, username, socketId, timestamp: Date.now() });
+    gameQueue.push({ id: userId, username, socketId, timestamp: Date.now(), pronto: null });
     console.log('Stato aggiornato della gameQueue:', gameQueue);
 
     // Controlla se ci sono 5 giocatori nella coda
-    if (gameQueue.length >= 2) {
-        const players = gameQueue.splice(0, 2);
+    if (gameQueue.length >= 5) {
+        const players = gameQueue.splice(0, 5);
         let gameId = `game_${Date.now()}`;
         preGameQueue[gameId] = players; 
 
@@ -41,7 +40,9 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
             }
         });
         console.log(preGameQueue);
-        req.io.to(gameId).emit('game-ready', 'Pronti alla partita!');
+        setTimeout(() => {
+            req.io.to(gameId).emit('game-ready', 'Partita trovata! Pronto a giocare?');
+        }, 3000);
     } else {
         res.json({ status: 'in-queue', message: 'In attesa di altri giocatori', gameQueue });
     }
@@ -63,6 +64,11 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
     gameQueue.splice(playerIndex, 1);
 
     console.log('Coda aggiornata:', gameQueue);
+
+    req.socket.emit("queueAbandoned", { 
+        status: 'idle', 
+        message: 'Hai abbandonato la coda' 
+    });
     res.json({ status: 'idle', message: 'Utente rimosso dalla coda', gameQueue });
 });
 
