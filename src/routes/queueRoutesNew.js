@@ -27,8 +27,8 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
     console.log('Stato aggiornato della gameQueue:', gameQueue);
 
     // Controlla se ci sono 5 giocatori nella coda
-    if (gameQueue.length >= 5) {
-        const players = gameQueue.splice(0, 5);
+    if (gameQueue.length >= 2) {
+        const players = gameQueue.splice(0, 2);
         let gameId = `game_${Date.now()}`;
         preGameQueue[gameId] = players; 
 
