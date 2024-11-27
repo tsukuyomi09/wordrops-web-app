@@ -44,11 +44,18 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
             req.io.to(gameId).emit('game-ready', 'Partita trovata! Pronto a giocare?');
         }, 3000);
     } else {
-        setTimeout(() => {
-            req.io.to(gameId).emit('in-queue', 'In attesa di altri giocatori');
-        }, 1000);
+        // Aggiungi il messaggio solo al singolo giocatore che si è appena unito
+        const socket = req.io.sockets.sockets.get(socketId);
+        if (socket) {
+            setTimeout(() => {
+                socket.emit('in-queue', 'In attesa di altri giocatori');
+            }, 1000);
+        } else {
+            console.log(`Nessun socket trovato per ${username} con socketId ${socketId}`);
+        }
     }
 
+    return res.status(200).json({ message: 'Utente aggiunto alla coda' });
 });
 
 
