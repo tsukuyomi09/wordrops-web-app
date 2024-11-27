@@ -26,6 +26,14 @@ window.onpopstate = function(event) {
 // Aggiungi uno stato iniziale
 history.pushState(null, null, location.href);
 
+window.addEventListener('load', () => {
+    // Aspetta 0.2 secondi dopo il caricamento della pagina
+    setTimeout(() => {
+        const avatarContainer = document.querySelector('.avatar-container');
+        avatarContainer.classList.add('show');  // Aggiungi la classe per avviare la transizione
+    }, 50);  // 0.2 secondi
+});
+
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
 const waitingOverlay = document.getElementById('waiting-overlay');
@@ -313,6 +321,8 @@ function closeMenu() {
     selectedAvatar = null; // Resetta la selezione
     selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
 }
+
+
 
 
 function logout(){
