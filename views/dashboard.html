@@ -8,14 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <link href="./style/style.css" rel="stylesheet">
+    <link href="/style/style.css" rel="stylesheet">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <script src="./js/checkAuth.js"></script>
+    <script src="/js/checkAuth.js"></script>
 
 </head>
 <body>
-    <div id="pagewrap" class="w-full">
-        <div></div>
+
+    <div id="loading-overlay" class="fixed inset-0 flex items-center justify-center z-50 opacity-100 hidden transition-opacity duration-1000">
+        <img class="w-full h-full object-cover" src="/images/gifs/book-loader-dashboard.gif" alt="Loading Animation">
+    </div>
+    <div id="pagewrap" class="w-full hidden">
+   
         <div id="waiting-overlay" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-10 hidden">
             <!-- Contenitore che usa flex-col per allineare il testo sopra e la gif sotto -->
             <div class="flex flex-col items-center">
@@ -26,7 +30,7 @@
         
                 <!-- Gif animata sotto il testo -->
                 <div id="waiting-gif" class="mb-4">
-                    <img src="./images/queue-spinner.gif" alt="Waiting Gif" class="w-32 h-32">
+                    <img src="/images/gifs/queue-spinner.gif" alt="Waiting Gif" class="w-32 h-32">
                 </div>
         
                 <!-- Pulsante "Abbandona" -->
@@ -60,31 +64,31 @@
                     <div class="grid grid-cols-4 grid-rows-3 gap-4 p-6 rounded shadow-lg">
                         <!-- Aggiungi qui i div con le immagini -->
                         <div data-avatar="boa-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer" >
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/boa-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/boa-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="nami-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/nami-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/nami-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="luffy-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/luffy-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/luffy-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="zoro-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/zoro-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/zoro-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="sanji-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/sanji-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/sanji-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="panda-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/panda-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/panda-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="shanks-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/shanks-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/shanks-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="robin-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/robin-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/robin-icon-chibi.png" alt="Avatar">
                         </div>
                         <div data-avatar="chopper-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer">
-                            <img class="w-4/5 h-4/5 object-contain" src="./images/avatars/chopper-icon-chibi.png" alt="Avatar">
+                            <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/chopper-icon-chibi.png" alt="Avatar">
                         </div>
                         
                     </div>
@@ -98,10 +102,10 @@
                     <h2 id="username" class="text-white text-2xl font-extrabold"></h2>
                     <h4 id="userStatus"></h4>
                 </div>
-                <button id="toggle-slider" onclick="document.getElementById('avatarContainer').classList.remove('hidden');" class="mt-4 text-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">cambia avatar</button>
+                <button id="toggle-slider" onclick="openAvatarMenu()" class="mt-4 text-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">cambia avatar</button>
             </div>
             <div class="avatar-container">
-                <img id="main-avatar" class="h-32 w-22" src="./images/avatars/luffy-icon-chibi.png" alt="">
+                <img id="main-avatar" class="h-32 w-22" src="/images/avatars/luffy-icon-chibi.png" alt="">
             </div>
 
                 
@@ -110,7 +114,7 @@
                 <div class="text-xs	 p-8 rounded-lg bg-white bg-opacity-80 flex flex-col items-center justify-center font-semibold">CLASSIFICHE</div>
                 
                 <!-- Elemento 2 -->
-                <button id="queue-button" onclick="joinQueue()" class="bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
+                <button id="queue-button" onclick="joinQueue()" class="hover-sound bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
                 <!-- Elemento 3 -->
                 <div class="text-xs p-8 rounded-lg bg-white bg-opacity-80 flex flex-col items-center justify-center font-semibold">ALTRO</div>
                 
@@ -126,6 +130,10 @@
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="/js/main.js" defer></script>
+    <audio id="click-sound" src="/images/button-hover-sound.mp3" preload="auto"></audio>
+    <audio id="select-sound" src="/images/avatar-select-1.mp3" preload="auto"></audio>
+    <audio id="select-sound-new-game" src="/images/new-game-sound.mp3" preload="auto"></audio>
+
 </body>
 </html>

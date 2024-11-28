@@ -1,3 +1,51 @@
+function showLoadingAnimation() {
+    const overlay = document.getElementById('loading-overlay');
+    const pagewrap = document.getElementById('pagewrap');
+    pagewrap.classList.remove('hidden'); 
+
+    // Mostra l'overlay e avvia l'animazione di fade-in
+    overlay.classList.remove('hidden');
+    overlay.classList.add('opacity-100');
+
+    setTimeout(() => {
+        // Imposta il fade-out
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
+
+        setTimeout(() => {
+            // Nascondi l'overlay dopo il fade-out
+            overlay.classList.add('hidden');
+            // Mostra il contenuto
+        }, 1000); // Tempo per completare il fade-out
+    }, 3000); // Durata della GIF
+}
+
+function showAvatarTransition() {
+    const avatarContainer = document.querySelector('.avatar-container');
+    setTimeout(() => {
+        avatarContainer.classList.add('show');
+    }, 50); // Ritardo per la transizione
+}
+
+window.addEventListener('load', () => {
+    const overlay = document.getElementById('loading-overlay');
+    const pagewrap = document.getElementById('pagewrap');
+    const audioCtx = new window.AudioContext();
+ 
+
+    if (!sessionStorage.getItem('hasVisited')) {
+        // Non visitato prima, mostra l'animazione
+        showLoadingAnimation();
+        sessionStorage.setItem('hasVisited', 'true');
+    } else {
+        // Già visitato, nascondi subito l'overlay e mostra la dashboard
+        pagewrap.classList.remove('hidden');
+    }
+
+    showAvatarTransition(); // Sempre eseguita
+});
+
+
 window.onpopstate = function(event) {
     console.log("L'utente ha cliccato 'Indietro'");
     // Qui puoi eseguire qualsiasi funzione, ad esempio:
@@ -26,13 +74,7 @@ window.onpopstate = function(event) {
 // Aggiungi uno stato iniziale
 history.pushState(null, null, location.href);
 
-window.addEventListener('load', () => {
-    // Aspetta 0.2 secondi dopo il caricamento della pagina
-    setTimeout(() => {
-        const avatarContainer = document.querySelector('.avatar-container');
-        avatarContainer.classList.add('show');  // Aggiungi la classe per avviare la transizione
-    }, 50);  // 0.2 secondi
-});
+
 
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
@@ -99,6 +141,92 @@ function initSocket() {
         });
     });
 }
+
+const sound = document.getElementById('click-sound');
+function buttonSound() {
+    if (sound) {
+        sound.currentTime = 0;  // Resetta il suono per farlo partire sempre da capo
+        sound.play();
+    } else {
+        console.error("Elemento audio non trovato!");
+    }
+}
+
+const selectSound = document.getElementById('select-sound');
+function avatarSelectSound() {
+    if (selectSound) {
+        selectSound.currentTime = 0;  // Resetta il suono per farlo partire sempre da capo
+        selectSound.play();
+    } else {
+        console.error("Elemento audio non trovato!");
+    }
+}
+
+const selectSoundNewGame = document.getElementById('select-sound-new-game');
+function newGameSound() {
+    if (selectSoundNewGame) {
+        selectSoundNewGame.currentTime = 0;  // Resetta il suono per farlo partire sempre da capo
+        selectSoundNewGame.play();
+    } else {
+        console.error("Elemento audio non trovato!");
+    }
+}
+
+
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let currentAudioSource = null;
+// Funzione per caricare il file audio e riprodurlo
+async function loadAndPlayAudio(filePath) {
+    try {
+        // Carica il file audio
+        const response = await fetch(filePath);
+        const arrayBuffer = await response.arrayBuffer();
+
+        // Decodifica l'audio in un AudioBuffer
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        // Crea un AudioBufferSourceNode
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.loop = true; // Configura il loop
+
+        // Collega il source al contesto audio
+        source.connect(audioCtx.destination);
+
+        // Riproduci l'audio
+        source.start();
+
+        // Salva il riferimento al nodo audio per fermarlo successivamente
+        currentAudioSource = source;
+    } catch (error) {
+        console.error("Errore durante il caricamento o la riproduzione dell'audio:", error);
+    }
+}
+
+async function startBackgroundMusic(filePath) {
+    // Verifica se c'è già un audio in riproduzione e lo ferma prima di iniziarne uno nuovo
+    if (currentAudioSource) {
+        currentAudioSource.stop(); // Ferma la musica in corso
+    }
+
+    try {
+        // Carica e avvia la musica
+        await loadAndPlayAudio(filePath); // Usa la tua funzione loadAndPlayAudio
+        console.log("Musica di sottofondo avviata.");
+    } catch (error) {
+        console.error("Errore durante la riproduzione della musica:", error);
+    }
+}
+
+function stopBackgroundMusic() {
+    if (currentAudioSource) {
+        currentAudioSource.stop(); // Ferma la riproduzione
+        currentAudioSource = null; // Resetta la variabile
+    } else {
+        console.log("Nessun audio in riproduzione.");
+    }
+}
+
 
 function fetchAvatarData() {
     // Controlla se l'avatar è già salvato nel localStorage
@@ -175,11 +303,15 @@ fetchAvatarData();
 fetchdashboardData();
 
 
-
-
 let isInQueue = false;  
 
 async function joinQueue() {
+    newGameSound()
+    const backgroundMusicPath = "/images/new-queue-music.ogg"; 
+    setTimeout(async () => {
+        await startBackgroundMusic(backgroundMusicPath);
+    }, 1000);
+
     console.log("Tentativo di connessione al WebSocket...");
     await initSocket();
 
@@ -208,8 +340,10 @@ async function joinQueue() {
 }
 
 function abandonQueue() {
+    buttonSound()
 
     console.log("Esecuzione di abandonQueue");
+
     if (socket) { 
         console.log("Socket esiste, procedo con la disconnessione...");
         socket.disconnect();
@@ -233,7 +367,9 @@ function abandonQueue() {
         }
         setTimeout(() => {
             waitingOverlay.classList.add('hidden');
+            stopBackgroundMusic();
         }, 1500);
+        
         return response.json();
     })
 
@@ -251,10 +387,17 @@ const selectButton = document.getElementById('select-avatar-button');
 const closeButton = document.getElementById('close-avatar-menu');
 let selectedAvatar = null;
 
+
+function openAvatarMenu() {
+    buttonSound()
+    document.getElementById('avatarContainer').classList.remove('hidden');
+}
+
+
 // Aggiungi l'evento click a ciascun avatar
 avatars.forEach(avatar => {
     avatar.addEventListener('click', () => {
-        // Deseleziona tutti gli avatar
+        avatarSelectSound()
         avatars.forEach(item => {
             item.classList.remove('bg-blue-600');
             item.classList.add('bg-blue-200');
@@ -270,6 +413,7 @@ avatars.forEach(avatar => {
 });
 
 selectButton.addEventListener('click', () => {
+    buttonSound()
     if (selectedAvatar) {
         fetch('/avatar', {
             method: 'POST',
@@ -291,6 +435,7 @@ selectButton.addEventListener('click', () => {
 });
 
 closeButton.addEventListener('click', () => {
+    buttonSound()
     if (selectedAvatar) {
         fetch('/avatar', {
             method: 'POST',
@@ -323,9 +468,8 @@ function closeMenu() {
 }
 
 
-
-
 function logout(){
+    buttonSound()
     fetch("/logout", {
         method: 'DELETE',
         headers: {
@@ -335,6 +479,7 @@ function logout(){
     })
     .then(response => {
         if (response.ok) {
+            sessionStorage.removeItem('hasVisited');
             window.location.href = "/"; 
         } else {
             return response.json(); 
