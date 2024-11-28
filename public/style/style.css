@@ -2,7 +2,7 @@
 .avatar-container {
     visibility: hidden;  /* Imposta la visibilità iniziale a hidden */
     opacity: 0;          /* Imposta l'opacità a 0 per nasconderlo */
-    transition: opacity 1.2s ease-in-out, visibility 0s linear 0.2s; /* Transizione per opacity e ritardo su visibility */
+    transition: opacity 1.2s ease-in-out, visibility 0s  /* Transizione per opacity e ritardo su visibility */
 }
 
 .avatar-container.show {
