@@ -9,3 +9,80 @@
     visibility: visible;  /* Imposta la visibilità a visible */
     opacity: 1;            /* Imposta l'opacità a 1 */
 }
+
+.font-consolas {
+font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.big-number{
+    font-size: 180px;
+}
+
+.section-wrapper {
+    background-image: url('/images/blobs.png');
+    background-size: 50%; /* Riduce l'immagine al 50% della larghezza del contenitore */
+    background-position: center 80%; /* Centra l'immagine */
+    background-repeat: no-repeat; /* Impedisce la ripetizione dell'immagine */
+}
+
+// animations
+
+#number-1, #number-4 {
+    position: relative;  /* Assicurati che l'elemento abbia una posizione relativa */
+    z-index: 10;  /* Aggiungi un alto z-index per assicurarti che l'elemento non venga coperto */
+  }
+  
+  .tilt-left {
+    transform: rotate(-12deg);
+    transform-origin: bottom left;
+    transition: transform 0.8s ease-out;
+  }
+  
+  .tilt-right {
+    transform: rotate(12deg);
+    transform-origin: bottom right;
+    transition: transform 0.8s ease-out;
+  }
+  
+  .no-tilt {
+    transform: rotate(0deg);
+    transform-origin: center;
+    transition: transform 0.4s ease;
+  }
+
+
+.fire-background-container{
+    mix-blend-mode:screen;
+    pointer-events: none;
+}
+
+// game mode animation
+
+#top-container, #bottom-container {
+    position: relative;  /* Assicurati che l'elemento abbia una posizione relativa */
+    z-index: 40;  /* Aggiungi un alto z-index per assicurarti che l'elemento non venga coperto */
+  }
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(60%); /* Inizialmente a destra */
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+  }
+  
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-60%); /* Inizialmente a sinistra */
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+  }
+  
+  /* Quando gli elementi diventano visibili */
+  .reveal-visible {
+    opacity: 1;
+    transform: translateX(0); /* Arrivano alla posizione finale */
+  }
+  
+  .reveal-right.reveal-visible {
+    transition-delay: 0.3s;
+  }
+
+    
