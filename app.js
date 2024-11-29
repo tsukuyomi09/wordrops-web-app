@@ -14,7 +14,6 @@ const io = socketio(server);
 
 io.on("connection", socket => {
     console.log('Nuovo client connesso:', socket.id);
-
     socket.on('disconnect', (reason) => {
         console.log("Disconnesso dal server per:", reason);
     });
@@ -38,11 +37,14 @@ app.use((req, res, next) => {
 });
 
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'homepage.html'));
+});
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'register.html'));
+app.get('/register19090903', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'register19090903.html'));
 });
 app.get('/game', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'game.html'));
@@ -60,6 +62,7 @@ app.get('/image', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'image.html'));
 });
 
+const waitingListRoute = require('./src/routes/waitingList');
 const registerRoutes = require('./src/routes/registerRoutes');
 const loginRoutes = require('./src/routes/loginRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
@@ -71,7 +74,9 @@ const verifyLogIn = require('./src/routes/verifyLogIn');
 const logout = require('./src/routes/logout');
 const updateAvatar = require('./src/services/updateAvatar');
 
+
 app.use(logout);
+app.use(waitingListRoute);
 app.use(verifyLogIn);
 app.use(registerRoutes);
 app.use(loginRoutes);

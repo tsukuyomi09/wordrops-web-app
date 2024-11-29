@@ -299,6 +299,7 @@ function displayItems(username) {
 
 }
 
+
 fetchAvatarData();
 fetchdashboardData();
 
@@ -352,7 +353,6 @@ function abandonQueue() {
     } else {
         console.log("Nessun socket da chiudere.");
     }
-
     
     fetch("/gamequeueNew", {
         method: 'DELETE',

@@ -9,14 +9,14 @@ async function checkSessionStatus() {
             console.log("Sessione non valida");
 
             const currentPath = window.location.pathname;
-            if (currentPath !== '/') {
-                window.location.href = '/';
+            if (currentPath !== '/register19090903') {
+                window.location.href = '/register19090903';
             }
         } else {
             console.log("Sessione valida");
 
             const currentPath = window.location.pathname;
-            if (currentPath === '/') {
+            if (currentPath === '/register19090903') {
                 window.location.href = '/dashboard';
             }
         }
