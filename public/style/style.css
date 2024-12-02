@@ -20,7 +20,7 @@ font-family: 'Consolas', 'Courier New', monospace;
 
 @media (max-width: 768px) { /* Schermi piccoli (smartphone) */
   .big-number {
-    font-size: 120px; /* Aumenta al 90% */
+    font-size: 140px; /* Aumenta al 90% */
   }
 }
 
