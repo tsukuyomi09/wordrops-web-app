@@ -40,6 +40,9 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'homepage.html'));
 });
+app.get('/privacy-policy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'privacy-policy.html'));
+});
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
