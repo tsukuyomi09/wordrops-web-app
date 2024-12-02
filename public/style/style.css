@@ -25,6 +25,18 @@ font-family: 'Consolas', 'Courier New', monospace;
     background-repeat: no-repeat; /* Impedisce la ripetizione dell'immagine */
 }
 
+@media (max-width: 1024px) { /* Schermi medi (tablet o piccoli desktop) */
+  .section-wrapper {
+      background-size: 80%; /* Aumenta al 80% */
+  }
+}
+
+@media (max-width: 768px) { /* Schermi piccoli (smartphone) */
+  .section-wrapper {
+      background-size: 90%; /* Aumenta al 90% */
+  }
+}
+
 // animations
 
 #number-1, #number-4 {
