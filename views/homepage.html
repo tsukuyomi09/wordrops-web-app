@@ -14,10 +14,11 @@
 </head>
 <body>
     <div id="beta-form" class=" hidden w-full h-screen flex items-center justify-center bg-black bg-opacity-60 fixed z-20">
-        <button onclick="closeBetaForm()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
-            X
-        </button>
-        <form id="waiting-list-form" class="bg-white p-6 rounded-lg shadow-lg w-full md:max-w-xl max-w-full">
+
+        <form id="waiting-list-form" class="relative bg-white p-6 rounded-lg shadow-lg w-full md:max-w-xl max-w-full">
+            <button onclick="closeBetaForm()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
+                X
+            </button>
             <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Unisciti alla lista d'attesa</h2>
             <div class="md:mb-8 mb-4">
                 <input type="text" id="name" name="name" placeholder="Nome*" required 
@@ -66,7 +67,7 @@
                 </label>
             </div>
             <div class="flex justify-left md:mb-8 mb-4">
-                <a href="/privacy_policy.html" target="_blank" class="text-indigo-600 hover:underline">Informativa sulla privacy</a>.
+                <a href="/privacy-policy" target="_blank" class="text-indigo-600 hover:underline">Informativa sulla privacy</a>.
             </div>
             <button type="submit" 
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md shadow">
@@ -98,7 +99,7 @@
                     <div class="z-3 text-center text-l text-white font-bold mb-4">beta tester?</div>
 
                     <div class="button-container z-3 p-1 border-2 border-white rounded-md">
-                        <button onclick="openBetaForm()" class="beta-button bg-white text-xl text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-gray-100 transition duration-300 cursor-pointer">
+                        <button onclick="openBetaForm()" class="beta-button bg-white text-xl text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-blue-100 transition duration-300 cursor-pointer">
                             ENTRA IN LISTA
                         </button>
                     </div>
@@ -140,8 +141,6 @@
                             <div class="text-3xl font-bold font-consolas">vs</div>
                             <div id="number-4" class="big-number text-red-500 font-bold font-consolas">4</div>
                         </div>
-
-                        <!-- <img src="/images/1vs4.png" alt="Immagine Centrale" class="w-xl h-auto object-contain"> -->
                         <div class="absolute -top-20 -left-80 mt-10 ml-10 text-5xl font-bold font-consolas">Collabora</div>
                         <div class="absolute -top-20 -right-80 mt-10 mr-10 text-lg text-right text-5xl font-bold font-consolas">Competi</div>
                         <div class="absolute -bottom-20 -left-80 mb-10 ml-10 text-lg text-5xl font-bold font-consolas">Leggi</div>
@@ -178,7 +177,91 @@
             </section>  
         </div>
     </div>
-    <script src="/js/homepage.js"></script>
+    <section class="py-40 relative">
+        <div 
+        class="absolute top-1/2 right-0 h-3/5 w-2/5 bg-contain bg-no-repeat opacity-5 transform -translate-y-1/2" 
+        style="background-image: url('/images/books-bg.png');">
+      </div>
+        <!-- Primo container con titolo centrale -->
+        <div class="text-center mb-8">
+          <h2 class="text-6xl font-bold text-gray-800 font-consolas">MA COME FUNZIONA?</h2>
+        </div>
+      
+        <!-- Quattro containers -->
+        <div class="grid grid-cols-1 md:grid-cols gap-24 max-w-5xl mx-auto mt-40">
+            <div class="flex items-start gap-12">
+                <div class="flex px-4 relative ">
+                    <img src="/images/blue-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
+                    <p class="text-black px-4 py-2 text-8xl font-bold">1</p>
+                </div>
+                <div class="flex-col">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 font-consolas">Unisciti alla storia</h3>
+                    <p class="text-gray-600 font-consolas">Ti unirai a 4 giocatori sconosciuti per creare insieme una storia unica.
+                        Non hai idea di come la trama si svilupperà: è proprio questa imprevedibilità che metterà alla prova la tua inventiva!
+                        </p>
+                </div>
+            </div>
+            <div class="flex items-start gap-12">
+                <div class="flex px-4 relative ">
+                    <img src="/images/purple-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
+                    <p class="text-black px-4 py-2 text-8xl font-bold">2</p>
+                </div>
+                <div class="flex-col">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 font-consolas">Scrivi il tuo capitolo</h3>
+                    <p class="text-gray-600 font-consolas">Quando arriva il tuo turno, hai 30 minuti per aggiungere il tuo tocco personale alla storia. Ma attenzione: ogni capitolo deve intrecciarsi con quelli precedenti. Costruisci sulla creatività degli altri e rendi la trama ancora più epica. Non vuoi essere tu a spezzare il flow, vero?
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-start gap-12">
+                <div class="flex px-4 relative ">
+                    <img src="/images/green-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
+                    <p class="text-black px-4 py-2 text-8xl font-bold">3</p>
+                </div>
+                <div class="flex-col">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 font-consolas">La storia è completa</h3>
+                    <p class="text-gray-600 font-consolas">Dopo 5 turni, la vostra creazione è finita! A seconda della modalità scelta:</p> <br>
+                    <p class="text-gray-600 font-consolas"><span class="text-red-500 font-bold">Competitiva:</span> puoi votare i capitoli degli altri giocatori e ricevere voti sul tuo. Più il tuo contributo è di impatto, più punti guadagni, scalando così la classifica globale.
+                    <br><span class="text-green-500 font-bold">Normale:</span> niente voti né stress, solo il piacere di scrivere e divertirsi insieme</p></br>
+                </div>
+            </div>
+            <div class="flex items-start gap-12">
+                <div class="flex px-4 relative ">
+                    <img src="/images/orange-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
+                    <p class="text-black px-4 py-2 text-8xl font-bold">4</p>
+                </div>
+                <div class="flex-col">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 font-consolas">Sfida la tua creatività</h3>
+                    <p class="text-gray-600 font-consolas">Ogni storia completata, ogni capitol scritto, ti fa . Salta in cima alla classifica globale e dimostra a tutti chi è il miglior narratore, ma ricorda: collaborazione e competizione vanno di pari passo!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-20 relative">
+        <img 
+        src="/images/wave-background.png" 
+        alt="background" 
+        class="absolute inset-0 w-full h-full object-cover overflow-hidden">    
+        <div class="content-top flex flex-col items-center justify-center relative z-10 max-w-5xl mx-auto h-screen">
+            <img src="/images/icon-3.png" alt="icon" class="mb-20 w-48 h-48 sm:w-36 sm:h-36">
+            <h2 class="mb-6 reveal-on-scroll text-center text-6xl font-bold font-consolas opacity-0 transform translate-y-6 transition duration-700">
+                ANCHE OLTRE LA SCRITTURA
+            </h2>
+            <div>
+                <p class="text-center text-xl font-consolas mb-6">Oltre a poter scrivere e competere, potrai prenderti anche una pausa, rilassarti, e passare del tempo a leggere tutte le storie create dalla comunità.</p>
+                <p class="text-center text-xl mb-20 font-consolas">Che tu voglia ridere, emozionarti o semplicemente passare del tempo in tranquillità, ci sarà sempre una storia pronta a sorprenderti completamente originale.</p>
 
+            </div>
+            <div class="flex-col ">
+                <div class="z-3 text-center text-l text-blue-400 font-bold mb-4">beta tester?</div>
+    
+                <div class="button-container z-3 p-1 border-2 border-blue-400 rounded-md">
+                    <button onclick="openBetaForm()" class="beta-button bg-blue-400 text-xl text-white px-4 py-2 rounded-md font-bold hover:bg-blue-600 transition duration-300 cursor-pointer">
+                        ENTRA IN LISTA
+                    </button>
+                </div>
+            </div>        
+        </div>
+    </section>
+<script src="/js/homepage.js"></script>
 </body>
 </html>
