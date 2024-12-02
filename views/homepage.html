@@ -75,11 +75,13 @@
             </button>
         </form>
     </div>
-    <div class="wrap pt-6 overflow-hidden">
-        <div class="section mx-auto px-6">
-            <div class="relative my-10">
-                <h1 class="text-center text-7xl font-bold font-consolas">NO ORDINARY <br> WRITERS</h1>
-                <div class="absolute top-0 right-0">
+    <div class="wrap lg:pt-6 pt-2 overflow-hidden">
+        <div class="section mx-auto md:px-6">
+            <div class="relative md:my-10 my-4">
+                <h1 class="text-center lg:text-7xl md:text-3xl text-3xl font-bold font-consolas">NO ORDINARY WRITERS</h1>
+                <p class="text-center md:text-xl text-sm font-consolas">Collabora e competi con altri scrittori!</p>
+
+                <div class="absolute top-0 right-0 md:block hidden">
                     <button id="registerButton" class="bg-gradient-to-r from-purple-500 to-red-500 py-2 px-4 font-consolas text-white rounded-md shadow-lg hover:shadow-2xl transition duration-300">
                         REGISTRATI
                     </button>                    
@@ -92,23 +94,27 @@
                         <source src="/images/fire-bg-video.mp4" type="video/mp4">
                     </video>
                 </div>
-                <div class="relative z-1">
-                    <img src="/images/homepage-main-img.jpg" alt="Immagine" class="w-full h-auto max-h-screen object-cover">
+                <div class="relative z-1 ">
+                    <!-- Immagine per dispositivi mobili -->
+                    <img src="/images/new-book-image-mobile.png" alt="Immagine mobile" class="md:hidden w-full h-2/3 object-cover md:h-auto md:max-h-screen">
+                  
+                    <!-- Immagine per dispositivi medi o superiori -->
+                    <img src="/images/new-book-image.png" alt="Immagine desktop" class="hidden md:block w-full h-auto max-h-screen object-fill">
                 </div>
-                <div class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col ">
-                    <div class="z-3 text-center text-l text-white font-bold mb-4">beta tester?</div>
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col mt-40">
+                    <div class="z-3 text-center text-l text-white font-bold mb-4 text-blue-500">beta tester?</div>
 
-                    <div class="button-container z-3 p-1 border-2 border-white rounded-md">
-                        <button onclick="openBetaForm()" class="beta-button bg-white text-xl text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-blue-100 transition duration-300 cursor-pointer">
+                    <div class="button-container z-3 p-1 border-2 border-blue-500 rounded-md">
+                        <button onclick="openBetaForm()" class="beta-button bg-white md:text-xl text:mg text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-blue-100 transition duration-300 cursor-pointer">
                             ENTRA IN LISTA
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="section-wrapper pt-40  px-6">            
+        <div class="section-wrapper pt-40 px-6">            
             <section >
-                <h2 class="reveal-on-scroll text-center text-6xl font-bold mb-20 opacity-0 transform translate-y-10 transition duration-700">La prima piattaforma <br> per scrittori creativi</h2>
+                <h2 class="reveal-on-scroll text-center lg:text-6xl text-3xl font-bold mb-20 opacity-0 transform translate-y-10 transition duration-700">La prima piattaforma <br> per scrittori creativi</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-20 max-w-6xl mx-auto px-4">
                    <div class="font-consolas text-xl">
                         <strong><span class="relative"><div class="absolute border-2 border-blue-500 h-10 w-16  top-0 transform  -translate-x-8 -translate-y-2"></div>
@@ -138,7 +144,7 @@
                      <div class="relative w-xl h-xl">
                         <div class="flex flex-column items-center gap-4 p-14">
                             <div id="number-1" class="big-number text-red-500 font-bold font-consolas">1</div>
-                            <div class="text-3xl font-bold font-consolas">vs</div>
+                            <div class="text-4xl font-bold font-consolas">vs</div>
                             <div id="number-4" class="big-number text-red-500 font-bold font-consolas">4</div>
                         </div>
                         <div class="absolute -top-20 -left-80 mt-10 ml-10 text-5xl font-bold font-consolas">Collabora</div>
@@ -149,26 +155,26 @@
                 </div>            
             </section>            
         </div>
-        <div class="section pt-40 pb-40 bg-blue-500">
+        <div class="section pt-40 pb-40 px-6 bg-blue-500">
             <section >
-                <h2 class="reveal-on-scroll text-center text-6xl font-bold text-white font-consolas opacity-0 transform translate-y-6 transition duration-700">
+                <h2 class="reveal-on-scroll text-center lg:text-6xl text-3xl font-bold text-white font-consolas opacity-0 transform translate-y-6 transition duration-700">
                     SCEGLI IL TUO STILE DI GIOCO</h2>
-                <h3 class="text-center text-xl mb-20 font-consolas text-white">Che tipo di giocatore sei, rilassato o competitivo?<br> Varie opzioni da provare, e presto molte altre in arrivo</h3>
-                <div class="flex flex-col mt-40 gap-20 w-full mx-auto max-w-6xl">
-                    <div class="flex border-2 border-white p-2 w-3/5 rounded-md reveal-left" id="top-container">
-                        <div class="flexflex-col gap-4 w-full rounded-md py-6 px-10 bg-white">
-                            <div class="flex  items-center gap-4 ">
+                <h3 class="text-center mb:text-xl text-lg mb-20 font-consolas text-white">Che tipo di giocatore sei, rilassato o competitivo?<br> Varie opzioni da provare, e presto molte altre in arrivo</h3>
+                <div class="flex flex-col md:mt-40 mt-6 md:gap-20 gap-10 w-full mx-auto max-w-6xl">
+                    <div class="flex border-2 border-white p-2 md:w-3/5 rounded-md reveal-left" id="top-container">
+                        <div class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white">
+                            <div class="flex items-center mb-2 gap-4">
                                 <h2 class="text-3xl font-bold font-consolas">Modalità <span class="text-red-600">Sfida</span></h2>
-                                <img src="/images/icons/icon1.png" alt="Icona Sfida" class="w-12 h-12">
+                                <img src="/images/icons/icon1.png" alt="Icona Sfida" class="md:w-12 md:h-12 w-24 h-24">
                             </div>
                             <p>Competi contro il tempo, guadagna punti e scala le classifiche. Ideale per chi cerca competizione e ha il pennino di fuoco.</p>
                         </div>
                     </div>
-                    <div class="flex  border-2 border-white p-2 w-3/5 ml-auto rounded-md reveal-right" id="bottom-container">
-                        <div class="flexflex-col gap-4 w-full rounded-md py-6 px-10 bg-white">
-                            <div class="flex items-center gap-4">
+                    <div class="flex  border-2 border-white p-2 md:w-3/5 ml-auto rounded-md reveal-right" id="bottom-container">
+                        <div class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white">
+                            <div class="flex items-center mb-2 gap-4">
                                 <h2 class="text-3xl font-bold font-consolas">Modalità <span class="text-green-600">Relax</span></h2>
-                                <img src="/images/icons/icon2.png" alt="Icona Relax" class="w-12 h-12">
+                                <img src="/images/icons/icon2.png" alt="Icona Relax" class="md:w-12 md:h-12 w-24 h-24">
                             </div>
                             <p>Nessuna fretta, nessun punteggio. Solo il piacere di scrivere, rilassarsi e creare insieme una storia epica.</p>
                         </div>
