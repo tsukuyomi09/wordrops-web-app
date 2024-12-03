@@ -43,9 +43,7 @@ app.get('/', (req, res) => {
 app.get('/privacy-policy', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'privacy-policy.html'));
 });
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
-});
+
 app.get('/register19090903', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'register19090903.html'));
 });

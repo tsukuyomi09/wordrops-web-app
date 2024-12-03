@@ -265,7 +265,7 @@ function fetchAvatarData() {
 // Funzione per aggiornare l'immagine dell'avatar
 function updateAvatarImage(avatar) {
     const avatarContainer = document.getElementById("main-avatar");
-    avatarContainer.src = `./images/avatars/${avatar}.png`;  // Imposta il nuovo avatar
+    avatarContainer.src = `/images/avatars/${avatar}.png`;  // Imposta il nuovo avatar
 }
 
 
