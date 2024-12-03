@@ -43,7 +43,6 @@ app.get('/', (req, res) => {
 app.get('/privacy-policy', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'privacy-policy.html'));
 });
-
 app.get('/register19090903', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'register19090903.html'));
 });
@@ -70,6 +69,7 @@ const dashboardRoutes = require('./src/routes/dashboardRoutes');
 const dashboardDataRoutes = require('./src/routes/dashboardData');
 const queueRoutes = require('./src/routes/queueRoutes');
 const queueRoutesNew = require('./src/routes/queueRoutesNew');
+const userProfileRoute = require('./src/routes/userProfile');
 const playersQueue = require('./src/routes/playersQueue');
 const verifyLogIn = require('./src/routes/verifyLogIn');
 const logout = require('./src/routes/logout');
@@ -83,6 +83,7 @@ app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(dashboardRoutes);
 app.use(dashboardDataRoutes);
+app.use(userProfileRoute);
 app.use(queueRoutes);
 app.use(queueRoutesNew);
 app.use(playersQueue);

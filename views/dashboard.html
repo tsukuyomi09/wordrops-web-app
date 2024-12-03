@@ -108,29 +108,43 @@
                 <img id="main-avatar" class="h-32 w-22" src="/images/avatars/luffy-icon-chibi.png" alt="">
             </div>
 
+            <button id="queue-button" onclick="joinQueue()" class="hover-sound mt-40 bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
+
+
                 
-            <div class="grid grid-cols-3 grid-rows-2 gap-8 mt-20">
-                <!-- Elemento 1 -->
-                <div class="text-xs	 p-8 rounded-lg bg-white bg-opacity-80 flex flex-col items-center justify-center font-semibold">CLASSIFICHE</div>
+            <div class="absolute left-0 top-0 space-y-4 p-4">
+                <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md">
+                    CLASSIFICHE
+                </div>
                 
-                <!-- Elemento 2 -->
-                <button id="queue-button" onclick="joinQueue()" class="hover-sound bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
-                <!-- Elemento 3 -->
-                <div class="text-xs p-8 rounded-lg bg-white bg-opacity-80 flex flex-col items-center justify-center font-semibold">ALTRO</div>
+                <div class="text-sm p-4 rounded-lg bg-white  flex flex-col items-center justify-center font-bold shadow-md">
+                    ALTRO
+                </div>
                 
-                <!-- Elemento 4 -->
-                <div class="text-xs	p-8 rounded-lg bg-white bg-opacity-80 flex flex-col items-center justify-center font-semibold">AMICI</div>
-                
-                <!-- Elemento 5 (occuparà 2° row, col 2 e 3) -->
-                <div class="text-xs p-8 rounded-lg	bg-white p-4 col-start-2 col-span-2 row-start-2 row-span-1 bg-opacity-80 flex flex-col items-center justify-center font-semibold">
+                <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md">
                     STORIE SCRITTE
                 </div>
+                
+                <div class="text-sm p-4 rounded-lg bg-green-500	 flex flex-col font-semibold shadow-md space-y-3">
+                    <h3 class="text-sm font-bold text-black">AMICI</h3>
+                    <form id="search-form" class="flex flex-col space-y-2">
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="Cerca un utente..."
+                            class="p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 transition-all"
+                        />
+                    </form>
+                    <div class="results" id="results"></div>
+                </div>
+                
             </div>  
 
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/main.js" defer></script>
+    <script src="/js/userSearch.js" defer></script>
     <audio id="click-sound" src="/images/button-hover-sound.mp3" preload="auto"></audio>
     <audio id="select-sound" src="/images/avatar-select-1.mp3" preload="auto"></audio>
     <audio id="select-sound-new-game" src="/images/new-game-sound.mp3" preload="auto"></audio>
