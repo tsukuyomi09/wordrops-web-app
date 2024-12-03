@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title> 
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="/style/style.css" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="pagewrap" class="w-full">
+        <div class="w-full h-screen flex flex-col items-center justify-top relative" style="background-image: url('/images/profile-bg-image.jpeg'); background-size: cover; background-position: center;" >
+            <div class="username_container mb-20 p-4 px-10 bg-gray-900 bg-opacity-60 rounded-bl-lg rounded-br-lg inline-block">
+                <h2 id="username" class="text-white text-2xl font-extrabold"></h2>
+                <h4 id="userStatus"></h4>
+            </div>
+            <div class="avatar-container">
+                <img id="main-avatar" class="h-32 w-22" src="/images/avatars/luffy-icon-chibi.png" alt="">
+            </div>
+            <div class="stats-container mt-10 p-4 bg-blue-600 bg-opacity-80 rounded-lg">
+                <div class="text-white text-lg font-semibold">
+                    Capitoli scritti: <span id="chapters-written">0</span>
+                </div>
+                <div class="text-white text-lg font-semibold mt-2">
+                    Punteggio: <span id="user-score">0</span>
+                </div>
+            </div>
+            <div class="absolute left-0 top-0 space-y-4 p-4">
+                <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md">
+                    CLASSIFICHE
+                </div>
+                <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md">
+                    STORIE SCRITTE
+                </div>
+                <div class="text-sm p-4 rounded-lg bg-white  flex flex-col items-center justify-center font-bold shadow-md">
+                    ALTRO
+                </div>
+            </div>  
+        </div>
+    </div>
+    <script src="/js/userProfile.js"></script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 let debounceTimer;
+const resultsDiv = document.getElementById('results');
 
 document.getElementById('search-input').addEventListener('input', () => {
     clearTimeout(debounceTimer);
@@ -11,9 +12,8 @@ document.getElementById('search-input').addEventListener('input', () => {
     }
 });
 
-async function searchUsers(query) {
-    const resultsDiv = document.getElementById('results');
 
+async function searchUsers(query) {
     try {
         const response = await fetch(`/search-users?username=${encodeURIComponent(query)}`);
         const users = await response.json();
@@ -22,13 +22,15 @@ async function searchUsers(query) {
             resultsDiv.innerHTML = '<p>Nessun utente trovato.</p>';
         } else {
             resultsDiv.innerHTML = users.map(user =>
-                `<div class="user flex bg-gray-200 w-full items-center space-x-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-all">
-                    <!-- Il contenitore cliccabile che occupa tutta la larghezza -->
+                `<div 
+                    class="user flex bg-gray-200 mb-4 w-full items-center space-x-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-all"
+                    data-username="${user.username}" 
+                    data-avatar="${user.avatar}">
                     <div class="flex w-full items-center space-x-3 justify-start">
                         <!-- Avatar -->
-                        <img src="/images/avatars/${user.avatar}.png" alt="Avatar" class="w-6 h-6 rounded-full border-4 border-orange-400	">
+                        <img src="/images/avatars/${user.avatar}.png" alt="${user.username} Avatar" class="w-8 h-8 rounded-full border-2 border-orange-400">
                         <!-- Username -->
-                        <strong class="text-mg font-nold text-gray-800">${user.username}</strong>
+                        <strong class="text-lg font-bold text-gray-800">${user.username}</strong>
                     </div>
                 </div>`
             ).join('');
@@ -38,3 +40,11 @@ async function searchUsers(query) {
         console.error(error);
     }
 }
+
+resultsDiv.addEventListener('click', event => {
+    const userElement = event.target.closest('.user'); // Trova l'elemento cliccato
+    if (userElement) {
+        const username = userElement.getAttribute('data-username');
+        window.location.href = `/profile/${username}`;
+    }
+});
