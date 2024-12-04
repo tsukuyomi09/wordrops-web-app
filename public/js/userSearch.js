@@ -98,8 +98,15 @@ function showAvatarTransition() {
 
 showAvatarTransition()
 
-function dashboardButton(){
-    const username = localStorage.getItem('username');
-    window.location.href = `/dashboard/${username}`;
+function dashboardButton() {
 
-}
+    const username = localStorage.getItem('username');
+    if (username) {
+        // Fai il redirect alla dashboard dell'utente
+        window.location.href = `/dashboard/${username}`;
+    } else {
+        alert('Impossibile recuperare l\'username. Effettua il login.');
+    }
+};
+    
+
