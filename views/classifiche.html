@@ -11,6 +11,11 @@
     <div id="pagewrap relative" class="w-full">
         <h1>Classifiche</h1>
         <div class="absolute right-0 top-0 space-y-4 p-4">
+            <button
+                class="p-2 bg-blue-500 text-white w-full font-bold rounded-lg shadow-md hover:bg-blue-600 transition-all"
+                onclick="dashboardButton()">
+                DASHBOARD
+            </button>
             <div class="text-sm p-4 rounded-lg bg-green-500	 flex flex-col font-semibold shadow-md space-y-3">
                 <h3 class="text-sm font-bold text-black">AMICI</h3>
                 <form id="search-form" class="flex flex-col space-y-2">
@@ -23,8 +28,19 @@
                 </form>
                 <div class="results" id="results"></div>
             </div>    
-        </div>  
+        </div> 
+        <div class="absolute left-0 top-0 space-y-4 p-4">
+            <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
+                CLASSIFICHE
+            </div>
+            <a href="/libreria" class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
+                LIBRERIA
+            </a>
+            <div class="text-sm p-4 rounded-lg bg-white  flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
+                ALTRO
+            </div>
+        </div> 
     </div>
-    <script src="/js/userSearch.js" defer></script>
+    <script src="/js/menu.js" defer></script>
 </body>
 </html>

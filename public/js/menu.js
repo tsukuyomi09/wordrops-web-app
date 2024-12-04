@@ -108,5 +108,6 @@ function dashboardButton() {
         alert('Impossibile recuperare l\'username. Effettua il login.');
     }
 };
+
     
 
