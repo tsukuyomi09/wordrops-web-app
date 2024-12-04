@@ -12,7 +12,26 @@
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <div id="pagewrap" class="w-full">
+    <div id="pagewrap relative" class="w-full">
+        <div class="absolute z-10 right-0 top-0 space-y-4 p-4">
+            <button
+                class="p-2 bg-blue-500 text-white w-full font-bold rounded-lg shadow-md hover:bg-blue-600 transition-all"
+                onclick="dashboardButton()">
+                DASHBOARD
+            </button>
+            <div class="text-sm p-4 rounded-lg bg-green-500	 flex flex-col font-semibold shadow-md space-y-3">
+                <h3 class="text-sm font-bold text-black">AMICI</h3>
+                <form id="search-form" class="flex flex-col space-y-2">
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Cerca un utente..."
+                        class="p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 transition-all"
+                    />
+                </form>
+                <div class="results" id="results"></div>
+            </div>    
+        </div>  
         <div class="w-full h-screen flex flex-col items-center justify-top relative" style="background-image: url('/images/profile-bg-image.jpeg'); background-size: cover; background-position: center;" >
             <div class="username_container mb-20 p-4 px-10 bg-gray-900 bg-opacity-60 rounded-bl-lg rounded-br-lg inline-block">
                 <h2 id="username" class="text-white text-2xl font-extrabold"></h2>
@@ -42,6 +61,6 @@
             </div>  
         </div>
     </div>
-    <script src="/js/userProfile.js"></script>
+    <script src="/js/userSearch.js" defer></script>
 </body>
 </html>
