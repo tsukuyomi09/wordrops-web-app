@@ -23,7 +23,6 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
 
     // Aggiungi l'utente alla gameQueue con un timestamp
     gameQueue.push({ id: userId, username, socketId, timestamp: Date.now(), pronto: null });
-    console.log('Stato aggiornato della gameQueue:', gameQueue);
     const socket = req.io.sockets.sockets.get(socketId);
     if (socket) {
         setTimeout(() => {
@@ -43,6 +42,7 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
             const socket = req.io.sockets.sockets.get(player.socketId);
             if (socket) {
                 socket.join(gameId);
+                socket.emit('gameIdAssigned', { gameId });
             } else {
                 console.log(`Nessun socket trovato per ${player.username} con socketId ${player.socketId}`);
             }
@@ -82,24 +82,16 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
 
 function startCountdown(io, gameId) {
     let countdown = 10; 
-
     const countdownInterval = setInterval(() => {
-        // Prima inviamo il countdown al client
         io.to(gameId).emit('countdown', countdown);
-
         if (countdown <= 0) {
-            clearInterval(countdownInterval); // Ferma il countdown
-            delete preGameQueue[gameId]; // Rimuove il gioco dalla coda
-
-            // Invia il messaggio 'queueAbandoned' a tutti i giocatori dopo un breve ritardo
-            setTimeout(() => {
-                io.to(gameId).emit('not-ready', 'Sei Stato rimosso dalla queue');
-            }, 1000);
-        } 
-
+            clearInterval(countdownInterval);
+            io.to(gameId).emit('countdown-finished'); // Ferma il countdown quando arriva a zero
+        }
         countdown--; // Decrementa il tempo rimanente
     }, 1000); // Esegui ogni secondo
 }
+
 
 
 module.exports = router;

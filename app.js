@@ -6,18 +6,13 @@ const http = require("http")
 const socketio = require("socket.io")
 const { connectDB } = require("./src/database/db");
 const cookieParser = require('cookie-parser');
+const { preGameQueue } = require('./src/routes/queueRoutesNew');
 
 
 const app = express();
 const server = http.createServer(app)
 const io = socketio(server);
 
-io.on("connection", socket => {
-    console.log('Nuovo client connesso:', socket.id);
-    socket.on('disconnect', (reason) => {
-        console.log("Disconnesso dal server per:", reason);
-    });
-})
 
 const port = process.env.PORT || 3000;
 
@@ -26,6 +21,55 @@ connectDB();
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+
+
+io.on("connection", socket => {
+    console.log('Nuovo client connesso:', socket.id);
+
+    socket.on('disconnect', (reason) => {
+        console.log("Disconnesso dal server per:", reason);
+    });
+
+    socket.on('playerReady', ({ gameId, userId }) => {
+        try {
+            console.log("Messaggio ricevuto: playerReady");
+    
+            // Verifica che gameId e userId siano presenti
+            if (!gameId || !userId) {
+                console.error("gameId o userId mancante");
+                return;
+            }
+    
+            // Trova il gioco specificato
+            const game = preGameQueue[gameId];
+    
+            if (!game) {
+                console.error(`Gioco con ID ${gameId} non trovato`);
+                return;
+            }
+    
+            // Trova il giocatore specificato, confrontando con socketId
+            const player = game.find(p => p.socketId === userId); // Cambiato da p.id a p.socketId
+    
+            if (!player) {
+                console.error(`Giocatore con socketId ${userId} non trovato nel gioco ${gameId}`);
+                return;
+            }
+    
+            // Segna il giocatore come pronto
+            player.pronto = true;
+            console.log(`Giocatore ${player.username} è pronto per il gioco ${gameId}`);
+    
+            // Stampa lo stato aggiornato della preGameQueue
+            console.log(preGameQueue);
+    
+        } catch (error) {
+            console.error("Errore durante l'elaborazione dell'evento 'playerReady':", error);
+        }
+    });
+    
+    
+})
 
 
 app.use((req, res, next) => {
