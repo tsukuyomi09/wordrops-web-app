@@ -83,14 +83,25 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
 function startCountdown(io, gameId) {
     let countdown = 10; 
     const countdownInterval = setInterval(() => {
-        io.to(gameId).emit('countdown', countdown);
-        if (countdown <= 0) {
-            clearInterval(countdownInterval);
-            io.to(gameId).emit('countdown-finished'); // Ferma il countdown quando arriva a zero
+        io.to(gameId).emit('countdown', countdown); // Invia il countdown corrente
+
+        if (countdown <= 0) { // Quando il countdown termina
+            clearInterval(countdownInterval); // Ferma il countdown
+            const game = preGameQueue[gameId]; // Recupera il gioco
+            if (game) {
+                const allReady = game.every(player => player.pronto); // Controlla se tutti sono pronti
+                if (allReady) {
+                    io.to(gameId).emit('game-start', "Tutti Pronti"); // Tutti pronti: inizia il gioco
+                } else {
+                    io.to(gameId).emit('game-cancelled', "Non tutti i giocatori erano pronti, partita annullata"); // Rimuovi la coda del gioco dal server
+                }
+            }
+        } else {
+            countdown--; 
         }
-        countdown--; // Decrementa il tempo rimanente
-    }, 1000); // Esegui ogni secondo
+    }, 1000);
 }
+
 
 
 
