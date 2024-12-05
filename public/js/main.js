@@ -137,9 +137,10 @@ function initSocket() {
             }, 2000); // Aspetta 2 secondi prima di ripristinare la UI
         });
 
-        socket.on("game-start", (message) => {
+        socket.on("game-start", (data) => {
             document.getElementById("countdown-seconds-container").classList.add('hidden');
             document.getElementById("game-ready-container").classList.remove('hidden');
+            window.location.href = `/game/${data.gameId}`;
         });
 
         socket.on("queueAbandoned", (data) => {

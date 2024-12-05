@@ -117,6 +117,8 @@ const queueRoutes = require('./src/routes/queueRoutes');
 const queueRoutesNew = require('./src/routes/queueRoutesNew');
 const searchUserRoute = require('./src/routes/searchUser');
 const playersQueue = require('./src/routes/playersQueue');
+const gameRoute = require('./src/routes/gameRoute');
+const gameRouteData = require('./src/routes/gameRouteData');
 const verifyLogIn = require('./src/routes/verifyLogIn');
 const logout = require('./src/routes/logout');
 const updateAvatar = require('./src/services/updateAvatar');
@@ -134,6 +136,8 @@ app.use(usersProfileData);
 app.use(searchUserRoute);
 app.use(queueRoutes);
 app.use(queueRoutesNew);
+app.use(gameRoute);
+app.use(gameRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
 

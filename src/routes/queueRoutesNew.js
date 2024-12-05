@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { client } = require('../database/db'); 
 const checkAuth = require('../middlewares/checkAuthToken');
 
 
@@ -80,18 +81,23 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
 });
 
 
-function startCountdown(io, gameId) {
+async function startCountdown(io, gameId) {
     let countdown = 10; 
-    const countdownInterval = setInterval(() => {
+    const countdownInterval = setInterval(async () => {
         io.to(gameId).emit('countdown', countdown); // Invia il countdown corrente
 
         if (countdown <= 0) { // Quando il countdown termina
             clearInterval(countdownInterval); // Ferma il countdown
             const game = preGameQueue[gameId]; // Recupera il gioco
+            console.log(game)
             if (game) {
                 const allReady = game.every(player => player.pronto); // Controlla se tutti sono pronti
                 if (allReady) {
-                    io.to(gameId).emit('game-start', "Tutti Pronti"); // Tutti pronti: inizia il gioco
+                    const newGameId = await createGameAndAssignPlayers(game); 
+                    io.to(gameId).emit('game-start', {
+                        message: "Tutti pronti: inizia il gioco",
+                        gameId: newGameId  // Passiamo il gameId al client
+                    });
                 } else {
                     io.to(gameId).emit('game-cancelled', "Non tutti i giocatori erano pronti, partita annullata"); // Rimuovi la coda del gioco dal server
                 }
@@ -102,7 +108,33 @@ function startCountdown(io, gameId) {
     }, 1000);
 }
 
+async function createGameAndAssignPlayers( game) {
+    let newGameId;
 
+    try {
+        const result = await client.query(`
+            INSERT INTO games (status, started_at) 
+            VALUES ('in-progress', NOW()) 
+            RETURNING game_id;`
+        );
+
+        newGameId = result.rows[0].game_id;
+
+        const playerPromises = game.map(player => {
+            return client.query(`
+                INSERT INTO players_in_game (game_id, user_id) 
+                VALUES ($1, $2)
+                ON CONFLICT (game_id, user_id) DO NOTHING;`
+                , [newGameId, player.id]);
+        });
+    
+        await Promise.all(playerPromises);
+        return newGameId;
+
+    } catch (err) {
+        console.error("Errore durante la creazione del gioco e l'assegnazione dei giocatori:", err);
+    }
+}
 
 
 module.exports = router;
