@@ -4,11 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>No Ordinary Writers</title>
-    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">   
-    <script src="./js/checkAuth.js"></script>
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="/style/style.css" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">  
+    <script src="/js/checkAuth.js"></script>
 </head>
-<body>
-    <h1>New Game</h1>
-    
+<body class="bg-gray-100 font-sans">
+
+    <div class="flex items-start justify-center min-h-screen">
+        <div class="text-center bg-white p-20 rounded-lg shadow-lg max-w-4xl w-full">
+            <h1 class="text-3xl font-semibold mb-20">Partita</h1>
+            <h2 class="text-xl font-semibold mb-4">Giocatori</h2>
+            <div id="players-list" class="flex justify-center items-center space-x-6">
+            </div>
+        </div>
+    </div>
+<script src="/js/game.js"></script>
 </body>
 </html>
