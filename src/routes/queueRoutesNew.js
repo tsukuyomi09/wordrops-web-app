@@ -23,7 +23,6 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
 
     // Aggiungi l'utente alla gameQueue con un timestamp
     gameQueue.push({ id: userId, username, socketId, timestamp: Date.now(), pronto: null });
-    console.log('Stato aggiornato della gameQueue:', gameQueue);
     const socket = req.io.sockets.sockets.get(socketId);
     if (socket) {
         setTimeout(() => {
@@ -43,6 +42,7 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
             const socket = req.io.sockets.sockets.get(player.socketId);
             if (socket) {
                 socket.join(gameId);
+                socket.emit('gameIdAssigned', { gameId });
             } else {
                 console.log(`Nessun socket trovato per ${player.username} con socketId ${player.socketId}`);
             }
@@ -82,24 +82,27 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
 
 function startCountdown(io, gameId) {
     let countdown = 10; 
-
     const countdownInterval = setInterval(() => {
-        // Prima inviamo il countdown al client
-        io.to(gameId).emit('countdown', countdown);
+        io.to(gameId).emit('countdown', countdown); // Invia il countdown corrente
 
-        if (countdown <= 0) {
+        if (countdown <= 0) { // Quando il countdown termina
             clearInterval(countdownInterval); // Ferma il countdown
-            delete preGameQueue[gameId]; // Rimuove il gioco dalla coda
-
-            // Invia il messaggio 'queueAbandoned' a tutti i giocatori dopo un breve ritardo
-            setTimeout(() => {
-                io.to(gameId).emit('not-ready', 'Sei Stato rimosso dalla queue');
-            }, 1000);
-        } 
-
-        countdown--; // Decrementa il tempo rimanente
-    }, 1000); // Esegui ogni secondo
+            const game = preGameQueue[gameId]; // Recupera il gioco
+            if (game) {
+                const allReady = game.every(player => player.pronto); // Controlla se tutti sono pronti
+                if (allReady) {
+                    io.to(gameId).emit('game-start', "Tutti Pronti"); // Tutti pronti: inizia il gioco
+                } else {
+                    io.to(gameId).emit('game-cancelled', "Non tutti i giocatori erano pronti, partita annullata"); // Rimuovi la coda del gioco dal server
+                }
+            }
+        } else {
+            countdown--; 
+        }
+    }, 1000);
 }
+
+
 
 
 module.exports = router;

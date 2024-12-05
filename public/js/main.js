@@ -31,18 +31,14 @@ window.addEventListener('load', () => {
     const overlay = document.getElementById('loading-overlay');
     const pagewrap = document.getElementById('pagewrap');
     const audioCtx = new window.AudioContext();
- 
 
     if (!sessionStorage.getItem('hasVisited')) {
-        // Non visitato prima, mostra l'animazione
         showLoadingAnimation();
         sessionStorage.setItem('hasVisited', 'true');
     } else {
-        // Già visitato, nascondi subito l'overlay e mostra la dashboard
         pagewrap.classList.remove('hidden');
     }
-
-    showAvatarTransition(); // Sempre eseguita
+    showAvatarTransition(); 
 });
 
 
@@ -73,8 +69,6 @@ window.onpopstate = function(event) {
 
 // Aggiungi uno stato iniziale
 history.pushState(null, null, location.href);
-
-
 
 const formInput = document.getElementById("p-input");
 const usernameDashboard = document.getElementById("username");
@@ -115,12 +109,17 @@ function initSocket() {
 
         });
 
-        socket.on("not-ready", (message) => {
+        socket.on('gameIdAssigned', (data) => {
+            currentGameId = data.gameId;
+            console.log(`Sei stato assegnato al gioco con ID: ${currentGameId}`);
+        });
+
+        socket.on("game-cancelled", (message) => {
             console.log(message); // Mostra il messaggio nella console
         
             // Modifica la UI
             document.getElementById('countdown-seconds').style.display = 'none'; // Nascondi il countdown
-            document.getElementById('countdown').innerText = "Sei stato rimosso dal game"; // Cambia il testo
+            document.getElementById('countdown').innerText = message
             document.getElementById('ready-btn').style.display = 'none'; // Nascondi il pulsante "Sono pronto"
         
             // Dopo 2 secondi, nascondi l'overlay e ripristina la UI
@@ -129,11 +128,18 @@ function initSocket() {
                 document.getElementById('countdown-seconds').style.display = 'block'; // Rendi visibile di nuovo il countdown
                 document.getElementById('ready-btn').style.display = 'block'; // Mostra il pulsante "Sono pronto"
                 document.getElementById('countdown').innerText = "Partita trovata, Inizio in:"; // Ripristina il testo iniziale
-
+                document.getElementById("ready-btn").classList.remove('hidden');
+                document.getElementById("pronto-text").classList.add('hidden');
+                stopBackgroundMusic()
                 countdownStarted = false;
                 socket.disconnect();
                 socket = null;
             }, 2000); // Aspetta 2 secondi prima di ripristinare la UI
+        });
+
+        socket.on("game-start", (message) => {
+            document.getElementById("countdown-seconds-container").classList.add('hidden');
+            document.getElementById("game-ready-container").classList.remove('hidden');
         });
 
         socket.on("queueAbandoned", (data) => {
@@ -141,6 +147,17 @@ function initSocket() {
         });
     });
 }
+
+function readyToPlay() {
+    document.getElementById("ready-btn").classList.add('hidden');
+    document.getElementById("pronto-text").classList.remove('hidden');
+    if (currentGameId) {
+        console.log({ gameId: currentGameId, userId: socket.id });
+        socket.emit('playerReady', { gameId: currentGameId, userId: socket.id });
+    } else {
+        console.log('Non sei ancora stato assegnato a un gioco.');
+    }
+};
 
 const sound = document.getElementById('click-sound');
 function buttonSound() {
@@ -466,7 +483,6 @@ function closeMenu() {
     selectedAvatar = null; // Resetta la selezione
     selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
 }
-
 
 function logout(){
     buttonSound()
