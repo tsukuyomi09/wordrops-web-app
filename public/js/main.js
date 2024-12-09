@@ -287,6 +287,8 @@ function updateAvatarImage(avatar) {
 }
 
 
+let game_id = null;
+
 function fetchdashboardData() {
     fetch("/dashboardData",{
         method: "GET",  // Metodo GET per ottenere gli item
@@ -302,8 +304,20 @@ function fetchdashboardData() {
         return response.json();
     })
     .then(data => {
-        displayItems(data.username);
-        console.log(`Status: ${data.status}`);
+        const username = data.username;
+        const status = data.status;
+        game_id = data.game_id;
+
+        const queueButton = document.getElementById("new-game-button");
+        const backToGameButton = document.getElementById("backToGame-button");
+
+        if (status === "in_game") {
+            backToGameButton.classList.remove("hidden");
+            queueButton.classList.add("hidden");
+        } 
+
+        displayItems(username);
+
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
@@ -395,6 +409,15 @@ function abandonQueue() {
     .catch(error => {
         console.error('Errore nella richiesta per abbandonare la coda:', error);
     });
+}
+
+function backToGameButton() {
+    if (game_id) {
+        // Reindirizza alla pagina del gioco
+        window.location.href = `/game/${game_id}`;
+    } else {
+        console.error("game_id non trovato. Impossibile tornare in partita.");
+    }
 }
 
 
