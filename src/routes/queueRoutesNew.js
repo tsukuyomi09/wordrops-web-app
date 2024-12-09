@@ -108,7 +108,7 @@ async function startCountdown(io, gameId) {
     }, 1000);
 }
 
-async function createGameAndAssignPlayers( game) {
+async function createGameAndAssignPlayers( game ) {
     let newGameId;
 
     try {
@@ -127,6 +127,16 @@ async function createGameAndAssignPlayers( game) {
                 ON CONFLICT (game_id, user_id) DO NOTHING;`
                 , [newGameId, player.id]);
         });
+
+        const playerIds = game.map(player => player.id);
+        await client.query(`
+            UPDATE users 
+            SET status = 'in_game'
+            WHERE user_id = ANY($1);`,
+            [playerIds]
+        );
+
+        //implement after creating game and players, update user status
     
         await Promise.all(playerPromises);
         return newGameId;

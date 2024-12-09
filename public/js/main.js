@@ -130,7 +130,7 @@ function initSocket() {
                 document.getElementById('countdown').innerText = "Partita trovata, Inizio in:"; // Ripristina il testo iniziale
                 document.getElementById("ready-btn").classList.remove('hidden');
                 document.getElementById("pronto-text").classList.add('hidden');
-                stopBackgroundMusic()
+                // stopBackgroundMusic()
                 countdownStarted = false;
                 socket.disconnect();
                 socket = null;
@@ -246,10 +246,9 @@ function stopBackgroundMusic() {
 }
 
 
-function fetchAvatarData() {
+function fetchAvatarData(username) {
     // Controlla se l'avatar è già salvato nel localStorage
-    const avatar = localStorage.getItem("avatar");
-
+    const avatar = localStorage.getItem(`avatar_${username}`);
     if (avatar) {
         // Se l'avatar è già presente nel localStorage, usa direttamente l'immagine
         updateAvatarImage(avatar);
@@ -271,7 +270,7 @@ function fetchAvatarData() {
         .then(data => {
             const avatar = data.avatar;
             // Memorizza l'avatar nel localStorage per evitare future richieste
-            localStorage.setItem("avatar", avatar);
+            localStorage.setItem(`avatar_${username}`, avatar);
             updateAvatarImage(avatar);
         })
         .catch(error => {
@@ -286,6 +285,9 @@ function updateAvatarImage(avatar) {
     avatarContainer.src = `/images/avatars/${avatar}.png`;  // Imposta il nuovo avatar
 }
 
+
+let game_id = null;
+let username;
 
 function fetchdashboardData() {
     fetch("/dashboardData",{
@@ -302,7 +304,19 @@ function fetchdashboardData() {
         return response.json();
     })
     .then(data => {
-        displayItems(data.username); // Mostra gli elementi ricevuti
+        username = data.username;
+        const status = data.status;
+        game_id = data.game_id;
+        const queueButton = document.getElementById("new-game-button");
+        const backToGameButton = document.getElementById("backToGame-button");
+
+        if (status === "in_game") {
+            backToGameButton.classList.remove("hidden");
+            queueButton.classList.add("hidden");
+        } 
+        fetchAvatarData(username)
+        displayItems(username);
+
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
@@ -318,7 +332,6 @@ function displayItems(username) {
 }
 
 
-fetchAvatarData();
 fetchdashboardData();
 
 
@@ -327,9 +340,9 @@ let isInQueue = false;
 async function joinQueue() {
     newGameSound()
     const backgroundMusicPath = "/images/new-queue-music.ogg"; 
-    setTimeout(async () => {
-        await startBackgroundMusic(backgroundMusicPath);
-    }, 1000);
+    // setTimeout(async () => {
+    //     await startBackgroundMusic(backgroundMusicPath);
+    // }, 1000);
 
     console.log("Tentativo di connessione al WebSocket...");
     await initSocket();
@@ -385,7 +398,7 @@ function abandonQueue() {
         }
         setTimeout(() => {
             waitingOverlay.classList.add('hidden');
-            stopBackgroundMusic();
+            // stopBackgroundMusic();
         }, 1500);
         
         return response.json();
@@ -394,6 +407,15 @@ function abandonQueue() {
     .catch(error => {
         console.error('Errore nella richiesta per abbandonare la coda:', error);
     });
+}
+
+function backToGameButton() {
+    if (game_id) {
+        // Reindirizza alla pagina del gioco
+        window.location.href = `/game/${game_id}`;
+    } else {
+        console.error("game_id non trovato. Impossibile tornare in partita.");
+    }
 }
 
 
@@ -443,7 +465,7 @@ selectButton.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             console.log('Avatar selezionato e salvato:', data);
-            localStorage.setItem('avatar', selectedAvatar);
+            localStorage.setItem(`avatar_${username}`, selectedAvatar);
             closeMenu(); 
         })
         .catch(error => {
@@ -466,7 +488,7 @@ closeButton.addEventListener('click', () => {
         .then(data => {
             // Gestisci la risposta (ad esempio, chiudi il menu o mostra un messaggio di successo)
             console.log('Avatar selezionato e salvato:', data);
-            localStorage.setItem('avatar', selectedAvatar);
+            localStorage.setItem(`avatar_${username}`, selectedAvatar);
             closeMenu(); // Chiudi il menu
         })
         .catch(error => {

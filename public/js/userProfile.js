@@ -28,7 +28,7 @@ function getUserData(){
     function displayUserItems(data) {
         if (data) {
             document.getElementById("username").textContent = data.username || "Nome utente non disponibile";
-            document.getElementById("main-avatar").src = `/images/avatars/${data.avatar}.png` || "/images/avatars/luffy-icon-chibi.png";
+            document.getElementById("main-avatar").src = `/images/avatars/${data.avatar}.png`;
             document.getElementById("chapters-written").textContent = data.capitoli_scritti || 0;
             document.getElementById("user-score").textContent = data.punteggio || 0;
         }

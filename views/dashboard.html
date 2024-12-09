@@ -26,7 +26,7 @@
                 <div id="waiting-gif" class="mb-4">
                     <img src="/images/gifs/queue-spinner.gif" alt="Waiting Gif" class="w-32 h-32">
                 </div>
-                <button id="queue-button" onclick="abandonQueue()" class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+                <button id="abandon-queue-button" onclick="abandonQueue()" class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
                     Abbandona
                 </button>
             </div>
@@ -93,9 +93,10 @@
                 <button id="toggle-slider" onclick="openAvatarMenu()" class="mt-4 text-xs bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">cambia avatar</button>
             </div>
             <div class="avatar-container">
-                <img id="main-avatar" class="h-32 w-22" src="/images/avatars/luffy-icon-chibi.png" alt="">
+                <img id="main-avatar" class="h-32 w-22" src="" alt="">
             </div>
-            <button id="queue-button" onclick="joinQueue()" class="hover-sound mt-40 bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
+            <button id="new-game-button" onclick="joinQueue()" class=" hover-sound mt-40 bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
+            <button id="backToGame-button" onclick="backToGameButton()" class="hidden hover-sound mt-40 bg-green-600 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">TORNA IN<br>PARTITA</button>
             <div class="absolute left-0 top-0 space-y-4 p-4">
                 <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
                     CLASSIFICHE
