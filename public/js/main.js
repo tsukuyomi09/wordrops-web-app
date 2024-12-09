@@ -246,10 +246,9 @@ function stopBackgroundMusic() {
 }
 
 
-function fetchAvatarData() {
+function fetchAvatarData(username) {
     // Controlla se l'avatar è già salvato nel localStorage
-    const avatar = localStorage.getItem("avatar");
-
+    const avatar = localStorage.getItem(`avatar_${username}`);
     if (avatar) {
         // Se l'avatar è già presente nel localStorage, usa direttamente l'immagine
         updateAvatarImage(avatar);
@@ -271,7 +270,7 @@ function fetchAvatarData() {
         .then(data => {
             const avatar = data.avatar;
             // Memorizza l'avatar nel localStorage per evitare future richieste
-            localStorage.setItem("avatar", avatar);
+            localStorage.setItem(`avatar_${username}`, avatar);
             updateAvatarImage(avatar);
         })
         .catch(error => {
@@ -288,6 +287,7 @@ function updateAvatarImage(avatar) {
 
 
 let game_id = null;
+let username;
 
 function fetchdashboardData() {
     fetch("/dashboardData",{
@@ -304,10 +304,9 @@ function fetchdashboardData() {
         return response.json();
     })
     .then(data => {
-        const username = data.username;
+        username = data.username;
         const status = data.status;
         game_id = data.game_id;
-
         const queueButton = document.getElementById("new-game-button");
         const backToGameButton = document.getElementById("backToGame-button");
 
@@ -315,7 +314,7 @@ function fetchdashboardData() {
             backToGameButton.classList.remove("hidden");
             queueButton.classList.add("hidden");
         } 
-
+        fetchAvatarData(username)
         displayItems(username);
 
     })
@@ -333,7 +332,6 @@ function displayItems(username) {
 }
 
 
-fetchAvatarData();
 fetchdashboardData();
 
 
@@ -467,7 +465,7 @@ selectButton.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             console.log('Avatar selezionato e salvato:', data);
-            localStorage.setItem('avatar', selectedAvatar);
+            localStorage.setItem(`avatar_${username}`, selectedAvatar);
             closeMenu(); 
         })
         .catch(error => {
@@ -490,7 +488,7 @@ closeButton.addEventListener('click', () => {
         .then(data => {
             // Gestisci la risposta (ad esempio, chiudi il menu o mostra un messaggio di successo)
             console.log('Avatar selezionato e salvato:', data);
-            localStorage.setItem('avatar', selectedAvatar);
+            localStorage.setItem(`avatar_${username}`, selectedAvatar);
             closeMenu(); // Chiudi il menu
         })
         .catch(error => {
