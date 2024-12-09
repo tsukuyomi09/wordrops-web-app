@@ -19,7 +19,7 @@ router.get("/userProfileData/:username", checkAuth, async (req, res) => {
         const { avatar, punteggio, capitoli_scritti } = result.rows[0];
         res.status(200).json({
             username,
-            avatar: avatar, // Usa un avatar di default se non presente
+            avatar: avatar, 
             punteggio: punteggio,  // Se il punteggio non esiste, restituisci 0
             capitoli_scritti: capitoli_scritti  // Se i capitoli scritti non esistono, restituisci 0
         });
