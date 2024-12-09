@@ -5,25 +5,18 @@ const checkAuth = require('../middlewares/checkAuthToken');
 const { client } = require('../database/db'); 
 
 router.get('/dashboard/:username', checkAuth, async (req, res) => {
-    const { username } = req.params;  // username passato nell'URL
+    const { username } = req.params;  
     console.log(`Username nell'URL: ${username}`);
     console.log(`ID utente autenticato: ${req.user_id} (${req.username})`);
 
     try {
-        // Se l'username nell'URL non corrisponde a quello dell'utente autenticato
         if (username !== req.username) {
             return res.status(403).send("Non puoi visualizzare la dashboard di un altro utente.");
         }
-
-        // Verifica se l'utente esiste nel database (usando req.username)
         const result = await client.query('SELECT * FROM users WHERE username = $1', [username]);
-
-        // Se l'utente non esiste, mostra un errore 404
         if (result.rows.length === 0) {
             return res.status(404).send('Utente non trovato');
         }
-
-        // Se l'utente esiste, invia il file della dashboard
         res.sendFile(path.join(__dirname, '..', '..', 'views', 'dashboard.html'));
 
     } catch (err) {

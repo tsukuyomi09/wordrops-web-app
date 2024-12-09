@@ -1,25 +1,32 @@
-const { gameQueue } = require('../routes/queueRoutesNew');  // Assicurati di avere l'accesso alla lista della coda
+const { client } = require('../database/db'); 
 
-const checkUserStatus = (req, res, next) => {
-    const userId = req.user_id;  // Ottieni l'ID utente dal middleware di autenticazione
+const checkUserStatus = async (req, res, next) => {
+    try {
+        const userId = req.user_id; // Assumi che `req.user_id` sia disponibile (ad esempio, dal token JWT o sessione)
 
-    // Se l'utente non è autenticato
-    if (!userId) {
-        return res.status(401).json({ message: "Utente non autenticato." });
+        // Verifica lo status dell'utente
+        const result = await client.query(`
+            SELECT status 
+            FROM users 
+            WHERE user_id = $1;`,
+            [userId]
+        );
+
+        const userStatus = result.rows[0]?.status;
+
+        if (!userStatus) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Aggiungi lo status nel request per usarlo più avanti se necessario
+        req.userStatus = userStatus;
+
+        // Passa al middleware successivo o gestore
+        next();
+    } catch (error) {
+        console.error('Error checking user status:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-
-    // Controlla se l'utente è nella coda
-    const isInQueue = gameQueue.some(player => player.id === userId);
-
-    // Assegna lo stato dell'utente in base alla sua posizione nella coda
-    if (isInQueue) {
-        req.userStatus = 'in queue';  // Se l'utente è in coda
-    } else {
-        req.userStatus = 'idle';  // Se l'utente non è in coda
-    }
-
-    // Passa al prossimo middleware o alla rotta
-    next();
 };
 
 module.exports = checkUserStatus;

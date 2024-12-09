@@ -130,7 +130,7 @@ function initSocket() {
                 document.getElementById('countdown').innerText = "Partita trovata, Inizio in:"; // Ripristina il testo iniziale
                 document.getElementById("ready-btn").classList.remove('hidden');
                 document.getElementById("pronto-text").classList.add('hidden');
-                stopBackgroundMusic()
+                // stopBackgroundMusic()
                 countdownStarted = false;
                 socket.disconnect();
                 socket = null;
@@ -302,7 +302,8 @@ function fetchdashboardData() {
         return response.json();
     })
     .then(data => {
-        displayItems(data.username); // Mostra gli elementi ricevuti
+        displayItems(data.username);
+        console.log(`Status: ${data.status}`);
     })
     .catch(error => {
         console.error("Errore durante il recupero degli elementi:", error);
@@ -327,9 +328,9 @@ let isInQueue = false;
 async function joinQueue() {
     newGameSound()
     const backgroundMusicPath = "/images/new-queue-music.ogg"; 
-    setTimeout(async () => {
-        await startBackgroundMusic(backgroundMusicPath);
-    }, 1000);
+    // setTimeout(async () => {
+    //     await startBackgroundMusic(backgroundMusicPath);
+    // }, 1000);
 
     console.log("Tentativo di connessione al WebSocket...");
     await initSocket();
@@ -385,7 +386,7 @@ function abandonQueue() {
         }
         setTimeout(() => {
             waitingOverlay.classList.add('hidden');
-            stopBackgroundMusic();
+            // stopBackgroundMusic();
         }, 1500);
         
         return response.json();
