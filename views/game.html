@@ -11,10 +11,8 @@
     <link href="/style/style.css" rel="stylesheet">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">  
 </head>
-<body class="bg-gray-100 font-sans">
-
+<body class="bg-gray-200">
     <div class="page-wrap p-6 relative">
-
         <!-- players container -->
         <div id="game-players-container" class="fixed top-1/2 z-10 ml-6 flex flex-col items-center space-y-4 p-2 py-6 bg-blue-200 rounded-full transform -translate-y-1/2">
             <div id="players-list" class="flex flex-col items-center space-y-6">
@@ -33,9 +31,6 @@
                 <div id="dashboard-icon" class="icon-container" onclick="dashboardButton()">
                     <img src="/images/icons/icons8-casa-100.png" alt="Search Icon" class="w-6 h-6" />
                 </div>    
-                <div id="search-icon" class="icon-container" onclick="openSearch()">
-                    <img src="/images/icons/users-icon-menu.png" alt="Search Icon" class="w-6 h-6" />
-                </div>   
                 <a href="/classifiche">
                     <div id="leaderboard-icon" class="icon-container">
                         <img src="/images/icons/icons8-trofeo-48.png" alt="leaderboard Icon" class="w-6 h-6" />
@@ -46,6 +41,9 @@
                         <img src="/images/icons/icons8-lettura-64.png" alt="library Icon" class="w-6 h-6" />
                     </div>  
                 </a>
+                <div id="search-icon" class="icon-container" onclick="openSearch()">
+                    <img src="/images/icons/users-icon-menu.png" alt="Search Icon" class="w-6 h-6" />
+                </div>   
                 <div id="user-search-wrapper" class="user-search-wrapper absolute top-0 right-6 opacity-0">
                     <div class="relative">
                         <div id="close-button" onclick="closeSearch()" class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2" onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')">
@@ -67,10 +65,12 @@
             </div>
         </div>
 
-        <!-- game UI container -->
-        <div id="game-ui-container" class="game-ui-container flex items-start justify-center min-h-screen">
-            <div class="text-center p-20 max-w-4xl w-full">
-                <h1 class="text-3xl font-semibold mb-20">Partita</h1>
+        <div id="ui-container" class="mt-20">
+            <!-- game UI container -->
+            <div id="game-ui-container" class="game-ui-container flex items-start justify-center min-h-screen">
+                <div class="text-center max-w-4xl w-full">
+                    <h1 class="text-3xl font-semibold ">Partita</h1>
+                </div>
             </div>
         </div>
     </div>

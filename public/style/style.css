@@ -1,3 +1,9 @@
+.blue-bg {
+  background-image: url('/images/main-bg-color.jpg');
+  background-size: cover; /* Copre tutta l'area visibile */
+  background-position: center; /* Centra l'immagine */
+  background-repeat: no-repeat; /* Evita che l'immagine si ripeta */
+}
 
 .avatar-container {
     visibility: hidden;  /* Imposta la visibilità iniziale a hidden */
@@ -128,4 +134,12 @@ font-family: 'Consolas', 'Courier New', monospace;
   transition: opacity 0.4s ease-in-out;
 }
 
+
+.hover-rotate {
+  transition: transform 0.3s ease; /* Animazione fluida */
+}
+
+.hover-rotate:hover {
+  transform: rotate(25deg); /* Ruota di 25 gradi */
+}
     
