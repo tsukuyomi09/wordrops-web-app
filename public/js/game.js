@@ -23,9 +23,11 @@ window.onload = async function() {
         const isCurrentUser = player.username === currentUser.username;
 
         playerDiv.innerHTML = `
-            <img src="${avatarSrc}" alt="${player.username}'s avatar" class="avatar w-10 h-12 mb-2" />
-            <span class="text-lg font-medium ${isCurrentUser ? 'text-green-500' : 'text-gray-700'}">${player.username}</span>
-        `;
+        <div class="flex items-center justify-center w-12 h-12 bg-white rounded-full">
+            <img src="${avatarSrc}" alt="${player.username}'s avatar" class="w-8 h-8 " />
+        </div>
+        <span class="text-sm font-medium ${isCurrentUser ? 'text-green-600' : 'text-gray-700'}">${player.username}</span>
+    `;
         playersList.appendChild(playerDiv);
     });
 };

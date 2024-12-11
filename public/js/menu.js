@@ -70,5 +70,15 @@ function dashboardButton() {
     }
 };
 
+function openSearch() {
+    const searchWrapper = document.getElementById('user-search-wrapper');
+    searchWrapper.classList.remove('opacity-0');   // Mostra il div con opacità 1
+}
+
+function closeSearch() {
+    const searchWrapper = document.getElementById('user-search-wrapper');
+    searchWrapper.classList.add('opacity-0');      // Nasconde il div con opacità 0
+}
+
     
 

@@ -13,6 +13,40 @@
 </head>
 <body>
     <div id="pagewrap relative" class="w-full">
+        <div class="menu-wrapper z-500 w-full fixed left-0 right-0">
+            <div class="flex justify-center items-center gap-6 p-2">
+                <div class="friend-search-wrapper absolute top-0 right-0">
+                    <div class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm space-y-2">
+                        <h3 class="text-xs font-semibold text-black">AMICI</h3>
+                        <form id="search-form" class="flex flex-col space-y-1">
+                            <input
+                                type="text"
+                                id="search-input"
+                                placeholder="Cerca un utente..."
+                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
+                            />
+                        </form>
+                        <div class="results" id="results"></div>
+                    </div>
+                </div>
+                <div id="dashboard-icon" class="icon-container" onclick="dashboardButton()">
+                    <img src="/images/icons/icons8-casa-100.png" alt="Search Icon" class="w-6 h-6" />
+                </div>    
+                <div id="search-icon" class="icon-container">
+                    <img src="/images/icons/users-icon-menu.png" alt="Search Icon" class="w-6 h-6" />
+                </div>   
+                <a href="/libreria">
+                    <div id="leaderboard-icon" class="icon-container">
+                        <img src="/images/icons/icons8-trofeo-48.png" alt="leaderboard Icon" class="w-6 h-6" />
+                    </div> 
+                </a>
+                <a href="/libreria">
+                    <div id="library-icon" class="icon-container">
+                        <img src="/images/icons/icons8-lettura-64.png" alt="library Icon" class="w-6 h-6" />
+                    </div>  
+                </a>
+            </div>
+        </div>
         <div class="absolute z-10 right-0 top-0 space-y-4 p-4">
             <button
                 class="p-2 bg-blue-500 text-white w-full font-bold rounded-lg shadow-md hover:bg-blue-600 transition-all"
