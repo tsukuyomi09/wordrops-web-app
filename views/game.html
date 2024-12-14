@@ -13,21 +13,14 @@
 </head>
 <body class="bg-gray-200">
     <div class="page-wrap p-6 relative">
-        <!-- players container -->
-        <div id="game-players-container" class="fixed top-1/2 z-10 ml-6 flex flex-col items-center space-y-4 p-2 py-6 bg-blue-200 rounded-full transform -translate-y-1/2">
-            <div id="players-list" class="flex flex-col items-center space-y-6">
-                <!-- <div class="player flex flex-col items-center text-center">
-                    <div class="flex items-center justify-center w-12 h-12 bg-white rounded-full p-3 mb-2">
-                        <img src="/images/avatars/luffy-icon-chibi.png" alt="${player.username}'s avatar" class="avatar object-cover" />
-                    </div>
-                    <span class="text-sm font-medium ${isCurrentUser ? 'text-green-500' : 'text-gray-700'}">player name</span>
-                </div> -->
-            </div>
-        </div>
-
+        
         <!-- menu container -->
-        <div id="menu-container" class="menu-wrapper w-full fixed left-0 right-0">
-            <div class="flex justify-center relative items-center gap-6">
+        <div id="menu-container" class="menu-wrapper w-full flex justify-center fixed left-0 right-0">
+            <div id="logout-button" class="icon-container icon absolute top-0 left-6 cursor-pointer p-2" onclick="logout()">
+                <img class="cursor-pointer" src="/images/icons/logout-icon.png" alt="logout Icon" class="w-6 h-6" />
+            </div>   
+
+            <div class="inline-flex justify-center relative items-center gap-6">
                 <div id="dashboard-icon" class="icon-container" onclick="dashboardButton()">
                     <img src="/images/icons/icons8-casa-100.png" alt="Search Icon" class="w-6 h-6" />
                 </div>    
@@ -44,33 +37,51 @@
                 <div id="search-icon" class="icon-container" onclick="openSearch()">
                     <img src="/images/icons/users-icon-menu.png" alt="Search Icon" class="w-6 h-6" />
                 </div>   
-                <div id="user-search-wrapper" class="user-search-wrapper absolute top-0 right-6 opacity-0">
-                    <div class="relative">
-                        <div id="close-button" onclick="closeSearch()" class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2" onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')">
-                            <img src="/images/icons/x-icon.png" alt="close-search-user">
-                        </div>
-                        <div class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm ">
-                            <form id="search-form" class="flex flex-col space-y-1">
-                                <input
-                                    type="text"
-                                    id="search-input"
-                                    placeholder="Cerca un utente..."
-                                    class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
-                                />
-                            </form>
-                        </div>
-                        <div class="results my-2" id="results"></div>
+            </div>
+            <div id="user-search-wrapper" class="user-search-wrapper absolute top-0 right-6 opacity-0">
+                <div class="relative">
+                    <div id="close-button" onclick="closeSearch()" class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2" onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')">
+                        <img src="/images/icons/x-icon.png" alt="close-search-user">
                     </div>
+                    <div class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm ">
+                        <form id="search-form" class="flex flex-col space-y-1">
+                            <input
+                                type="text"
+                                id="search-input"
+                                placeholder="Cerca un utente..."
+                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
+                            />
+                        </form>
+                    </div>
+                    <div class="results my-2" id="results"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- players container -->
+        <div id="game-players-container" class="fixed top-1/2 z-10 flex flex-col items-center space-y-4 p-2 py-6 bg-blue-200 rounded-full transform -translate-y-1/2">
+            <div id="players-list" class="flex flex-col items-center space-y-6">
+                <!-- <div class="player flex flex-col items-center text-center">
+                    <div class="flex items-center justify-center w-12 h-12 bg-white rounded-full p-3 mb-2">
+                        <img src="/images/avatars/luffy-icon-chibi.png" alt="${player.username}'s avatar" class="avatar object-cover" />
+                    </div>
+                    <span class="text-sm font-medium ${isCurrentUser ? 'text-green-500' : 'text-gray-700'}">player name</span>
+                </div> -->
             </div>
         </div>
 
         <div id="ui-container" class="mt-20">
             <!-- game UI container -->
-            <div id="game-ui-container" class="game-ui-container flex items-start justify-center min-h-screen">
+            <div id="game-ui-container" class="game-ui-container flex-row items-start justify-center min-h-screen">
                 <div class="text-center max-w-4xl w-full">
                     <h1 class="text-3xl font-semibold ">Partita</h1>
                 </div>
+                <div id="button-container" class="flex justify-center items-center mt-5">
+                    <button id="abandon-game-button" onclick="abandonGame()" 
+                      class="bg-red-500 text-white font-bold text-sm py-2 px-4 rounded-lg shadow-lg transition transform hover:bg-red-600 hover:-translate-y-1 hover:shadow-xl active:translate-y-1 active:shadow-md">
+                      ABBANDONA PARTITA
+                    </button>
+                  </div>
             </div>
         </div>
     </div>

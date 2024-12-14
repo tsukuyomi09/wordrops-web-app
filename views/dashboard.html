@@ -38,6 +38,9 @@
         <div id="countdown-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-10 hidden">
             <div id="game-ready-container" class="flex flex-col items-center hidden">
                 <h2 class="text-red-600 text-2xl font-bold">TUTTI PRONTI</h2>
+                <div id="turn-order-container" class="hidden">
+                    <!-- I turni verranno aggiunti qui dinamicamente -->
+                </div>
             </div>
             <div id="countdown-seconds-container" class="flex flex-col items-center">
                 <div id="countdown" class="text-white text-2xl mb-2">
@@ -53,11 +56,11 @@
 
         <!-- avatars menu container -->
         <div id="avatarContainer" class="hidden flex justify-center items-center p-50 fixed inset-0 bg-black z-10 bg-opacity-80">
-            <button id="close-avatar-menu" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
-                X
-            </button>
             <div class="flex flex-col justify-center items-center h-screen">
-                <div class="grid grid-cols-4 grid-rows-3 gap-4 p-6 rounded shadow-lg">
+                <div class="grid grid-cols-4 relative grid-rows-3 gap-4 p-6 rounded shadow-lg">
+                    <button id="close-avatar-menu" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center">
+                        X
+                    </button>
                     <div data-avatar="boa-icon-chibi" class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer" >
                         <img class="w-4/5 h-4/5 object-contain" src="/images/avatars/boa-icon-chibi.png" alt="Avatar">
                     </div>

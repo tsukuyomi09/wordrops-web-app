@@ -7,7 +7,7 @@ window.onload = async function() {
         console.error("Errore nel recupero dei giocatori");
         return;
     }
-
+ 
     const players = await response.json();
     const currentUser = { username: localStorage.getItem('username') };
 
@@ -31,4 +31,8 @@ window.onload = async function() {
         playersList.appendChild(playerDiv);
     });
 };
+
+
+// abandon game request
+
 

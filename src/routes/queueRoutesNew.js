@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { client } = require('../database/db'); 
+const { createGameAndAssignPlayers } = require('../services/gameManager');
 const checkAuth = require('../middlewares/checkAuthToken');
 
 
 let gameQueue = []; // Array per la coda dei giocatori
 let preGameQueue = {}; // Oggetto per i giochi pronti
+const userGameMap = new Map(); // status degli utenti  
+
 
 // add player to queue
 router.post('/gamequeueNew', checkAuth, (req, res) => {
@@ -83,21 +85,39 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
 
 async function startCountdown(io, gameId) {
     let countdown = 10; 
+    console.log(`[Game ${gameId}] Countdown iniziato.`);
+    
     const countdownInterval = setInterval(async () => {
         io.to(gameId).emit('countdown', countdown); // Invia il countdown corrente
 
         if (countdown <= 0) { // Quando il countdown termina
             clearInterval(countdownInterval); // Ferma il countdown
             const game = preGameQueue[gameId]; // Recupera il gioco
-            console.log(game)
+            console.log(`[Game ${gameId}] Recuperato gioco dalla preGameQueue:`, game);
+
             if (game) {
                 const allReady = game.every(player => player.pronto); // Controlla se tutti sono pronti
+                console.log(`[Game ${gameId}] Tutti pronti: ${allReady}`);
+
                 if (allReady) {
-                    const newGameId = await createGameAndAssignPlayers(game); 
+                    const { gameId: newGameId, turnOrder }  = await createGameAndAssignPlayers(game);
+                    console.log(`[Game ${gameId}] Partita creata con successo. Nuovo gameId: ${newGameId}, Turn Order:`, turnOrder); 
+
+                    game.forEach(player => {
+                        userGameMap.set(player.id, newGameId);
+                        console.log(`[Game ${newGameId}] Aggiunto userId ${player.id} alla Map con gameId ${newGameId}`);
+                    });
+
                     io.to(gameId).emit('game-start', {
                         message: "Tutti pronti: inizia il gioco",
-                        gameId: newGameId  // Passiamo il gameId al client
+                        gameId: newGameId,  // Passiamo il gameId al client
+                        turnOrder: turnOrder
                     });
+
+                    console.log(`[DEBUG] Contenuto completo di userGameMap:`);
+                    for (const [userId, gameId] of userGameMap) {
+                        console.log(`  - userId: ${userId}, gameId: ${gameId}`);
+                    }
                 } else {
                     io.to(gameId).emit('game-cancelled', "Non tutti i giocatori erano pronti, partita annullata"); // Rimuovi la coda del gioco dal server
                 }
@@ -106,44 +126,6 @@ async function startCountdown(io, gameId) {
             countdown--; 
         }
     }, 1000);
-}
-
-async function createGameAndAssignPlayers( game ) {
-    let newGameId;
-
-    try {
-        const result = await client.query(`
-            INSERT INTO games (status, started_at) 
-            VALUES ('in-progress', NOW()) 
-            RETURNING game_id;`
-        );
-
-        newGameId = result.rows[0].game_id;
-
-        const playerPromises = game.map(player => {
-            return client.query(`
-                INSERT INTO players_in_game (game_id, user_id) 
-                VALUES ($1, $2)
-                ON CONFLICT (game_id, user_id) DO NOTHING;`
-                , [newGameId, player.id]);
-        });
-
-        const playerIds = game.map(player => player.id);
-        await client.query(`
-            UPDATE users 
-            SET status = 'in_game'
-            WHERE user_id = ANY($1);`,
-            [playerIds]
-        );
-
-        //implement after creating game and players, update user status
-    
-        await Promise.all(playerPromises);
-        return newGameId;
-
-    } catch (err) {
-        console.error("Errore durante la creazione del gioco e l'assegnazione dei giocatori:", err);
-    }
 }
 
 

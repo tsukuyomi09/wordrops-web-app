@@ -3,8 +3,9 @@ const router = express.Router();
 const path = require('path');
 const checkAuth = require('../middlewares/checkAuthToken');
 const { client } = require('../database/db'); 
+const checkUserStatus = require('../middlewares/checkUserStatus');
 
-router.get('/dashboard/:username', checkAuth, async (req, res) => {
+router.get('/dashboard/:username', checkAuth, checkUserStatus, async (req, res) => {
     const { username } = req.params;  
     console.log(`Username nell'URL: ${username}`);
     console.log(`ID utente autenticato: ${req.user_id} (${req.username})`);

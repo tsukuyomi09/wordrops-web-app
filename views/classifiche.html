@@ -5,42 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">   
     <title>No Ordinary Writers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="/style/style.css" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="./js/checkAuth.js"></script>
 </head>
-<body class="bg-gray-200">
-    <div id="pagewrap relative" class="w-full">
-        <h1>Classifiche</h1>
-        <div class="absolute right-0 top-0 space-y-4 p-4">
-            <button
-                class="p-2 bg-blue-500 text-white w-full font-bold rounded-lg shadow-md hover:bg-blue-600 transition-all"
-                onclick="dashboardButton()">
-                DASHBOARD
-            </button>
-            <div class="text-sm p-4 rounded-lg bg-green-500	 flex flex-col font-semibold shadow-md space-y-3">
-                <h3 class="text-sm font-bold text-black">AMICI</h3>
-                <form id="search-form" class="flex flex-col space-y-2">
-                    <input
-                        type="text"
-                        id="search-input"
-                        placeholder="Cerca un utente..."
-                        class="p-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 transition-all"
-                    />
-                </form>
-                <div class="results" id="results"></div>
-            </div>    
-        </div> 
-        <div class="absolute left-0 top-0 space-y-4 p-4">
-            <div class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
-                CLASSIFICHE
+<body class="blue-bg" >
+    <div class="page-wrap p-6 relative">
+        
+        <!-- menu container -->
+        <div id="menu-container" class="menu-wrapper w-full flex justify-center fixed left-0 right-0">
+            <div id="logout-button" class="icon-container icon absolute top-0 left-6 cursor-pointer p-2" onclick="logout()">
+                <img class="cursor-pointer" src="/images/icons/logout-icon.png" alt="logout Icon" class="w-6 h-6" />
+            </div>   
+
+            <div class="inline-flex justify-center relative items-center gap-6">
+                <div id="dashboard-icon" class="icon-container" onclick="dashboardButton()">
+                    <img src="/images/icons/icons8-casa-100.png" alt="Search Icon" class="w-6 h-6" />
+                </div>    
+                <a href="/classifiche">
+                    <div id="leaderboard-icon" class="icon-container">
+                        <img src="/images/icons/icons8-trofeo-48.png" alt="leaderboard Icon" class="w-6 h-6" />
+                    </div> 
+                </a>
+                <a href="/libreria">
+                    <div id="library-icon" class="icon-container">
+                        <img src="/images/icons/icons8-lettura-64.png" alt="library Icon" class="w-6 h-6" />
+                    </div>  
+                </a>
+                <div id="search-icon" class="icon-container" onclick="openSearch()">
+                    <img src="/images/icons/users-icon-menu.png" alt="Search Icon" class="w-6 h-6" />
+                </div>   
             </div>
-            <a href="/libreria" class="text-sm p-4 rounded-lg bg-white flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
-                LIBRERIA
-            </a>
-            <div class="text-sm p-4 rounded-lg bg-white  flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-100 cursor-pointer transition-all duration-300 ease-in-out">
-                ALTRO
+            <div id="user-search-wrapper" class="user-search-wrapper absolute top-0 right-6 opacity-0">
+                <div class="relative">
+                    <div id="close-button" onclick="closeSearch()" class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2" onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')">
+                        <img src="/images/icons/x-icon.png" alt="close-search-user">
+                    </div>
+                    <div class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm ">
+                        <form id="search-form" class="flex flex-col space-y-1">
+                            <input
+                                type="text"
+                                id="search-input"
+                                placeholder="Cerca un utente..."
+                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
+                            />
+                        </form>
+                    </div>
+                    <div class="results my-2" id="results"></div>
+                </div>
             </div>
-        </div> 
-    </div>
-    <script src="/js/menu.js" defer></script>
+        </div>
+
+        <!-- ui container -->
+        <div id="ui-container" class="mt-20">
+            <h1 class="text-white text-2xl font-bold text-center mb-40">Classifiche</h1>
+        </div>
+
+<script src="/js/menu.js" defer></script>
 </body>
 </html>

@@ -60,7 +60,6 @@ function showAvatarTransition() {
 showAvatarTransition()
 
 function dashboardButton() {
-
     const username = localStorage.getItem('username');
     if (username) {
         // Fai il redirect alla dashboard dell'utente
