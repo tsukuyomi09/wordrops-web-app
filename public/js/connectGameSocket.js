@@ -1,20 +1,23 @@
-// 1. Al caricamento della pagina:
-//    - Controlla se esiste lo "status" nel session storage:
-//      - Se sì:
-//        - Se lo status è "in_game":
-//          - Controlla se esiste il "gameId" nel session storage:
-//            - Se sì, connettiti alla partita usando il gameId.
-//            - Altrimenti, recupera il gameId dal server e connettiti.
-//        - Se lo status non è "in_game", termina.
-//      - Se no:
-//        - Recupera lo status dal server e salvalo nel session storage.
-//        - Se lo status è "in_game", recupera il gameId dal server e connettiti.
-//        - Altrimenti, termina.
+window.onload = async () => {
+    try {
+        console.log(`fetch partita`)
+        const response = await fetch('/checkUserGameStatus', {
+            method: 'GET', 
+            credentials: 'include',  // Assicurati di includere i cookie per l'autenticazione
+        });
 
-// 2. Funzione per connettersi alla partita:
-//    - Usa il gameId per stabilire la connessione WebSocket.
-//    - Implementa logica di connessione.
+        if (response.ok) {
+            const data = await response.json();
 
-// 3. Funzione per recuperare dati dal server:
-//    - Recupera lo "status" o il "gameId" tramite una fetch API al backend.
-//    - Gestisci eventuali errori.
+            if (data.isInGame) {
+                console.log(`Sì, l'utente è in partita con gameId: ${data.gameId}`);
+            } else {
+                console.log("L'utente non è in partita.");
+            }
+        } else {
+            console.error("Errore nella fetch: Impossibile verificare lo stato del gioco.");
+        }
+    } catch (error) {
+        console.error("Errore durante il controllo della partita:", error);
+    }
+};

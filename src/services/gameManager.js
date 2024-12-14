@@ -46,6 +46,16 @@ async function createGameAndAssignPlayers(game) {
             startedAt: new Date()
         });
 
+        console.log("[DEBUG] Contenuto completo di activeGames:");
+        activeGames.forEach((value, key) => {
+            console.log(`- gameId: ${key}`);
+            console.log(`  - players: ${value.players.map(player => player.id).join(", ")}`);
+            console.log(`  - status: ${value.status}`);
+            console.log(`  - turnOrder: ${value.turnOrder.join(", ")}`);
+            console.log(`  - connections: ${JSON.stringify(value.connections, null, 2)}`);
+            console.log(`  - startedAt: ${value.startedAt}`);
+        });
+
         console.log(`Gioco con ID ${newGameId} creato e aggiunto ai giochi attivi.`);
 
         return { gameId: newGameId, turnOrder };

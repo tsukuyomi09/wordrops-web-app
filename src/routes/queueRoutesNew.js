@@ -132,3 +132,4 @@ async function startCountdown(io, gameId) {
 module.exports = router;
 module.exports.gameQueue = gameQueue;
 module.exports.preGameQueue = preGameQueue;
+module.exports.userGameMap = userGameMap;
