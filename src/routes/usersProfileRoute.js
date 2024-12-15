@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const checkAuth = require('../middlewares/checkAuthToken');
+const checkUserGameStatus = require('../routes/checkUserGameStatus');
 
-
-router.get('/profile/:username', checkAuth, async (req, res) => {
+router.get('/profile/:username', checkAuth, checkUserGameStatus, async (req, res) => {
     const { username } = req.params;  // username passato nell'URL
     console.log(`Richiesta per il profilo dell'utente: ${username}`);
     try {

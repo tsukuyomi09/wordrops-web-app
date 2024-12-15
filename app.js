@@ -6,8 +6,6 @@ const http = require("http")
 const socketio = require("socket.io")
 const { connectDB } = require("./src/database/db");
 const cookieParser = require('cookie-parser');
-const { preGameQueue } = require('./src/routes/queueRoutesNew');
-
 
 const app = express();
 const server = http.createServer(app)
@@ -119,7 +117,6 @@ const searchUserRoute = require('./src/routes/searchUser');
 const playersQueue = require('./src/routes/playersQueue');
 const gameRoute = require('./src/routes/gameRoute');
 const gameRouteData = require('./src/routes/gameRouteData');
-const checkUserGameStatus = require('./src/routes/checkUserGameStatus');
 const verifyLogIn = require('./src/routes/verifyLogIn');
 const logout = require('./src/routes/logout');
 const updateAvatar = require('./src/services/updateAvatar');
@@ -137,11 +134,11 @@ app.use(usersProfileData);
 app.use(searchUserRoute);
 app.use(queueRoutes);
 app.use(queueRoutesNew);
-app.use(checkUserGameStatus);
 app.use(gameRoute);
 app.use(gameRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
+
 
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
