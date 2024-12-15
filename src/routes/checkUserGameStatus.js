@@ -4,6 +4,11 @@ const { userGameMap } = require('./queueRoutesNew');
 const checkUserGameStatus = (req, res, next) => {
     const user_id = req.user_id;  // Ottenuto dal middleware `checkAuth`
     console.log(`Verifica stato di gioco per utente: ${user_id}`);
+    console.log('Tipo di user_id:', typeof user_id);
+
+    userGameMap.forEach((gameId, key) => {
+        console.log(`Chiave nella Map: ${key} (tipo: ${typeof key}), valore (gameId): ${gameId} (tipo: ${typeof gameId})`);
+    });
 
     if (userGameMap.has(user_id)) {
         const gameId = userGameMap.get(user_id);

@@ -6,6 +6,8 @@ const http = require("http")
 const socketio = require("socket.io")
 const { connectDB } = require("./src/database/db");
 const cookieParser = require('cookie-parser');
+const { preGameQueue } = require('./src/routes/queueRoutesNew');
+
 
 const app = express();
 const server = http.createServer(app)
