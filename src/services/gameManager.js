@@ -42,8 +42,9 @@ async function createGameAndAssignPlayers(game) {
         activeGames.set(newGameId, {
             gameId: newGameId,
             players: game,
-            status: 'in-progress',
+            status: 'to-start',
             turnOrder: turnOrder,
+            readyPlayersCount: 0,
             turnIndex: 0,
             connections: [],
             countdownDuration: 1800000, // 30 secondi
@@ -51,8 +52,6 @@ async function createGameAndAssignPlayers(game) {
             countdownEnd: null,      // Sarà calcolato al momento dell'avvio
             startedAt: new Date()
         });
-
-        startCountdown(newGameId);
 
         return { gameId: newGameId, turnOrder };
 
@@ -77,6 +76,7 @@ function getActiveGames() {
 
 function startCountdown(newGameId) {
     const io = getSocket();
+    newGameId = Number(newGameId)
     const game = activeGames.get(newGameId);
     if (!game) {
         console.error(`Gioco con ID ${newGameId} non trovato`);
@@ -121,4 +121,4 @@ function startCountdown(newGameId) {
 
 
 
-module.exports = { createGameAndAssignPlayers, activeGames, getActiveGames };
+module.exports = { createGameAndAssignPlayers, activeGames, getActiveGames, startCountdown };

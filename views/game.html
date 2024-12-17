@@ -70,6 +70,19 @@
             </div>
         </div>
 
+        <div id="popup-start-countdown" class="hidden fixed inset-0 bg-gray-800 bg-opacity-80 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg text-center">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">Partita a Tempo</h2>
+                <p class="text-gray-600 mb-6">
+                    La partita è a tempo! Quando tutti saranno pronti, il countdown non potrà piú essere fermato.
+                </p>
+                <button
+                    onClick="buttonStartGame()"
+                    class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300">
+                    Sono pronto!
+                </button>
+            </div>
+        </div>
         <div id="ui-container" class="mt-20">
             <!-- game UI container -->
             <div id="game-ui-container" class="game-ui-container flex-row items-start justify-center min-h-screen">
