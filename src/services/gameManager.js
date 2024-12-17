@@ -1,4 +1,6 @@
 const { client } = require('../database/db'); 
+const { getSocket } = require('./socketManager');
+
 
 const activeGames = new Map(); 
 
@@ -42,21 +44,15 @@ async function createGameAndAssignPlayers(game) {
             players: game,
             status: 'in-progress',
             turnOrder: turnOrder,
-            connections: game.map(player => player.socket),
+            turnIndex: 0,
+            connections: [],
+            countdownDuration: 1800000, // 30 secondi
+            countdownStart: null,    // Valore iniziale
+            countdownEnd: null,      // Sarà calcolato al momento dell'avvio
             startedAt: new Date()
         });
 
-        console.log("[DEBUG] Contenuto completo di activeGames:");
-        activeGames.forEach((value, key) => {
-            console.log(`- gameId: ${key}`);
-            console.log(`  - players: ${value.players.map(player => player.id).join(", ")}`);
-            console.log(`  - status: ${value.status}`);
-            console.log(`  - turnOrder: ${value.turnOrder.join(", ")}`);
-            console.log(`  - connections: ${JSON.stringify(value.connections, null, 2)}`);
-            console.log(`  - startedAt: ${value.startedAt}`);
-        });
-
-        console.log(`Gioco con ID ${newGameId} creato e aggiunto ai giochi attivi.`);
+        startCountdown(newGameId);
 
         return { gameId: newGameId, turnOrder };
 
@@ -75,4 +71,54 @@ function shuffleArray(array) {
     return array;
 }
 
-module.exports = { createGameAndAssignPlayers, activeGames };
+function getActiveGames() {
+    return activeGames;
+}
+
+function startCountdown(newGameId) {
+    const io = getSocket();
+    const game = activeGames.get(newGameId);
+    if (!game) {
+        console.error(`Gioco con ID ${newGameId} non trovato`);
+        return;
+    }
+
+    const now = Date.now();
+    game.countdownStart = now;
+    game.countdownEnd = now + game.countdownDuration;
+
+    console.log(`Countdown di 30 minuti avviato per il gioco ${newGameId}. Termine: ${new Date(game.countdownEnd).toISOString()}`);
+
+    // Intervallo per aggiornare il tempo rimanente
+    const intervalId = setInterval(() => {
+        const remainingTime = game.countdownEnd - Date.now();
+
+        if (remainingTime <= 0) {
+            clearInterval(intervalId); // Ferma l'intervallo quando il countdown termina
+            console.log(`Countdown di 30 minuti terminato per il gioco ${newGameId}`);
+            game.status = 'ready-to-start'; // Cambia stato o esegui altra logica
+        } else {
+            const minutes = Math.floor(remainingTime / 60000);
+            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            
+            // Ottieni i socket connessi alla stanza durante ogni ciclo
+            setTimeout(() => {
+                const connectedSockets = io.sockets.adapter.rooms.get(newGameId);
+                console.log(`Client connessi alla stanza ${newGameId}:`, connectedSockets ? Array.from(connectedSockets) : 'Nessun client connesso');
+            }, 50);
+
+            console.log('Tipo di newGameId:', typeof newGameId, 'Valore:', newGameId);
+            io.in(newGameId).emit('countdownUpdate', { 
+                remainingTime,
+                formatted: `${minutes}m ${seconds}s`
+            });
+
+            console.log(`Tempo rimanente per il gioco ${newGameId}: ${minutes}m ${seconds}s`);
+        }
+    }, 1000); // Aggiorna ogni secondo
+}
+
+
+
+
+module.exports = { createGameAndAssignPlayers, activeGames, getActiveGames };

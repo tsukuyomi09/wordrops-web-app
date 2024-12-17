@@ -1,5 +1,5 @@
 // Lato client
-window.onload = async function() {
+async function getGamePlayers () {
     const gameId = window.location.pathname.split('/').pop();  // Ottieni gameId dall'URL
     const response = await fetch(`/game/${gameId}/players`);
 
@@ -32,7 +32,6 @@ window.onload = async function() {
     });
 };
 
-
-// abandon game request
+getGamePlayers();
 
 

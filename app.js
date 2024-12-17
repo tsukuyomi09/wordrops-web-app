@@ -7,12 +7,13 @@ const socketio = require("socket.io")
 const { connectDB } = require("./src/database/db");
 const cookieParser = require('cookie-parser');
 const { preGameQueue } = require('./src/routes/queueRoutesNew');
+const { activeGames } = require('./src/services/gameManager');
 
 
 const app = express();
 const server = http.createServer(app)
-const io = socketio(server);
-
+const { initSocket } = require('./src/services/socketManager');
+const io = initSocket(server);
 
 const port = process.env.PORT || 3000;
 
@@ -67,8 +68,46 @@ io.on("connection", socket => {
             console.error("Errore durante l'elaborazione dell'evento 'playerReady':", error);
         }
     });
+
+    socket.on('startGameCountdown', ({ gameId }) => {
+        startGameCountdown(io, gameId);
+    });
+
+    socket.on('joinNewGame', ({ gameId }) => {
+        gameId = Number(gameId);
+        console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
+        socket.join(gameId); 
+
+        setTimeout(() => {
+            const connectedSockets = io.sockets.adapter.rooms.get(gameId);
+            console.log(`Client connessi alla stanza ${gameId} dopo un ritardo:`, connectedSockets ? Array.from(connectedSockets) : 'Nessun client connesso');
+        }, 50);
+
+        console.log(`Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`, {
+            message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
+            socketId: socket.id
+        });
     
+        io.in(gameId).emit('playerJoined', { 
+            message: `Un nuovo giocatore si è unito alla stanza ${gameId}`, 
+            socketId: socket.id 
+        });
+    });
     
+    socket.on('disconnect', () => {
+        console.log(`Socket ${socket.id} disconnesso`);
+    
+        // Trova il gioco in cui è presente il socket.id
+        for (const [gameId, game] of activeGames) {
+            if (game.connections.includes(socket.id)) {
+                // Rimuovi il socket.id dalla lista connections
+                game.connections = game.connections.filter(conn => conn !== socket.id);
+                console.log(`Socket ${socket.id} rimosso dal gioco ${gameId}`);
+                console.log(`Connessioni aggiornate per il gioco ${gameId}:`, game.connections);
+                break; // Una volta trovato e aggiornato, non serve continuare
+            }
+        }
+    });       
 })
 
 

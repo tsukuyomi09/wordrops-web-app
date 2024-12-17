@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <link href="/style/style.css" rel="stylesheet">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">  
-    <!-- <script src="/js/connectGameSocket.js" defer></script> -->
 </head>
 <body class="bg-gray-200">
     <div class="page-wrap p-6 relative">
@@ -74,7 +73,7 @@
         <div id="ui-container" class="mt-20">
             <!-- game UI container -->
             <div id="game-ui-container" class="game-ui-container flex-row items-start justify-center min-h-screen">
-                <div class="text-center max-w-4xl w-full">
+                <div class="text-center w-full">
                     <h1 class="text-3xl font-semibold ">Partita</h1>
                 </div>
                 <div id="button-container" class="flex justify-center items-center mt-5">
@@ -82,11 +81,17 @@
                       class="bg-red-500 text-white font-bold text-sm py-2 px-4 rounded-lg shadow-lg transition transform hover:bg-red-600 hover:-translate-y-1 hover:shadow-xl active:translate-y-1 active:shadow-md">
                       ABBANDONA PARTITA
                     </button>
-                  </div>
+                </div>
+                <div id="countdown-display">
+                    <p>Countdown: <span id="minutes">00</span>:<span id="seconds">00</span></p>
+                </div>
             </div>
         </div>
     </div>
+
 <script src="/js/game.js"></script>
 <script src="/js/menu.js" defer></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/connectGameSocket.js"></script>
 </body>
 </html>

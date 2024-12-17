@@ -1,23 +1,40 @@
-window.onload = async () => {
+function initializeSocket(){
     try {
-        console.log(`fetch partita`)
-        const response = await fetch('/checkUserGameStatus', {
-            method: 'GET', 
-            credentials: 'include',  // Assicurati di includere i cookie per l'autenticazione
+        // Estrai il gameId dall'URL
+        const urlPath = window.location.pathname; // Ottiene il path tipo "/game/178"
+        const gameId = urlPath.split('/')[2]; // Estrai l'ID del gioco (in questo caso "178")
+
+        if (!gameId) {
+            console.error("Errore: gameId non trovato nell'URL");
+            return;
+        }
+        console.log(`Apertura connessione WebSocket per gameId: ${gameId}`);
+
+        const socket = io();
+
+        socket.on('countdownUpdate', (data) => {
+            console.log(`Tempo rimanente: ${data.formatted}`);
+            // Aggiorna l'interfaccia utente con il tempo rimanente
+        });
+        
+        socket.on('playerJoined', (data) => {
+            console.log(`Messaggio ricevuto dal server: ${data.message}`);
         });
 
-        if (response.ok) {
-            const data = await response.json();
 
-            if (data.isInGame) {
-                console.log(`Sì, l'utente è in partita con gameId: ${data.gameId}`);
-            } else {
-                console.log("L'utente non è in partita.");
-            }
-        } else {
-            console.error("Errore nella fetch: Impossibile verificare lo stato del gioco.");
-        }
+        socket.on('connect', () => {
+            console.log(`Connesso al server con ID socket: ${socket.id}`);
+            socket.emit('joinNewGame', { gameId }); // Comunica al server a quale gioco si sta associando
+        });
+
+        
     } catch (error) {
-        console.error("Errore durante il controllo della partita:", error);
+        console.error("Errore durante l'inizializzazione della connessione:", error);
     }
 };
+
+initializeSocket()
+
+
+
+

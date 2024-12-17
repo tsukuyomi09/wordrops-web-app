@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { createGameAndAssignPlayers } = require('../services/gameManager');
+const { activeGames } = require('..//services/gameManager');
 const checkAuth = require('../middlewares/checkAuthToken');
 
 
 let gameQueue = []; // Array per la coda dei giocatori
 let preGameQueue = {}; // Oggetto per i giochi pronti
 const userGameMap = new Map(); // status degli utenti  
+
 
 
 // add player to queue
@@ -50,9 +52,8 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
                 console.log(`Nessun socket trovato per ${player.username} con socketId ${player.socketId}`);
             }
         });
-        console.log(preGameQueue);
         setTimeout(() => {
-            startCountdown(req.io, gameId);
+            startCountdownPreGame(req.io, gameId);
         }, 3000);
     } 
 
@@ -73,8 +74,6 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
     // Rimuovi l'utente dalla queue
     gameQueue.splice(playerIndex, 1);
 
-    console.log('Coda aggiornata:', gameQueue);
-
     req.socket.emit("queueAbandoned", { 
         status: 'idle', 
         message: 'Hai abbandonato la coda' 
@@ -83,29 +82,24 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
 });
 
 
-async function startCountdown(io, gameId) {
+async function startCountdownPreGame(io, gameId) {
     let countdown = 10; 
-    console.log(`[Game ${gameId}] Countdown iniziato.`);
     
-    const countdownInterval = setInterval(async () => {
+    const preGameCountdownInterval = setInterval(async () => {
         io.to(gameId).emit('countdown', countdown); // Invia il countdown corrente
 
         if (countdown <= 0) { // Quando il countdown termina
-            clearInterval(countdownInterval); // Ferma il countdown
+            clearInterval(preGameCountdownInterval); // Ferma il countdown
             const game = preGameQueue[gameId]; // Recupera il gioco
-            console.log(`[Game ${gameId}] Recuperato gioco dalla preGameQueue:`, game);
 
             if (game) {
                 const allReady = game.every(player => player.pronto); // Controlla se tutti sono pronti
-                console.log(`[Game ${gameId}] Tutti pronti: ${allReady}`);
 
                 if (allReady) {
                     const { gameId: newGameId, turnOrder }  = await createGameAndAssignPlayers(game);
-                    console.log(`[Game ${gameId}] Partita creata con successo. Nuovo gameId: ${newGameId}, Turn Order:`, turnOrder); 
 
                     game.forEach(player => {
                         userGameMap.set(player.id, newGameId);
-                        console.log(`[Game ${newGameId}] Aggiunto userId ${player.id} alla Map con gameId ${newGameId}`);
                     });
 
                     io.to(gameId).emit('game-start', {
@@ -114,10 +108,6 @@ async function startCountdown(io, gameId) {
                         turnOrder: turnOrder
                     });
 
-                    console.log(`[DEBUG] Contenuto completo di userGameMap:`);
-                    for (const [userId, gameId] of userGameMap) {
-                        console.log(`  - userId: ${userId}, gameId: ${gameId}`);
-                    }
                 } else {
                     io.to(gameId).emit('game-cancelled', "Non tutti i giocatori erano pronti, partita annullata"); // Rimuovi la coda del gioco dal server
                 }
@@ -127,7 +117,6 @@ async function startCountdown(io, gameId) {
         }
     }, 1000);
 }
-
 
 module.exports = router;
 module.exports.gameQueue = gameQueue;
