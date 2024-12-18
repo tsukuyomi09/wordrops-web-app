@@ -9,7 +9,7 @@ app.post('/password', (req, res) => {
   // Controlla se la password è corretta
   if (password === GLOBAL_PASSWORD) {
     // Se la password è corretta, genera un token JWT
-    const token = jwt.sign({ user: 'admin' }, GLOBAL_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ user: 'admin' }, GLOBAL_SECRET, { expiresIn: '5h' });
 
     // Invia il token come cookie al client (o nell'header, se preferisci)
     res.cookie('token', token, { httpOnly: true });  // Questo rende il cookie sicuro (non accessibile tramite JS)

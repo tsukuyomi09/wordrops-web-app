@@ -36,12 +36,13 @@ async function createGameAndAssignPlayers(game) {
         // Aspettiamo che tutti i giocatori siano assegnati
         await Promise.all(playerPromises);
 
-        const turnOrder = shuffleArray(game.map(player => player.id));
+        const turnOrder = shuffleArray(game.map(player => ({ id: player.id, username: player.username })));
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
             players: game,
+            chapters: [],
             status: 'to-start',
             turnOrder: turnOrder,
             readyPlayersCount: 0,
@@ -52,6 +53,8 @@ async function createGameAndAssignPlayers(game) {
             countdownEnd: null,      // Sarà calcolato al momento dell'avvio
             startedAt: new Date()
         });
+
+        console.log("Active Games - Full Log after adding the game:", JSON.stringify(Array.from(activeGames.entries()), null, 2));
 
         return { gameId: newGameId, turnOrder };
 
@@ -107,10 +110,15 @@ function startCountdown(newGameId) {
                 console.log(`Client connessi alla stanza ${newGameId}:`, connectedSockets ? Array.from(connectedSockets) : 'Nessun client connesso');
             }, 50);
 
+            const currentTurn = game.turnIndex;
+            const turnOrder = game.turnOrder;
+
             console.log('Tipo di newGameId:', typeof newGameId, 'Valore:', newGameId);
-            io.in(newGameId).emit('countdownUpdate', { 
+            io.in(newGameId).emit('gameUpdate', { 
                 remainingTime,
-                formatted: `${minutes}m ${seconds}s`
+                formatted: `${minutes}m ${seconds}s`,
+                currentPlayer: turnOrder[currentTurn],  // ID del giocatore corrente
+                turnOrder 
             });
 
             console.log(`Tempo rimanente per il gioco ${newGameId}: ${minutes}m ${seconds}s`);

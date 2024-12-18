@@ -74,7 +74,9 @@ io.on("connection", socket => {
     });
 
     socket.on('joinNewGame', ({ gameId }) => {
+        console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
         gameId = Number(gameId);
+        console.log(`gameId convertito in numero:`, gameId);
         console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
         socket.join(gameId); 
 

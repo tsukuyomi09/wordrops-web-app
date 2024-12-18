@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
     <link href="/style/style.css" rel="stylesheet">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">  
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 </head>
 <body class="bg-gray-200">
     <div class="page-wrap p-6 relative">
@@ -85,18 +86,31 @@
         </div>
         <div id="ui-container" class="mt-20">
             <!-- game UI container -->
-            <div id="game-ui-container" class="game-ui-container flex-row items-start justify-center min-h-screen">
+            <div id="game-ui-container" class="game-ui-container flex-row items-start justify-center min-h-screen px-40">
                 <div class="text-center w-full">
-                    <h1 class="text-3xl font-semibold ">Partita</h1>
+                    <h1 class="text-xl font-semibold ">Partita</h1>
                 </div>
+                <div id="countdown-display" class="text-xl font-bold text-center mt-4"></div>
+                <div id="current-turn" class="text-lg font-semibold text-center mt-2"></div>
+                <div id="turn-order" class="text-sm font-medium text-center mt-2"></div>
+
                 <div id="button-container" class="flex justify-center items-center mt-5">
                     <button id="abandon-game-button" onclick="abandonGame()" 
                       class="bg-red-500 text-white font-bold text-sm py-2 px-4 rounded-lg shadow-lg transition transform hover:bg-red-600 hover:-translate-y-1 hover:shadow-xl active:translate-y-1 active:shadow-md">
                       ABBANDONA PARTITA
                     </button>
                 </div>
-                <div id="countdown-display">
-                    <p>Countdown: <span id="minutes">00</span>:<span id="seconds">00</span></p>
+                <div id="chapter-editor-container" class="flex-row justify-start mt-20 ">
+                    <div id="toolbar-container" class="rounded"></div>
+                    <div class="flex flex-col my-6">
+                        <input 
+                          type="text" 
+                          id="chapter-title" 
+                          placeholder="Titolo.." 
+                          class="p-2 border text-xl rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-200"
+                        />
+                    </div>
+                    <div id="editor-container" class="bg-white mt-10 p-4 border rounded shadow min-h-screen "></div>
                 </div>
             </div>
         </div>
@@ -106,5 +120,7 @@
 <script src="/js/menu.js" defer></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/connectGameSocket.js"></script>
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script src="/js/chapter.js"></script>
 </body>
 </html>

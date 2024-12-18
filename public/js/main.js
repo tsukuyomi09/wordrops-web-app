@@ -326,8 +326,10 @@ function fetchdashboardData() {
         game_id = data.game_id;
         const queueButton = document.getElementById("new-game-button");
         const backToGameButton = document.getElementById("backToGame-button");
+        const statusContainer = document.getElementById("status-div");
 
         if (status === "in_game") {
+            statusContainer.classList.remove("hidden");
             backToGameButton.classList.remove("hidden");
             queueButton.classList.add("hidden");
         } 

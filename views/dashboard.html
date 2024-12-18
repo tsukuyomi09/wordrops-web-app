@@ -143,26 +143,35 @@
                 <div class=" flex flex-col justify-center items-center">
 
                     <!-- main avatar container -->
-                    <div class="avatar-container relative flex flex-col justify-center items-center p-10 bg-gray-500 bg-opacity-10 shadow-md rounded-2xl h-60 w-60">
+                    <div class="avatar-container relative flex flex-col justify-center items-center p-10 bg-gray-500 bg-opacity-10 shadow-md rounded-2xl h-30 w-30">
                         <img id="main-avatar" class="h-full w-auto object-contain" src="" alt="">
                         <div class="absolute -mr-2 bottom-0 right-0 h-6 w-6 rounded-full bg-white">
                             <img class="hover-rotate cursor-pointer" src="/images/icons/change-avatar-icon.png" onclick="openAvatarMenu()" alt="">
                         </div>
                     </div>
+                    <div id="status-div" class="hidden flex items-center justify-center space-x-2 mt-4">
+                        <!-- Testo con il pallino verde -->
+                        <span class="text-sm font-semibold">SEI IN GAME</span>
+                        <span id="game-status-indicator" class="w-2 h-2 rounded-full bg-green-500"></span>
+                    </div>
+                    
+                    <!-- Countdown Timer -->
+                    <div id="countdown-display" class="text-sm font-bold text-center mt-2"></div>
 
                     <div class="username_container p-4 px-10 inline-block">
                         <h2 id="username" class="text-white text-4xl font-extrabold"></h2>
                         <h4 id="userStatus"></h4>
                     </div>
                 </div>
-                <button id="new-game-button" onclick="joinQueue()" class=" hover-sound mt-40 bg-blue-700 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
-                <button id="backToGame-button" onclick="backToGameButton()" class="hidden hover-sound mt-40 bg-green-600 border-4 border-white text-white font-semibold w-40 h-40 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">TORNA IN<br>PARTITA</button> 
+                <button id="new-game-button" onclick="joinQueue()" class=" hover-sound text-sm mt-6 bg-blue-700 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">NUOVA <br>PARTITA</button>
+                <button id="backToGame-button" onclick="backToGameButton()" class="hidden hover-sound text-sm mt-6 bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold">TORNA IN<br>PARTITA</button> 
             </div>
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/main.js" defer></script>
     <script src="/js/menu.js" defer></script>
+    <script src="/js/connectGameSocket.js"></script>
     <audio id="click-sound" src="/images/button-hover-sound.mp3" preload="auto"></audio>
     <audio id="select-sound" src="/images/avatar-select-1.mp3" preload="auto"></audio>
     <audio id="select-sound-new-game" src="/images/new-game-sound.mp3" preload="auto"></audio>
