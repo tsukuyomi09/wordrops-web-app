@@ -36,7 +36,11 @@ async function createGameAndAssignPlayers(game) {
         // Aspettiamo che tutti i giocatori siano assegnati
         await Promise.all(playerPromises);
 
-        const turnOrder = shuffleArray(game.map(player => ({ id: player.id, username: player.username })));
+        const turnOrder = shuffleArray(game.map(player => ({
+            id: player.id,
+            username: player.username,
+            avatar: player.avatar // Assicurati che l'avatar sia presente
+        })));
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
@@ -109,16 +113,12 @@ function startCountdown(newGameId) {
                 const connectedSockets = io.sockets.adapter.rooms.get(newGameId);
                 console.log(`Client connessi alla stanza ${newGameId}:`, connectedSockets ? Array.from(connectedSockets) : 'Nessun client connesso');
             }, 50);
-
-            const currentTurn = game.turnIndex;
-            const turnOrder = game.turnOrder;
+            
 
             console.log('Tipo di newGameId:', typeof newGameId, 'Valore:', newGameId);
             io.in(newGameId).emit('gameUpdate', { 
                 remainingTime,
                 formatted: `${minutes}m ${seconds}s`,
-                currentPlayer: turnOrder[currentTurn],  // ID del giocatore corrente
-                turnOrder 
             });
 
             console.log(`Tempo rimanente per il gioco ${newGameId}: ${minutes}m ${seconds}s`);

@@ -65,42 +65,30 @@ function initializeSocket(game_id){
         const socket = io();
 
         socket.on('gameUpdate', (data) => {
-            console.log('Dati ricevuti:', data);  // Log di debug per vedere i dati ricevuti
+            console.log('Dati ricevuti:', data); // Log di debug per vedere i dati ricevuti
         
-            const countdownDisplay = document.getElementById('countdown-display');
-            if (countdownDisplay) {
-                countdownDisplay.textContent = data.formatted; // Aggiorna il testo con il tempo rimanente
+            try {
+                updateCountdownDisplay(data.formatted);
+                console.log(`tempo rimanente: ${data.formatted}`);
+            } catch (error) {
+                console.error("Errore durante updateCountdownDisplay:", error);
             }
-        
-            // Estrai i dati per il turno corrente e l'ordine dei turni
-            const { currentPlayer, turnOrder } = data;
-        
-            // Aggiungi log per verificare che currentPlayer e turnOrder siano quelli che ti aspetti
-            console.log('currentPlayer:', currentPlayer);
-            console.log('turnOrder:', turnOrder);
-        
-            // Trova il giocatore corrente
-            const currentTurnPlayer = currentPlayer;  // Ora currentPlayer è un oggetto con id e username
-            console.log('currentTurnPlayer:', currentTurnPlayer);  // Log per vedere il giocatore corrente
-        
-            // Se currentTurnPlayer è trovato, mostra l'username
-            const currentTurnDisplay = document.getElementById('current-turn');
-            if (currentTurnDisplay && currentTurnPlayer) {
-                currentTurnDisplay.textContent = `Turno corrente: ${currentTurnPlayer.username}`; // Mostra l'username del giocatore corrente
-            } else if (currentTurnDisplay) {
-                currentTurnDisplay.textContent = `Turno corrente non trovato!`; // Se non trovi il giocatore, mostra un messaggio di errore
+            
+            try {
+                updateCurrentPlayerDisplay(data.currentPlayer);
+                console.log(`giocatore attuale:`, data.currentPlayer);
+            } catch (error) {
+                console.error("Errore durante updateCurrentPlayerDisplay:", error);
             }
-        
-            // Mostra l'ordine dei turni con gli username
-            const turnOrderText = turnOrder.map((player, index) => `Turno ${index + 1}: ${player.username}`).join(', ');
-            const turnOrderDisplay = document.getElementById('turn-order');
-            if (turnOrderDisplay) {
-                turnOrderDisplay.textContent = `Ordine dei turni: ${turnOrderText}`;
+            
+            try {
+                updateTurnOrderDisplay(data.turnOrder);
+                console.log(`ordine dei turni:`, data.turnOrder);
+            } catch (error) {
+                console.error("Errore durante updateTurnOrderDisplay:", error);
             }
+
         });
-        
-        
-        
         
 
         socket.on('playerJoined', (data) => {
@@ -138,6 +126,55 @@ function buttonStartGame() {
     })
     .catch(error => console.error("Errore nel segnare il giocatore come pronto:", error));
   }
+
+
+function updateCountdownDisplay(formattedTime) {
+    const countdownDisplay = document.getElementById('countdown-display');
+    if (countdownDisplay) {
+        countdownDisplay.textContent = formattedTime; // Aggiorna il testo con il tempo rimanente
+    }
+}
+
+function updateCurrentPlayerDisplay(currentPlayer) {
+    const currentTurnDisplay = document.getElementById('current-turn');
+    if (currentTurnDisplay && currentPlayer) {
+        const avatarSrc = getAvatarSrc(currentPlayer.avatar);
+
+        currentTurnDisplay.innerHTML = `
+            <div class="flex items-center">
+                <img src="${avatarSrc}" alt="Avatar" class="w-8 h-8 rounded-full mr-2" />
+                <span class="text-lg font-bold">Turno corrente: ${currentPlayer.username}</span>
+            </div>
+        `;
+    } else if (currentTurnDisplay) {
+        currentTurnDisplay.textContent = `Turno corrente non trovato!`; // Messaggio di errore
+    }
+}
+
+function updateTurnOrderDisplay(turnOrder) {
+    const turnOrderDisplay = document.getElementById('turn-order');
+    if (turnOrderDisplay) {
+        const turnOrderHTML = turnOrder.map((player, index) => {
+            const avatarSrc = getAvatarSrc(player.avatar);
+
+            return `
+                <div class="turn-order-item flex items-center mb-2">
+                    <img src="${avatarSrc}" alt="Avatar" class="w-8 h-8 rounded-full mr-2" />
+                    <span class="text-sm font-medium">${player.username} (Turno ${index + 1})</span>
+                </div>
+            `;
+        }).join('');
+
+        turnOrderDisplay.innerHTML = turnOrderHTML;
+    }
+}
+
+function getAvatarSrc(avatar) {
+    // Controlla se l'avatar è definito, altrimenti usa un avatar di default
+    return avatar 
+        ? `/images/avatars/${avatar}.png` 
+        : '/images/avatars/default-avatar.png';
+}
 
 
 

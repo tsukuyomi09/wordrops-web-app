@@ -16,6 +16,7 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
     const userId = req.user_id; // Ottieni userId dal middleware
     const username = req.username; // Ottieni username dal middleware
     const socketId = req.body.socketId;
+    const avatar = req.body.avatarForGame;
 
     if (!userId) {
         return res.status(401).json({ error: 'Utente non autenticato' });
@@ -27,7 +28,14 @@ router.post('/gamequeueNew', checkAuth, (req, res) => {
     }
 
     // Aggiungi l'utente alla gameQueue con un timestamp
-    gameQueue.push({ id: userId, username, socketId, timestamp: Date.now(), pronto: null });
+    gameQueue.push({ 
+        id: userId, 
+        username, 
+        avatar, // Includi l'avatar
+        socketId, 
+        timestamp: Date.now(), 
+        pronto: null 
+    });
     const socket = req.io.sockets.sockets.get(socketId);
     if (socket) {
         setTimeout(() => {
