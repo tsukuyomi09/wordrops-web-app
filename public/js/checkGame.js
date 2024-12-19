@@ -152,6 +152,20 @@ function initializeSocket(game_id) {
 
         const socket = io();
 
+        socket.on('nextChapterUpdate', (data) => {
+            console.log("Dati aggiornati del gioco ricevuti:", data);
+            const updatesList = document.getElementById('updates-list');
+        
+            const newUpdate = document.createElement('li');
+            newUpdate.textContent = `Nuovo capitolo aggiunto da ${data.chapters[data.chapters.length - 1].author}. 
+                                     Titolo: "${data.chapters[data.chapters.length - 1].title}"`;
+            updatesList.appendChild(newUpdate);
+        
+            const nextPlayerInfo = document.createElement('p');
+            nextPlayerInfo.textContent = `Prossimo giocatore: ${data.nextPlayer}`;
+            updatesList.appendChild(nextPlayerInfo);
+        });
+
         socket.on('gameUpdate', (data) => {
             try {
                 updateCountdownDisplay(data.formatted);
@@ -257,9 +271,11 @@ function getAvatarSrc(avatar) {
 }
 
 function getChapter() {
+    console.log("bottone partito")
     const title = document.getElementById('chapter-title').value.trim();
-    const editorContent = quill.getText().trim(); // Assumendo che Quill sia inizializzato come `quill`
-    
+    const editorContent = editor.getText().trim(); // Assumendo che Quill sia inizializzato come `quill`
+    const currentUser = localStorage.getItem('username');
+
     // Conta le parole nel contenuto dell'editor
     const wordCount = editorContent ? editorContent.split(/\s+/).length : 0;
 
@@ -275,14 +291,22 @@ function getChapter() {
 
     const data = {
         title: title,
-        content: editorContent
+        content: editorContent,
+        currentUser: currentUser
     };
-    sendChapter(data)
+    saveChapterChangeTurn(data)
 
 };
 
 function saveChapterChangeTurn(data){
-    fetch('/saveChapter', {
+    console.log("Dati inviati al server:");
+    console.log("Titolo:", data.title);
+    console.log("Contenuto:", data.content);
+    console.log("Utente corrente:", data.currentUser);
+    const gameId = window.location.pathname.split('/')[2];
+
+
+    fetch(`/saveChapterChangeTurn/${gameId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -330,7 +354,7 @@ const toolbar = document.querySelector('.ql-toolbar');
 toolbar.classList.add('rounded', 'mb-4', 'text-2xl')
 
 
-function getChapter() {
+function getChapterFromLocal() {
     const savedContent = localStorage.getItem('chapterContent'); // Ottieni il contenuto salvato
     if (savedContent) {
       editor.root.innerHTML = savedContent; // Carica il contenuto nell'editor
@@ -342,7 +366,7 @@ editor.on('text-change', function() {
     localStorage.setItem('chapterContent', content); // Salva il contenuto nell'localStorage
 });
 
-getChapter()
+getChapterFromLocal()
 
 function handleEditorAccess(currentPlayer, currentUser) {
     console.log(`handleEditorAccess initialized inside function`)
