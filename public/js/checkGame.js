@@ -147,6 +147,12 @@ function initializeSocket(game_id) {
         const socket = io();
 
         socket.on('nextChapterUpdate', (data) => {
+            const nextPlayerData = { username: data.nextPlayer };
+            sessionStorage.setItem('currentPlayer', JSON.stringify({ nextPlayerData }));
+            const currentUser = localStorage.getItem('username');
+            handleEditorAccess(nextPlayerData, currentUser)
+            updateCurrentPlayerDisplay(nextPlayerData)
+
             console.log("Dati aggiornati del gioco ricevuti:", data);
         
             const updatesList = document.getElementById('updates-list');

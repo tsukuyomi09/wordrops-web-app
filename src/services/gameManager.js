@@ -83,8 +83,7 @@ function getActiveGames() {
 
 function startCountdown(newGameId) {
     const io = getSocket();
-    newGameId = Number(newGameId)
-    const game = activeGames.get(newGameId);
+    const game = activeGames.get(Number(newGameId));
     if (!game) {
         console.error(`Gioco con ID ${newGameId} non trovato`);
         return;
@@ -94,34 +93,18 @@ function startCountdown(newGameId) {
     game.countdownStart = now;
     game.countdownEnd = now + game.countdownDuration;
 
-    console.log(`Countdown di 30 minuti avviato per il gioco ${newGameId}. Termine: ${new Date(game.countdownEnd).toISOString()}`);
-
-    // Intervallo per aggiornare il tempo rimanente
-    const intervalId = setInterval(() => {
+    setInterval(() => {
         const remainingTime = game.countdownEnd - Date.now();
-
         if (remainingTime <= 0) {
-            clearInterval(intervalId); // Ferma l'intervallo quando il countdown termina
-            console.log(`Countdown di 30 minuti terminato per il gioco ${newGameId}`);
+            console.log(`Countdown terminato per il gioco ${newGameId}`);
             game.status = 'ready-to-start'; // Cambia stato o esegui altra logica
         } else {
             const minutes = Math.floor(remainingTime / 60000);
             const seconds = Math.floor((remainingTime % 60000) / 1000);
-            
-            // Ottieni i socket connessi alla stanza durante ogni ciclo
-            setTimeout(() => {
-                const connectedSockets = io.sockets.adapter.rooms.get(newGameId);
-                console.log(`Client connessi alla stanza ${newGameId}:`, connectedSockets ? Array.from(connectedSockets) : 'Nessun client connesso');
-            }, 50);
-            
-
-            console.log('Tipo di newGameId:', typeof newGameId, 'Valore:', newGameId);
-            io.in(newGameId).emit('gameUpdate', { 
+            io.in(Number(newGameId)).emit('gameUpdate', { 
                 remainingTime,
                 formatted: `${minutes}m ${seconds}s`,
             });
-
-            console.log(`Tempo rimanente per il gioco ${newGameId}: ${minutes}m ${seconds}s`);
         }
     }, 1000); // Aggiorna ogni secondo
 }
