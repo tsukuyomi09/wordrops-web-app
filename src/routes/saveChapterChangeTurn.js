@@ -33,12 +33,14 @@ router.post('/saveChapterChangeTurn/:gameId', checkAuth, (req, res) => {
         return;
     }
 
+    const newChapter = { title, content, author: username };
+
     game.chapters.push({ title, content, author: username });
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
 
-    req.io.to(gameId).emit('nextChapterUpdate', {
-        chapters: game.chapters,
-        nextPlayer: game.turnOrder[game.turnIndex].username,
+    req.io.to(Number(gameId)).emit('nextChapterUpdate', {
+        chapter: newChapter, // Capitolo appena aggiunto
+        nextPlayer: game.turnOrder[game.turnIndex].username, // Prossimo giocatore
     });
 
     res.json({ message: "Dati ricevuti correttamente." });

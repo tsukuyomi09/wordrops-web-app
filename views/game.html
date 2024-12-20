@@ -83,13 +83,15 @@
                 </div>
 
                 
-                <div id="gameUI-update" class="flex items-center justify-between p-4">
-                    <div id="turn-order" class="w-1/3 flex items-start gap-2 p-4 rounded">
-                    </div>                
-                    <div id="countdown-display" class="w-1/3 text-4xl font-bold text-center">
-                    </div>
-                    <div id="current-turn" class="w-1/3 text-lg font-semibold text-right">
-                    </div>
+                <div id="gameUI-update" class=" items-center justify-between p-4">
+                    <div id="turn-order" class=" flex items-center justify-center gap-2 p-4 rounded">
+                    </div> 
+                    <div class="flex items-center justify-center gap-2 rounded">
+                        <div id="countdown-display" class="w-1/2 text-4xl font-bold text-center">
+                        </div>
+                        <div id="current-turn" class="w-1/2 text-lg font-semibold text-right">
+                        </div>
+                    </div>               
                 </div>
                 <div id="game-updates" class="mt-4 p-4 border rounded bg-gray-100">
                     <h3 class="text-xl font-bold">Nuovo capitolo</h3>
@@ -121,6 +123,6 @@
 <script src="/js/menu.js" defer></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-<script src="/js/checkGame.js"></script>
+<script src="/js/checkGame.js" defer></script>
 </body>
 </html>

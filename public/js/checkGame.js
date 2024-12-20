@@ -86,10 +86,7 @@ function checkGameData(game_id) {
     if (turnOrderData && currentPlayer) {
         updateCurrentPlayerDisplay(currentPlayer)
         updateTurnOrderDisplay(turnOrderData)
-        console.log("Calling handleEditorAccess in 'if' with:");
-        console.log("currentPlayer:", currentPlayer);
-        console.log("currentUser:", currentUser);
-        handleEditorAccess(currentPlayer, currentUser);
+        handleEditorAccess(currentPlayer, currentUser)
 
     } else {
         // Altrimenti fai una fetch per ottenere i dati del gioco
@@ -103,10 +100,7 @@ function checkGameData(game_id) {
                 // Poi aggiorna l'interfaccia
                 updateCurrentPlayerDisplay(data.currentPlayer)
                 updateTurnOrderDisplay(data.turnOrder)
-                console.log("Calling handleEditorAccess in 'else' with:");
-                console.log("currentPlayer:", currentPlayer);
-                console.log("currentUser:", currentUser);
-                handleEditorAccess(currentPlayer, currentUser);
+                handleEditorAccess(data.currentPlayer, currentUser)
 
             })
             .catch(error => {
@@ -154,17 +148,18 @@ function initializeSocket(game_id) {
 
         socket.on('nextChapterUpdate', (data) => {
             console.log("Dati aggiornati del gioco ricevuti:", data);
+        
             const updatesList = document.getElementById('updates-list');
-        
             const newUpdate = document.createElement('li');
-            newUpdate.textContent = `Nuovo capitolo aggiunto da ${data.chapters[data.chapters.length - 1].author}. 
-                                     Titolo: "${data.chapters[data.chapters.length - 1].title}"`;
+            newUpdate.innerHTML = `
+                <strong>Nuovo capitolo aggiunto da ${data.chapter.author}</strong><br>
+                <em>Titolo:</em> "${data.chapter.title}"<br>
+                <p>${data.chapter.content}</p>
+            `;
             updatesList.appendChild(newUpdate);
-        
-            const nextPlayerInfo = document.createElement('p');
-            nextPlayerInfo.textContent = `Prossimo giocatore: ${data.nextPlayer}`;
-            updatesList.appendChild(nextPlayerInfo);
+
         });
+        
 
         socket.on('gameUpdate', (data) => {
             try {
@@ -334,24 +329,29 @@ function saveChapterChangeTurn(data){
 /// quill editor initialization ///
 
 const toolbarOptions = [
-    ['bold', 'italic', 'underline'],     
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }], 
-    [{ 'align': [] }],                     
+    ['bold', 'italic', 'underline'],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'align': [] }],
     [{ 'header': '1' }, { 'header': '2' }],
     [{ 'size': ['small', 'medium', 'large', 'huge'] }],
-    ['clean']                           
-  ];
-  
-  // Inizializza Quill
-  const editor = new Quill('#editor-container', {
-    theme: 'snow',                         // Tema 'snow'
+    ['clean']
+];
+
+// Inizializza Quill
+const editor = new Quill('#editor-container', {
+    theme: 'snow',
     modules: {
-      toolbar: toolbarOptions              // Usa la barra degli strumenti configurata
+        toolbar: toolbarOptions
     },
-  });
+});
 
 const toolbar = document.querySelector('.ql-toolbar');
-toolbar.classList.add('rounded', 'mb-4', 'text-2xl')
+toolbar.classList.add('rounded', 'mb-4', 'text-2xl');
+
+editor.on('text-change', function() {
+    const content = editor.root.innerHTML;
+    localStorage.setItem('chapterContent', content); // Salva il contenuto nell'localStorage
+});
 
 
 function getChapterFromLocal() {
@@ -361,12 +361,8 @@ function getChapterFromLocal() {
     }
 };
 
-editor.on('text-change', function() {
-    const content = editor.root.innerHTML;
-    localStorage.setItem('chapterContent', content); // Salva il contenuto nell'localStorage
-});
-
 getChapterFromLocal()
+
 
 function handleEditorAccess(currentPlayer, currentUser) {
     console.log(`handleEditorAccess initialized inside function`)
@@ -390,6 +386,11 @@ function handleEditorAccess(currentPlayer, currentUser) {
         console.log("Editor disabilitato e pulsante nascosto per altri giocatori.");
     }
 }
+
+
+
+
+
 
 
 
