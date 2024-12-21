@@ -92,6 +92,18 @@ function checkGameData(game_id) {
         updateTurnOrderDisplay(turnOrderData)
         handleEditorAccess(currentPlayer, currentUser)
 
+        fetch(`/games/${game_id}/chapters`) // Assumendo che questa sia la rotta giusta
+            .then(response => response.json())  // Recupera i dati dei capitoli
+            .then(chaptersData => {
+                console.log("Capitoli recuperati:", chaptersData);
+
+                // 3. Aggiungi i capitoli all'interfaccia
+                updateChaptersDisplay(chaptersData); // Funzione che aggiorna la visualizzazione dei capitoli
+            })
+            .catch(error => {
+                console.error('Errore nel recupero dei capitoli:', error);
+            });
+
     } else {
         console.log(`parte ELSE checkGameData: `)
 
@@ -160,21 +172,17 @@ function initializeSocket(game_id) {
         });
 
         socket.on('nextChapterUpdate', (data) => {
+            // Aggiungi il nuovo capitolo
+            const newChapter = data.chapter; // Ottieni il capitolo dal messaggio WebSocket
+            updateChaptersDisplay([newChapter]); // Chiamata alla funzione per visualizzare il capitolo
+        
+            // Aggiorna il giocatore corrente e altre logiche correlate
             sessionStorage.setItem('currentPlayer', JSON.stringify(data.nextPlayer));
             const currentUser = localStorage.getItem('username');
             handleEditorAccess(data.nextPlayer, currentUser);
             updateCurrentPlayerDisplay(data.nextPlayer);
         
-            console.log("Dati aggiornati del gioco ricevuti:", data);
-        
-            const updatesList = document.getElementById('updates-list');
-            const newUpdate = document.createElement('li');
-            newUpdate.innerHTML = `
-                <strong>Nuovo capitolo aggiunto da ${data.chapter.author}</strong><br>
-                <em>Titolo:</em> "${data.chapter.title}"<br>
-                <p>${data.chapter.content}</p>
-            `;
-            updatesList.appendChild(newUpdate);
+            console.log("Nuovo capitolo ricevuto:", data);
         });
         
 
@@ -334,6 +342,9 @@ function saveChapterChangeTurn(data){
     .then(result => {
         alert('Capitolo inviato con successo!');
         console.log(result);
+        document.getElementById('chapter-title').value = '';  // Reset del titolo
+        editor.setText('');
+        localStorage.removeItem('chapterContent');
     })
     .catch(error => {
         console.error('Errore:', error);
@@ -427,6 +438,22 @@ async function abandonGame() {
     } finally {
         abandonButton.disabled = false;
     }
+}
+
+
+function updateChaptersDisplay(chaptersData) {
+    const updatesList = document.getElementById('updates-list');
+    
+    // Aggiungi ogni capitolo alla lista
+    chaptersData.forEach(chapter => {
+        const newUpdate = document.createElement('li');
+        newUpdate.innerHTML = `
+            <strong>Nuovo capitolo aggiunto da ${chapter.author}</strong><br>
+            <em>Titolo:</em> "${chapter.title}"<br>
+            <p>${chapter.content}</p>
+        `;
+        updatesList.appendChild(newUpdate);
+    });
 }
     
 
