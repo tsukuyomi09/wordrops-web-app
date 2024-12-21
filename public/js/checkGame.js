@@ -84,11 +84,17 @@ function checkGameData(game_id) {
 
 
     if (turnOrderData && currentPlayer) {
+        console.log(`parte IF checkGameData: `)
+        console.log(currentPlayer)
+        console.log(currentPlayer.username)
+
         updateCurrentPlayerDisplay(currentPlayer)
         updateTurnOrderDisplay(turnOrderData)
         handleEditorAccess(currentPlayer, currentUser)
 
     } else {
+        console.log(`parte ELSE checkGameData: `)
+
         // Altrimenti fai una fetch per ottenere i dati del gioco
         getCurrentGameData(game_id)
             .then(data => {
@@ -146,13 +152,19 @@ function initializeSocket(game_id) {
 
         const socket = io();
 
-        socket.on('nextChapterUpdate', (data) => {
-            const nextPlayerData = { username: data.nextPlayer };
-            sessionStorage.setItem('currentPlayer', JSON.stringify({ nextPlayerData }));
-            const currentUser = localStorage.getItem('username');
-            handleEditorAccess(nextPlayerData, currentUser)
-            updateCurrentPlayerDisplay(nextPlayerData)
+        socket.on('gameAbandoned', (data) => {
+            alert(data.message); // Notifica agli utenti
+            sessionStorage.clear(); // Cancella i dati relativi alla partita
+            const username = localStorage.getItem('username');
+            window.location.href = `/dashboard/${username}`; // Redirezione
+        });
 
+        socket.on('nextChapterUpdate', (data) => {
+            sessionStorage.setItem('currentPlayer', JSON.stringify(data.nextPlayer));
+            const currentUser = localStorage.getItem('username');
+            handleEditorAccess(data.nextPlayer, currentUser);
+            updateCurrentPlayerDisplay(data.nextPlayer);
+        
             console.log("Dati aggiornati del gioco ricevuti:", data);
         
             const updatesList = document.getElementById('updates-list');
@@ -163,7 +175,6 @@ function initializeSocket(game_id) {
                 <p>${data.chapter.content}</p>
             `;
             updatesList.appendChild(newUpdate);
-
         });
         
 
@@ -221,7 +232,7 @@ function updateCountdownDisplay(formattedTime) {
 }
 
 function updateCurrentPlayerDisplay(currentPlayer) {
-    console.log(`currentPlayer in checkGameData: ${currentPlayer}`)
+    console.log(`currentPlayer in updateCurrentPlayerDisplay: ${currentPlayer.username}`)
 
     const currentTurnDisplay = document.getElementById('current-turn');
     if (currentTurnDisplay && currentPlayer) {
@@ -392,6 +403,32 @@ function handleEditorAccess(currentPlayer, currentUser) {
         console.log("Editor disabilitato e pulsante nascosto per altri giocatori.");
     }
 }
+
+
+async function abandonGame() {
+    const gameId = sessionStorage.getItem("game_id");
+    const abandonButton = document.getElementById('abandon-game-button');
+    try {
+        abandonButton.disabled = true;
+
+        const response = await fetch(`/abandon-game/${gameId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Errore nella fetch: ${response.status} - ${response.statusText}`);
+        }
+
+        alert('Hai abbandonato la partita. Gli altri giocatori sono stati notificati.');
+    } catch (error) {
+        console.error('Errore durante l\'abbandono del gioco:', error);
+        alert('Errore durante l\'abbandono del gioco. Riprova.');
+    } finally {
+        abandonButton.disabled = false;
+    }
+}
+    
 
 
 

@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { activeGames } = require('../services/gameManager');
+const { activeGames, startCountdown } = require('../services/gameManager');
 const checkAuth = require('../middlewares/checkAuthToken');
-const startCountdown = require('../services/gameManager');
 
 router.post('/saveChapterChangeTurn/:gameId', checkAuth, (req, res) => {
     const { gameId } = req.params;
@@ -38,11 +37,18 @@ router.post('/saveChapterChangeTurn/:gameId', checkAuth, (req, res) => {
 
     game.chapters.push({ title, content, author: username });
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
+    startCountdown(Number(gameId));
+
+    const nextPlayer = game.turnOrder[game.turnIndex];
+
+// Verifica che i dati siano corretti prima di inviarli
+    console.log("Dati del prossimo giocatore:", nextPlayer);
 
     req.io.to(Number(gameId)).emit('nextChapterUpdate', {
         chapter: newChapter, // Capitolo appena aggiunto
-        nextPlayer: game.turnOrder[game.turnIndex].username, // Prossimo giocatore
+        nextPlayer: game.turnOrder[game.turnIndex], // Prossimo giocatore (intero oggetto)
     });
+
 
     res.json({ message: "Dati ricevuti correttamente." });
 })

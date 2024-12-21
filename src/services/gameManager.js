@@ -54,7 +54,8 @@ async function createGameAndAssignPlayers(game) {
             connections: [],
             countdownDuration: 1800000, // 30 minutes
             countdownStart: null,    // Valore iniziale
-            countdownEnd: null,      // Sarà calcolato al momento dell'avvio
+            countdownEnd: null,
+            countdownInterval: null,
             startedAt: new Date()
         });
 
@@ -93,11 +94,20 @@ function startCountdown(newGameId) {
     game.countdownStart = now;
     game.countdownEnd = now + game.countdownDuration;
 
-    setInterval(() => {
+    // Se esiste già un intervallo, lo cancella
+    if (game.countdownInterval) {
+        clearInterval(game.countdownInterval);
+        console.log(`Intervallo esistente cancellato per il gioco ${newGameId}`);
+    }
+
+    // Avvia un nuovo intervallo
+    game.countdownInterval = setInterval(() => {
         const remainingTime = game.countdownEnd - Date.now();
         if (remainingTime <= 0) {
             console.log(`Countdown terminato per il gioco ${newGameId}`);
-            game.status = 'ready-to-start'; // Cambia stato o esegui altra logica
+            game.status = 'ready-to-start';
+            clearInterval(game.countdownInterval);
+            game.countdownInterval = null;
         } else {
             const minutes = Math.floor(remainingTime / 60000);
             const seconds = Math.floor((remainingTime % 60000) / 1000);
@@ -106,9 +116,10 @@ function startCountdown(newGameId) {
                 formatted: `${minutes}m ${seconds}s`,
             });
         }
-    }, 1000); // Aggiorna ogni secondo
-}
+    }, 1000);
 
+    console.log(`Countdown avviato per il gioco ${newGameId}`);
+}
 
 
 

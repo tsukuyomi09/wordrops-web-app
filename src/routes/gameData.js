@@ -5,7 +5,6 @@ const checkAuth = require('../middlewares/checkAuthToken');
 
 router.get('/game-data/:gameId', checkAuth, (req, res) => {
     console.log("recupero data per il game in corso..")
-    console.log("Contenuto di activeGames:", JSON.stringify([...activeGames.entries()], null, 2));
 
     const { gameId } = req.params;
     const numericGameId = Number(gameId);
