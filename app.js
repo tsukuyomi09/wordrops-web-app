@@ -76,14 +76,14 @@ io.on("connection", socket => {
     socket.on('userWriting', ({ game_id, username }) => {
         console.log(`${username} sta scrivendo nella stanza ${game_id}`);
         // Invia agli altri utenti nella stanza che l'utente sta scrivendo
-        socket.to(game_id).emit('userWriting', { username });
+        socket.to(Number(game_id)).emit('userWriting', { username });
     });
 
     // Ascolta l'evento 'userThinking'
     socket.on('userThinking', ({ game_id, username }) => {
         console.log(`${username} è tornato in modalità pensiero nella stanza ${game_id}`);
         // Invia agli altri utenti nella stanza che l'utente è in modalità pensiero
-        socket.to(game_id).emit('userThinking', { username });
+        socket.to(Number(game_id)).emit('userThinking', { username });
     });
 
     socket.on('joinNewGame', ({ gameId }) => {
