@@ -161,3 +161,13 @@ font-family: 'Consolas', 'Courier New', monospace;
 .ql-size-huge {
   font-size: 28px;
 }
+
+
+.thinking-fox {
+  animation: fadein 0.5s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

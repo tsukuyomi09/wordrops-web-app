@@ -1,5 +1,7 @@
 
+let editor;
 let game_id;
+
 
 window.onload = function initialize() {
     checkUserStatus();
@@ -162,7 +164,34 @@ function initializeSocket(game_id) {
         }
         console.log(`Apertura connessione WebSocket per gameId: ${game_id}`);
 
-        const socket = io();
+        socket = io();
+
+        editor.on('text-change', () => {
+            // Invia al server che l'utente sta scrivendo
+            socket.emit('userWriting', { game_id, username: localStorage.getItem('username') });
+
+            // Reset del timeout per notificare l'inattività
+            clearTimeout(writingTimeout);
+            writingTimeout = setTimeout(() => {
+                socket.emit('userThinking', { game_id, username: localStorage.getItem('username') });
+            }, 2000); // 2 secondi di inattività
+        });
+
+        socket.on('userWriting', ({ username }) => {
+            console.log(`${username} sta scrivendo...`);
+            if (username !== localStorage.getItem('username')) {
+                // Aggiorna solo per gli altri giocatori
+                updateFoxAnimation(true);
+            }
+        });
+        
+        socket.on('userThinking', ({ username }) => {
+            console.log(`${username} è in modalità pensiero.`);
+            if (username !== localStorage.getItem('username')) {
+                // Torna all'animazione "thinking"
+                updateFoxAnimation(false);
+            }
+        });
 
         socket.on('gameAbandoned', (data) => {
             alert(data.message); // Notifica agli utenti
@@ -366,7 +395,7 @@ const toolbarOptions = [
 ];
 
 // Inizializza Quill
-const editor = new Quill('#editor-container', {
+editor = new Quill('#editor-container', {
     theme: 'snow',
     modules: {
         toolbar: toolbarOptions
@@ -376,10 +405,7 @@ const editor = new Quill('#editor-container', {
 const toolbar = document.querySelector('.ql-toolbar');
 toolbar.classList.add('rounded', 'mb-4', 'text-2xl');
 
-editor.on('text-change', function() {
-    const content = editor.root.innerHTML;
-    localStorage.setItem('chapterContent', content); // Salva il contenuto nell'localStorage
-});
+let writingTimeout;
 
 
 function getChapterFromLocal() {
@@ -394,7 +420,7 @@ getChapterFromLocal()
 
 function handleEditorAccess(currentPlayer, currentUser) {
     console.log(`handleEditorAccess initialized inside function`)
-
+    const foxAnimations = document.getElementById('fox-animations');
     const sendButton = document.getElementById('send-chapter-button');
     console.log(`player turn: ${currentPlayer.username}`);
     console.log(`currentUser: ${currentUser}`);
@@ -405,10 +431,12 @@ function handleEditorAccess(currentPlayer, currentUser) {
     }
 
     if (currentPlayer.username === currentUser) {
+        foxAnimations.classList.add('hidden');
         editor.enable(true); // Abilita l'editor
         sendButton.classList.remove('hidden'); // Mostra il pulsante
         console.log("Editor abilitato e pulsante visibile per il giocatore di turno.");
     } else {
+        foxAnimations.classList.remove('hidden');
         editor.enable(false); // Disabilita l'editor
         sendButton.classList.add('hidden'); // Nascondi il pulsante
         console.log("Editor disabilitato e pulsante nascosto per altri giocatori.");
@@ -454,6 +482,21 @@ function updateChaptersDisplay(chaptersData) {
         `;
         updatesList.appendChild(newUpdate);
     });
+}
+
+function updateFoxAnimation(isWriting) {
+    const writingFox = document.getElementById('writing-fox');
+    const thinkingFox = document.getElementById('thinking-fox');
+
+    if (isWriting) {
+        // Mostra l'animazione "writing" e nascondi "thinking"
+        writingFox.classList.remove('hidden');
+        thinkingFox.classList.add('hidden');
+    } else {
+        // Mostra l'animazione "thinking" e nascondi "writing"
+        writingFox.classList.add('hidden');
+        thinkingFox.classList.remove('hidden');
+    }
 }
     
 
