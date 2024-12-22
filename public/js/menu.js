@@ -60,7 +60,6 @@ function showAvatarTransition() {
 showAvatarTransition()
 
 function dashboardButton() {
-
     const username = localStorage.getItem('username');
     if (username) {
         // Fai il redirect alla dashboard dell'utente
@@ -69,6 +68,16 @@ function dashboardButton() {
         alert('Impossibile recuperare l\'username. Effettua il login.');
     }
 };
+
+function openSearch() {
+    const searchWrapper = document.getElementById('user-search-wrapper');
+    searchWrapper.classList.remove('opacity-0');   // Mostra il div con opacità 1
+}
+
+function closeSearch() {
+    const searchWrapper = document.getElementById('user-search-wrapper');
+    searchWrapper.classList.add('opacity-0');      // Nasconde il div con opacità 0
+}
 
     
 

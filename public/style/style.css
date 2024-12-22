@@ -1,3 +1,9 @@
+.blue-bg {
+  background-image: url('/images/main-bg-color.jpg');
+  background-size: cover; /* Copre tutta l'area visibile */
+  background-position: center; /* Centra l'immagine */
+  background-repeat: no-repeat; /* Evita che l'immagine si ripeta */
+}
 
 .avatar-container {
     visibility: hidden;  /* Imposta la visibilità iniziale a hidden */
@@ -103,4 +109,65 @@ font-family: 'Consolas', 'Courier New', monospace;
     transition-delay: 0.3s;
   }
 
+  .icon-container {
+    width: 3rem; /* equivalente a w-12 in Tailwind */
+    height: 3rem; /* equivalente a h-12 in Tailwind */
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.icon-container:hover {
+    transform: scale(1.20);
+}
+
+.icon-image {
+    width: 1.5rem; /* equivalente a w-6 in Tailwind */
+    height: 1.5rem; /* equivalente a h-6 in Tailwind */
+}
+
+.user-search-wrapper {
+  transition: opacity 0.4s ease-in-out;
+}
+
+
+.hover-rotate {
+  transition: transform 0.3s ease; /* Animazione fluida */
+}
+
+.hover-rotate:hover {
+  transform: rotate(25deg); /* Ruota di 25 gradi */
+}
     
+
+// quill styles
+
+.ql-size-small {
+  font-size: 16px;
+}
+
+.ql-size-medium {
+  font-size: 20px;
+}
+
+.ql-size-large {
+  font-size: 24px;
+}
+
+.ql-size-huge {
+  font-size: 28px;
+}
+
+
+.thinking-fox {
+  animation: fadein 0.5s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

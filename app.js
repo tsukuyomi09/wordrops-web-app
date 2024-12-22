@@ -7,12 +7,13 @@ const socketio = require("socket.io")
 const { connectDB } = require("./src/database/db");
 const cookieParser = require('cookie-parser');
 const { preGameQueue } = require('./src/routes/queueRoutesNew');
+const { activeGames } = require('./src/services/gameManager');
 
 
 const app = express();
 const server = http.createServer(app)
-const io = socketio(server);
-
+const { initSocket } = require('./src/services/socketManager');
+const io = initSocket(server);
 
 const port = process.env.PORT || 3000;
 
@@ -67,8 +68,61 @@ io.on("connection", socket => {
             console.error("Errore durante l'elaborazione dell'evento 'playerReady':", error);
         }
     });
+
+    socket.on('startGameCountdown', ({ gameId }) => {
+        startGameCountdown(io, gameId);
+    });
+
+    socket.on('userWriting', ({ game_id, username }) => {
+        console.log(`${username} sta scrivendo nella stanza ${game_id}`);
+        // Invia agli altri utenti nella stanza che l'utente sta scrivendo
+        socket.to(game_id).emit('userWriting', { username });
+    });
+
+    // Ascolta l'evento 'userThinking'
+    socket.on('userThinking', ({ game_id, username }) => {
+        console.log(`${username} è tornato in modalità pensiero nella stanza ${game_id}`);
+        // Invia agli altri utenti nella stanza che l'utente è in modalità pensiero
+        socket.to(game_id).emit('userThinking', { username });
+    });
+
+    socket.on('joinNewGame', ({ gameId }) => {
+        console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
+        gameId = Number(gameId);
+        console.log(`gameId convertito in numero:`, gameId);
+        console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
+        socket.join(gameId); 
+
+        setTimeout(() => {
+            const connectedSockets = io.sockets.adapter.rooms.get(gameId);
+            console.log(`Client connessi alla stanza ${gameId} dopo un ritardo:`, connectedSockets ? Array.from(connectedSockets) : 'Nessun client connesso');
+        }, 50);
+
+        console.log(`Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`, {
+            message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
+            socketId: socket.id
+        });
     
+        io.in(gameId).emit('playerJoined', { 
+            message: `Un nuovo giocatore si è unito alla stanza ${gameId}`, 
+            socketId: socket.id 
+        });
+    });
     
+    socket.on('disconnect', () => {
+        console.log(`Socket ${socket.id} disconnesso`);
+    
+        // Trova il gioco in cui è presente il socket.id
+        for (const [gameId, game] of activeGames) {
+            if (game.connections.includes(socket.id)) {
+                // Rimuovi il socket.id dalla lista connections
+                game.connections = game.connections.filter(conn => conn !== socket.id);
+                console.log(`Socket ${socket.id} rimosso dal gioco ${gameId}`);
+                console.log(`Connessioni aggiornate per il gioco ${gameId}:`, game.connections);
+                break; // Una volta trovato e aggiornato, non serve continuare
+            }
+        }
+    });       
 })
 
 
@@ -112,13 +166,18 @@ const loginRoutes = require('./src/routes/loginRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
 const usersProfileRoute = require('./src/routes/usersProfileRoute');
 const usersProfileData = require('./src/routes/usersProfileData');
-const dashboardDataRoutes = require('./src/routes/dashboardData');
+const userDataRoutes = require('./src/routes/userData');
 const queueRoutes = require('./src/routes/queueRoutes');
 const queueRoutesNew = require('./src/routes/queueRoutesNew');
 const searchUserRoute = require('./src/routes/searchUser');
 const playersQueue = require('./src/routes/playersQueue');
+const gameStatus = require('./src/routes/gameStatus');
+const playerReady = require('./src/routes/playerReady');
 const gameRoute = require('./src/routes/gameRoute');
-const gameRouteData = require('./src/routes/gameRouteData');
+const gameRouteData = require('./src/routes/gameData');
+const saveChapterChangeTurn = require('./src/routes/saveChapterChangeTurn');
+const getChapters = require('./src/routes/getChapters');
+const abandonGame = require('./src/routes/abandonGame');
 const verifyLogIn = require('./src/routes/verifyLogIn');
 const logout = require('./src/routes/logout');
 const updateAvatar = require('./src/services/updateAvatar');
@@ -131,15 +190,21 @@ app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(dashboardRoutes);
 app.use(usersProfileRoute);
-app.use(dashboardDataRoutes);
+app.use(userDataRoutes);
 app.use(usersProfileData);
 app.use(searchUserRoute);
 app.use(queueRoutes);
 app.use(queueRoutesNew);
+app.use(gameStatus);
+app.use(playerReady);
 app.use(gameRoute);
+app.use(saveChapterChangeTurn);
+app.use(getChapters);
+app.use(abandonGame);
 app.use(gameRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
+
 
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);

@@ -19,4 +19,28 @@ const connectDB = async () => {
     }
 };
 
-module.exports = { client, connectDB };
+
+async function deleteGameFromDB(gameId) {
+    try {
+        await client.query('BEGIN');
+        await client.query('DELETE FROM players_in_game WHERE game_id = $1', [gameId]);
+        await client.query('DELETE FROM games WHERE game_id = $1', [gameId]);
+        await client.query('COMMIT');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+    }
+}
+
+async function resetUserStatus(players) {
+    try {
+        const usernames = players.map(player => player.username);
+        await client.query('UPDATE users SET status = $1 WHERE username = ANY($2)', ['idle', usernames]);
+    } catch (err) {
+        console.error("Errore durante il reset dello stato degli utenti:", err);
+        throw err;
+    }
+}
+
+
+module.exports = { client, connectDB, deleteGameFromDB, resetUserStatus };

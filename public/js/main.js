@@ -140,7 +140,10 @@ function initSocket() {
         socket.on("game-start", (data) => {
             document.getElementById("countdown-seconds-container").classList.add('hidden');
             document.getElementById("game-ready-container").classList.remove('hidden');
-            window.location.href = `/game/${data.gameId}`;
+            displayTurnOrder(data.turnOrder);
+            setTimeout(() => {
+                window.location.href = `/game/${data.gameId}`;
+            }, 3000); 
         });
 
         socket.on("queueAbandoned", (data) => {
@@ -159,6 +162,20 @@ function readyToPlay() {
         console.log('Non sei ancora stato assegnato a un gioco.');
     }
 };
+
+function displayTurnOrder(turnOrder) {
+    const turnContainer = document.getElementById("turn-order-container");
+
+    turnContainer.innerHTML = "";
+    turnOrder.forEach((playerId, index) => {
+        const turnElement = document.createElement("div");
+        turnElement.classList.add("turn");
+        turnElement.textContent = `Turno ${index + 1}: Giocatore ${playerId}`;
+        turnContainer.appendChild(turnElement);
+    });
+
+    turnContainer.classList.remove("hidden");
+}
 
 const sound = document.getElementById('click-sound');
 function buttonSound() {
@@ -286,11 +303,10 @@ function updateAvatarImage(avatar) {
 }
 
 
-let game_id = null;
 let username;
 
 function fetchdashboardData() {
-    fetch("/dashboardData",{
+    fetch("/userData",{
         method: "GET",  // Metodo GET per ottenere gli item
         headers: {
             "Content-Type": "application/json",
@@ -309,8 +325,12 @@ function fetchdashboardData() {
         game_id = data.game_id;
         const queueButton = document.getElementById("new-game-button");
         const backToGameButton = document.getElementById("backToGame-button");
+        const statusContainer = document.getElementById("status-div");
+        const gameUiContainer = document.getElementById("gameUI-update");
 
         if (status === "in_game") {
+            gameUiContainer.classList.remove("hidden");
+            statusContainer.classList.remove("hidden");
             backToGameButton.classList.remove("hidden");
             queueButton.classList.add("hidden");
         } 
@@ -349,13 +369,17 @@ async function joinQueue() {
 
     if (socketId) {
         try {
+            const usernameForAvatar = localStorage.getItem('username');
+            const avatarKey = `avatar_${usernameForAvatar}`;
+            const avatarForGame = localStorage.getItem(avatarKey);
+
             const response = await fetch("/gamequeueNew", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify({ socketId })
+                body: JSON.stringify({ socketId, avatarForGame })
             });
 
             if (!response.ok) {

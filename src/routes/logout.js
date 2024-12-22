@@ -4,9 +4,9 @@ const checkAuth = require('../middlewares/checkAuthToken');
 
 router.delete("/logout", checkAuth, (req, res) => {
     try {
-        // Rimuovi il cookie contenente il JWT (token)
-        res.clearCookie('token');  // Assicurati che 'token' sia il nome del tuo cookie
-
+        // Rimuovi il cookie contenente il JWT (token) e il game_id
+        res.clearCookie('token');          
+        
         // Risposta di successo
         res.status(200).json({ message: "Logout effettuato con successo" });
 

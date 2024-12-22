@@ -26,14 +26,14 @@ router.post("/login", async (req, res) => {
         };
 
         const secretKey = process.env.ACCESS_TOKEN_SECRET;
-        const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign(payload, secretKey, { expiresIn: '6h' });
 
         const isProduction = process.env.NODE_ENV === 'production';
         console.log(`secure: ${isProduction}`)
 
         res.cookie("token", token, {
             httpOnly: true,  // Il cookie non può essere letto tramite JavaScript
-            maxAge: 3600 * 1000,  // La durata del cookie (1 ora)
+            maxAge: 6 * 3600 * 1000,  // La durata del cookie (1 ora)
             secure: isProduction,  // Usa HTTP durante lo sviluppo
             sameSite: 'Strict',  // Impedisce l'invio in richieste cross-origin
         });

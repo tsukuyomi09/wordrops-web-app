@@ -3,7 +3,7 @@ const router = express.Router();
 const checkAuth = require('../middlewares/checkAuthToken');
 const checkUserStatus = require('../middlewares/checkUserStatus');
 
-router.get("/dashboardData", checkAuth, checkUserStatus, async (req, res) => {
+router.get("/userData", checkAuth, checkUserStatus, async (req, res) => {
     try {
         const { username, userStatus, game_id  } = req;  // Recupera il `username` direttamente da `req`
 
