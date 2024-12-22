@@ -474,15 +474,25 @@ function updateChaptersDisplay(chaptersData) {
     
     // Aggiungi ogni capitolo alla lista
     chaptersData.forEach(chapter => {
-        const newUpdate = document.createElement('li');
+        const newUpdate = document.createElement('div'); // Usa un <div> invece di un <li>
+        newUpdate.classList.add('bg-gray-100', 'p-4', 'mb-4', 'rounded-lg', 'shadow-md'); // Classi Tailwind
+
+        // Creazione della struttura per ogni capitolo
         newUpdate.innerHTML = `
-            <strong>Nuovo capitolo aggiunto da ${chapter.author}</strong><br>
-            <em>Titolo:</em> "${chapter.title}"<br>
-            <p>${chapter.content}</p>
+            <div class="font-semibold text-xl mb-2">
+                <strong>Titolo:</strong> "${chapter.title}"
+            </div>
+            <div class="text-gray-600 text-lg mb-2">
+                <em>Autore:</em> ${chapter.author}
+            </div>
+            <div class="text-gray-800 text-base">
+                <p>${chapter.content}</p>
+            </div>
         `;
         updatesList.appendChild(newUpdate);
     });
 }
+
 
 function updateFoxAnimation(isWriting) {
     const writingFox = document.getElementById('writing-fox');
