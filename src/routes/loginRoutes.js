@@ -9,9 +9,6 @@ const { verifyPassword } = require("../utils/authUtility");
 
 router.post("/login", async (req, res) => {
     const { loginUserName, loginPassword } = req.body;
-
-    console.log(`username: ${loginUserName}`)
-
     if (!loginUserName || !loginPassword) {
         return res.status(400).json({ message: "Fill up all fields" });
     }
@@ -29,7 +26,6 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(payload, secretKey, { expiresIn: '6h' });
 
         const isProduction = process.env.NODE_ENV === 'production';
-        console.log(`secure: ${isProduction}`)
 
         res.cookie("token", token, {
             httpOnly: true,  // Il cookie non può essere letto tramite JavaScript

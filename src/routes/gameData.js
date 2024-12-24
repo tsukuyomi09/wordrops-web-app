@@ -4,12 +4,10 @@ const { activeGames } = require('../services/gameManager');
 const checkAuth = require('../middlewares/checkAuthToken');
 
 router.get('/game-data/:gameId', checkAuth, (req, res) => {
-    console.log("recupero data per il game in corso..")
 
     const { gameId } = req.params;
     const numericGameId = Number(gameId);
     const game = activeGames.get(numericGameId);
-    console.log("Dati del gioco trovato:", JSON.stringify(game, null, 2));
 
     if (!game) {
         return res.status(404).json({ error: 'Gioco non trovato' });
@@ -17,10 +15,6 @@ router.get('/game-data/:gameId', checkAuth, (req, res) => {
 
     const { players, turnOrder, turnIndex } = game;
     const currentPlayer = players.find(player => player.id === turnOrder[turnIndex].id);
-
-    console.log("Indice turno corrente:", turnIndex);
-    console.log("Giocatore corrente da turnOrder:", turnOrder[turnIndex]);
-
 
     if (!currentPlayer) {
         return res.status(500).json({ error: 'Errore nella determinazione del giocatore attuale' });

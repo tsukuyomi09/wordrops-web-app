@@ -5,8 +5,6 @@ const checkAuth = require('../middlewares/checkAuthToken');
 const checkUserGameStatus = require('../routes/checkUserGameStatus');
 
 router.get('/profile/:username', checkAuth, checkUserGameStatus, async (req, res) => {
-    const { username } = req.params;  // username passato nell'URL
-    console.log(`Richiesta per il profilo dell'utente: ${username}`);
     try {
         // Invia direttamente la pagina del profilo, senza recuperare i dati dal database
         res.sendFile(path.join(__dirname, '..', '..', 'views', 'profile.html'));

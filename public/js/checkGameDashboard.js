@@ -83,19 +83,6 @@ function checkGameData(game_id) {
 
         updateCurrentPlayerDisplay(currentPlayer)
         updateTurnOrderDisplay(turnOrderData, currentPlayer)
-        handleEditorAccess(currentPlayer, currentUser)
-        foxAnimation()
-
-        fetch(`/games/${game_id}/chapters`) // Assumendo che questa sia la rotta giusta
-            .then(response => response.json())  // Recupera i dati dei capitoli
-            .then(chaptersData => {
-
-                // 3. Aggiungi i capitoli all'interfaccia
-                updateChaptersDisplay(chaptersData); // Funzione che aggiorna la visualizzazione dei capitoli
-            })
-            .catch(error => {
-                console.error('Errore nel recupero dei capitoli:', error);
-            });
 
     } else {
         // Altrimenti fai una fetch per ottenere i dati del gioco
@@ -109,8 +96,6 @@ function checkGameData(game_id) {
                 // Poi aggiorna l'interfaccia
                 updateCurrentPlayerDisplay(data.currentPlayer)
                 updateTurnOrderDisplay(data.turnOrder)
-                handleEditorAccess(data.currentPlayer, currentUser)
-                foxAnimation()
 
             })
             .catch(error => {
@@ -184,15 +169,10 @@ function initializeSocket(game_id) {
         });
         
 
-        socket.on('nextChapterUpdate', (data) => {
-            console.log('Dati ricevuti dal server:', data);
+        socket.on('nextChapterUpdate', (data) => {        
+            // Aggiorna il giocatore corrente e altre logiche correlate
             sessionStorage.setItem('currentPlayer', JSON.stringify(data.nextPlayer));
-            const newChapter = data.chapter; // Ottieni il capitolo dal messaggio WebSocket
-            updateChaptersDisplay([newChapter]); // Chiamata alla funzione per visualizzare il capitolo
-
             const currentUser = localStorage.getItem('username');
-            foxAnimation()
-            handleEditorAccess(data.nextPlayer, currentUser);
             updateCurrentPlayerDisplay(data.nextPlayer);      
         });
         
@@ -288,6 +268,7 @@ function updateTurnOrderDisplay(turnOrder, currentPlayer) {
     }
 }
 
+
 function getAvatarSrc(avatar) {
     // Controlla se l'avatar è definito, altrimenti usa un avatar di default
     return avatar 
@@ -295,199 +276,16 @@ function getAvatarSrc(avatar) {
         : '/images/avatars/default-avatar.png';
 }
 
-function getChapter() {
-    const title = document.getElementById('chapter-title').value.trim();
-    const editorContent = editor.getText().trim(); // Assumendo che Quill sia inizializzato come `quill`
-    const currentUser = localStorage.getItem('username');
-
-    // Conta le parole nel contenuto dell'editor
-    const wordCount = editorContent ? editorContent.split(/\s+/).length : 0;
-
-    // Verifica se il titolo è vuoto o ci sono meno di 100 parole
-    if (!title) {
-        alert('Il titolo è obbligatorio!');
-        return;
-    }
-    if (wordCount < 100) {
-        alert('Il contenuto deve avere almeno 100 parole!');
-        return;
-    }
-
-    const data = {
-        title: title,
-        content: editorContent,
-        currentUser: currentUser
-    };
-    saveChapterChangeTurn(data)
-
-};
-
-function saveChapterChangeTurn(data){
-    const gameId = window.location.pathname.split('/')[2];
-
-    fetch(`/saveChapterChangeTurn/${gameId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Errore durante il salvataggio del capitolo.');
-        }
-        return response.json();
-    })
-    .then(result => {
-        document.getElementById('chapter-title').value = '';  // Reset del titolo
-        editor.setText('');
-        localStorage.removeItem('chapterContent');
-    })
-    .catch(error => {
-        console.error('Errore:', error);
-        alert('Si è verificato un errore durante l\'invio.');
-    });
-}
 
 
 
-/// quill editor initialization ///
-
-const toolbarOptions = [
-    ['bold', 'italic', 'underline'],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    [{ 'align': [] }],
-    [{ 'header': '1' }, { 'header': '2' }],
-    [{ 'size': ['small', 'medium', 'large', 'huge'] }],
-    ['clean']
-];
-
-// Inizializza Quill
-editor = new Quill('#editor-container', {
-    theme: 'snow',
-    modules: {
-        toolbar: toolbarOptions
-    },
-});
-
-const toolbar = document.querySelector('.ql-toolbar');
-toolbar.classList.add('rounded', 'mb-4', 'text-2xl');
-
-let writingTimeout;
 
 
-function getChapterFromLocal() {
-    const savedContent = localStorage.getItem('chapterContent'); // Ottieni il contenuto salvato
-    if (savedContent) {
-      editor.root.innerHTML = savedContent; // Carica il contenuto nell'editor
-    }
-};
-
-getChapterFromLocal()
 
 
-function handleEditorAccess(currentPlayer, currentUser) {
-    const sendButton = document.getElementById('send-chapter-button');
-    if (!sendButton) {
-        console.error("Pulsante 'send-chapter-button' non trovato.");
-        return;
-    }
-
-    if (currentPlayer.username === currentUser) {
-        editor.enable(true); // Abilita l'editor
-        sendButton.classList.remove('hidden'); // Mostra il pulsante
-    } else {
-        editor.enable(false); // Disabilita l'editor
-        sendButton.classList.add('hidden'); // Nascondi il pulsante
-    }
-}
 
 
-async function abandonGame() {
-    const gameId = sessionStorage.getItem("game_id");
-    const abandonButton = document.getElementById('abandon-game-button');
-    try {
-        abandonButton.disabled = true;
 
-        const response = await fetch(`/abandon-game/${gameId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Errore nella fetch: ${response.status} - ${response.statusText}`);
-        }
-    } catch (error) {
-        console.error('Errore durante l\'abbandono del gioco:', error);
-        alert('Errore durante l\'abbandono del gioco. Riprova.');
-    } finally {
-        abandonButton.disabled = false;
-    }
-}
-
-
-function updateChaptersDisplay(chaptersData) {
-    const updatesList = document.getElementById('updates-list');
-    
-    // Aggiungi ogni capitolo alla lista
-    chaptersData.forEach(chapter => {
-        const newUpdate = document.createElement('div'); // Usa un <div> invece di un <li>
-        newUpdate.classList.add('bg-gray-100', 'p-4', 'mb-4', 'rounded-lg', 'shadow-md'); // Classi Tailwind
-
-        // Creazione della struttura per ogni capitolo
-        newUpdate.innerHTML = `
-            <div class="font-semibold text-xl mb-2">
-                <strong>Titolo:</strong> "${chapter.title}"
-            </div>
-            <div class="text-gray-600 text-lg mb-2">
-                <em>Autore:</em> ${chapter.author}
-            </div>
-            <div class="text-gray-800 text-base">
-                <p>${chapter.content}</p>
-            </div>
-        `;
-        updatesList.appendChild(newUpdate);
-    });
-}
-
-
-function foxAnimation() {
-    console.log('fox animation started');
-    
-    const currentPlayer = JSON.parse(sessionStorage.getItem('currentPlayer'));
-    const currentPlayerUsername = currentPlayer ? currentPlayer.username : null;
-
-    const ownUsername = localStorage.getItem('username');
-
-    // Verifica se i dati sono disponibili
-    if (!currentPlayerUsername || !ownUsername) {
-        console.error('Errore: dati utente mancanti');
-        return;
-    }
-
-    // Elementi del DOM
-    const foxAnimationsBox = document.getElementById('fox-animations');
-    const writingFox = document.getElementById('writing-fox');
-    const writingText = document.getElementById('writing-text');
-    const thinkingFox = document.getElementById('thinking-fox');
-    const thinkingText = document.getElementById('thinking-text');
-
-    // Nascondi tutte le animazioni prima di applicare la logica
-    foxAnimationsBox.classList.add('hidden');
-    writingFox.classList.add('hidden');
-    thinkingFox.classList.add('hidden');
-    
-    // Confronta i nomi utente
-    if (currentPlayerUsername === ownUsername) {
-        // Se sono uguali, non mostrare nulla
-        foxAnimationsBox.classList.add('hidden');
-    } else {
-        // Se sono diversi, mostra l'animazione "thinking"
-        foxAnimationsBox.classList.remove('hidden');
-        thinkingFox.classList.remove('hidden');
-        thinkingText.textContent = `${currentPlayerUsername} sta pensando...` // Aggiungi il testo
-    }
-}
 
 
 

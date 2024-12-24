@@ -43,7 +43,6 @@ window.addEventListener('load', () => {
 
 
 window.onpopstate = function(event) {
-    console.log("L'utente ha cliccato 'Indietro'");
     // Qui puoi eseguire qualsiasi funzione, ad esempio:
     fetch("/gamequeueNew", {
         method: 'DELETE',
@@ -86,7 +85,6 @@ function initSocket() {
         // Quando il WebSocket è connesso, salva il socketId
         socket.on('connect', () => {
             socketId = socket.id;
-            console.log("Socket connesso con ID:", socketId);
             resolve();  // Una volta connesso, risolvi la promessa
         });
 
@@ -111,11 +109,9 @@ function initSocket() {
 
         socket.on('gameIdAssigned', (data) => {
             currentGameId = data.gameId;
-            console.log(`Sei stato assegnato al gioco con ID: ${currentGameId}`);
         });
 
         socket.on("game-cancelled", (message) => {
-            console.log(message); // Mostra il messaggio nella console
         
             // Modifica la UI
             document.getElementById('countdown-seconds').style.display = 'none'; // Nascondi il countdown
@@ -156,7 +152,6 @@ function readyToPlay() {
     document.getElementById("ready-btn").classList.add('hidden');
     document.getElementById("pronto-text").classList.remove('hidden');
     if (currentGameId) {
-        console.log({ gameId: currentGameId, userId: socket.id });
         socket.emit('playerReady', { gameId: currentGameId, userId: socket.id });
     } else {
         console.log('Non sei ancora stato assegnato a un gioco.');
@@ -247,7 +242,6 @@ async function startBackgroundMusic(filePath) {
     try {
         // Carica e avvia la musica
         await loadAndPlayAudio(filePath); // Usa la tua funzione loadAndPlayAudio
-        console.log("Musica di sottofondo avviata.");
     } catch (error) {
         console.error("Errore durante la riproduzione della musica:", error);
     }
@@ -364,7 +358,6 @@ async function joinQueue() {
     //     await startBackgroundMusic(backgroundMusicPath);
     // }, 1000);
 
-    console.log("Tentativo di connessione al WebSocket...");
     await initSocket();
 
     if (socketId) {
@@ -386,7 +379,6 @@ async function joinQueue() {
                 throw new Error(`Errore HTTP: ${response.status}`);
             }
 
-            console.log("Richiesta per unirsi alla coda completata con successo.");
         } catch (error) {
             console.error('Errore nella richiesta per unirsi alla coda:', error);
         }
@@ -398,13 +390,9 @@ async function joinQueue() {
 function abandonQueue() {
     buttonSound()
 
-    console.log("Esecuzione di abandonQueue");
-
     if (socket) { 
-        console.log("Socket esiste, procedo con la disconnessione...");
         socket.disconnect();
         socket = null;
-        console.log("Connessione Socket.IO chiusa");
     } else {
         console.log("Nessun socket da chiudere.");
     }
@@ -488,7 +476,6 @@ selectButton.addEventListener('click', () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Avatar selezionato e salvato:', data);
             localStorage.setItem(`avatar_${username}`, selectedAvatar);
             closeMenu(); 
         })
@@ -511,7 +498,6 @@ closeButton.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             // Gestisci la risposta (ad esempio, chiudi il menu o mostra un messaggio di successo)
-            console.log('Avatar selezionato e salvato:', data);
             localStorage.setItem(`avatar_${username}`, selectedAvatar);
             closeMenu(); // Chiudi il menu
         })

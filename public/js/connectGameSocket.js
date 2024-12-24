@@ -18,7 +18,6 @@ window.onload = async function fetchdashboardData() {
           game_id = Number(data.game_id);
 
           if (status === "in_game") {
-            console.log("Lo stato è 'in_game'. Avvio delle funzioni.");
             checkGameStatus(game_id);
             initializeSocket(game_id);
           } else {
@@ -45,7 +44,6 @@ async function checkGameStatus(game_id) {
         const data = await response.json();
 
         if (data.status === 'to-start') {
-            console.log(`game status: ${data.status}`);
             document.getElementById('popup-start-countdown').classList.remove('hidden');
         }
     } catch (error) {
@@ -60,30 +58,24 @@ function initializeSocket(game_id){
             console.error("Errore: gameId non trovato nell'URL");
             return;
         }
-        console.log(`Apertura connessione WebSocket per gameId: ${game_id}`);
 
         const socket = io();
 
-        socket.on('gameUpdate', (data) => {
-            console.log('Dati ricevuti:', data); // Log di debug per vedere i dati ricevuti
-        
+        socket.on('gameUpdate', (data) => {        
             try {
                 updateCountdownDisplay(data.formatted);
-                console.log(`tempo rimanente: ${data.formatted}`);
             } catch (error) {
                 console.error("Errore durante updateCountdownDisplay:", error);
             }
             
             try {
                 updateCurrentPlayerDisplay(data.currentPlayer);
-                console.log(`giocatore attuale:`, data.currentPlayer);
             } catch (error) {
                 console.error("Errore durante updateCurrentPlayerDisplay:", error);
             }
             
             try {
                 updateTurnOrderDisplay(data.turnOrder);
-                console.log(`ordine dei turni:`, data.turnOrder);
             } catch (error) {
                 console.error("Errore durante updateTurnOrderDisplay:", error);
             }
@@ -96,9 +88,7 @@ function initializeSocket(game_id){
         });
 
         socket.on('connect', () => {
-            console.log(`Connesso al server con ID socket: ${socket.id}`);
             socket.emit('joinNewGame', { gameId: game_id }); // Assicurati che sia 'game_id', non 'gameId'
-            console.log(`Emesso joinNewGame con game_id: ${game_id}`);
         });
         
     } catch (error) {

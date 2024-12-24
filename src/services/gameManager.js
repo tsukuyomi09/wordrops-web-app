@@ -97,14 +97,12 @@ function startCountdown(newGameId) {
     // Se esiste già un intervallo, lo cancella
     if (game.countdownInterval) {
         clearInterval(game.countdownInterval);
-        console.log(`Intervallo esistente cancellato per il gioco ${newGameId}`);
     }
 
     // Avvia un nuovo intervallo
     game.countdownInterval = setInterval(() => {
         const remainingTime = game.countdownEnd - Date.now();
         if (remainingTime <= 0) {
-            console.log(`Countdown terminato per il gioco ${newGameId}`);
             game.status = 'ready-to-start';
             clearInterval(game.countdownInterval);
             game.countdownInterval = null;
@@ -118,7 +116,6 @@ function startCountdown(newGameId) {
         }
     }, 1000);
 
-    console.log(`Countdown avviato per il gioco ${newGameId}`);
 }
 
 
