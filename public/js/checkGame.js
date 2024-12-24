@@ -91,7 +91,7 @@ function checkGameData(game_id) {
         console.log(currentPlayer.username)
 
         updateCurrentPlayerDisplay(currentPlayer)
-        updateTurnOrderDisplay(turnOrderData)
+        updateTurnOrderDisplay(turnOrderData, currentPlayer)
         handleEditorAccess(currentPlayer, currentUser)
 
         fetch(`/games/${game_id}/chapters`) // Assumendo che questa sia la rotta giusta
@@ -157,6 +157,7 @@ async function getCurrentGameData(game_id) {
 }
 
 function initializeSocket(game_id) {
+    game_id = Number(game_id)
     try {
         if (!game_id) {
             console.error("Errore: gameId non trovato nell'URL");
@@ -166,22 +167,25 @@ function initializeSocket(game_id) {
 
         socket = io();
 
-        editor.on('text-change', () => {
-            // Invia al server che l'utente sta scrivendo
-            socket.emit('userWriting', { game_id, username: localStorage.getItem('username') });
+        if (editor) {
+            editor.on('text-change', () => {
+                // Invia al server che l'utente sta scrivendo
+                socket.emit('userWriting', { game_id, username: localStorage.getItem('username') });
+    
+                // Reset del timeout per notificare l'inattività
+                clearTimeout(writingTimeout);
+                writingTimeout = setTimeout(() => {
+                    socket.emit('userThinking', { game_id, username: localStorage.getItem('username') });
+                }, 2000); // 2 secondi di inattività
+            });
+        }
 
-            // Reset del timeout per notificare l'inattività
-            clearTimeout(writingTimeout);
-            writingTimeout = setTimeout(() => {
-                socket.emit('userThinking', { game_id, username: localStorage.getItem('username') });
-            }, 2000); // 2 secondi di inattività
-        });
 
         socket.on('userWriting', ({ username }) => {
             console.log(`${username} sta scrivendo...`);
             if (username !== localStorage.getItem('username')) {
                 // Aggiorna solo per gli altri giocatori
-                updateFoxAnimation(true);
+                updateFoxAnimation(true, username);
             }
         });
         
@@ -189,16 +193,39 @@ function initializeSocket(game_id) {
             console.log(`${username} è in modalità pensiero.`);
             if (username !== localStorage.getItem('username')) {
                 // Torna all'animazione "thinking"
-                updateFoxAnimation(false);
+                updateFoxAnimation(false, username);
             }
         });
 
         socket.on('gameAbandoned', (data) => {
-            alert(data.message); // Notifica agli utenti
             sessionStorage.clear(); // Cancella i dati relativi alla partita
-            const username = localStorage.getItem('username');
-            window.location.href = `/dashboard/${username}`; // Redirezione
+        
+            // Recupera gli elementi del popup
+            const popup = document.getElementById('popup-message');
+            const popupText = document.getElementById('popup-text');
+            const popupClose = document.getElementById('popup-close');
+        
+            // Imposta il messaggio del popup
+            const currentUser = localStorage.getItem('username');
+            if (data.username === currentUser) {
+                popupText.textContent = 'Hai abbandonato la partita. La partita è stata annullata.';
+            } else {
+                popupText.textContent = `La partita è stata abbandonata da ${data.username}.`;
+            }
+        
+            // Mostra il popup
+            popup.classList.remove('hidden');
+            popupClose.removeEventListener('click', handlePopupClose);
+            popupClose.addEventListener('click', handlePopupClose);
+        
+            function handlePopupClose() {
+                popup.classList.add('hidden'); // Nasconde il popup
+                const username = localStorage.getItem('username');
+                window.location.href = `/dashboard/${username}`; // Redirezione
+            }
         });
+        
+        
 
         socket.on('nextChapterUpdate', (data) => {
             // Aggiungi il nuovo capitolo
@@ -289,7 +316,7 @@ function updateCurrentPlayerDisplay(currentPlayer) {
     }
 }
 
-function updateTurnOrderDisplay(turnOrder) {
+function updateTurnOrderDisplay(turnOrder, currentPlayer) {
 
     const turnOrderDisplay = document.getElementById('turn-order');
     console.log(`turnOrderDisplay in checkGameData: ${turnOrderDisplay}`)
@@ -298,12 +325,12 @@ function updateTurnOrderDisplay(turnOrder) {
         const turnOrderHTML = turnOrder.map((player, index) => {
             const avatarSrc = getAvatarSrc(player.avatar);
             return `
-            <div class="turn-order-item flex flex-col items-center ">
-                <div class="p-2 h-20 w-20 flex flex-col items-center rounded bg-white">
-                <img src="${avatarSrc}" alt="Avatar" class="w-8 h-8 rounded-full mb-1" />
+            <div class="turn-order-item flex flex-row items-center ">
+                <div class="p-2 h-12 w-10 flex flex-col items-center rounded bg-white">
+                <img src="${avatarSrc}" alt="Avatar" class="w-4 h-4 rounded-full mb-1" />
                 <span class="text-sm font-medium">${player.username}</span>
                 </div>
-                <span class="text-sm font-medium mt-2">${index + 1}°</span>
+                <span class="text-xl ml-4 font-medium mt-2">${index + 1}°</span>
             </div>
         `;
         }).join('');
@@ -458,8 +485,6 @@ async function abandonGame() {
         if (!response.ok) {
             throw new Error(`Errore nella fetch: ${response.status} - ${response.statusText}`);
         }
-
-        alert('Hai abbandonato la partita. Gli altri giocatori sono stati notificati.');
     } catch (error) {
         console.error('Errore durante l\'abbandono del gioco:', error);
         alert('Errore durante l\'abbandono del gioco. Riprova.');
@@ -494,18 +519,26 @@ function updateChaptersDisplay(chaptersData) {
 }
 
 
-function updateFoxAnimation(isWriting) {
+function updateFoxAnimation(isWriting, username) {
     const writingFox = document.getElementById('writing-fox');
     const thinkingFox = document.getElementById('thinking-fox');
+    const writingText = document.getElementById('writing-text');
+    const thinkingText = document.getElementById('thinking-text');
 
     if (isWriting) {
         // Mostra l'animazione "writing" e nascondi "thinking"
         writingFox.classList.remove('hidden');
         thinkingFox.classList.add('hidden');
+        
+        // Modifica il testo per includere il nome utente
+        writingText.textContent = `${username} is writing something clever...`;
     } else {
         // Mostra l'animazione "thinking" e nascondi "writing"
         writingFox.classList.add('hidden');
         thinkingFox.classList.remove('hidden');
+        
+        // Modifica il testo per includere il nome utente
+        thinkingText.textContent = `${username} is thinking...`;
     }
 }
     

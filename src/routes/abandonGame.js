@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { activeGames } = require('../services/gameManager');
 const { resetUserStatus, deleteGameFromDB } = require('../database/db');  // Supponiamo di avere queste funzioni
+const checkAuth = require('../middlewares/checkAuthToken');
 
-router.post('/abandon-game/:gameId', async (req, res) => {
+
+router.post('/abandon-game/:gameId', checkAuth, async (req, res) => {
     const { gameId } = req.params;
+    const { username } = req; // Utente che abbandona la partita
 
     // Recupera il gioco dalla Map
     const game = activeGames.get(Number(gameId));
@@ -27,8 +30,11 @@ router.post('/abandon-game/:gameId', async (req, res) => {
         return res.status(500).json({ message: 'Errore durante la cancellazione.' });
     }
 
-    // Notifica i giocatori tramite socket
-    req.io.to(Number(gameId)).emit('gameAbandoned', { message: 'La partita purtroppo è stata abbandonata da un giocatore.' });
+    // Messaggio per gli altri giocatori nella stanza
+    req.io.to(Number(gameId)).emit('gameAbandoned', { 
+        message: `La partita è stata abbandonata da ${username}.`,
+        username // Include il nome utente nel payload
+    });
 
     res.json({ message: 'Gioco abbandonato e giocatori notificati.' });
 });
