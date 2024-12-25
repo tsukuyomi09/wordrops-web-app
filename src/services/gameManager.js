@@ -59,8 +59,6 @@ async function createGameAndAssignPlayers(game) {
             startedAt: new Date()
         });
 
-        console.log("Active Games - Full Log after adding the game:", JSON.stringify(Array.from(activeGames.entries()), null, 2));
-
         return { gameId: newGameId, turnOrder };
 
     } catch (err) {
@@ -117,7 +115,5 @@ function startCountdown(newGameId) {
     }, 1000);
 
 }
-
-
 
 module.exports = { createGameAndAssignPlayers, activeGames, getActiveGames, startCountdown };
