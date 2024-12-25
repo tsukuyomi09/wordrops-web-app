@@ -1,9 +1,4 @@
-.blue-bg {
-  background-image: url('/images/main-bg-color.jpg');
-  background-size: cover; /* Copre tutta l'area visibile */
-  background-position: center; /* Centra l'immagine */
-  background-repeat: no-repeat; /* Evita che l'immagine si ripeta */
-}
+
 
 .avatar-container {
     visibility: hidden;  /* Imposta la visibilità iniziale a hidden */
@@ -80,6 +75,7 @@ font-family: 'Consolas', 'Courier New', monospace;
     pointer-events: none;
 }
 
+
 // game mode animation
 
 #top-container, #bottom-container {
@@ -147,24 +143,24 @@ font-family: 'Consolas', 'Courier New', monospace;
 // quill styles
 
 .ql-size-small {
-  font-size: 16px;
+  font-size: 20px; !important
 }
 
 .ql-size-medium {
-  font-size: 20px;
+  font-size: 28px; !important
 }
 
 .ql-size-large {
-  font-size: 24px;
-}
-
-.ql-size-huge {
-  font-size: 28px;
+  font-size: 36px; !important
 }
 
 
 .thinking-fox {
   animation: fadein 0.5s;
+}
+
+.min-height-custom {
+  min-height: 300px; /* Imposta la min-height che desideri */
 }
 
 @keyframes fadein {

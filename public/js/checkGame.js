@@ -155,6 +155,11 @@ function initializeSocket(game_id) {
 
         socket = io();
 
+        socket.on('game-ready-popup', () => {
+            console.log("Evento 'game-ready-popup' ricevuto"); // Debug per confermare la ricezione
+            showGameStartPopup(); // Mostra il popup
+        });
+
         socket.on('gameAbandoned', (data) => {
         
             // Recupera gli elementi del popup
@@ -185,7 +190,6 @@ function initializeSocket(game_id) {
         
 
         socket.on('nextChapterUpdate', (data) => {
-            console.log('Dati ricevuti dal server:', data);
             sessionStorage.setItem('currentPlayer', JSON.stringify(data.nextPlayer));
             const newChapter = data.chapter; // Ottieni il capitolo dal messaggio WebSocket
             updateChaptersDisplay([newChapter]); // Chiamata alla funzione per visualizzare il capitolo
@@ -194,6 +198,10 @@ function initializeSocket(game_id) {
             foxAnimation()
             handleEditorAccess(data.nextPlayer, currentUser);
             updateCurrentPlayerDisplay(data.nextPlayer);      
+
+            if (currentUser !== data.previousAuthor) {
+                changeTurnShowPopup(data.previousAuthor, data.nextPlayer);
+            }
         });
         
 
@@ -220,8 +228,9 @@ function initializeSocket(game_id) {
 
 function buttonStartGame() {
     document.getElementById('popup-start-countdown').classList.add('hidden');
+    
     fetch(`/game/${game_id}/player-ready`, {
-      method: 'POST', 
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -229,12 +238,32 @@ function buttonStartGame() {
     })
     .then(response => response.json())
     .then(data => {
-      if (data.status === 'game-started') {
+      console.log('Dati ricevuti dal server:', data); // Log per vedere cosa arriva dal server
+  
+      if (data.status === 'in-progress') {
         // Se il gioco è stato avviato, esegui altre azioni
-        alert("La partita è iniziata!");
+        sessionStorage.setItem('game_status', 'in_progress');
+        console.log('Stato del gioco aggiornato:', sessionStorage.getItem('game_status')); // Log per verificare lo stato nel sessionStorage
+        showGameStartPopup();
+      } else {
+        console.log('Il gioco non è ancora pronto.');
       }
     })
     .catch(error => console.error("Errore nel segnare il giocatore come pronto:", error));
+  }
+  
+
+function showGameStartPopup() {
+    
+    const gameStartPopup = document.createElement('div');
+    gameStartPopup.classList.add('fixed', 'top-1/2', 'left-1/2', 'bg-green-500', 'text-white', 'py-2', 'px-4', 'rounded-lg', 'shadow-lg', 'z-50');
+    gameStartPopup.innerHTML = '<strong>La partita è iniziata!</strong>';
+    document.body.appendChild(gameStartPopup);
+
+    setTimeout(() => {
+        gameStartPopup.remove();
+        console.log("Popup rimosso"); // Debug per verificare se il popup viene rimosso
+    }, 2000);
 }
 
 
@@ -358,7 +387,7 @@ const toolbarOptions = [
     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
     [{ 'align': [] }],
     [{ 'header': '1' }, { 'header': '2' }],
-    [{ 'size': ['small', 'medium', 'large', 'huge'] }],
+    [{ 'size': ['small', 'medium', 'large'] }],  // Modifica le opzioni di size
     ['clean']
 ];
 
@@ -487,6 +516,36 @@ function foxAnimation() {
         thinkingFox.classList.remove('hidden');
         thinkingText.textContent = `${currentPlayerUsername} sta pensando...` // Aggiungi il testo
     }
+}
+
+function changeTurnShowPopup(author, nextPlayer) {
+    // Crea un div che rappresenta il popup
+    const popup = document.createElement('div');
+    popup.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center', 'bg-black', 'bg-opacity-50', 'z-50');
+
+    // Aggiungi il contenuto del popup
+    popup.innerHTML = `
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <p class="text-lg font-semibold text-gray-800">
+                <span class="font-bold text-blue-600">${author}</span> ha scritto un nuovo capitolo!
+            </p>
+            <p class="mt-2 text-gray-600">
+                Ora è il turno di <span class="font-bold text-blue-600">${nextPlayer.username}</span>.
+            </p>
+            <button class="mt-4 bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-400 focus:outline-none" onclick="closeChangeTurnPopup(this)">
+                OK
+            </button>
+        </div>
+    `;
+
+    // Aggiungi il popup al body
+    document.body.appendChild(popup);
+}
+
+// Funzione per chiudere il popup quando l'utente clicca su "OK"
+function closeChangeTurnPopup(button) {
+    const popupContainer = button.closest('.fixed'); // Trova il contenitore del popup
+    popupContainer.remove(); // Rimuovi il popup dal DOM
 }
 
 

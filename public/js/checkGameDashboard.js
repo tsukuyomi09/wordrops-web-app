@@ -174,6 +174,10 @@ function initializeSocket(game_id) {
             sessionStorage.setItem('currentPlayer', JSON.stringify(data.nextPlayer));
             const currentUser = localStorage.getItem('username');
             updateCurrentPlayerDisplay(data.nextPlayer);      
+
+            if (currentUser !== data.previousAuthor) {
+                changeTurnShowPopup(data.previousAuthor, data.nextPlayer);
+            }
         });
         
 
@@ -274,6 +278,36 @@ function getAvatarSrc(avatar) {
     return avatar 
         ? `/images/avatars/${avatar}.png` 
         : '/images/avatars/default-avatar.png';
+}
+
+function changeTurnShowPopup(author, nextPlayer) {
+    // Crea un div che rappresenta il popup
+    const popup = document.createElement('div');
+    popup.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center', 'bg-black', 'bg-opacity-50', 'z-50');
+
+    // Aggiungi il contenuto del popup
+    popup.innerHTML = `
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <p class="text-lg font-semibold text-gray-800">
+                <span class="font-bold text-blue-600">${author}</span> ha scritto un nuovo capitolo!
+            </p>
+            <p class="mt-2 text-gray-600">
+                Ora è il turno di <span class="font-bold text-blue-600">${nextPlayer.username}</span>.
+            </p>
+            <button class="mt-4 bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-400 focus:outline-none" onclick="closeChangeTurnPopup(this)">
+                OK
+            </button>
+        </div>
+    `;
+
+    // Aggiungi il popup al body
+    document.body.appendChild(popup);
+}
+
+// Funzione per chiudere il popup quando l'utente clicca su "OK"
+function closeChangeTurnPopup(button) {
+    const popupContainer = button.closest('.fixed'); // Trova il contenitore del popup
+    popupContainer.remove(); // Rimuovi il popup dal DOM
 }
 
 

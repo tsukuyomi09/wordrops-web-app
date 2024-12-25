@@ -46,6 +46,7 @@ router.post('/saveChapterChangeTurn/:gameId', checkAuth, (req, res) => {
     req.io.to(Number(gameId)).emit('nextChapterUpdate', {
         chapter: newChapter, // Capitolo appena aggiunto
         nextPlayer: game.turnOrder[game.turnIndex], // Prossimo giocatore (intero oggetto)
+        previousAuthor: username,
     });
 
     res.json({ message: "Dati ricevuti correttamente." });

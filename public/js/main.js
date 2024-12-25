@@ -519,6 +519,7 @@ function closeMenu() {
 
 function logout(){
     buttonSound()
+    sessionStorage.clear(); 
     fetch("/logout", {
         method: 'DELETE',
         headers: {
@@ -528,7 +529,6 @@ function logout(){
     })
     .then(response => {
         if (response.ok) {
-            sessionStorage.removeItem('hasVisited');
             window.location.href = "/"; 
         } else {
             return response.json(); 

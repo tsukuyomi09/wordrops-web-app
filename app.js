@@ -31,6 +31,12 @@ io.on("connection", socket => {
         console.log("Disconnesso dal server per:", reason);
     });
 
+    socket.on('text-update-animation', ({ gameId, username }) => {
+        io.in(Number(gameId)).emit('text-update-animation', { 
+            message: `${username} sta scrivendo`, 
+        });
+    })
+
     socket.on('playerReady', ({ gameId, userId }) => {
         try {
             console.log("Messaggio ricevuto: playerReady");

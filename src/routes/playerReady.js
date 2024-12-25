@@ -18,12 +18,12 @@ router.post('/game/:gameId/player-ready', async (req, res) => {
 
     // Se il numero di giocatori pronti raggiunge 5, inizia il gioco
     if (game.readyPlayersCount === 5) {
-      console.log('Cinque giocatori pronti, inizio del gioco...');
       game.status = 'in-progress'; // Imposta lo stato del gioco come "in-progress"
       startCountdown(gameId); // Avvia il countdown
-      return res.json({ status: 'in-progress' });
+      req.io.to(Number(gameId)).emit('game-ready-popup');
+      return res.json({ status: 'in-progress' }); 
     }
-
+    
     res.json({ status: 'ready' });
   });
 
