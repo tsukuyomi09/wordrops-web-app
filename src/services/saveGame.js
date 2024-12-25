@@ -7,9 +7,9 @@ async function saveNormalGame(game) {
 
         // Inseriamo il gioco nella tabella games_completed_normal
         await client.query(
-            `INSERT INTO games_completed_normal (id, started_at, finished_at)
-             VALUES ($1, $2, $3)`,
-            [game.gameId, game.startedAt, finishedAt] // Parametri per inserire il gioco
+            `INSERT INTO games_completed_normal (id, title, started_at, finished_at)
+             VALUES ($1, $2, $3, $4)`,
+            [game.gameId, `Storia ${game.gameId}`, game.startedAt, finishedAt] // Aggiungi il titolo "Storia + gameId"
         );
 
         // Fase 2: Salvataggio dei capitoli

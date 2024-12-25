@@ -140,6 +140,26 @@ function initializeSocket(game_id) {
 
         socket = io();
 
+        socket.on('gameCompleted', () => {
+            // Recupera gli elementi del nuovo popup
+            const newPopup = document.getElementById('new-popup-message');
+            const newPopupText = document.getElementById('new-popup-text');
+            const newPopupClose = document.getElementById('new-popup-close');
+
+            newPopupText.textContent = "Congratulazioni, un nuovo racconto ha preso vita!"
+        
+            newPopup.classList.remove('hidden');
+            newPopupClose.removeEventListener('click', handleNewPopupClose);
+            newPopupClose.addEventListener('click', handleNewPopupClose);
+        
+            function handleNewPopupClose() {
+                const username = localStorage.getItem('username');
+                newPopup.classList.add('hidden');
+                sessionStorage.clear();
+                window.location.href = `/dashboard/${username}`;
+            }
+        });
+
         socket.on('gameAbandoned', (data) => {
         
             // Recupera gli elementi del popup

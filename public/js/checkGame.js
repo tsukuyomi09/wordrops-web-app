@@ -176,7 +176,7 @@ function initializeSocket(game_id) {
                 const username = localStorage.getItem('username');
                 newPopup.classList.add('hidden');
                 sessionStorage.clear();
-                window.location.href = `/${username}`;
+                window.location.href = `/dashboard/${username}`;
             }
         });
         
