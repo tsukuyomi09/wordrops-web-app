@@ -5,7 +5,7 @@ async function fetchCompletedGames() {
         
         if (response.ok) {
             if (data.completedGames.length > 0) {
-                const containerToReveal = document.getElementById('stories-container-absolute');
+                const containerToReveal = document.getElementById('stories-container-wrapper');
                 containerToReveal.classList.remove('hidden'); // Rende visibile il contenitore
                 renderCompletedGames(data.completedGames); // Se ci sono giochi, li renderizza
             } else {
