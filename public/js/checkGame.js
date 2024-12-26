@@ -162,6 +162,7 @@ function initializeSocket(game_id) {
 
         socket.on('gameCompleted', () => {
             // Recupera gli elementi del nuovo popup
+            sessionStorage.clear();
             const newPopup = document.getElementById('new-popup-message');
             const newPopupText = document.getElementById('new-popup-text');
             const newPopupClose = document.getElementById('new-popup-close');
@@ -175,7 +176,6 @@ function initializeSocket(game_id) {
             function handleNewPopupClose() {
                 const username = localStorage.getItem('username');
                 newPopup.classList.add('hidden');
-                sessionStorage.clear();
                 window.location.href = `/dashboard/${username}`;
             }
         });
