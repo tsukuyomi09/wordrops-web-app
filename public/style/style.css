@@ -11,6 +11,7 @@
     opacity: 1;            /* Imposta l'opacità a 1 */
 }
 
+
 .font-consolas {
 font-family: 'Consolas', 'Courier New', monospace;
 }
@@ -160,7 +161,7 @@ font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .min-height-custom {
-  min-height: 300px; /* Imposta la min-height che desideri */
+  min-height: 300px; 
 }
 
 @keyframes fadein {
@@ -168,30 +169,61 @@ font-family: 'Consolas', 'Courier New', monospace;
   to { opacity: 1; }
 }
 
-:root {
 
-  /* navigation arrows */
-  --swiper-navigation-color: white;
-
-  /* pagination buttons */
-  --swiper-pagination-color: white;
-  --swiper-pagination-bullet-inactive-color: white;
+.swiper-pagination {
+  background: rgba(5, 81, 223, 0.18) !important; /* Azzurro chiaro con opacità */
+  backdrop-filter: blur(15px) !important; /* Aggiungi più blur per un effetto più morbido */
+  border: 1px solid rgba(173, 216, 230, 0.5) !important; /* Bordo azzurro chiaro */
+  border-radius: 15px !important;
+  padding: 5px 10px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  width: auto !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px;
+  align-items: center !important;
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  bottom: 40px !important; 
 }
 
-.swiper {
-  width: 100%;
-  height: 100%;
+.swiper-pagination-bullet {
+  background-color: rgba(255, 255, 255, 1) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  width: 24px !important;  
+  height: 24px !important;  
+  opacity: 1 !important;
+
 }
 
-.swiper-slide {
-  background-position: center;
-  background-size: cover;
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  border-radius: 50% !important;
+  outline: 2px solid red !important;
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
+.swiper-pagination-bullet:nth-child(1) {
+  background-image: url('/images/icons/play-game.png') !important;
 }
 
+.swiper-pagination-bullet:nth-child(2) {
+  background-image: url('/images/icons/stats-medal.png') !important;
+}
+
+.swiper-pagination-bullet:nth-child(3) {
+  background-image: url('/images/icons/icons8-lettura-64.png') !important;
+}
+
+.swiper-pagination-bullet:nth-child(4) {
+  background-image: url('/images/icons/book-icon.png') !important; 
+}
+
+.swiper-pagination-bullet:nth-child(5) {
+  background-image: url('/images/icons/fire-icon.png') !important;
+}
 
 

@@ -1,8 +1,7 @@
-const { client } = require('../database/db'); 
-const { getSocket } = require('./socketManager');
+const { client } = require("../database/db");
+const { getSocket } = require("./socketManager");
 
-
-const activeGames = new Map(); 
+const activeGames = new Map();
 
 async function createGameAndAssignPlayers(game) {
     let newGameId;
@@ -18,49 +17,58 @@ async function createGameAndAssignPlayers(game) {
         newGameId = result.rows[0].game_id;
 
         // Aggiunta dei giocatori alla partita
-        const playerPromises = game.map(player => {
-            return client.query(`
+        const playerPromises = game.map((player) => {
+            return client.query(
+                `
                 INSERT INTO players_in_game (game_id, user_id) 
                 VALUES ($1, $2)
                 ON CONFLICT (game_id, user_id) DO NOTHING;
-            `, [newGameId, player.id]);
+            `,
+                [newGameId, player.id]
+            );
         });
 
-        const playerIds = game.map(player => player.id);
-        await client.query(`
+        const playerIds = game.map((player) => player.id);
+        await client.query(
+            `
             UPDATE users 
             SET status = 'in_game'
             WHERE user_id = ANY($1);
-        `, [playerIds]);
+        `,
+            [playerIds]
+        );
 
         // Aspettiamo che tutti i giocatori siano assegnati
         await Promise.all(playerPromises);
 
-        const turnOrder = shuffleArray(game.map(player => ({
-            id: player.id,
-            username: player.username,
-            avatar: player.avatar // Assicurati che l'avatar sia presente
-        })));
+        const turnOrder = shuffleArray(
+            game.map((player) => ({
+                id: player.id,
+                username: player.username,
+                avatar: player.avatar, // Assicurati che l'avatar sia presente
+            }))
+        );
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
+            type: null,
+            votes: {},
             players: game,
             chapters: [],
-            status: 'to-start',
+            status: "to-start",
             turnOrder: turnOrder,
             readyPlayersCount: 0,
             turnIndex: 0,
             connections: [],
             countdownDuration: 1800000, // 30 minutes
-            countdownStart: null,    // Valore iniziale
+            countdownStart: null, // Valore iniziale
             countdownEnd: null,
             countdownInterval: null,
-            startedAt: new Date()
+            startedAt: new Date(),
         });
 
         return { gameId: newGameId, turnOrder };
-
     } catch (err) {
         console.error("Errore nella creazione del gioco:", err);
         throw err;
@@ -101,19 +109,23 @@ function startCountdown(newGameId) {
     game.countdownInterval = setInterval(() => {
         const remainingTime = game.countdownEnd - Date.now();
         if (remainingTime <= 0) {
-            game.status = 'ready-to-start';
+            game.status = "ready-to-start";
             clearInterval(game.countdownInterval);
             game.countdownInterval = null;
         } else {
             const minutes = Math.floor(remainingTime / 60000);
             const seconds = Math.floor((remainingTime % 60000) / 1000);
-            io.in(Number(newGameId)).emit('gameUpdate', { 
+            io.in(Number(newGameId)).emit("gameUpdate", {
                 remainingTime,
                 formatted: `${minutes}m ${seconds}s`,
             });
         }
     }, 1000);
-
 }
 
-module.exports = { createGameAndAssignPlayers, activeGames, getActiveGames, startCountdown };
+module.exports = {
+    createGameAndAssignPlayers,
+    activeGames,
+    getActiveGames,
+    startCountdown,
+};

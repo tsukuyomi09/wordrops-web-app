@@ -1,3 +1,13 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const swiper = new Swiper('.swiper-container', {
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    });
+});
+
 function showLoadingAnimation() {
     const overlay = document.getElementById('loading-overlay');
     const pagewrap = document.getElementById('pagewrap');
