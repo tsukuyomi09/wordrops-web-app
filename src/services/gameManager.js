@@ -7,27 +7,6 @@ async function createGameAndAssignPlayers(game) {
     let newGameId;
 
     try {
-        // Creazione del gioco nel database
-        const result = await client.query(`
-            INSERT INTO games (status, started_at) 
-            VALUES ('in-progress', NOW()) 
-            RETURNING game_id;
-        `);
-
-        newGameId = result.rows[0].game_id;
-
-        // Aggiunta dei giocatori alla partita
-        const playerPromises = game.map((player) => {
-            return client.query(
-                `
-                INSERT INTO players_in_game (game_id, user_id) 
-                VALUES ($1, $2)
-                ON CONFLICT (game_id, user_id) DO NOTHING;
-            `,
-                [newGameId, player.id]
-            );
-        });
-
         const playerIds = game.map((player) => player.id);
         await client.query(
             `
@@ -37,9 +16,6 @@ async function createGameAndAssignPlayers(game) {
         `,
             [playerIds]
         );
-
-        // Aspettiamo che tutti i giocatori siano assegnati
-        await Promise.all(playerPromises);
 
         const turnOrder = shuffleArray(
             game.map((player) => ({

@@ -1,19 +1,19 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { client } = require('../database/db'); 
-const checkAuth = require('../middlewares/checkAuthToken');
+const { client } = require("../database/db");
+const checkAuth = require("../middlewares/checkAuthToken");
 
-router.get('/personal-library', checkAuth, async (req, res) => {
+router.get("/personal-library", checkAuth, async (req, res) => {
     const user_id = req.user_id; // ID dell'utente
 
     try {
         // Query per ottenere solo id e title delle storie completate
         const { rows } = await client.query(
             `SELECT DISTINCT g.id, g.title, g.finished_at
-             FROM games_chapters_normal gc
-             JOIN games_completed_normal g ON gc.game_id = g.id
+             FROM games_chapters gc
+             JOIN games_completed g ON gc.game_id = g.id
              WHERE gc.author_id = $1
-             ORDER BY g.finished_at DESC`, 
+             ORDER BY g.finished_at DESC`,
             [user_id] // ID dell'utente
         );
 
@@ -21,7 +21,9 @@ router.get('/personal-library', checkAuth, async (req, res) => {
         res.json({ completedGames: rows });
     } catch (err) {
         console.error("Errore nel recupero dei giochi completati:", err);
-        res.status(500).json({ message: 'Errore nel recupero dei giochi completati.' });
+        res.status(500).json({
+            message: "Errore nel recupero dei giochi completati.",
+        });
     }
 });
 
