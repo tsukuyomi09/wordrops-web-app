@@ -1,21 +1,20 @@
-const { client } = require("../database/db");
+const { v4: uuidv4 } = require("uuid");
 const { getSocket } = require("./socketManager");
 
 const activeGames = new Map();
+const playersMap = new Map();
 
 async function createGameAndAssignPlayers(game) {
-    let newGameId;
+    newGameId = Date.now();
 
     try {
         const playerIds = game.map((player) => player.id);
-        await client.query(
-            `
-            UPDATE users 
-            SET status = 'in_game'
-            WHERE user_id = ANY($1);
-        `,
-            [playerIds]
-        );
+        newGameId = uuidv4();
+
+        game.forEach((player) => {
+            // Aggiungi il gioco per ogni giocatore
+            addGameForPlayer(player.id, newGameId);
+        });
 
         const turnOrder = shuffleArray(
             game.map((player) => ({
@@ -44,6 +43,8 @@ async function createGameAndAssignPlayers(game) {
             startedAt: new Date(),
         });
 
+        console.log("Current activeGames map:", activeGames);
+
         return { gameId: newGameId, turnOrder };
     } catch (err) {
         console.error("Errore nella creazione del gioco:", err);
@@ -66,7 +67,7 @@ function getActiveGames() {
 
 function startCountdown(newGameId) {
     const io = getSocket();
-    const game = activeGames.get(Number(newGameId));
+    const game = activeGames.get(newGameId);
     if (!game) {
         console.error(`Gioco con ID ${newGameId} non trovato`);
         return;
@@ -91,7 +92,7 @@ function startCountdown(newGameId) {
         } else {
             const minutes = Math.floor(remainingTime / 60000);
             const seconds = Math.floor((remainingTime % 60000) / 1000);
-            io.in(Number(newGameId)).emit("gameUpdate", {
+            io.in(newGameId).emit("gameUpdate", {
                 remainingTime,
                 formatted: `${minutes}m ${seconds}s`,
             });
@@ -99,9 +100,27 @@ function startCountdown(newGameId) {
     }, 1000);
 }
 
+function addGameForPlayer(playerId, gameId, status = "in_progress") {
+    // Se il giocatore non esiste, crea una nuova entry
+    if (!playersMap.has(playerId)) {
+        playersMap.set(playerId, {
+            games: {},
+        });
+    }
+
+    // Ottieni i dati del giocatore
+    const playerData = playersMap.get(playerId);
+    // Aggiungi il gioco alla mappa del giocatore con lo stato
+    playerData.games[gameId] = status;
+
+    // Riaffetta i dati aggiornati alla mappa
+    playersMap.set(playerId, playerData);
+}
+
 module.exports = {
     createGameAndAssignPlayers,
     activeGames,
     getActiveGames,
     startCountdown,
+    playersMap,
 };

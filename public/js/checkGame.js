@@ -8,6 +8,7 @@ window.onload = function initialize() {
 function checkUserStatus() {
     const userStatus = sessionStorage.getItem("user_status");
     const gameId = sessionStorage.getItem("game_id");
+    console.log(userStatus, gameId);
     if (userStatus === "in_game" && gameId) {
         initializeInGameFunction(gameId);
     } else {
@@ -155,7 +156,7 @@ async function getCurrentGameData(game_id) {
 }
 
 function initializeSocket(game_id) {
-    game_id = Number(game_id);
+    game_id;
     try {
         if (!game_id) {
             console.error("Errore: gameId non trovato nell'URL");

@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("text-update-animation", ({ gameId, username }) => {
-        io.in(Number(gameId)).emit("text-update-animation", {
+        io.in(gameId).emit("text-update-animation", {
             message: `${username} sta scrivendo`,
         });
     });
@@ -85,7 +85,6 @@ io.on("connection", (socket) => {
 
     socket.on("joinNewGame", ({ gameId }) => {
         console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
-        gameId = Number(gameId);
         console.log(`gameId convertito in numero:`, gameId);
         console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
         socket.join(gameId);
@@ -176,7 +175,6 @@ const usersProfileRoute = require("./src/routes/usersProfileRoute");
 const usersProfileData = require("./src/routes/usersProfileData");
 const getPersonalLibrary = require("./src/routes/getPersonalLibrary");
 const userDataRoutes = require("./src/routes/userData");
-const queueRoutes = require("./src/routes/queueRoutes");
 const queueRoutesNew = require("./src/routes/queueRoutesNew");
 const searchUserRoute = require("./src/routes/searchUser");
 const playersQueue = require("./src/routes/playersQueue");
@@ -201,7 +199,6 @@ app.use(getPersonalLibrary);
 app.use(userDataRoutes);
 app.use(usersProfileData);
 app.use(searchUserRoute);
-app.use(queueRoutes);
 app.use(queueRoutesNew);
 app.use(gameStatus);
 app.use(playerReady);

@@ -1,14 +1,13 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { activeGames, startCountdown } = require('../services/gameManager');
-const { saveNormalGame } = require('../services/saveGame');
-const { resetUserStatus, deleteGameFromDB } = require('../database/db');  // Supponiamo di avere queste funzioni
-const checkAuth = require('../middlewares/checkAuthToken');
+const { activeGames, startCountdown } = require("../services/gameManager");
+const { saveNormalGame } = require("../services/saveGame");
+const { resetUserStatus, deleteGameFromDB } = require("../database/db"); // Supponiamo di avere queste funzioni
+const checkAuth = require("../middlewares/checkAuthToken");
 
-
-router.post('/saveChapterChangeTurn/:gameId', checkAuth, async (req, res) => {
+router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     const { gameId } = req.params;
-    const user_id = req.user_id
+    const user_id = req.user_id;
     const { title, content, currentUser } = req.body; // Dati inviati dal client
     const username = req.username; // Dati dal middleware
 
@@ -17,7 +16,7 @@ router.post('/saveChapterChangeTurn/:gameId', checkAuth, async (req, res) => {
         return;
     }
 
-    const game = activeGames.get(Number(gameId));
+    const game = activeGames.get(gameId);
 
     if (!game) {
         res.status(404).json({ message: "Partita non trovata." });
@@ -28,12 +27,16 @@ router.post('/saveChapterChangeTurn/:gameId', checkAuth, async (req, res) => {
     const currentTurnPlayer = game.turnOrder[turnIndex];
 
     if (!currentTurnPlayer) {
-        res.status(500).json({ message: "Errore nel recupero del turno corrente." });
+        res.status(500).json({
+            message: "Errore nel recupero del turno corrente.",
+        });
         return;
     }
 
     if (currentTurnPlayer.username !== currentUser) {
-        res.status(403).json({ message: "Non è il turno di questo giocatore." });
+        res.status(403).json({
+            message: "Non è il turno di questo giocatore.",
+        });
         return;
     }
 
@@ -45,53 +48,66 @@ router.post('/saveChapterChangeTurn/:gameId', checkAuth, async (req, res) => {
         try {
             // Salva il gioco e i capitoli
             const saveSuccess = await saveNormalGame(game); // Attendi il risultato della funzione
-    
+
             if (saveSuccess) {
                 const players = game.players;
-    
+
                 // Rimuovi il gioco dalla Map
-                activeGames.delete(Number(gameId));
-    
+                activeGames.delete(gameId);
+
                 // Resetta gli utenti e cancella dal DB
                 try {
-                    await deleteGameFromDB(Number(gameId)); // Cancella dal DB
+                    await deleteGameFromDB(gameId); // Cancella dal DB
                     await resetUserStatus(players); // Resetta gli utenti a 'idle'
                 } catch (err) {
-                    console.error("Errore durante la cancellazione dal database:", err);
-                    return res.status(500).json({ message: 'Errore durante la cancellazione.' });
+                    console.error(
+                        "Errore durante la cancellazione dal database:",
+                        err
+                    );
+                    return res
+                        .status(500)
+                        .json({ message: "Errore durante la cancellazione." });
                 }
-    
-                req.io.to(Number(gameId)).emit('gameCompleted')
-    
+
+                req.io.to(gameId).emit("gameCompleted");
+
                 // Risposta positiva al client
-                return res.json({ message: 'Gioco completato e giocatori notificati.' });
+                return res.json({
+                    message: "Gioco completato e giocatori notificati.",
+                });
             } else {
                 // Se il salvataggio del gioco non ha avuto successo, invia un errore
-                return res.status(500).json({ message: 'Errore nel salvataggio del gioco.' });
+                return res
+                    .status(500)
+                    .json({ message: "Errore nel salvataggio del gioco." });
             }
         } catch (err) {
-            console.error("Errore durante il processo di salvataggio del gioco:", err);
-            return res.status(500).json({ message: 'Errore nel processo di completamento del gioco.' });
+            console.error(
+                "Errore durante il processo di salvataggio del gioco:",
+                err
+            );
+            return res
+                .status(500)
+                .json({
+                    message: "Errore nel processo di completamento del gioco.",
+                });
         }
     }
-    
 
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
     const nextPlayer = game.turnOrder[game.turnIndex];
 
     console.log("Log del game");
 
+    startCountdown(gameId);
 
-    startCountdown(Number(gameId));
-
-    req.io.to(Number(gameId)).emit('nextChapterUpdate', {
+    req.io.to(gameId).emit("nextChapterUpdate", {
         chapter: newChapter, // Capitolo appena aggiunto
         nextPlayer: game.turnOrder[game.turnIndex], // Prossimo giocatore (intero oggetto)
         previousAuthor: username,
     });
 
     res.json({ message: "Dati ricevuti correttamente." });
-})
-
+});
 
 module.exports = router;
