@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { activeGames, startCountdown } = require("../services/gameManager");
 const { saveNormalGame } = require("../services/saveGame");
-const { resetUserStatus, deleteGameFromDB } = require("../database/db"); // Supponiamo di avere queste funzioni
+const { playersMap } = require("../services/gameManager");
 const checkAuth = require("../middlewares/checkAuthToken");
 
 router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
@@ -40,34 +40,48 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
         return;
     }
 
-    const newChapter = { title, content, author: username, user_id: user_id };
+    const newChapter = {
+        title,
+        content,
+        author: username,
+        user_id: user_id,
+        isValid: true,
+    };
 
-    game.chapters.push({ title, content, author: username, user_id: user_id });
-
+    game.chapters.push(newChapter);
+    console.log(`games chapters = ${game.chapters.length}`);
     if (game.chapters.length === 5) {
         try {
+            console.log(`five games reached`);
             // Salva il gioco e i capitoli
             const saveSuccess = await saveNormalGame(game); // Attendi il risultato della funzione
+            console.log("Contenuto di saveSuccess:", saveSuccess);
 
             if (saveSuccess) {
                 const players = game.players;
 
-                // Rimuovi il gioco dalla Map
-                activeGames.delete(gameId);
+                console.log("Contenuto di players:", players);
 
-                // Resetta gli utenti e cancella dal DB
-                try {
-                    await deleteGameFromDB(gameId); // Cancella dal DB
-                    await resetUserStatus(players); // Resetta gli utenti a 'idle'
-                } catch (err) {
-                    console.error(
-                        "Errore durante la cancellazione dal database:",
-                        err
-                    );
-                    return res
-                        .status(500)
-                        .json({ message: "Errore durante la cancellazione." });
-                }
+                // Rimuovi il gioco dalla playersMap
+                players.forEach((playerId) => {
+                    const player = playersMap.get(playerId);
+                    console.log(`Checking player ${playerId}`, player); // Debug
+
+                    if (player) {
+                        console.log(`Before delete:`, player.games);
+                        delete player.games[gameId]; // Rimuovi il gioco
+
+                        console.log(`After delete:`, player.games); // Verifica se è stato rimosso
+
+                        // Se il giocatore non ha più giochi, rimuovilo dalla playersMap
+                        if (Object.keys(player.games).length === 0) {
+                            console.log(
+                                `Removing player ${playerId} from playersMap`
+                            );
+                            playersMap.delete(playerId);
+                        }
+                    }
+                });
 
                 req.io.to(gameId).emit("gameCompleted");
 
@@ -86,11 +100,9 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
                 "Errore durante il processo di salvataggio del gioco:",
                 err
             );
-            return res
-                .status(500)
-                .json({
-                    message: "Errore nel processo di completamento del gioco.",
-                });
+            return res.status(500).json({
+                message: "Errore nel processo di completamento del gioco.",
+            });
         }
     }
 
@@ -102,6 +114,7 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     startCountdown(gameId);
 
     req.io.to(gameId).emit("nextChapterUpdate", {
+        gameId: gameId,
         chapter: newChapter, // Capitolo appena aggiunto
         nextPlayer: game.turnOrder[game.turnIndex], // Prossimo giocatore (intero oggetto)
         previousAuthor: username,

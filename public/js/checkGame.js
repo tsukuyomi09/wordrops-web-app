@@ -2,156 +2,89 @@ let editor;
 let game_id;
 
 window.onload = function initialize() {
-    checkUserStatus();
+    fetchUserData();
 };
 
-function checkUserStatus() {
-    const userStatus = sessionStorage.getItem("user_status");
-    const gameId = sessionStorage.getItem("game_id");
-    console.log(userStatus, gameId);
-    if (userStatus === "in_game" && gameId) {
-        initializeInGameFunction(gameId);
-    } else {
-        // Se "user_status" non è presente, esegui una fetch per ottenere i dati
-        getUserStatus();
-    }
-}
-
-function getUserStatus() {
-    fetch("/userData")
-        .then((response) => response.json())
-        .then((data) => {
-            // Salva i dati nel session storage
-            sessionStorage.setItem("user_status", data.status);
-            sessionStorage.setItem("game_id", data.game_id);
-            game_id = data.game_id;
-
-            // Se l'utente è in gioco, inizializza il gioco
-            if (data.status === "in_game") {
-                initializeInGameFunction(data.game_id);
-            }
-        })
-        .catch((error) => {
-            console.error("Errore durante la fetch dei dati:", error);
-        });
-}
-
-function initializeInGameFunction(game_id) {
-    initializeSocket(game_id);
-    checkGameData(game_id);
-
-    const game_status = sessionStorage.getItem("game_status");
-    if (game_status) {
-        if (game_status === "to_start") {
-            document
-                .getElementById("popup-start-countdown")
-                .classList.remove("hidden");
-        }
-    } else {
-        getGameStatus(game_id);
-    }
-}
-
-async function getGameStatus(game_id) {
+async function fetchUserData() {
     try {
-        const response = await fetch(`/game-status/${game_id}`);
+        const urlPath = window.location.pathname;
+        const urlGameId = urlPath.split("/").pop(); // Ottiene l'ID del gioco dall'URL
 
-        if (!response.ok) {
-            throw new Error(
-                "Errore nel recupero dei dati dallo stato del gioco"
-            );
-        }
+        console.log("Game ID from URL:", urlGameId);
+
+        // Fetch per ottenere lo stato dell'utente
+        const response = await fetch("/userData");
+        if (!response.ok)
+            throw new Error("Errore nel recupero dei dati utente");
+
         const data = await response.json();
+        console.log("Dati utente:", data);
 
+        if (data.status === "in_game" && data.games.hasOwnProperty(urlGameId)) {
+            game_id = urlGameId;
+            initializeGame(game_id);
+        }
+    } catch (error) {
+        console.error("Errore nel recupero dei dati utente:", error);
+    }
+}
+
+async function initializeGame(game_id) {
+    initializeSocket(game_id);
+    console.log("checkGameData in partenza");
+
+    try {
+        // Fetch per ottenere lo stato del gioco
+        const response = await fetch(`/game-status/${game_id}`);
+        if (!response.ok)
+            throw new Error("Errore nel recupero dello stato del gioco");
+
+        const data = await response.json();
         if (data.status === "to-start") {
             document
                 .getElementById("popup-start-countdown")
                 .classList.remove("hidden");
-            sessionStorage.setItem("game_status", "to-start");
-        } else if (data.status === "in-progress") {
-            sessionStorage.setItem("game_status", "in-progress");
         }
     } catch (error) {
-        console.error("Errore durante la fetch dello stato del gioco", error);
+        console.error("Errore nel recupero dello stato del gioco:", error);
     }
+
+    fetchGameData(game_id);
 }
 
-function checkGameData(game_id) {
-    // Verifica se i dati del gioco sono presenti nel sessionStorage
-    const turnOrderData = JSON.parse(sessionStorage.getItem("turnOrder"));
-    const currentPlayer = JSON.parse(sessionStorage.getItem("currentPlayer"));
-    const currentUser = localStorage.getItem("username");
-
-    if (turnOrderData && currentPlayer) {
-        updateCurrentPlayerDisplay(currentPlayer);
-        updateTurnOrderDisplay(turnOrderData, currentPlayer);
-        handleEditorAccess(currentPlayer, currentUser);
-        foxAnimation();
-
-        fetch(`/games/${game_id}/chapters`) // Assumendo che questa sia la rotta giusta
-            .then((response) => response.json()) // Recupera i dati dei capitoli
-            .then((chaptersData) => {
-                // 3. Aggiungi i capitoli all'interfaccia
-                updateChaptersDisplay(chaptersData); // Funzione che aggiorna la visualizzazione dei capitoli
-            })
-            .catch((error) => {
-                console.error("Errore nel recupero dei capitoli:", error);
-            });
-    } else {
-        // Altrimenti fai una fetch per ottenere i dati del gioco
-        getCurrentGameData(game_id)
-            .then((data) => {
-                // Salva i dati nel sessionStorage
-                sessionStorage.setItem("players", JSON.stringify(data.players));
-                sessionStorage.setItem(
-                    "turnOrder",
-                    JSON.stringify(data.turnOrder)
-                );
-                sessionStorage.setItem(
-                    "currentPlayer",
-                    JSON.stringify(data.currentPlayer)
-                );
-
-                // Poi aggiorna l'interfaccia
-                updateCurrentPlayerDisplay(data.currentPlayer);
-                updateTurnOrderDisplay(data.turnOrder);
-                handleEditorAccess(data.currentPlayer, currentUser);
-                foxAnimation();
-            })
-            .catch((error) => {
-                console.error(
-                    "Errore durante il recupero dei dati del gioco:",
-                    error
-                );
-            });
-    }
-}
-
-async function getCurrentGameData(game_id) {
+async function fetchGameData(game_id) {
     try {
-        const response = await fetch(`/game-data/${game_id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error(
-                `Errore nella fetch: ${response.status} - ${response.statusText}`
-            );
-        }
+        const response = await fetch(`/game-data/${game_id}`);
+        if (!response.ok)
+            throw new Error("Errore nel recupero dei dati del gioco");
 
         const data = await response.json();
+        console.log("Dati gioco:", data);
 
-        // Assicurati che i dati contengano le informazioni necessarie
-        if (!data.players || !data.turnOrder || !data.currentPlayer) {
-            throw new Error("I dati del gioco sono incompleti o mancanti");
-        }
+        updateCurrentPlayerDisplay(data.currentPlayer);
+        updateTurnOrderDisplay(data.turnOrder);
+        handleEditorAccess(
+            data.currentPlayer,
+            localStorage.getItem("username")
+        );
+        foxAnimation();
 
-        return data; // Restituisci i dati ottenuti
+        // Fetch per i capitoli del gioco
+        fetchGameChapters(game_id);
     } catch (error) {
         console.error("Errore durante il recupero dei dati del gioco:", error);
-        throw error; // Rilancia l'errore per una gestione più specifica in chiamata
+    }
+}
+
+async function fetchGameChapters(game_id) {
+    try {
+        const response = await fetch(`/games/${game_id}/chapters`);
+        if (!response.ok) throw new Error("Errore nel recupero dei capitoli");
+
+        const chaptersData = await response.json();
+        updateChaptersDisplay(chaptersData);
+    } catch (error) {
+        console.error("Errore nel recupero dei capitoli:", error);
     }
 }
 
@@ -192,12 +125,20 @@ function initializeSocket(game_id) {
         });
 
         socket.on("nextChapterUpdate", (data) => {
-            sessionStorage.setItem(
-                "currentPlayer",
-                JSON.stringify(data.nextPlayer)
-            );
-            const newChapter = data.chapter; // Ottieni il capitolo dal messaggio WebSocket
-            updateChaptersDisplay([newChapter]); // Chiamata alla funzione per visualizzare il capitolo
+            let activeGames =
+                JSON.parse(sessionStorage.getItem("active_games")) || {};
+            const game_id = data.gameId;
+
+            if (activeGames[game_id]) {
+                activeGames[game_id].currentPlayer = data.nextPlayer;
+                sessionStorage.setItem(
+                    "active_games",
+                    JSON.stringify(activeGames)
+                );
+            }
+
+            const newChapter = data.chapter;
+            updateChaptersDisplay([newChapter]);
 
             const currentUser = localStorage.getItem("username");
             foxAnimation();

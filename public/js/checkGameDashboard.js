@@ -1,5 +1,5 @@
 let editor;
-let game_id;
+let gameIds;
 
 window.onload = function initialize() {
     checkUserStatus();
@@ -7,13 +7,20 @@ window.onload = function initialize() {
 
 function checkUserStatus() {
     const userStatus = sessionStorage.getItem("user_status");
-    const gameId = sessionStorage.getItem("game_id");
-    if (userStatus === "in_game" && gameId) {
-        initializeInGameFunction(gameId);
+    const gameIds = getGameIds();
+    console.log("Game IDs:", gameIds);
+
+    if (userStatus === "in_game" && gameIds) {
+        initializeInGameFunction(gameIds);
     } else {
         // Se "user_status" non è presente, esegui una fetch per ottenere i dati
         getUserStatus();
     }
+}
+
+function getGameIds() {
+    const userGames = JSON.parse(sessionStorage.getItem("games"));
+    return userGames ? Object.keys(userGames) : [];
 }
 
 function getUserStatus() {
@@ -22,12 +29,13 @@ function getUserStatus() {
         .then((data) => {
             // Salva i dati nel session storage
             sessionStorage.setItem("user_status", data.status);
-            sessionStorage.setItem("game_id", data.game_id);
-            game_id = data.game_id;
+            sessionStorage.setItem("games", JSON.stringify(data.games));
+            console.log(`games data: ${data.games}`);
+            const gameIds = getGameIds();
 
             // Se l'utente è in gioco, inizializza il gioco
             if (data.status === "in_game") {
-                initializeInGameFunction(data.game_id);
+                initializeInGameFunction(gameIds);
             }
         })
         .catch((error) => {
@@ -140,9 +148,9 @@ async function getCurrentGameData(game_id) {
     }
 }
 
-function initializeSocket(game_id) {
+function initializeSocket(gameIds) {
     try {
-        if (!game_id) {
+        if (!gameIds) {
             console.error("Errore: gameId non trovato nell'URL");
             return;
         }
@@ -197,7 +205,12 @@ function initializeSocket(game_id) {
         });
 
         socket.on("connect", () => {
-            socket.emit("joinNewGame", { gameId: game_id });
+            gameIds.forEach((game_id) => {
+                socket.emit("joinNewGame", { gameId: game_id });
+                console.log(
+                    `Richiesta di joinNewGame inviata per il game ${game_id}`
+                );
+            });
         });
     } catch (error) {
         console.error(

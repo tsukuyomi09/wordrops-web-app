@@ -182,6 +182,8 @@ const gameStatus = require("./src/routes/gameStatus");
 const playerReady = require("./src/routes/playerReady");
 const gameRoute = require("./src/routes/gameRoute");
 const gameRouteData = require("./src/routes/gameData");
+const gamesRouteData = require("./src/routes/gamesData");
+
 const saveChapterChangeTurn = require("./src/routes/saveChapterChangeTurn");
 const getChapters = require("./src/routes/getChapters");
 const verifyLogIn = require("./src/routes/verifyLogIn");
@@ -206,6 +208,7 @@ app.use(gameRoute);
 app.use(saveChapterChangeTurn);
 app.use(getChapters);
 app.use(gameRouteData);
+app.use(gamesRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
 

@@ -11,13 +11,10 @@ const checkUserStatus = async (req, res, next) => {
 
         if (playersMap.has(userId)) {
             const userGames = playersMap.get(userId).games;
-            const firstGameId = Object.keys(userGames)[0];
             req.userGames = userGames;
-            req.game_id = firstGameId || null;
             req.userStatus = "in_game";
         } else {
             req.userGames = null;
-            req.game_id = null;
             req.userStatus = "not_in_game";
         }
 

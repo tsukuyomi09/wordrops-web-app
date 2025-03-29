@@ -149,7 +149,6 @@ function initSocket() {
             document
                 .getElementById("game-ready-container")
                 .classList.remove("hidden");
-            displayTurnOrder(data.turnOrder);
             setTimeout(() => {
                 window.location.href = `/game/${data.gameId}`;
             }, 3000);
@@ -173,20 +172,6 @@ function readyToPlay() {
     } else {
         console.log("Non sei ancora stato assegnato a un gioco.");
     }
-}
-
-function displayTurnOrder(turnOrder) {
-    const turnContainer = document.getElementById("turn-order-container");
-
-    turnContainer.innerHTML = "";
-    turnOrder.forEach((playerId, index) => {
-        const turnElement = document.createElement("div");
-        turnElement.classList.add("turn");
-        turnElement.textContent = `Turno ${index + 1}: Giocatore ${playerId}`;
-        turnContainer.appendChild(turnElement);
-    });
-
-    turnContainer.classList.remove("hidden");
 }
 
 const sound = document.getElementById("click-sound");
@@ -333,19 +318,41 @@ function fetchdashboardData() {
         .then((data) => {
             username = data.username;
             const status = data.status;
-            game_id = data.game_id;
-            const queueButton = document.getElementById("new-game-button");
-            const backToGameButton =
-                document.getElementById("backToGame-button");
+            const games = data.games; // Più giochi attivi
+            console.log(`games: ${JSON.stringify(games, null, 2)}`);
+
             const statusContainer = document.getElementById("status-div");
             const gameUiContainer = document.getElementById("gameUI-update");
+            const buttonsContainer = document.getElementById(
+                "game-buttons-container"
+            );
 
-            if (status === "in_game") {
+            // Pulizia pulsanti precedenti
+            buttonsContainer.innerHTML = "";
+
+            if (
+                status === "in_game" &&
+                games &&
+                Object.keys(games).length > 0
+            ) {
                 gameUiContainer.classList.remove("hidden");
                 statusContainer.classList.remove("hidden");
-                backToGameButton.classList.remove("hidden");
-                queueButton.classList.add("hidden");
+
+                // Creazione di un pulsante per ogni gioco attivo
+                Object.entries(games).forEach(([gameId, gameStatus]) => {
+                    const button = document.createElement("button");
+                    button.innerText = `Torna a Game ${gameId}`;
+                    button.onclick = () => handleBackToGame(gameId);
+                    button.className =
+                        "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
+
+                    buttonsContainer.appendChild(button);
+                });
+            } else {
+                gameUiContainer.classList.add("hidden");
+                statusContainer.classList.add("hidden");
             }
+
             fetchAvatarData(username);
             displayItems(username);
         })
@@ -442,10 +449,10 @@ function abandonQueue() {
         });
 }
 
-function backToGameButton() {
-    if (game_id) {
+function handleBackToGame(firstGameId) {
+    if (firstGameId) {
         // Reindirizza alla pagina del gioco
-        window.location.href = `/game/${game_id}`;
+        window.location.href = `/game/${firstGameId}`;
     } else {
         console.error("game_id non trovato. Impossibile tornare in partita.");
     }

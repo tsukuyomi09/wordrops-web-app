@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 const { getSocket } = require("./socketManager");
+const { saveNormalGame } = require("../services/saveGame");
 
 const activeGames = new Map();
 const playersMap = new Map();
@@ -36,7 +37,7 @@ async function createGameAndAssignPlayers(game) {
             readyPlayersCount: 0,
             turnIndex: 0,
             connections: [],
-            countdownDuration: 1800000, // 30 minutes
+            countdownDuration: 10000, // 1 minutes
             countdownStart: null, // Valore iniziale
             countdownEnd: null,
             countdownInterval: null,
@@ -77,18 +78,95 @@ function startCountdown(newGameId) {
     game.countdownStart = now;
     game.countdownEnd = now + game.countdownDuration;
 
-    // Se esiste già un intervallo, lo cancella
     if (game.countdownInterval) {
         clearInterval(game.countdownInterval);
     }
 
-    // Avvia un nuovo intervallo
-    game.countdownInterval = setInterval(() => {
+    game.countdownInterval = setInterval(async () => {
         const remainingTime = game.countdownEnd - Date.now();
         if (remainingTime <= 0) {
-            game.status = "ready-to-start";
             clearInterval(game.countdownInterval);
             game.countdownInterval = null;
+
+            console.log(
+                `Tempo scaduto per il turno di ${
+                    game.turnOrder[game.turnIndex].username
+                }`
+            );
+
+            // Esegui la logica di cambio turno anche senza capitolo scritto
+            const currentPlayer = game.turnOrder[game.turnIndex];
+            const emptyChapter = {
+                title: "Capitolo saltato",
+                content: "[Tempo scaduto]",
+                author: currentPlayer.username,
+                user_id: currentPlayer.id,
+                isValid: false,
+            };
+            console.log(`author ${currentPlayer.username}`);
+            console.log(`user_id ${currentPlayer.id}`);
+            console.log(
+                "currentPlayer:",
+                JSON.stringify(currentPlayer, null, 2)
+            );
+
+            game.chapters.push(emptyChapter);
+            console.log("chapters:", JSON.stringify(game.chapters, null, 2));
+
+            if (game.chapters.length === 5) {
+                try {
+                    const saveSuccess = await saveNormalGame(game);
+                    if (saveSuccess) {
+                        const players = game.players;
+                        console.log("Players array:", players);
+
+                        players.forEach((player) => {
+                            const playerId = player.id; // Estrai l'ID dal singolo oggetto player
+                            console.log(`Checking player ${playerId}`);
+
+                            const playerData = playersMap.get(playerId);
+
+                            if (playerData) {
+                                console.log(`Before delete:`, playerData.games);
+                                delete playerData.games[newGameId];
+
+                                console.log(`After delete:`, playerData.games);
+
+                                if (
+                                    Object.keys(playerData.games).length === 0
+                                ) {
+                                    console.log(
+                                        `Removing player ${playerId} from playersMap`
+                                    );
+                                    playersMap.delete(playerId);
+                                }
+                            } else {
+                                console.log(
+                                    `Player ${playerId} not found in playersMap.`
+                                );
+                            }
+                        });
+
+                        activeGames.delete(newGameId);
+                        io.to(newGameId).emit("gameCompleted");
+                        return;
+                    }
+                } catch (err) {
+                    console.error("Errore nel salvataggio del gioco:", err);
+                }
+            }
+
+            game.turnIndex = (game.turnIndex + 1) % game.turnOrder.length;
+            const nextPlayer = game.turnOrder[game.turnIndex];
+
+            startCountdown(newGameId);
+
+            io.to(newGameId).emit("nextChapterUpdate", {
+                gameId: newGameId,
+                chapter: emptyChapter,
+                nextPlayer: nextPlayer,
+                previousAuthor: currentPlayer.username,
+            });
         } else {
             const minutes = Math.floor(remainingTime / 60000);
             const seconds = Math.floor((remainingTime % 60000) / 1000);
@@ -115,6 +193,8 @@ function addGameForPlayer(playerId, gameId, status = "in_progress") {
 
     // Riaffetta i dati aggiornati alla mappa
     playersMap.set(playerId, playerData);
+
+    console.log("📌 Stato attuale di playersMap:", playersMap);
 }
 
 module.exports = {

@@ -11,23 +11,22 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
         return res.status(404).json({ error: "Gioco non trovato" });
     }
 
-    const { players, turnOrder, turnIndex } = game;
+    const { players, turnOrder, turnIndex, status } = game;
     const currentPlayer = players.find(
         (player) => player.id === turnOrder[turnIndex].id
     );
 
     if (!currentPlayer) {
-        return res
-            .status(500)
-            .json({
-                error: "Errore nella determinazione del giocatore attuale",
-            });
+        return res.status(500).json({
+            error: "Errore nella determinazione del giocatore attuale",
+        });
     }
 
     res.status(200).json({
         players,
         turnOrder,
         currentPlayer,
+        status,
     });
 });
 
