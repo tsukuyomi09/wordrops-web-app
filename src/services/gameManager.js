@@ -1,68 +1,52 @@
-const { client } = require('../database/db'); 
-const { getSocket } = require('./socketManager');
+const { v4: uuidv4 } = require("uuid");
+const { getSocket } = require("./socketManager");
+const { saveNormalGame } = require("../services/saveGame");
 
-
-const activeGames = new Map(); 
+const activeGames = new Map();
+const playersMap = new Map();
 
 async function createGameAndAssignPlayers(game) {
-    let newGameId;
+    newGameId = Date.now();
 
     try {
-        // Creazione del gioco nel database
-        const result = await client.query(`
-            INSERT INTO games (status, started_at) 
-            VALUES ('in-progress', NOW()) 
-            RETURNING game_id;
-        `);
+        const playerIds = game.map((player) => player.id);
+        newGameId = uuidv4();
 
-        newGameId = result.rows[0].game_id;
-
-        // Aggiunta dei giocatori alla partita
-        const playerPromises = game.map(player => {
-            return client.query(`
-                INSERT INTO players_in_game (game_id, user_id) 
-                VALUES ($1, $2)
-                ON CONFLICT (game_id, user_id) DO NOTHING;
-            `, [newGameId, player.id]);
+        game.forEach((player) => {
+            // Aggiungi il gioco per ogni giocatore
+            addGameForPlayer(player.id, newGameId);
         });
 
-        const playerIds = game.map(player => player.id);
-        await client.query(`
-            UPDATE users 
-            SET status = 'in_game'
-            WHERE user_id = ANY($1);
-        `, [playerIds]);
-
-        // Aspettiamo che tutti i giocatori siano assegnati
-        await Promise.all(playerPromises);
-
-        const turnOrder = shuffleArray(game.map(player => ({
-            id: player.id,
-            username: player.username,
-            avatar: player.avatar // Assicurati che l'avatar sia presente
-        })));
+        const turnOrder = shuffleArray(
+            game.map((player) => ({
+                id: player.id,
+                username: player.username,
+                avatar: player.avatar, // Assicurati che l'avatar sia presente
+            }))
+        );
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
+            type: null,
+            votes: {},
             players: game,
             chapters: [],
-            status: 'to-start',
+            status: "to-start",
             turnOrder: turnOrder,
             readyPlayersCount: 0,
             turnIndex: 0,
             connections: [],
-            countdownDuration: 1800000, // 30 minutes
-            countdownStart: null,    // Valore iniziale
+            countdownDuration: 10000, // 1 minutes
+            countdownStart: null, // Valore iniziale
             countdownEnd: null,
             countdownInterval: null,
-            startedAt: new Date()
+            startedAt: new Date(),
         });
 
-        console.log("Active Games - Full Log after adding the game:", JSON.stringify(Array.from(activeGames.entries()), null, 2));
+        console.log("Current activeGames map:", activeGames);
 
         return { gameId: newGameId, turnOrder };
-
     } catch (err) {
         console.error("Errore nella creazione del gioco:", err);
         throw err;
@@ -84,7 +68,7 @@ function getActiveGames() {
 
 function startCountdown(newGameId) {
     const io = getSocket();
-    const game = activeGames.get(Number(newGameId));
+    const game = activeGames.get(newGameId);
     if (!game) {
         console.error(`Gioco con ID ${newGameId} non trovato`);
         return;
@@ -94,33 +78,129 @@ function startCountdown(newGameId) {
     game.countdownStart = now;
     game.countdownEnd = now + game.countdownDuration;
 
-    // Se esiste già un intervallo, lo cancella
     if (game.countdownInterval) {
         clearInterval(game.countdownInterval);
-        console.log(`Intervallo esistente cancellato per il gioco ${newGameId}`);
     }
 
-    // Avvia un nuovo intervallo
-    game.countdownInterval = setInterval(() => {
+    game.countdownInterval = setInterval(async () => {
         const remainingTime = game.countdownEnd - Date.now();
         if (remainingTime <= 0) {
-            console.log(`Countdown terminato per il gioco ${newGameId}`);
-            game.status = 'ready-to-start';
             clearInterval(game.countdownInterval);
             game.countdownInterval = null;
+
+            console.log(
+                `Tempo scaduto per il turno di ${
+                    game.turnOrder[game.turnIndex].username
+                }`
+            );
+
+            // Esegui la logica di cambio turno anche senza capitolo scritto
+            const currentPlayer = game.turnOrder[game.turnIndex];
+            const emptyChapter = {
+                title: "Capitolo saltato",
+                content: "[Tempo scaduto]",
+                author: currentPlayer.username,
+                user_id: currentPlayer.id,
+                isValid: false,
+            };
+            console.log(`author ${currentPlayer.username}`);
+            console.log(`user_id ${currentPlayer.id}`);
+            console.log(
+                "currentPlayer:",
+                JSON.stringify(currentPlayer, null, 2)
+            );
+
+            game.chapters.push(emptyChapter);
+            console.log("chapters:", JSON.stringify(game.chapters, null, 2));
+
+            if (game.chapters.length === 5) {
+                try {
+                    const saveSuccess = await saveNormalGame(game);
+                    if (saveSuccess) {
+                        const players = game.players;
+                        console.log("Players array:", players);
+
+                        players.forEach((player) => {
+                            const playerId = player.id; // Estrai l'ID dal singolo oggetto player
+                            console.log(`Checking player ${playerId}`);
+
+                            const playerData = playersMap.get(playerId);
+
+                            if (playerData) {
+                                console.log(`Before delete:`, playerData.games);
+                                delete playerData.games[newGameId];
+
+                                console.log(`After delete:`, playerData.games);
+
+                                if (
+                                    Object.keys(playerData.games).length === 0
+                                ) {
+                                    console.log(
+                                        `Removing player ${playerId} from playersMap`
+                                    );
+                                    playersMap.delete(playerId);
+                                }
+                            } else {
+                                console.log(
+                                    `Player ${playerId} not found in playersMap.`
+                                );
+                            }
+                        });
+
+                        activeGames.delete(newGameId);
+                        io.to(newGameId).emit("gameCompleted");
+                        return;
+                    }
+                } catch (err) {
+                    console.error("Errore nel salvataggio del gioco:", err);
+                }
+            }
+
+            game.turnIndex = (game.turnIndex + 1) % game.turnOrder.length;
+            const nextPlayer = game.turnOrder[game.turnIndex];
+
+            startCountdown(newGameId);
+
+            io.to(newGameId).emit("nextChapterUpdate", {
+                gameId: newGameId,
+                chapter: emptyChapter,
+                nextPlayer: nextPlayer,
+                previousAuthor: currentPlayer.username,
+            });
         } else {
             const minutes = Math.floor(remainingTime / 60000);
             const seconds = Math.floor((remainingTime % 60000) / 1000);
-            io.in(Number(newGameId)).emit('gameUpdate', { 
+            io.in(newGameId).emit("gameUpdate", {
                 remainingTime,
                 formatted: `${minutes}m ${seconds}s`,
             });
         }
     }, 1000);
-
-    console.log(`Countdown avviato per il gioco ${newGameId}`);
 }
 
+function addGameForPlayer(playerId, gameId, status = "in_progress") {
+    // Se il giocatore non esiste, crea una nuova entry
+    if (!playersMap.has(playerId)) {
+        playersMap.set(playerId, {
+            games: {},
+        });
+    }
 
+    // Ottieni i dati del giocatore
+    const playerData = playersMap.get(playerId);
+    // Aggiungi il gioco alla mappa del giocatore con lo stato
+    playerData.games[gameId] = status;
 
-module.exports = { createGameAndAssignPlayers, activeGames, getActiveGames, startCountdown };
+    // Riaffetta i dati aggiornati alla mappa
+    playersMap.set(playerId, playerData);
+
+    console.log("📌 Stato attuale di playersMap:", playersMap);
+}
+
+module.exports = {
+    createGameAndAssignPlayers,
+    activeGames,
+    getActiveGames,
+    startCountdown,
+    playersMap,
+};

@@ -96,12 +96,6 @@ document.getElementById("waiting-list-form").addEventListener("submit", async (e
     const waitingListGender = document.getElementById("gender").value;
     const waitingListAge = document.getElementById("age_range").value;
 
-    console.log(`name: ${waitingListName}`)
-    console.log(`waitingListEmail: ${waitingListEmail}`)
-    console.log(`waitingListpreferences: ${waitingListpreferences}`)
-    console.log(`waitingListGender: ${waitingListGender}`)
-    console.log(`waitingListAge: ${waitingListAge}`)
-
     try {
         const response = await fetch("/waiting-list", {
             method: "POST",

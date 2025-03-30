@@ -5,9 +5,6 @@ document.getElementById("registrationForm").addEventListener("submit", async (e)
     const userPassword = document.getElementById("regPassword").value;
     const userName = document.getElementById("regUserName").value;
 
-    console.log(`email: ${userEmail}`)
-    console.log(`password: ${userPassword}`)
-
     try{
         const response = await fetch("/register", {
             method: "POST",

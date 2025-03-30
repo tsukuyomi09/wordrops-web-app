@@ -1,37 +1,51 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const path = require('path');
-const checkAuth = require('../middlewares/checkAuthToken');
-const checkUserGameStatus = require('../routes/checkUserGameStatus');
-const { activeGames } = require('../services/gameManager');
+const path = require("path");
+const checkAuth = require("../middlewares/checkAuthToken");
+const checkUserGameStatus = require("../routes/checkUserGameStatus");
+const { activeGames } = require("../services/gameManager");
 
-router.get('/game/:gameId', checkAuth, checkUserGameStatus, async (req, res) => {
-    console.log(`Parametri URL: `, req.params);  // Visualizza l'oggetto params
-    const { gameId: URLgameId } = req.params;  // Estrai e rinomina il gameId in URLgameId
-    const { isInGame } = req;  
-    const { gameId } = req;  
-    console.log(`urlgameID: ${URLgameId}`);  // Visualizza il valore di gameId dalla URL
-    console.log(`gameId: ${gameId}`);  // Visualizza il gameId dell'utente
+router.get(
+    "/game/:gameId",
+    checkAuth,
+    checkUserGameStatus,
+    async (req, res) => {
+        const { gameId: URLgameId } = req.params; // Estrai e rinomina il gameId in URLgameId
+        const { isInGame } = req;
+        const { gameId } = req;
 
-    if (isInGame && Number(URLgameId) === Number(gameId)) {
-        const game = activeGames.get(Number(URLgameId));
+        console.log(
+            `User ${req.user_id} is checking game with ID: ${URLgameId}`
+        );
 
-        // Se il gioco non è in corso (status non è 'in-progress')
-        if (game.status == 'to-start') {
-            // Invio della pagina di gioco con il flag del popup
-            res.sendFile(path.join(__dirname, '..', '..', 'views', 'game.html'), {
-                popup: true // Indica al client che deve mostrare il popup
-            });
+        if (isInGame && URLgameId === gameId) {
+            const game = activeGames.get(URLgameId);
+
+            if (game.status == "to-start") {
+                console.log(
+                    `Game ${gameId} is not started yet, showing popup...`
+                );
+                // Invio della pagina di gioco con il flag del popup
+                res.sendFile(
+                    path.join(__dirname, "..", "..", "views", "game.html"),
+                    {
+                        popup: true, // Indica al client che deve mostrare il popup
+                    }
+                );
+            } else {
+                console.log(`Game ${gameId} is in progress, no popup.`);
+                // Se il gioco è in corso, invia solo la pagina senza il popup
+                res.sendFile(
+                    path.join(__dirname, "..", "..", "views", "game.html")
+                );
+            }
         } else {
-            // Se il gioco è in corso, invia solo la pagina senza il popup
-            res.sendFile(path.join(__dirname, '..', '..', 'views', 'game.html'));
+            console.log(
+                `User ${req.user_id} is not in game ${URLgameId}, redirecting to dashboard.`
+            );
+            res.redirect(`/dashboard/${req.username}`);
         }
-
-        // Se il gioco è in corso, invia la pagina di gioco
-        res.sendFile(path.join(__dirname, '..', '..', 'views', 'game.html'));
-    } else {
-        res.redirect(`/dashboard/${req.username}`);
     }
-});
+);
 
 module.exports = router;

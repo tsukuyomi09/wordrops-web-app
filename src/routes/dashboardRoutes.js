@@ -7,8 +7,6 @@ const checkUserGameStatus = require('../routes/checkUserGameStatus');
 
 router.get('/dashboard/:username', checkAuth, checkUserGameStatus, async (req, res) => {
     const { username } = req.params;  
-    console.log(`Username nell'URL: ${username}`);
-    console.log(`ID utente autenticato: ${req.user_id} (${req.username})`);
 
     try {
         if (username !== req.username) {

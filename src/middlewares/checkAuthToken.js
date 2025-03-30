@@ -12,9 +12,7 @@ const checkAuth = (req, res, next) => {
         const secretKey = process.env.ACCESS_TOKEN_SECRET;
 
         const decoded = jwt.verify(token, secretKey);
-        console.log("Decoded token:", decoded);
         req.user_id = decoded.userId;  
-        console.log("user_id:", req.user_id);
         req.username = decoded.username;
 
         next();

@@ -13,7 +13,6 @@ async function checkSessionStatus() {
                 window.location.href = '/';
             }
         } else {
-            console.log("Sessione valida");
 
             const currentPath = window.location.pathname;
             if (currentPath === '/register19090903') {

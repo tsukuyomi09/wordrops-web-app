@@ -1,9 +1,4 @@
-.blue-bg {
-  background-image: url('/images/main-bg-color.jpg');
-  background-size: cover; /* Copre tutta l'area visibile */
-  background-position: center; /* Centra l'immagine */
-  background-repeat: no-repeat; /* Evita che l'immagine si ripeta */
-}
+
 
 .avatar-container {
     visibility: hidden;  /* Imposta la visibilità iniziale a hidden */
@@ -15,6 +10,7 @@
     visibility: visible;  /* Imposta la visibilità a visible */
     opacity: 1;            /* Imposta l'opacità a 1 */
 }
+
 
 .font-consolas {
 font-family: 'Consolas', 'Courier New', monospace;
@@ -79,6 +75,7 @@ font-family: 'Consolas', 'Courier New', monospace;
     mix-blend-mode:screen;
     pointer-events: none;
 }
+
 
 // game mode animation
 
@@ -147,19 +144,15 @@ font-family: 'Consolas', 'Courier New', monospace;
 // quill styles
 
 .ql-size-small {
-  font-size: 16px;
+  font-size: 20px; !important
 }
 
 .ql-size-medium {
-  font-size: 20px;
+  font-size: 28px; !important
 }
 
 .ql-size-large {
-  font-size: 24px;
-}
-
-.ql-size-huge {
-  font-size: 28px;
+  font-size: 36px; !important
 }
 
 
@@ -167,7 +160,70 @@ font-family: 'Consolas', 'Courier New', monospace;
   animation: fadein 0.5s;
 }
 
+.min-height-custom {
+  min-height: 300px; 
+}
+
 @keyframes fadein {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+
+.swiper-pagination {
+  background: rgba(5, 81, 223, 0.18) !important; /* Azzurro chiaro con opacità */
+  backdrop-filter: blur(15px) !important; /* Aggiungi più blur per un effetto più morbido */
+  border: 1px solid rgba(173, 216, 230, 0.5) !important; /* Bordo azzurro chiaro */
+  border-radius: 15px !important;
+  padding: 5px 10px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  width: auto !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px;
+  align-items: center !important;
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  bottom: 40px !important; 
+}
+
+.swiper-pagination-bullet {
+  background-color: rgba(255, 255, 255, 1) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  width: 24px !important;  
+  height: 24px !important;  
+  opacity: 1 !important;
+
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  border-radius: 50% !important;
+  outline: 2px solid red !important;
+}
+
+.swiper-pagination-bullet:nth-child(1) {
+  background-image: url('/images/icons/play-game.png') !important;
+}
+
+.swiper-pagination-bullet:nth-child(2) {
+  background-image: url('/images/icons/stats-medal.png') !important;
+}
+
+.swiper-pagination-bullet:nth-child(3) {
+  background-image: url('/images/icons/icons8-lettura-64.png') !important;
+}
+
+.swiper-pagination-bullet:nth-child(4) {
+  background-image: url('/images/icons/book-icon.png') !important; 
+}
+
+.swiper-pagination-bullet:nth-child(5) {
+  background-image: url('/images/icons/fire-icon.png') !important;
+}
+
+

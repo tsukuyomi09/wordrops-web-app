@@ -1,20 +1,32 @@
-const express = require('express');
-const { userGameMap } = require('./queueRoutesNew');
+const { playersMap } = require("../services/gameManager");
 
 const checkUserGameStatus = (req, res, next) => {
-    const user_id = req.user_id;  // Ottenuto dal middleware `checkAuth`
+    const user_id = req.user_id;
 
-    if (userGameMap.has(user_id)) {
-        const gameId = userGameMap.get(user_id);
-        req.isInGame = true;  // Indica che l'utente è in partita
-        req.gameId = gameId;  // Associa il gameId alla richiesta
+    console.log(`Checking if user ${user_id} is in a game...`);
+
+    console.log("Current playersMap:", playersMap);
+
+    if (playersMap.has(user_id)) {
+        const games = playersMap.get(user_id).games;
+        console.log(
+            `User ${user_id} is in the playersMap. Checking their games...`
+        );
+
+        const gameId = req.params.gameId;
+        if (games[gameId]) {
+            console.log(`User ${user_id} is in game ${gameId}`);
+            req.isInGame = true;
+            req.gameId = gameId;
+        } else {
+            console.log(`User ${user_id} is not in game ${gameId}`);
+            req.isInGame = false;
+        }
     } else {
-        console.log(`Utente ${user_id} non è in una partita.`);
-        req.isInGame = false;  // Indica che l'utente non è in partita
+        req.isInGame = false;
     }
 
-    next(); // Passa al prossimo middleware o route handler
+    next();
 };
 
 module.exports = checkUserGameStatus;
-
