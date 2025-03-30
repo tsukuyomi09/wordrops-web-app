@@ -37,7 +37,7 @@ async function createGameAndAssignPlayers(game) {
             readyPlayersCount: 0,
             turnIndex: 0,
             connections: [],
-            countdownDuration: 10000, // 1 minutes
+            countdownDuration: 1800000, // 30 minutes
             countdownStart: null, // Valore iniziale
             countdownEnd: null,
             countdownInterval: null,

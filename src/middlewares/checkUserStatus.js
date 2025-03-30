@@ -13,9 +13,11 @@ const checkUserStatus = async (req, res, next) => {
             const userGames = playersMap.get(userId).games;
             req.userGames = userGames;
             req.userStatus = "in_game";
+            req.maxGamesReached = Object.keys(userGames).length >= 5;
         } else {
             req.userGames = null;
             req.userStatus = "not_in_game";
+            req.maxGamesReached = false;
         }
 
         next();

@@ -5,7 +5,7 @@ const checkUserStatus = require("../middlewares/checkUserStatus");
 
 router.get("/userData", checkAuth, checkUserStatus, async (req, res) => {
     try {
-        const { username, userStatus, userGames } = req; // Recupera il `username` direttamente da `req`
+        const { username, userStatus, userGames, maxGamesReached } = req; // Recupera il `username` direttamente da `req`
 
         if (!username) {
             return res.status(404).json({ error: "Username non trovato" });
@@ -16,6 +16,7 @@ router.get("/userData", checkAuth, checkUserStatus, async (req, res) => {
             username,
             games: userGames,
             status: userStatus,
+            maxGamesReached,
         });
     } catch (err) {
         console.error("Errore durante il recupero dello username:", err);

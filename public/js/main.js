@@ -319,7 +319,9 @@ function fetchdashboardData() {
             username = data.username;
             const status = data.status;
             const games = data.games; // Più giochi attivi
+            const maxGamesReached = data.maxGamesReached; // Nuova proprietà ricevuta
             console.log(`games: ${JSON.stringify(games, null, 2)}`);
+            console.log(`Max games reached: ${maxGamesReached}`);
 
             const statusContainer = document.getElementById("status-div");
             const gameUiContainer = document.getElementById("gameUI-update");
@@ -330,6 +332,25 @@ function fetchdashboardData() {
             // Pulizia pulsanti precedenti
             buttonsContainer.innerHTML = "";
 
+            const newGameButton = document.getElementById("new-game-button");
+            if (newGameButton) {
+                if (maxGamesReached) {
+                    newGameButton.innerText = "LIMITE RAGGIUNTO";
+                    newGameButton.disabled = true;
+                    newGameButton.classList.add(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                } else {
+                    newGameButton.innerText = "NUOVA PARTITA";
+                    newGameButton.disabled = false;
+                    newGameButton.classList.remove(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                }
+            }
+
             if (
                 status === "in_game" &&
                 games &&
@@ -339,9 +360,9 @@ function fetchdashboardData() {
                 statusContainer.classList.remove("hidden");
 
                 // Creazione di un pulsante per ogni gioco attivo
-                Object.entries(games).forEach(([gameId, gameStatus]) => {
+                Object.entries(games).forEach(([gameId, gameStatus], index) => {
                     const button = document.createElement("button");
-                    button.innerText = `Torna a Game ${gameId}`;
+                    button.innerText = `Torna al game ${index + 1}`; // Usa un numero sequenziale invece del gameId
                     button.onclick = () => handleBackToGame(gameId);
                     button.className =
                         "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
