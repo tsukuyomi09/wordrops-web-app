@@ -547,6 +547,19 @@ function openOverlay() {
     e;
 }
 
+// function change grayscale select game images
+
+const img1 = document.getElementById("img1");
+const img2 = document.getElementById("img2");
+
+function toggleGrayscale(hovered, other) {
+    hovered.style.filter = "grayscale(0%)";
+    other.style.filter = "grayscale(60%)";
+}
+
+img1.addEventListener("mouseenter", () => toggleGrayscale(img1, img2));
+img2.addEventListener("mouseenter", () => toggleGrayscale(img2, img1));
+
 // function to close select game overlay
 
 function closeOverlay() {

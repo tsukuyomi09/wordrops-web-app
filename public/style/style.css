@@ -76,6 +76,11 @@ font-family: 'Consolas', 'Courier New', monospace;
     pointer-events: none;
 }
 
+.custom-filter {
+  filter: grayscale(60%);
+  transition: filter 0.3s ease-in-out;
+}
+
 
 // game mode animation
 
