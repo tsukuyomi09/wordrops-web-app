@@ -395,7 +395,12 @@ fetchdashboardData();
 
 let isInQueue = false;
 
-async function joinQueue() {
+async function joinQueue(mode) {
+    if (!mode) {
+        console.error("Nessuna modalità selezionata.");
+        return;
+    }
+
     newGameSound();
     const backgroundMusicPath = "/images/new-queue-music.ogg";
     // setTimeout(async () => {
@@ -416,7 +421,7 @@ async function joinQueue() {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ socketId, avatarForGame }),
+                body: JSON.stringify({ socketId, avatarForGame, mode }),
             });
 
             if (!response.ok) {

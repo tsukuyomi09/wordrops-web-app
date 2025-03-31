@@ -11,8 +11,17 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
         return res.status(404).json({ error: "Gioco non trovato" });
     }
 
+    // Accedi correttamente all'array di giocatori
     const { players, turnOrder, turnIndex, status } = game;
-    const currentPlayer = players.find(
+    const playersArray = players.players; // Qui accedi al vero array di giocatori
+
+    if (!Array.isArray(playersArray)) {
+        return res.status(500).json({
+            error: "I giocatori non sono in formato array",
+        });
+    }
+
+    const currentPlayer = playersArray.find(
         (player) => player.id === turnOrder[turnIndex].id
     );
 
@@ -23,7 +32,7 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
     }
 
     res.status(200).json({
-        players,
+        players: playersArray,
         turnOrder,
         currentPlayer,
         status,

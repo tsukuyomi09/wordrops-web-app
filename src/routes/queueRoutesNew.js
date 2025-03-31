@@ -4,34 +4,46 @@ const { createGameAndAssignPlayers } = require("../services/gameManager");
 const { activeGames } = require("../services/gameManager");
 const checkAuth = require("../middlewares/checkAuthToken");
 
-let gameQueue = []; // Array per la coda dei giocatori
-let preGameQueue = {}; // Oggetto per i giochi pronti
+gameQueues = {
+    normal_slow: [],
+    normal_fast: [],
+};
+let preGameQueue = {};
 
 // add player to queue
 router.post("/gamequeueNew", checkAuth, (req, res) => {
-    const userId = req.user_id; // Ottieni userId dal middleware
-    const username = req.username; // Ottieni username dal middleware
+    const userId = req.user_id;
+    const username = req.username;
     const socketId = req.body.socketId;
     const avatar = req.body.avatarForGame;
+    const mode = req.body.mode;
 
     if (!userId) {
         return res.status(401).json({ error: "Utente non autenticato" });
     }
 
-    // Controlla se l'utente è già nella queue
-    if (gameQueue.some((player) => player.id === userId)) {
+    if (!mode || !gameQueues[mode]) {
+        return res.status(400).json({ error: "Modalità non valida" });
+    }
+
+    if (
+        Object.values(gameQueues).some((queue) =>
+            queue.some((player) => player.id === userId)
+        )
+    ) {
         return res.status(400).json({ error: "Utente già in coda" });
     }
 
-    // Aggiungi l'utente alla gameQueue con un timestamp
-    gameQueue.push({
+    gameQueues[mode].push({
         id: userId,
         username,
         avatar, // Includi l'avatar
         socketId,
+        mode,
         timestamp: Date.now(),
         pronto: null,
     });
+
     const socket = req.io.sockets.sockets.get(socketId);
     if (socket) {
         setTimeout(() => {
@@ -44,25 +56,25 @@ router.post("/gamequeueNew", checkAuth, (req, res) => {
     }
 
     // Controlla se ci sono 5 giocatori nella coda
-    if (gameQueue.length >= 5) {
-        const players = gameQueue.splice(0, 5);
-        let gameId = `game_${Date.now()}`;
-        preGameQueue[gameId] = players;
+    if (gameQueues[mode].length >= 5) {
+        const players = gameQueues[mode].splice(0, 5); // Rimuovi i primi 5 giocatori dalla coda
+        let gameId = `game_${mode}:${Date.now()}`;
+        preGameQueue[gameId] = {
+            mode, // Salviamo la modalità
+            players, // I giocatori con la modalità già inclusa
+        };
 
         players.forEach((player) => {
             const socket = req.io.sockets.sockets.get(player.socketId);
             if (socket) {
                 socket.join(gameId);
                 socket.emit("gameIdAssigned", { gameId });
-            } else {
-                console.log(
-                    `Nessun socket trovato per ${player.username} con socketId ${player.socketId}`
-                );
             }
         });
+
         setTimeout(() => {
             startCountdownPreGame(req.io, gameId);
-        }, 3000);
+        }, 1000);
     }
 
     return res.status(200).json({ message: "Utente aggiunto alla coda" });
@@ -71,15 +83,25 @@ router.post("/gamequeueNew", checkAuth, (req, res) => {
 // remove player from queue
 router.delete("/gamequeueNew", checkAuth, async (req, res) => {
     const userId = req.user_id; // Ottieni l'ID dell'utente dalla sessione
+    let modeFound = null;
 
-    // Trova l'indice dell'utente nella queue
-    const playerIndex = gameQueue.findIndex((player) => player.id === userId);
-
-    if (playerIndex === -1) {
-        return res.status(400).json({ error: "Utente non trovato nella coda" });
+    // Trova in quale coda si trova l'utente
+    for (const mode in gameQueues) {
+        const playerIndex = gameQueues[mode].findIndex(
+            (player) => player.id === userId
+        );
+        if (playerIndex !== -1) {
+            modeFound = mode;
+            gameQueues[mode].splice(playerIndex, 1);
+            break;
+        }
     }
-    // Rimuovi l'utente dalla queue
-    gameQueue.splice(playerIndex, 1);
+
+    if (!modeFound) {
+        return res
+            .status(400)
+            .json({ error: "Utente non trovato in nessuna coda" });
+    }
 
     req.socket.emit("queueAbandoned", {
         status: "idle",
@@ -88,7 +110,6 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
     res.json({
         status: "idle",
         message: "Utente rimosso dalla coda",
-        gameQueue,
     });
 });
 
@@ -104,7 +125,7 @@ async function startCountdownPreGame(io, gameId) {
             const game = preGameQueue[gameId]; // Recupera il gioco
 
             if (game) {
-                const allReady = game.every((player) => player.pronto);
+                const allReady = game.players.every((player) => player.pronto);
 
                 if (allReady) {
                     const { gameId: newGameId, turnOrder } =
@@ -129,5 +150,5 @@ async function startCountdownPreGame(io, gameId) {
 }
 
 module.exports = router;
-module.exports.gameQueue = gameQueue;
+module.exports.gameQueues = gameQueues;
 module.exports.preGameQueue = preGameQueue;
