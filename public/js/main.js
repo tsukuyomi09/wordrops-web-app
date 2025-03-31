@@ -536,6 +536,28 @@ selectButton.addEventListener("click", () => {
     }
 });
 
+// function to open select game overlay
+function openOverlay() {
+    var overlay = document.getElementById("overlay-new-game");
+    overlay.style.display = "flex";
+    setTimeout(() => {
+        overlay.classList.remove("opacity-0", "translate-y-10");
+        overlay.classList.add("opacity-100", "translate-y-0");
+    }, 10);
+    e;
+}
+
+// function to close select game overlay
+
+function closeOverlay() {
+    var overlay = document.getElementById("overlay-new-game");
+    overlay.classList.remove("opacity-100", "translate-y-0");
+    overlay.classList.add("opacity-0", "translate-y-10");
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 500);
+}
+
 closeButton.addEventListener("click", () => {
     buttonSound();
     if (selectedAvatar) {
