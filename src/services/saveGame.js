@@ -5,10 +5,10 @@ async function saveNormalGame(game) {
         // 1️⃣ Salviamo il gioco nella tabella games_completed
         const finishedAt = new Date();
         const result = await client.query(
-            `INSERT INTO games_completed (title, started_at, finished_at)
-             VALUES ($1, $2, $3)
+            `INSERT INTO games_completed (title, started_at, finished_at, mode)
+             VALUES ($1, $2, $3, $4)
              RETURNING id`,
-            [`Storia ${game.gameId}`, game.startedAt, finishedAt]
+            [`Storia ${game.gameId}`, game.startedAt, finishedAt, game.gameMode]
         );
         const databaseGameId = result.rows[0].id;
 

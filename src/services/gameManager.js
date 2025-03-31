@@ -27,20 +27,18 @@ async function createGameAndAssignPlayers(game) {
         let countdownDuration;
         switch (gameMode) {
             case "normal_slow":
-                countdownDuration = 3600000; // 1 ora (in millisecondi)
+                countdownDuration = 20000;
                 break;
             case "normal_fast":
-                countdownDuration = 600000; // 10 minuti (in millisecondi)
+                countdownDuration = 10000;
                 break;
-            // Puoi aggiungere altre modalità se necessario
-            // Senza un 'default', il codice si ferma qui se gameMode non è riconosciuto
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
             type: null,
-            type: gameMode,
+            gameMode: gameMode,
             votes: {},
             players: game,
             chapters: [],
@@ -129,7 +127,7 @@ function startCountdown(newGameId) {
                 try {
                     const saveSuccess = await saveNormalGame(game);
                     if (saveSuccess) {
-                        const players = game.players;
+                        const players = game.players.players;
                         console.log("Players array:", players);
 
                         players.forEach((player) => {

@@ -58,23 +58,24 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
             console.log("Contenuto di saveSuccess:", saveSuccess);
 
             if (saveSuccess) {
-                const players = game.players;
+                const players = game.players.players;
 
                 console.log("Contenuto di players:", players);
 
                 // Rimuovi il gioco dalla playersMap
-                players.forEach((playerId) => {
-                    const player = playersMap.get(playerId);
-                    console.log(`Checking player ${playerId}`, player); // Debug
+                players.forEach((player) => {
+                    const playerId = player.id; // Ora otteniamo correttamente l'ID
+                    const playerData = playersMap.get(playerId);
+                    console.log(`Checking player ${playerId}`, playerData); // Debug
 
-                    if (player) {
-                        console.log(`Before delete:`, player.games);
-                        delete player.games[gameId]; // Rimuovi il gioco
+                    if (playerData) {
+                        console.log(`Before delete:`, playerData.games);
+                        delete playerData.games[gameId]; // Rimuovi il gioco
 
-                        console.log(`After delete:`, player.games); // Verifica se è stato rimosso
+                        console.log(`After delete:`, playerData.games); // Verifica se è stato rimosso
 
                         // Se il giocatore non ha più giochi, rimuovilo dalla playersMap
-                        if (Object.keys(player.games).length === 0) {
+                        if (Object.keys(playerData.games).length === 0) {
                             console.log(
                                 `Removing player ${playerId} from playersMap`
                             );
