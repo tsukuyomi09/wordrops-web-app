@@ -21,7 +21,114 @@
     </head>
 
     <body class="h-screen">
-        <div class="image-div"></div>
+        <div
+            id="overlay-new-game"
+            class="fixed inset-0 z-50 flex bg-black opacity-0 bg-opacity-100 transform translate-y-10 transition-all duration-500"
+            style="display: none"
+        >
+            <button
+                onclick="closeOverlay()"
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-50 -translate-y-1/2 bg-red-600 text-white font-bold w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
+            >
+                ESCI
+            </button>
+
+            <div
+                class="w-1/2 h-full flex items-center justify-center ml-auto relative group"
+            >
+                <img
+                    id="img1"
+                    class="absolute w-full h-full object-cover opacity-70 custom-filter"
+                    src="/images/homepage-main-img.jpg"
+                    alt="Normal Mode Background"
+                />
+
+                <!-- Contenitore dei pulsanti -->
+                <div class="flex flex-col gap-10 items-center">
+                    <button
+                        id="new-game-button-normal-fast"
+                        onclick="joinQueue('normal_fast')"
+                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-blue-600 border border-white text-white font-semibold px-10 py-6 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                    >
+                        QUICK
+                        <div
+                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 rotate-12 transform"
+                        >
+                            30 MIN
+                        </div>
+                    </button>
+
+                    <div
+                        class="w-full text-center text-white text-6xl font-extrabold z-10"
+                    >
+                        NORMALE
+                    </div>
+
+                    <button
+                        id="new-game-button-normal-slow"
+                        onclick="joinQueue('normal_slow')"
+                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-blue-600 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                    >
+                        ENDURANCE
+                        <div
+                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 rotate-12 transform"
+                        >
+                            12 ORE
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Testo NORMAL -->
+            </div>
+
+            <!-- Sezione destra -->
+
+            <div
+                class="w-1/2 h-full flex items-center justify-center ml-auto relative group"
+            >
+                <img
+                    id="img2"
+                    class="absolute w-full h-full object-cover custom-filter"
+                    src="/images/write-web-app_register-image-version2.png"
+                    alt="Normal Mode Background"
+                />
+
+                <!-- Contenitore dei pulsanti -->
+                <div class="flex flex-col gap-10 items-center">
+                    <button
+                        id="new-game-button-ranked-fast"
+                        onclick="joinQueue('ranked_fast')"
+                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                    >
+                        QUICK
+                        <div
+                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 rotate-12 transform"
+                        >
+                            30 MIN
+                        </div>
+                    </button>
+
+                    <div
+                        class="w-full text-center text-white text-6xl font-extrabold z-10"
+                    >
+                        CLASSIFICATA
+                    </div>
+
+                    <button
+                        id="new-game-button-ranked-slow"
+                        onclick="joinQueue('ranked_slow')"
+                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                    >
+                        ENDURANCE
+                        <div
+                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition duration-300 rotate-12 transform"
+                        >
+                            12 ORE
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div class="swiper-container absolute w-full h-full overflow-hidden">
             <div class="swiper-wrapper flex w-full">
@@ -54,6 +161,7 @@
                                         />
                                     </div>
                                 </div>
+
                                 <div
                                     class="username_container p-4 px-10 inline-block"
                                 >
@@ -76,6 +184,12 @@
                                         class="w-2 h-2 rounded-full bg-green-500"
                                     ></span>
                                 </div>
+                                <button
+                                    onclick="openOverlay()"
+                                    class="bg-green-600 text-white font-bold mt-20 px-4 py-2 w-32 h-16 rounded-xl flex items-center justify-center shadow-lg hover:bg-green-700 transition duration-300"
+                                >
+                                    NUOVA PARTITA
+                                </button>
                                 <div
                                     id="gameUI-update"
                                     class="items-center justify-between p-4"
@@ -98,13 +212,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button
-                                id="new-game-button"
-                                onclick="joinQueue()"
-                                class="hover-sound text-sm mt-6 bg-blue-700 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold"
-                            >
-                                NUOVA <br />PARTITA
-                            </button>
+
                             <div
                                 id="game-buttons-container"
                                 class="flex flex-wrap gap-4 mt-6"
@@ -212,6 +320,7 @@
                 alt="Loading Animation"
             />
         </div>
+
         <div class="page-wrap p-6 relative min-h-screen">
             <!-- queue overlay -->
             <div

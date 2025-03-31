@@ -47,6 +47,7 @@ io.on("connection", (socket) => {
 
             // Trova il gioco specificato
             const game = preGameQueue[gameId];
+            console.log("Contenuto di game:", game);
 
             if (!game) {
                 console.error(`Gioco con ID ${gameId} non trovato`);
@@ -54,7 +55,7 @@ io.on("connection", (socket) => {
             }
 
             // Trova il giocatore specificato, confrontando con socketId
-            const player = game.find((p) => p.socketId === userId); // Cambiato da p.id a p.socketId
+            const player = game.players.find((p) => p.socketId === userId); // Cambiato da p.id a p.socketId
 
             if (!player) {
                 console.error(

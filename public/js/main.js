@@ -319,7 +319,9 @@ function fetchdashboardData() {
             username = data.username;
             const status = data.status;
             const games = data.games; // Più giochi attivi
+            const maxGamesReached = data.maxGamesReached; // Nuova proprietà ricevuta
             console.log(`games: ${JSON.stringify(games, null, 2)}`);
+            console.log(`Max games reached: ${maxGamesReached}`);
 
             const statusContainer = document.getElementById("status-div");
             const gameUiContainer = document.getElementById("gameUI-update");
@@ -330,6 +332,25 @@ function fetchdashboardData() {
             // Pulizia pulsanti precedenti
             buttonsContainer.innerHTML = "";
 
+            const newGameButton = document.getElementById("new-game-button");
+            if (newGameButton) {
+                if (maxGamesReached) {
+                    newGameButton.innerText = "LIMITE RAGGIUNTO";
+                    newGameButton.disabled = true;
+                    newGameButton.classList.add(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                } else {
+                    newGameButton.innerText = "NUOVA PARTITA";
+                    newGameButton.disabled = false;
+                    newGameButton.classList.remove(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                }
+            }
+
             if (
                 status === "in_game" &&
                 games &&
@@ -339,9 +360,9 @@ function fetchdashboardData() {
                 statusContainer.classList.remove("hidden");
 
                 // Creazione di un pulsante per ogni gioco attivo
-                Object.entries(games).forEach(([gameId, gameStatus]) => {
+                Object.entries(games).forEach(([gameId, gameStatus], index) => {
                     const button = document.createElement("button");
-                    button.innerText = `Torna a Game ${gameId}`;
+                    button.innerText = `Torna al game ${index + 1}`; // Usa un numero sequenziale invece del gameId
                     button.onclick = () => handleBackToGame(gameId);
                     button.className =
                         "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
@@ -374,7 +395,12 @@ fetchdashboardData();
 
 let isInQueue = false;
 
-async function joinQueue() {
+async function joinQueue(mode) {
+    if (!mode) {
+        console.error("Nessuna modalità selezionata.");
+        return;
+    }
+
     newGameSound();
     const backgroundMusicPath = "/images/new-queue-music.ogg";
     // setTimeout(async () => {
@@ -395,7 +421,7 @@ async function joinQueue() {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ socketId, avatarForGame }),
+                body: JSON.stringify({ socketId, avatarForGame, mode }),
             });
 
             if (!response.ok) {
@@ -509,6 +535,41 @@ selectButton.addEventListener("click", () => {
             });
     }
 });
+
+// function to open select game overlay
+function openOverlay() {
+    var overlay = document.getElementById("overlay-new-game");
+    overlay.style.display = "flex";
+    setTimeout(() => {
+        overlay.classList.remove("opacity-0", "translate-y-10");
+        overlay.classList.add("opacity-100", "translate-y-0");
+    }, 10);
+    e;
+}
+
+// function change grayscale select game images
+
+const img1 = document.getElementById("img1");
+const img2 = document.getElementById("img2");
+
+function toggleGrayscale(hovered, other) {
+    hovered.style.filter = "grayscale(0%)";
+    other.style.filter = "grayscale(60%)";
+}
+
+img1.addEventListener("mouseenter", () => toggleGrayscale(img1, img2));
+img2.addEventListener("mouseenter", () => toggleGrayscale(img2, img1));
+
+// function to close select game overlay
+
+function closeOverlay() {
+    var overlay = document.getElementById("overlay-new-game");
+    overlay.classList.remove("opacity-100", "translate-y-0");
+    overlay.classList.add("opacity-0", "translate-y-10");
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 500);
+}
 
 closeButton.addEventListener("click", () => {
     buttonSound();

@@ -6,29 +6,39 @@ const activeGames = new Map();
 const playersMap = new Map();
 
 async function createGameAndAssignPlayers(game) {
-    newGameId = Date.now();
+    newGameId = uuidv4();
 
     try {
-        const playerIds = game.map((player) => player.id);
-        newGameId = uuidv4();
+        const gameMode = game.mode;
 
-        game.forEach((player) => {
+        game.players.forEach((player) => {
             // Aggiungi il gioco per ogni giocatore
-            addGameForPlayer(player.id, newGameId);
+            addGameForPlayer(player.id, newGameId, "in_progress", gameMode);
         });
 
         const turnOrder = shuffleArray(
-            game.map((player) => ({
+            game.players.map((player) => ({
                 id: player.id,
                 username: player.username,
                 avatar: player.avatar, // Assicurati che l'avatar sia presente
             }))
         );
 
+        let countdownDuration;
+        switch (gameMode) {
+            case "normal_slow":
+                countdownDuration = 20000;
+                break;
+            case "normal_fast":
+                countdownDuration = 10000;
+                break;
+        }
+
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
             type: null,
+            gameMode: gameMode,
             votes: {},
             players: game,
             chapters: [],
@@ -37,7 +47,7 @@ async function createGameAndAssignPlayers(game) {
             readyPlayersCount: 0,
             turnIndex: 0,
             connections: [],
-            countdownDuration: 10000, // 1 minutes
+            countdownDuration: countdownDuration,
             countdownStart: null, // Valore iniziale
             countdownEnd: null,
             countdownInterval: null,
@@ -117,7 +127,7 @@ function startCountdown(newGameId) {
                 try {
                     const saveSuccess = await saveNormalGame(game);
                     if (saveSuccess) {
-                        const players = game.players;
+                        const players = game.players.players;
                         console.log("Players array:", players);
 
                         players.forEach((player) => {
@@ -178,20 +188,15 @@ function startCountdown(newGameId) {
     }, 1000);
 }
 
-function addGameForPlayer(playerId, gameId, status = "in_progress") {
-    // Se il giocatore non esiste, crea una nuova entry
+function addGameForPlayer(playerId, gameId, status = "in_progress", mode) {
     if (!playersMap.has(playerId)) {
         playersMap.set(playerId, {
             games: {},
         });
     }
 
-    // Ottieni i dati del giocatore
     const playerData = playersMap.get(playerId);
-    // Aggiungi il gioco alla mappa del giocatore con lo stato
-    playerData.games[gameId] = status;
-
-    // Riaffetta i dati aggiornati alla mappa
+    playerData.games[gameId] = { status, mode }; // Aggiungi anche la modalità nel gioco
     playersMap.set(playerId, playerData);
 
     console.log("📌 Stato attuale di playersMap:", playersMap);
