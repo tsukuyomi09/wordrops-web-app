@@ -27,7 +27,7 @@ async function createGameAndAssignPlayers(game) {
         let countdownDuration;
         switch (gameMode) {
             case "normal_slow":
-                countdownDuration = 20000;
+                countdownDuration = 100000;
                 break;
             case "normal_fast":
                 countdownDuration = 10000;
@@ -107,8 +107,8 @@ function startCountdown(newGameId) {
             // Esegui la logica di cambio turno anche senza capitolo scritto
             const currentPlayer = game.turnOrder[game.turnIndex];
             const emptyChapter = {
-                title: "Capitolo saltato",
-                content: "[Tempo scaduto]",
+                title: null,
+                content: null,
                 author: currentPlayer.username,
                 user_id: currentPlayer.id,
                 isValid: false,

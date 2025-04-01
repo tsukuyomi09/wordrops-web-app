@@ -406,6 +406,7 @@ async function joinQueue(mode) {
     // setTimeout(async () => {
     //     await startBackgroundMusic(backgroundMusicPath);
     // }, 1000);
+    closeOverlay();
 
     await initSocket();
 

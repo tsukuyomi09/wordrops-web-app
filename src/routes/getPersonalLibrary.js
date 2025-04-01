@@ -3,13 +3,13 @@ const router = express.Router();
 const { client } = require("../database/db");
 const checkAuth = require("../middlewares/checkAuthToken");
 
-router.get("/personal-library", checkAuth, async (req, res) => {
+router.get("/personalLibrary", checkAuth, async (req, res) => {
     const user_id = req.user_id; // ID dell'utente
 
     try {
         // Query per ottenere solo id e title delle storie completate
         const { rows } = await client.query(
-            `SELECT DISTINCT g.id, g.title, g.finished_at
+            `SELECT DISTINCT g.id, g.title, g.finished_at, g.back_cover
              FROM games_chapters gc
              JOIN games_completed g ON gc.game_id = g.id
              WHERE gc.author_id = $1
