@@ -25,13 +25,10 @@ async function createGameAndAssignPlayers(game) {
         );
 
         let countdownDuration;
-        switch (gameMode) {
-            case "normal_slow":
-                countdownDuration = 100000;
-                break;
-            case "normal_fast":
-                countdownDuration = 10000;
-                break;
+        if (gameMode.includes("fast")) {
+            countdownDuration = 5000; // 10 secondi per le modalità "fast"
+        } else {
+            countdownDuration = 10000; // 20 secondi per le modalità "slow" o altre
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
@@ -107,26 +104,53 @@ function startCountdown(newGameId) {
             // Esegui la logica di cambio turno anche senza capitolo scritto
             const currentPlayer = game.turnOrder[game.turnIndex];
             const emptyChapter = {
-                title: null,
-                content: null,
+                title: "null",
+                content: "null",
                 author: currentPlayer.username,
                 user_id: currentPlayer.id,
                 isValid: false,
             };
-            console.log(`author ${currentPlayer.username}`);
-            console.log(`user_id ${currentPlayer.id}`);
-            console.log(
-                "currentPlayer:",
-                JSON.stringify(currentPlayer, null, 2)
-            );
+            // console.log(`author ${currentPlayer.username}`);
+            // console.log(`user_id ${currentPlayer.id}`);
+            // console.log(
+            //     "currentPlayer:",
+            //     JSON.stringify(currentPlayer, null, 2)
+            // );
 
             game.chapters.push(emptyChapter);
-            console.log("chapters:", JSON.stringify(game.chapters, null, 2));
 
             if (game.chapters.length === 5) {
+                console.log(`five games reached`);
+                console.log(`games chapters = ${game.chapters.length}`);
+
                 try {
                     const saveSuccess = await saveNormalGame(game);
                     if (saveSuccess) {
+                        if (
+                            ["ranked_slow", "ranked_fast"].includes(
+                                game.gameMode
+                            )
+                        ) {
+                            console.log(
+                                "Ranked game detected, starting scoring process..."
+                            );
+
+                            io.to(newGameId).emit("start-assign-scores");
+                            clearInterval(game.countdownInterval);
+                            game.status = "awaiting_scores";
+
+                            console.log("waiting for scores to be assigned");
+
+                            await new Promise((resolve, reject) => {
+                                // Qui ascoltiamo l'evento "scores-assigned"
+                                io.once("scores-assigned", () => {
+                                    console.log(
+                                        "Scores assigned, proceeding to save..."
+                                    );
+                                    resolve();
+                                });
+                            });
+                        }
                         const players = game.players.players;
                         console.log("Players array:", players);
 

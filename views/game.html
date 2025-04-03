@@ -22,6 +22,21 @@
         />
     </head>
     <body class="bbg-gradient-to-r from-white to-gray-200">
+        <div
+            id="scoreModal"
+            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden z-50"
+        >
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold">Assegna i punteggi</h2>
+                <p>Ora puoi votare i capitoli.</p>
+                <button
+                    onclick="closeModal()"
+                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                    Chiudi
+                </button>
+            </div>
+        </div>
         <div class="page-wrap p-6 relative">
             <div
                 id="new-popup-message"
@@ -43,7 +58,7 @@
 
             <div
                 id="popup-message"
-                class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50"
+                class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-40"
             >
                 <div
                     class="bg-white rounded-lg shadow-lg p-6 text-center max-w-sm w-full"
@@ -161,7 +176,7 @@
 
             <div
                 id="popup-start-countdown"
-                class="hidden fixed inset-0 bg-gray-800 bg-opacity-80 flex items-center justify-center z-50"
+                class="hidden fixed inset-0 bg-gray-800 bg-opacity-80 flex items-center justify-center z-40"
             >
                 <div
                     class="bg-white rounded-lg shadow-lg p-6 max-w-lg text-center"

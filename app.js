@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
 
             // Trova il gioco specificato
             const game = preGameQueue[gameId];
-            console.log("Contenuto di game:", game);
+            // console.log("Contenuto di game:", game);
 
             if (!game) {
                 console.error(`Gioco con ID ${gameId} non trovato`);
@@ -66,12 +66,12 @@ io.on("connection", (socket) => {
 
             // Segna il giocatore come pronto
             player.pronto = true;
-            console.log(
-                `Giocatore ${player.username} è pronto per il gioco ${gameId}`
-            );
+            // console.log(
+            //     `Giocatore ${player.username} è pronto per il gioco ${gameId}`
+            // );
 
             // Stampa lo stato aggiornato della preGameQueue
-            console.log(preGameQueue);
+            // console.log(preGameQueue);
         } catch (error) {
             console.error(
                 "Errore durante l'elaborazione dell'evento 'playerReady':",
@@ -85,28 +85,28 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinNewGame", ({ gameId }) => {
-        console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
-        console.log(`gameId convertito in numero:`, gameId);
-        console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
+        // console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
+        // console.log(`gameId convertito in numero:`, gameId);
+        // console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
         socket.join(gameId);
 
         setTimeout(() => {
             const connectedSockets = io.sockets.adapter.rooms.get(gameId);
-            console.log(
-                `Client connessi alla stanza ${gameId} dopo un ritardo:`,
-                connectedSockets
-                    ? Array.from(connectedSockets)
-                    : "Nessun client connesso"
-            );
+            // console.log(
+            //     `Client connessi alla stanza ${gameId} dopo un ritardo:`,
+            //     connectedSockets
+            //         ? Array.from(connectedSockets)
+            //         : "Nessun client connesso"
+            // );
         }, 50);
 
-        console.log(
-            `Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`,
-            {
-                message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
-                socketId: socket.id,
-            }
-        );
+        // console.log(
+        //     `Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`,
+        //     {
+        //         message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
+        //         socketId: socket.id,
+        //     }
+        // );
 
         io.in(gameId).emit("playerJoined", {
             message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,

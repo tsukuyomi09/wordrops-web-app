@@ -5,8 +5,6 @@ const checkUserGameStatus = (req, res, next) => {
 
     console.log(`Checking if user ${user_id} is in a game...`);
 
-    console.log("Current playersMap:", playersMap);
-
     if (playersMap.has(user_id)) {
         const games = playersMap.get(user_id).games;
         console.log(

@@ -49,10 +49,25 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     };
 
     game.chapters.push(newChapter);
-    console.log(`games chapters = ${game.chapters.length}`);
     if (game.chapters.length === 5) {
         try {
             console.log(`five games reached`);
+            console.log(`games chapters = ${game.chapters.length}`);
+
+            // check if game is ranked before saving, if it is, begin scoring
+            if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
+                console.log(
+                    "Ranked game detected, starting scoring process..."
+                );
+
+                req.io.to(gameId).emit("start-assign-scores");
+
+                // Esegui il calcolo dei punteggi prima di salvare
+                await initiateAssignScore(game);
+
+                console.log("Scoring completed, proceeding to save...");
+            }
+
             // Salva il gioco e i capitoli
             const saveSuccess = await saveNormalGame(game); // Attendi il risultato della funzione
             console.log("Contenuto di saveSuccess:", saveSuccess);
@@ -109,8 +124,6 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
     const nextPlayer = game.turnOrder[game.turnIndex];
-
-    console.log("Log del game");
 
     startCountdown(gameId);
 

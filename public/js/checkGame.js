@@ -61,16 +61,24 @@ async function fetchGameData(game_id) {
         const data = await response.json();
         console.log("Dati gioco:", data);
 
-        updateCurrentPlayerDisplay(data.currentPlayer);
-        updateTurnOrderDisplay(data.turnOrder);
-        handleEditorAccess(
-            data.currentPlayer,
-            localStorage.getItem("username")
-        );
-        foxAnimation();
+        if (data.status === "in_game") {
+            // Se lo status è "in_game", esegui tutto ciò che c'è
+            updateCurrentPlayerDisplay(data.currentPlayer);
+            updateTurnOrderDisplay(data.turnOrder);
+            handleEditorAccess(
+                data.currentPlayer,
+                localStorage.getItem("username")
+            );
+            foxAnimation();
 
-        // Fetch per i capitoli del gioco
-        fetchGameChapters(game_id);
+            // Fetch per i capitoli del gioco
+            fetchGameChapters(game_id);
+        } else if (data.status === "awaiting_scores") {
+            // Se lo status è "awaiting_scores", esegui un'altra logica
+            console.log("Il gioco è in attesa dei punteggi.");
+            // Puoi aggiungere un altro comportamento qui, per esempio, mostrare una notifica che aspetta i punteggi
+            document.getElementById("scoreModal").classList.remove("hidden");
+        }
     } catch (error) {
         console.error("Errore durante il recupero dei dati del gioco:", error);
     }
@@ -148,6 +156,11 @@ function initializeSocket(game_id) {
             if (currentUser !== data.previousAuthor) {
                 changeTurnShowPopup(data.previousAuthor, data.nextPlayer);
             }
+        });
+
+        socket.on("start-assign-scores", () => {
+            console.log("Received start-assign-scores event. Opening modal...");
+            document.getElementById("scoreModal").classList.remove("hidden");
         });
 
         socket.on("gameUpdate", (data) => {

@@ -103,7 +103,7 @@ function openBookOverlay(title, storyDetails) {
                 Capitolo: ${item.title}
             </h3>
             <div class="flex items-center mt-2">
-                <a href="/profile/username" class="flex items-center">
+                <a href="/profile/${item.username}" class="flex items-center">
                     <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-10 h-10 rounded-full mr-2" />
                     <span class="text-sm text-blue-600 hover:underline">${item.username}</span>
                 </a>

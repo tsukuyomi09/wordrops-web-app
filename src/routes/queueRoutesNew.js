@@ -7,6 +7,8 @@ const checkAuth = require("../middlewares/checkAuthToken");
 gameQueues = {
     normal_slow: [],
     normal_fast: [],
+    ranked_slow: [],
+    ranked_fast: [],
 };
 let preGameQueue = {};
 
@@ -17,6 +19,7 @@ router.post("/gamequeueNew", checkAuth, (req, res) => {
     const socketId = req.body.socketId;
     const avatar = req.body.avatarForGame;
     const mode = req.body.mode;
+    console.log(`players in queue on mode: ${mode}`);
 
     if (!userId) {
         return res.status(401).json({ error: "Utente non autenticato" });
