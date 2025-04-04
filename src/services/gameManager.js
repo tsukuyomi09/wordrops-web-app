@@ -136,14 +136,14 @@ function startCountdown(newGameId) {
                                 "Ranked game detected, starting scoring process..."
                             );
                             game.status === "awaiting_scores";
-                            req.io.to(newGameId).emit("awaiting_scores", {
+                            io.to(newGameId).emit("awaiting_scores", {
                                 chapters: game.chapters,
                                 status: game.status,
                                 // Altri dati...
                             });
 
                             setTimeout(() => {
-                                req.io.to(newGameId).disconnectSockets(true);
+                                io.to(newGameId).disconnectSockets(true);
                                 clearInterval(game.countdownInterval);
                                 console.log(
                                     "Socket disconnessi dopo invio awaiting-scores."
@@ -186,14 +186,25 @@ function startCountdown(newGameId) {
                                     );
                                 }
                             });
+                            activeGames.delete(newGameId);
+                            io.to(newGameId).emit("gameCompleted");
+                            return;
                         }
-
-                        activeGames.delete(newGameId);
-                        io.to(newGameId).emit("gameCompleted");
-                        return;
+                    } else {
+                        // Se il salvataggio del gioco non ha avuto successo, invia un errore
+                        return res.status(500).json({
+                            message: "Errore nel salvataggio del gioco.",
+                        });
                     }
                 } catch (err) {
-                    console.error("Errore nel salvataggio del gioco:", err);
+                    console.error(
+                        "Errore durante il processo di salvataggio del gioco:",
+                        err
+                    );
+                    return res.status(500).json({
+                        message:
+                            "Errore nel processo di completamento del gioco.",
+                    });
                 }
             }
 

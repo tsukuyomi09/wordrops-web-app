@@ -73,7 +73,6 @@ async function fetchGameData(game_id) {
             // Puoi aggiungere un altro comportamento qui, per esempio, mostrare una notifica che aspetta i punteggi
             openScoreModal(data.chapters); // Apri il modale con i capitoli
         }
-
         console.log(`lo status del game é in_game`);
         // Se lo status è "in_game", esegui tutto ciò che c'è
         updateCurrentPlayerDisplay(data.currentPlayer);
