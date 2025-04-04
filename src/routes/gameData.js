@@ -12,7 +12,7 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
     }
 
     // Accedi correttamente all'array di giocatori
-    const { players, turnOrder, turnIndex, status } = game;
+    const { players, turnOrder, turnIndex, status, chapters } = game;
     const playersArray = players.players; // Qui accedi al vero array di giocatori
 
     if (!Array.isArray(playersArray)) {
@@ -36,6 +36,7 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
         turnOrder,
         currentPlayer,
         status,
+        chapters,
     });
 });
 

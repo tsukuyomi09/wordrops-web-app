@@ -23,6 +23,9 @@ async function fetchUserData() {
         if (data.status === "in_game" && data.games.hasOwnProperty(urlGameId)) {
             game_id = urlGameId;
             initializeGame(game_id);
+        } else {
+            console.log("Non stai partecipando a questa partita");
+            window.location.href = `/dashboard/${data.username}`;
         }
     } catch (error) {
         console.error("Errore nel recupero dei dati utente:", error);
@@ -60,28 +63,59 @@ async function fetchGameData(game_id) {
 
         const data = await response.json();
         console.log("Dati gioco:", data);
+        console.log(`questo lo status del game: ${data.status}`);
 
-        if (data.status === "in_game") {
-            // Se lo status è "in_game", esegui tutto ciò che c'è
-            updateCurrentPlayerDisplay(data.currentPlayer);
-            updateTurnOrderDisplay(data.turnOrder);
-            handleEditorAccess(
-                data.currentPlayer,
-                localStorage.getItem("username")
-            );
-            foxAnimation();
-
-            // Fetch per i capitoli del gioco
-            fetchGameChapters(game_id);
-        } else if (data.status === "awaiting_scores") {
+        if (data.status === "awaiting_scores") {
             // Se lo status è "awaiting_scores", esegui un'altra logica
+            console.log("Dati gioco ricevuti:", data);
+
             console.log("Il gioco è in attesa dei punteggi.");
             // Puoi aggiungere un altro comportamento qui, per esempio, mostrare una notifica che aspetta i punteggi
-            document.getElementById("scoreModal").classList.remove("hidden");
+            openScoreModal(data.chapters); // Apri il modale con i capitoli
         }
+
+        console.log(`lo status del game é in_game`);
+        // Se lo status è "in_game", esegui tutto ciò che c'è
+        updateCurrentPlayerDisplay(data.currentPlayer);
+        updateTurnOrderDisplay(data.turnOrder);
+        handleEditorAccess(
+            data.currentPlayer,
+            localStorage.getItem("username")
+        );
+        foxAnimation();
+
+        // Fetch per i capitoli del gioco
+        fetchGameChapters(game_id);
     } catch (error) {
         console.error("Errore durante il recupero dei dati del gioco:", error);
     }
+}
+
+function openScoreModal(chapters) {
+    const modal = document.getElementById("scoreModal");
+    const container = document.getElementById("chaptersContainer");
+
+    if (!Array.isArray(chapters)) {
+        console.error("Errore: chapters non è un array!", chapters);
+        return;
+    }
+
+    // Svuota il contenitore
+    container.innerHTML = "";
+
+    // Crea le box per i capitoli
+    chapters.forEach((chapter, index) => {
+        const chapterBox = document.createElement("div");
+        chapterBox.className =
+            "p-3 border rounded-lg bg-gray-200 cursor-pointer hover:bg-gray-300 transition";
+        chapterBox.textContent = `Capitolo ${index + 1}: ${chapter.title}`;
+
+        // Aggiunge il capitolo al contenitore
+        container.appendChild(chapterBox);
+    });
+
+    // Mostra il modale
+    modal.classList.remove("hidden");
 }
 
 async function fetchGameChapters(game_id) {
@@ -158,9 +192,9 @@ function initializeSocket(game_id) {
             }
         });
 
-        socket.on("start-assign-scores", () => {
-            console.log("Received start-assign-scores event. Opening modal...");
-            document.getElementById("scoreModal").classList.remove("hidden");
+        socket.on("awaiting_scores", (data) => {
+            console.log("Awaiting scores event. Opening modal...");
+            openScoreModal(data.chapters); // Apri il modale con i capitoli
         });
 
         socket.on("gameUpdate", (data) => {

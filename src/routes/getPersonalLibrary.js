@@ -13,6 +13,7 @@ router.get("/personalLibrary", checkAuth, async (req, res) => {
              FROM games_chapters gc
              JOIN games_completed g ON gc.game_id = g.id
              WHERE gc.author_id = $1
+             AND g.publish = 'publish'
              ORDER BY g.finished_at DESC`,
             [user_id] // ID dell'utente
         );

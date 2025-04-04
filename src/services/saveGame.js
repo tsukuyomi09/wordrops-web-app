@@ -23,12 +23,24 @@ async function saveNormalGame(game) {
         const title = "Test Game Title";
         const blurb = "Test Game Blurb";
 
+        const isRanked = ["ranked_slow", "ranked_fast"].includes(game.gameMode);
+        game.publishStatus = isRanked ? "awaiting_scores" : "publish";
+        game.status = isRanked ? "awaiting_scores" : "completed";
+
         const finishedAt = new Date();
         const result = await client.query(
-            `INSERT INTO games_completed (title, started_at, finished_at, mode, back_cover)
-             VALUES ($1, $2, $3, $4, $5)
+            `INSERT INTO games_completed (title, started_at, finished_at, mode, back_cover, publish, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING id`,
-            [title, game.startedAt, finishedAt, game.gameMode, blurb]
+            [
+                title,
+                game.startedAt,
+                finishedAt,
+                game.gameMode,
+                blurb,
+                game.publishStatus,
+                game.status,
+            ]
         );
         const databaseGameId = result.rows[0].id;
 

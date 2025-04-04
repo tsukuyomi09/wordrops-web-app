@@ -92,21 +92,21 @@ io.on("connection", (socket) => {
 
         setTimeout(() => {
             const connectedSockets = io.sockets.adapter.rooms.get(gameId);
-            // console.log(
-            //     `Client connessi alla stanza ${gameId} dopo un ritardo:`,
-            //     connectedSockets
-            //         ? Array.from(connectedSockets)
-            //         : "Nessun client connesso"
-            // );
+            console.log(
+                `Client connessi alla stanza ${gameId} dopo un ritardo:`,
+                connectedSockets
+                    ? Array.from(connectedSockets)
+                    : "Nessun client connesso"
+            );
         }, 50);
 
-        // console.log(
-        //     `Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`,
-        //     {
-        //         message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
-        //         socketId: socket.id,
-        //     }
-        // );
+        console.log(
+            `Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`,
+            {
+                message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
+                socketId: socket.id,
+            }
+        );
 
         io.in(gameId).emit("playerJoined", {
             message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,

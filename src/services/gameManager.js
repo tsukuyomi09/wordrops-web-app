@@ -26,9 +26,9 @@ async function createGameAndAssignPlayers(game) {
 
         let countdownDuration;
         if (gameMode.includes("fast")) {
-            countdownDuration = 5000; // 10 secondi per le modalità "fast"
+            countdownDuration = 50000; // 10 secondi per le modalità "fast"
         } else {
-            countdownDuration = 10000; // 20 secondi per le modalità "slow" o altre
+            countdownDuration = 100000; // 20 secondi per le modalità "slow" o altre
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
@@ -36,6 +36,7 @@ async function createGameAndAssignPlayers(game) {
             gameId: newGameId,
             type: null,
             gameMode: gameMode,
+            publishStatus: null,
             votes: {},
             players: game,
             chapters: [],
@@ -134,52 +135,58 @@ function startCountdown(newGameId) {
                             console.log(
                                 "Ranked game detected, starting scoring process..."
                             );
+                            game.status === "awaiting_scores";
+                            req.io.to(newGameId).emit("awaiting_scores", {
+                                chapters: game.chapters,
+                                status: game.status,
+                                // Altri dati...
+                            });
 
-                            io.to(newGameId).emit("start-assign-scores");
-                            clearInterval(game.countdownInterval);
-                            game.status = "awaiting_scores";
+                            setTimeout(() => {
+                                req.io.to(newGameId).disconnectSockets(true);
+                                clearInterval(game.countdownInterval);
+                                console.log(
+                                    "Socket disconnessi dopo invio awaiting-scores."
+                                );
+                            }, 500);
+                        } else {
+                            const players = game.players.players;
+                            console.log("Players array:", players);
 
-                            console.log("waiting for scores to be assigned");
+                            players.forEach((player) => {
+                                const playerId = player.id;
+                                console.log(`Checking player ${playerId}`);
 
-                            await new Promise((resolve, reject) => {
-                                // Qui ascoltiamo l'evento "scores-assigned"
-                                io.once("scores-assigned", () => {
+                                const playerData = playersMap.get(playerId);
+
+                                if (playerData) {
                                     console.log(
-                                        "Scores assigned, proceeding to save..."
+                                        `Before delete:`,
+                                        playerData.games
                                     );
-                                    resolve();
-                                });
+                                    delete playerData.games[newGameId];
+
+                                    console.log(
+                                        `After delete:`,
+                                        playerData.games
+                                    );
+
+                                    if (
+                                        Object.keys(playerData.games).length ===
+                                        0
+                                    ) {
+                                        console.log(
+                                            `Removing player ${playerId} from playersMap`
+                                        );
+                                        playersMap.delete(playerId);
+                                    }
+                                } else {
+                                    console.log(
+                                        `Player ${playerId} not found in playersMap.`
+                                    );
+                                }
                             });
                         }
-                        const players = game.players.players;
-                        console.log("Players array:", players);
-
-                        players.forEach((player) => {
-                            const playerId = player.id; // Estrai l'ID dal singolo oggetto player
-                            console.log(`Checking player ${playerId}`);
-
-                            const playerData = playersMap.get(playerId);
-
-                            if (playerData) {
-                                console.log(`Before delete:`, playerData.games);
-                                delete playerData.games[newGameId];
-
-                                console.log(`After delete:`, playerData.games);
-
-                                if (
-                                    Object.keys(playerData.games).length === 0
-                                ) {
-                                    console.log(
-                                        `Removing player ${playerId} from playersMap`
-                                    );
-                                    playersMap.delete(playerId);
-                                }
-                            } else {
-                                console.log(
-                                    `Player ${playerId} not found in playersMap.`
-                                );
-                            }
-                        });
 
                         activeGames.delete(newGameId);
                         io.to(newGameId).emit("gameCompleted");
