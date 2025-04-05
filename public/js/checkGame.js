@@ -191,6 +191,13 @@ function initializeSocket(game_id) {
             }
         });
 
+        socket.on("receiveChatMessage", (messageData) => {
+            const { messageText, avatar, username } = messageData;
+
+            // Chiama la funzione per visualizzare il messaggio ricevuto
+            displayReceivedMessage(messageText, avatar, username);
+        });
+
         socket.on("awaiting_scores", (data) => {
             console.log("Awaiting scores event. Opening modal...");
             openScoreModal(data.chapters); // Apri il modale con i capitoli
@@ -217,6 +224,85 @@ function initializeSocket(game_id) {
             error
         );
     }
+}
+
+//chat messages
+
+const sendButton = document.getElementById("sendButton");
+
+sendButton.addEventListener("click", () => {
+    const user_id = localStorage.getItem("user_id");
+    const username = localStorage.getItem("username");
+    const current_player_avatar = localStorage.getItem(`avatar_${username}`);
+    console.log(`user_id: ${user_id}`);
+    console.log(`username: ${username}`);
+    console.log(`current_player_avatar: ${current_player_avatar}`);
+
+    const messageInput = document.getElementById("messageInput");
+    const messageText = messageInput.value.trim();
+
+    if (!messageText) return;
+
+    if (!user_id || !current_player_avatar || !game_id || !username) {
+        console.log("Dati mancanti");
+        return;
+    }
+
+    socket.emit("sendChatMessage", {
+        gameId: game_id,
+        user_id: user_id,
+        messageText: messageText,
+        avatar: current_player_avatar,
+        username: username,
+    });
+
+    logMessage(messageText, current_player_avatar, username);
+    messageInput.value = "";
+});
+
+function logMessage(messageText, avatarName, username) {
+    const messageBox = document.getElementById("chatBox");
+
+    const wrapper = document.createElement("div");
+    wrapper.className =
+        "p-2 mb-2 bg-blue-100 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
+    wrapper.innerHTML = `
+        <img src="/images/avatars/${avatarName}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
+        <div>
+            <div class="font-semibold text-sm text-gray-800">${
+                username || "Anonimo"
+            }</div>
+            <div class="text-sm">${messageText}</div>
+        </div>
+    `;
+    messageBox.appendChild(wrapper);
+    messageBox.scrollTop = messageBox.scrollHeight;
+}
+
+function displayReceivedMessage(messageText, avatar, username) {
+    const messageBox = document.getElementById("chatBox");
+
+    // Crea il wrapper per il messaggio
+    const wrapper = document.createElement("div");
+    wrapper.className =
+        "p-2 mb-2 bg-gray-100 rounded text-gray-700 flex items-start gap-2";
+
+    // Utilizza innerHTML per creare il contenuto del messaggio
+    wrapper.innerHTML = `
+        <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
+        <div>
+            <div class="font-semibold text-sm text-gray-800">${
+                username || "Anonimo"
+            }</div>
+            <div class="text-sm">${messageText}</div>
+        </div>
+    `;
+
+    // Aggiungi il messaggio alla chatbox
+    messageBox.appendChild(wrapper);
+
+    // Scorri verso il basso dopo aver aggiunto il messaggio
+    messageBox.scrollTop = messageBox.scrollHeight;
 }
 
 function buttonStartGame() {

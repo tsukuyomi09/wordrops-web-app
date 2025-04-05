@@ -316,6 +316,7 @@ function fetchdashboardData() {
             return response.json();
         })
         .then((data) => {
+            localStorage.setItem("user_id", data.user_id);
             username = data.username;
             const status = data.status;
             const games = data.games; // Più giochi attivi

@@ -26,9 +26,9 @@ async function createGameAndAssignPlayers(game) {
 
         let countdownDuration;
         if (gameMode.includes("fast")) {
-            countdownDuration = 50000; // 10 secondi per le modalità "fast"
+            countdownDuration = 500000; // 10 secondi per le modalità "fast"
         } else {
-            countdownDuration = 100000; // 20 secondi per le modalità "slow" o altre
+            countdownDuration = 1000000; // 20 secondi per le modalità "slow" o altre
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
@@ -43,10 +43,11 @@ async function createGameAndAssignPlayers(game) {
             status: "to-start",
             turnOrder: turnOrder,
             readyPlayersCount: 0,
+            chat: [],
             turnIndex: 0,
             connections: [],
             countdownDuration: countdownDuration,
-            countdownStart: null, // Valore iniziale
+            countdownStart: null,
             countdownEnd: null,
             countdownInterval: null,
             startedAt: new Date(),

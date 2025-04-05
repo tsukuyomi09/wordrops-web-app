@@ -80,6 +80,25 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("sendChatMessage", (messageData) => {
+        const { gameId, user_id, messageText, avatar, username } = messageData;
+
+        const message = {
+            user_id,
+            text: messageText,
+            sent_at: new Date(),
+        };
+
+        // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
+        socket.to(gameId).emit("receiveChatMessage", {
+            gameId: gameId,
+            userId: user_id,
+            messageText: messageText,
+            avatar: avatar,
+            username: username,
+        });
+    });
+
     socket.on("startGameCountdown", ({ gameId }) => {
         startGameCountdown(io, gameId);
     });
