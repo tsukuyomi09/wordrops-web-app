@@ -21,7 +21,7 @@
             rel="stylesheet"
         />
     </head>
-    <body class="bbg-gradient-to-r from-white to-gray-200">
+    <body class="bbg-gradient-to-r from-white to-gray-200 overflow-x-hidden">
         <div
             id="scoreModal"
             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden z-50"
@@ -43,7 +43,14 @@
                 </button>
             </div>
         </div>
-        <div class="flex absolute bottom-0 right-0 z-50">
+
+        <div id="chatContainer" class="fixed bottom-2 z-50 chatNotVisible">
+            <button
+                id="toggleChatButton"
+                class="absolute bottom-2 -left-14 p-2 bg-blue-500 z-50 text-white rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                💬
+            </button>
             <div class="w-full max-w-md bg-white p-4 rounded-lg shadow-lg">
                 <!-- Area messaggi -->
                 <div

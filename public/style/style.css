@@ -7,8 +7,18 @@
 }
 
 .avatar-container.show {
-    visibility: visible;  /* Imposta la visibilità a visible */
-    opacity: 1;            /* Imposta l'opacità a 1 */
+    visibility: visible;  
+    opacity: 1;            
+}
+
+.chatNotVisible {
+  right: -17rem; 
+  transition: right 0.3s ease-in-out; 
+}
+
+.chatVisible {
+  right: 0rem; 
+  transition: right 0.3s ease-in-out; 
 }
 
 

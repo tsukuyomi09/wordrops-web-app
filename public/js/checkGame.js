@@ -228,6 +228,30 @@ function initializeSocket(game_id) {
 
 //chat messages
 
+let isChatOpen = false;
+
+const toggleChatButton = document.getElementById("toggleChatButton");
+const chatContainer = document.getElementById("chatContainer");
+
+toggleChatButton.addEventListener("click", () => {
+    console.log("clicked");
+    // Cambia lo stato della chat
+    isChatOpen = !isChatOpen;
+    console.log("isChatOpen:", isChatOpen);
+    // Mostra o nasconde la chat in base allo stato
+    if (isChatOpen) {
+        console.log("it is open:", isChatOpen);
+
+        chatContainer.classList.add("chatVisible");
+        chatContainer.classList.remove("chatNotVisible");
+    } else {
+        console.log("it is closed:", isChatOpen);
+
+        chatContainer.classList.add("chatNotVisible");
+        chatContainer.classList.remove("chatVisible");
+    }
+});
+
 const sendButton = document.getElementById("sendButton");
 
 sendButton.addEventListener("click", () => {
