@@ -1,6 +1,7 @@
 let editor;
 let game_id;
 const user_id = Number(localStorage.getItem("user_id"));
+let unreadMessages = {};
 
 window.onload = function initialize() {
     fetchUserData();
@@ -193,10 +194,31 @@ function initializeSocket(game_id) {
         });
 
         socket.on("receiveChatMessage", (messageData) => {
-            const { messageText, avatar, username } = messageData;
+            const { game_id, messageText, avatar, username, sentAt } =
+                messageData;
 
-            // Chiama la funzione per visualizzare il messaggio ricevuto
-            displayReceivedMessage(messageText, avatar, username);
+            if (isChatOpen) {
+                console.log("message read:");
+
+                displayReceivedMessage(messageText, avatar, username);
+            } else {
+                // Se la chat non è aperta, salva il messaggio nell'oggetto unreadMessages
+                if (!unreadMessages[game_id]) {
+                    unreadMessages[game_id] = [];
+                }
+
+                unreadMessages[game_id].push({
+                    messageText,
+                    avatar,
+                    username,
+                    sentAt,
+                });
+                console.log("message not read:");
+                console.log("unreadMessages:", unreadMessages);
+
+                // Mostra il simbolo di notifica
+                displayNotificationSymbol();
+            }
         });
 
         socket.on("awaiting_scores", (data) => {
@@ -245,6 +267,24 @@ toggleChatButton.addEventListener("click", () => {
 
         chatContainer.classList.add("chatVisible");
         chatContainer.classList.remove("chatNotVisible");
+
+        const notificationSymbol =
+            document.getElementById("notificationSymbol");
+        notificationSymbol.classList.add("hidden");
+
+        for (let game_id in unreadMessages) {
+            unreadMessages[game_id].forEach((msg) => {
+                displayReceivedMessage(
+                    msg.messageText,
+                    msg.avatar,
+                    msg.username
+                );
+            });
+        }
+
+        // Pulisci i messaggi non letti una volta che sono stati visualizzati
+        unreadMessages = {};
+        console.log(`unreadMessages should be empty: ${unreadMessages} `);
     } else {
         console.log("it is closed:", isChatOpen);
 
@@ -252,6 +292,12 @@ toggleChatButton.addEventListener("click", () => {
         chatContainer.classList.remove("chatVisible");
     }
 });
+
+function displayNotificationSymbol() {
+    console.log("New message received! Show notification icon");
+    const notificationSymbol = document.getElementById("notificationSymbol");
+    notificationSymbol.classList.remove("hidden"); // Rimuove la classe 'hidden' per mostrare il simbolo
+}
 
 const sendButton = document.getElementById("sendButton");
 

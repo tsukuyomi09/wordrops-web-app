@@ -113,9 +113,11 @@ io.on("connection", (socket) => {
 
         // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
         socket.to(game_id).emit("receiveChatMessage", {
+            game_id: game_id,
             messageText: messageText,
             avatar: player.avatar,
             username: player.username,
+            sentAt: new Date(),
         });
     });
 
