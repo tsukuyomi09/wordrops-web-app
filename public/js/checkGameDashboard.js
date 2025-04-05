@@ -1,5 +1,6 @@
 let editor;
 let gameIds;
+const user_id = Number(localStorage.getItem("user_id"));
 
 window.onload = function initialize() {
     checkUserStatus();

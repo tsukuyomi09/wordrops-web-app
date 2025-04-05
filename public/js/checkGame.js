@@ -1,5 +1,6 @@
 let editor;
 let game_id;
+const user_id = Number(localStorage.getItem("user_id"));
 
 window.onload = function initialize() {
     fetchUserData();
@@ -255,43 +256,37 @@ toggleChatButton.addEventListener("click", () => {
 const sendButton = document.getElementById("sendButton");
 
 sendButton.addEventListener("click", () => {
-    const user_id = localStorage.getItem("user_id");
-    const username = localStorage.getItem("username");
-    const current_player_avatar = localStorage.getItem(`avatar_${username}`);
-    console.log(`user_id: ${user_id}`);
-    console.log(`username: ${username}`);
-    console.log(`current_player_avatar: ${current_player_avatar}`);
-
+    if (!game_id) {
+        console.log("game_id non è stato ancora impostato!");
+        return;
+    }
     const messageInput = document.getElementById("messageInput");
     const messageText = messageInput.value.trim();
 
-    if (!messageText) return;
+    if (!messageText || !user_id || !game_id) return;
 
-    if (!user_id || !current_player_avatar || !game_id || !username) {
-        console.log("Dati mancanti");
-        return;
-    }
+    console.log(`game_id prima dell'invio ${game_id}`);
 
     socket.emit("sendChatMessage", {
-        gameId: game_id,
+        game_id: game_id,
         user_id: user_id,
         messageText: messageText,
-        avatar: current_player_avatar,
-        username: username,
     });
 
-    logMessage(messageText, current_player_avatar, username);
     messageInput.value = "";
+    logMessage(messageText);
 });
 
-function logMessage(messageText, avatarName, username) {
+function logMessage(messageText) {
+    const username = localStorage.getItem("username");
+    const current_player_avatar = localStorage.getItem(`avatar_${username}`);
     const messageBox = document.getElementById("chatBox");
 
     const wrapper = document.createElement("div");
     wrapper.className =
         "p-2 mb-2 bg-blue-100 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
     wrapper.innerHTML = `
-        <img src="/images/avatars/${avatarName}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
+        <img src="/images/avatars/${current_player_avatar}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
         <div>
             <div class="font-semibold text-sm text-gray-800">${
                 username || "Anonimo"
@@ -321,11 +316,7 @@ function displayReceivedMessage(messageText, avatar, username) {
             <div class="text-sm">${messageText}</div>
         </div>
     `;
-
-    // Aggiungi il messaggio alla chatbox
     messageBox.appendChild(wrapper);
-
-    // Scorri verso il basso dopo aver aggiunto il messaggio
     messageBox.scrollTop = messageBox.scrollHeight;
 }
 

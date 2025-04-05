@@ -81,21 +81,41 @@ io.on("connection", (socket) => {
     });
 
     socket.on("sendChatMessage", (messageData) => {
-        const { gameId, user_id, messageText, avatar, username } = messageData;
+        const { game_id, user_id, messageText } = messageData;
+        console.log(
+            `mage id: ${game_id} , user id: ${user_id} text: ${messageText}`
+        );
+        const game = activeGames.get(game_id);
+        console.log("Turn order:", game.turnOrder);
+
+        if (!game) return;
+
+        const player = game.turnOrder.find((p) => {
+            console.log(
+                `Comparing user_id: ${user_id} with player id: ${p.id}`
+            );
+            return p.id === user_id;
+        });
+        console.log(`player: ${player}`);
+        if (!player) return;
 
         const message = {
-            user_id,
-            text: messageText,
-            sent_at: new Date(),
+            userId: user_id,
+            username: player.username,
+            avatar: player.avatar,
+            messageText: messageText,
+            sentAt: new Date(),
         };
 
+        // Salva il messaggio nel backend
+        game.chat.push(message);
+        console.log("Chat aggiornata:", game.chat);
+
         // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
-        socket.to(gameId).emit("receiveChatMessage", {
-            gameId: gameId,
-            userId: user_id,
+        socket.to(game_id).emit("receiveChatMessage", {
             messageText: messageText,
-            avatar: avatar,
-            username: username,
+            avatar: player.avatar,
+            username: player.username,
         });
     });
 
