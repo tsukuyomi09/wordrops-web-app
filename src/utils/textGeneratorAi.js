@@ -6,7 +6,7 @@ dotenv.config();
 
 // Inizializza OpenAI con la tua chiave API
 const openai = new OpenAI({
-    apiKey: process.env.TEXT_BOOK_GEN_API,
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
 // Funzione per generare titolo e riassunto
