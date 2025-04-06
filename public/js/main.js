@@ -337,7 +337,6 @@ async function fetchdashboardData() {
         const maxGamesReached = data.maxGamesReached;
         console.log(`games: ${JSON.stringify(games, null, 2)}`);
         console.log(`Max games reached: ${maxGamesReached}`);
-
         const statusContainer = document.getElementById("status-div");
         const gameUiContainer = document.getElementById("gameUI-update");
         const buttonsContainer = document.getElementById(
