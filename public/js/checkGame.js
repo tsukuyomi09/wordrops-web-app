@@ -1,5 +1,7 @@
 let editor;
 let game_id;
+const user_id = Number(localStorage.getItem("user_id"));
+let unreadMessages = {};
 
 window.onload = function initialize() {
     fetchUserData();
@@ -23,6 +25,9 @@ async function fetchUserData() {
         if (data.status === "in_game" && data.games.hasOwnProperty(urlGameId)) {
             game_id = urlGameId;
             initializeGame(game_id);
+        } else {
+            console.log("Non stai partecipando a questa partita");
+            window.location.href = `/dashboard/${data.username}`;
         }
     } catch (error) {
         console.error("Errore nel recupero dei dati utente:", error);
@@ -60,7 +65,18 @@ async function fetchGameData(game_id) {
 
         const data = await response.json();
         console.log("Dati gioco:", data);
+        console.log(`questo lo status del game: ${data.status}`);
 
+        if (data.status === "awaiting_scores") {
+            // Se lo status è "awaiting_scores", esegui un'altra logica
+            console.log("Dati gioco ricevuti:", data);
+
+            console.log("Il gioco è in attesa dei punteggi.");
+            // Puoi aggiungere un altro comportamento qui, per esempio, mostrare una notifica che aspetta i punteggi
+            openScoreModal(data.chapters); // Apri il modale con i capitoli
+        }
+        console.log(`lo status del game é in_game`);
+        // Se lo status è "in_game", esegui tutto ciò che c'è
         updateCurrentPlayerDisplay(data.currentPlayer);
         updateTurnOrderDisplay(data.turnOrder);
         handleEditorAccess(
@@ -74,6 +90,33 @@ async function fetchGameData(game_id) {
     } catch (error) {
         console.error("Errore durante il recupero dei dati del gioco:", error);
     }
+}
+
+function openScoreModal(chapters) {
+    const modal = document.getElementById("scoreModal");
+    const container = document.getElementById("chaptersContainer");
+
+    if (!Array.isArray(chapters)) {
+        console.error("Errore: chapters non è un array!", chapters);
+        return;
+    }
+
+    // Svuota il contenitore
+    container.innerHTML = "";
+
+    // Crea le box per i capitoli
+    chapters.forEach((chapter, index) => {
+        const chapterBox = document.createElement("div");
+        chapterBox.className =
+            "p-3 border rounded-lg bg-gray-200 cursor-pointer hover:bg-gray-300 transition";
+        chapterBox.textContent = `Capitolo ${index + 1}: ${chapter.title}`;
+
+        // Aggiunge il capitolo al contenitore
+        container.appendChild(chapterBox);
+    });
+
+    // Mostra il modale
+    modal.classList.remove("hidden");
 }
 
 async function fetchGameChapters(game_id) {
@@ -150,6 +193,39 @@ function initializeSocket(game_id) {
             }
         });
 
+        socket.on("receiveChatMessage", (messageData) => {
+            const { game_id, messageText, avatar, username, sentAt } =
+                messageData;
+
+            if (isChatOpen) {
+                console.log("message read:");
+
+                displayReceivedMessage(messageText, avatar, username);
+            } else {
+                // Se la chat non è aperta, salva il messaggio nell'oggetto unreadMessages
+                if (!unreadMessages[game_id]) {
+                    unreadMessages[game_id] = [];
+                }
+
+                unreadMessages[game_id].push({
+                    messageText,
+                    avatar,
+                    username,
+                    sentAt,
+                });
+                console.log("message not read:");
+                console.log("unreadMessages:", unreadMessages);
+
+                // Mostra il simbolo di notifica
+                displayNotificationSymbol();
+            }
+        });
+
+        socket.on("awaiting_scores", (data) => {
+            console.log("Awaiting scores event. Opening modal...");
+            openScoreModal(data.chapters); // Apri il modale con i capitoli
+        });
+
         socket.on("gameUpdate", (data) => {
             try {
                 updateCountdownDisplay(data.formatted);
@@ -171,6 +247,123 @@ function initializeSocket(game_id) {
             error
         );
     }
+}
+
+//chat messages
+
+let isChatOpen = false;
+
+const toggleChatButton = document.getElementById("toggleChatButton");
+const chatContainer = document.getElementById("chatContainer");
+
+toggleChatButton.addEventListener("click", () => {
+    console.log("clicked");
+    // Cambia lo stato della chat
+    isChatOpen = !isChatOpen;
+    console.log("isChatOpen:", isChatOpen);
+    // Mostra o nasconde la chat in base allo stato
+    if (isChatOpen) {
+        console.log("it is open:", isChatOpen);
+
+        chatContainer.classList.add("chatVisible");
+        chatContainer.classList.remove("chatNotVisible");
+
+        const notificationSymbol =
+            document.getElementById("notificationSymbol");
+        notificationSymbol.classList.add("hidden");
+
+        for (let game_id in unreadMessages) {
+            unreadMessages[game_id].forEach((msg) => {
+                displayReceivedMessage(
+                    msg.messageText,
+                    msg.avatar,
+                    msg.username
+                );
+            });
+        }
+
+        // Pulisci i messaggi non letti una volta che sono stati visualizzati
+        unreadMessages = {};
+        console.log(`unreadMessages should be empty: ${unreadMessages} `);
+    } else {
+        console.log("it is closed:", isChatOpen);
+
+        chatContainer.classList.add("chatNotVisible");
+        chatContainer.classList.remove("chatVisible");
+    }
+});
+
+function displayNotificationSymbol() {
+    console.log("New message received! Show notification icon");
+    const notificationSymbol = document.getElementById("notificationSymbol");
+    notificationSymbol.classList.remove("hidden"); // Rimuove la classe 'hidden' per mostrare il simbolo
+}
+
+const sendButton = document.getElementById("sendButton");
+
+sendButton.addEventListener("click", () => {
+    if (!game_id) {
+        console.log("game_id non è stato ancora impostato!");
+        return;
+    }
+    const messageInput = document.getElementById("messageInput");
+    const messageText = messageInput.value.trim();
+
+    if (!messageText || !user_id || !game_id) return;
+
+    console.log(`game_id prima dell'invio ${game_id}`);
+
+    socket.emit("sendChatMessage", {
+        game_id: game_id,
+        user_id: user_id,
+        messageText: messageText,
+    });
+
+    messageInput.value = "";
+    logMessage(messageText);
+});
+
+function logMessage(messageText) {
+    const username = localStorage.getItem("username");
+    const current_player_avatar = localStorage.getItem(`avatar_${username}`);
+    const messageBox = document.getElementById("chatBox");
+
+    const wrapper = document.createElement("div");
+    wrapper.className =
+        "p-2 mb-2 bg-blue-100 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
+    wrapper.innerHTML = `
+        <img src="/images/avatars/${current_player_avatar}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
+        <div>
+            <div class="font-semibold text-sm text-gray-800">${
+                username || "Anonimo"
+            }</div>
+            <div class="text-sm">${messageText}</div>
+        </div>
+    `;
+    messageBox.appendChild(wrapper);
+    messageBox.scrollTop = messageBox.scrollHeight;
+}
+
+function displayReceivedMessage(messageText, avatar, username) {
+    const messageBox = document.getElementById("chatBox");
+
+    // Crea il wrapper per il messaggio
+    const wrapper = document.createElement("div");
+    wrapper.className =
+        "p-2 mb-2 bg-gray-100 rounded text-gray-700 flex items-start gap-2";
+
+    // Utilizza innerHTML per creare il contenuto del messaggio
+    wrapper.innerHTML = `
+        <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
+        <div>
+            <div class="font-semibold text-sm text-gray-800">${
+                username || "Anonimo"
+            }</div>
+            <div class="text-sm">${messageText}</div>
+        </div>
+    `;
+    messageBox.appendChild(wrapper);
+    messageBox.scrollTop = messageBox.scrollHeight;
 }
 
 function buttonStartGame() {

@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
 
             // Trova il gioco specificato
             const game = preGameQueue[gameId];
-            console.log("Contenuto di game:", game);
+            // console.log("Contenuto di game:", game);
 
             if (!game) {
                 console.error(`Gioco con ID ${gameId} non trovato`);
@@ -66,12 +66,12 @@ io.on("connection", (socket) => {
 
             // Segna il giocatore come pronto
             player.pronto = true;
-            console.log(
-                `Giocatore ${player.username} è pronto per il gioco ${gameId}`
-            );
+            // console.log(
+            //     `Giocatore ${player.username} è pronto per il gioco ${gameId}`
+            // );
 
             // Stampa lo stato aggiornato della preGameQueue
-            console.log(preGameQueue);
+            // console.log(preGameQueue);
         } catch (error) {
             console.error(
                 "Errore durante l'elaborazione dell'evento 'playerReady':",
@@ -80,14 +80,55 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("sendChatMessage", (messageData) => {
+        const { game_id, user_id, messageText } = messageData;
+        console.log(
+            `mage id: ${game_id} , user id: ${user_id} text: ${messageText}`
+        );
+        const game = activeGames.get(game_id);
+        console.log("Turn order:", game.turnOrder);
+
+        if (!game) return;
+
+        const player = game.turnOrder.find((p) => {
+            console.log(
+                `Comparing user_id: ${user_id} with player id: ${p.id}`
+            );
+            return p.id === user_id;
+        });
+        console.log(`player: ${player}`);
+        if (!player) return;
+
+        const message = {
+            userId: user_id,
+            username: player.username,
+            avatar: player.avatar,
+            messageText: messageText,
+            sentAt: new Date(),
+        };
+
+        // Salva il messaggio nel backend
+        game.chat.push(message);
+        console.log("Chat aggiornata:", game.chat);
+
+        // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
+        socket.to(game_id).emit("receiveChatMessage", {
+            game_id: game_id,
+            messageText: messageText,
+            avatar: player.avatar,
+            username: player.username,
+            sentAt: new Date(),
+        });
+    });
+
     socket.on("startGameCountdown", ({ gameId }) => {
         startGameCountdown(io, gameId);
     });
 
     socket.on("joinNewGame", ({ gameId }) => {
-        console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
-        console.log(`gameId convertito in numero:`, gameId);
-        console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
+        // console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
+        // console.log(`gameId convertito in numero:`, gameId);
+        // console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
         socket.join(gameId);
 
         setTimeout(() => {
@@ -175,6 +216,7 @@ const dashboardRoutes = require("./src/routes/dashboardRoutes");
 const usersProfileRoute = require("./src/routes/usersProfileRoute");
 const usersProfileData = require("./src/routes/usersProfileData");
 const getPersonalLibrary = require("./src/routes/getPersonalLibrary");
+const storyDetails = require("./src/routes/storyDetails");
 const userDataRoutes = require("./src/routes/userData");
 const queueRoutesNew = require("./src/routes/queueRoutesNew");
 const searchUserRoute = require("./src/routes/searchUser");
@@ -199,6 +241,7 @@ app.use(loginRoutes);
 app.use(dashboardRoutes);
 app.use(usersProfileRoute);
 app.use(getPersonalLibrary);
+app.use(storyDetails);
 app.use(userDataRoutes);
 app.use(usersProfileData);
 app.use(searchUserRoute);

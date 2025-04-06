@@ -49,42 +49,60 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     };
 
     game.chapters.push(newChapter);
-    console.log(`games chapters = ${game.chapters.length}`);
     if (game.chapters.length === 5) {
         try {
             console.log(`five games reached`);
-            // Salva il gioco e i capitoli
-            const saveSuccess = await saveNormalGame(game); // Attendi il risultato della funzione
-            console.log("Contenuto di saveSuccess:", saveSuccess);
+            console.log(`games chapters = ${game.chapters.length}`);
+            const saveSuccess = await saveNormalGame(game);
 
             if (saveSuccess) {
-                const players = game.players.players;
+                if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
+                    console.log(
+                        "Ranked game detected, starting scoring process..."
+                    );
+                    game.status === "awaiting_scores";
+                    req.io.to(newGameId).emit("awaiting_scores", {
+                        chapters: game.chapters,
+                        status: game.status,
+                        // Altri dati...
+                    });
 
-                console.log("Contenuto di players:", players);
+                    setTimeout(() => {
+                        req.io.to(newGameId).disconnectSockets(true);
+                        clearInterval(game.countdownInterval);
+                        console.log(
+                            "Socket disconnessi dopo invio awaiting-scores."
+                        );
+                    }, 500);
+                } else {
+                    const players = game.players.players;
 
-                // Rimuovi il gioco dalla playersMap
-                players.forEach((player) => {
-                    const playerId = player.id; // Ora otteniamo correttamente l'ID
-                    const playerData = playersMap.get(playerId);
-                    console.log(`Checking player ${playerId}`, playerData); // Debug
+                    console.log("Contenuto di players:", players);
 
-                    if (playerData) {
-                        console.log(`Before delete:`, playerData.games);
-                        delete playerData.games[gameId]; // Rimuovi il gioco
+                    // Rimuovi il gioco dalla playersMap
+                    players.forEach((player) => {
+                        const playerId = player.id; // Ora otteniamo correttamente l'ID
+                        const playerData = playersMap.get(playerId);
+                        console.log(`Checking player ${playerId}`, playerData); // Debug
 
-                        console.log(`After delete:`, playerData.games); // Verifica se è stato rimosso
+                        if (playerData) {
+                            console.log(`Before delete:`, playerData.games);
+                            delete playerData.games[gameId]; // Rimuovi il gioco
 
-                        // Se il giocatore non ha più giochi, rimuovilo dalla playersMap
-                        if (Object.keys(playerData.games).length === 0) {
-                            console.log(
-                                `Removing player ${playerId} from playersMap`
-                            );
-                            playersMap.delete(playerId);
+                            console.log(`After delete:`, playerData.games); // Verifica se è stato rimosso
+
+                            // Se il giocatore non ha più giochi, rimuovilo dalla playersMap
+                            if (Object.keys(playerData.games).length === 0) {
+                                console.log(
+                                    `Removing player ${playerId} from playersMap`
+                                );
+                                playersMap.delete(playerId);
+                            }
                         }
-                    }
-                });
-
-                req.io.to(gameId).emit("gameCompleted");
+                    });
+                    activeGames.delete(newGameId);
+                    req.io.to(gameId).emit("gameCompleted");
+                }
 
                 // Risposta positiva al client
                 return res.json({
@@ -109,8 +127,6 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
     const nextPlayer = game.turnOrder[game.turnIndex];
-
-    console.log("Log del game");
 
     startCountdown(gameId);
 

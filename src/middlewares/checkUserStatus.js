@@ -8,6 +8,7 @@ const { playersMap } = require("../services/gameManager");
 const checkUserStatus = async (req, res, next) => {
     try {
         const userId = req.user_id;
+        console.log(`players map: ${playersMap}`);
 
         if (playersMap.has(userId)) {
             const userGames = playersMap.get(userId).games;

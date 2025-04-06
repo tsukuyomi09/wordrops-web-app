@@ -1,14 +1,46 @@
 const { client } = require("../database/db");
+const { generateBookMetadata } = require("../utils/textGeneratorAi");
 
 async function saveNormalGame(game) {
     try {
-        // 1️⃣ Salviamo il gioco nella tabella games_completed
+        // Commentato per evitare di generare con AI durante i test
+        // const validChapters = game.chapters.filter(
+        //     (chapter) =>
+        //         chapter.content && chapter.content !== "[Tempo scaduto]"
+        // );
+        // const chaptersToElaborate = validChapters
+        //     .map((chapter) => chapter.content)
+        //     .join("\n");
+
+        // const aiResponse = await generateBookMetadata(chaptersToElaborate); // Passiamo solo i contenuti validi
+
+        // if (!aiResponse.title || !aiResponse.blurb) {
+        //     throw new Error("Risposta AI non valida.");
+        // }
+
+        // const { title, blurb } = aiResponse;
+
+        const title = "Test Game Title";
+        const blurb = "Test Game Blurb";
+
+        const isRanked = ["ranked_slow", "ranked_fast"].includes(game.gameMode);
+        game.publishStatus = isRanked ? "awaiting_scores" : "publish";
+        game.status = isRanked ? "awaiting_scores" : "completed";
+
         const finishedAt = new Date();
         const result = await client.query(
-            `INSERT INTO games_completed (title, started_at, finished_at, mode)
-             VALUES ($1, $2, $3, $4)
+            `INSERT INTO games_completed (title, started_at, finished_at, mode, back_cover, publish, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING id`,
-            [`Storia ${game.gameId}`, game.startedAt, finishedAt, game.gameMode]
+            [
+                title,
+                game.startedAt,
+                finishedAt,
+                game.gameMode,
+                blurb,
+                game.publishStatus,
+                game.status,
+            ]
         );
         const databaseGameId = result.rows[0].id;
 

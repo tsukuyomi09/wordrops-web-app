@@ -25,13 +25,10 @@ async function createGameAndAssignPlayers(game) {
         );
 
         let countdownDuration;
-        switch (gameMode) {
-            case "normal_slow":
-                countdownDuration = 20000;
-                break;
-            case "normal_fast":
-                countdownDuration = 10000;
-                break;
+        if (gameMode.includes("fast")) {
+            countdownDuration = 500000; // 10 secondi per le modalità "fast"
+        } else {
+            countdownDuration = 1000000; // 20 secondi per le modalità "slow" o altre
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
@@ -39,16 +36,18 @@ async function createGameAndAssignPlayers(game) {
             gameId: newGameId,
             type: null,
             gameMode: gameMode,
+            publishStatus: null,
             votes: {},
             players: game,
             chapters: [],
             status: "to-start",
             turnOrder: turnOrder,
             readyPlayersCount: 0,
+            chat: [],
             turnIndex: 0,
             connections: [],
             countdownDuration: countdownDuration,
-            countdownStart: null, // Valore iniziale
+            countdownStart: null,
             countdownEnd: null,
             countdownInterval: null,
             startedAt: new Date(),
@@ -107,62 +106,106 @@ function startCountdown(newGameId) {
             // Esegui la logica di cambio turno anche senza capitolo scritto
             const currentPlayer = game.turnOrder[game.turnIndex];
             const emptyChapter = {
-                title: "Capitolo saltato",
-                content: "[Tempo scaduto]",
+                title: "null",
+                content: "null",
                 author: currentPlayer.username,
                 user_id: currentPlayer.id,
                 isValid: false,
             };
-            console.log(`author ${currentPlayer.username}`);
-            console.log(`user_id ${currentPlayer.id}`);
-            console.log(
-                "currentPlayer:",
-                JSON.stringify(currentPlayer, null, 2)
-            );
+            // console.log(`author ${currentPlayer.username}`);
+            // console.log(`user_id ${currentPlayer.id}`);
+            // console.log(
+            //     "currentPlayer:",
+            //     JSON.stringify(currentPlayer, null, 2)
+            // );
 
             game.chapters.push(emptyChapter);
-            console.log("chapters:", JSON.stringify(game.chapters, null, 2));
 
             if (game.chapters.length === 5) {
+                console.log(`five games reached`);
+                console.log(`games chapters = ${game.chapters.length}`);
+
                 try {
                     const saveSuccess = await saveNormalGame(game);
                     if (saveSuccess) {
-                        const players = game.players.players;
-                        console.log("Players array:", players);
+                        if (
+                            ["ranked_slow", "ranked_fast"].includes(
+                                game.gameMode
+                            )
+                        ) {
+                            console.log(
+                                "Ranked game detected, starting scoring process..."
+                            );
+                            game.status === "awaiting_scores";
+                            io.to(newGameId).emit("awaiting_scores", {
+                                chapters: game.chapters,
+                                status: game.status,
+                                // Altri dati...
+                            });
 
-                        players.forEach((player) => {
-                            const playerId = player.id; // Estrai l'ID dal singolo oggetto player
-                            console.log(`Checking player ${playerId}`);
-
-                            const playerData = playersMap.get(playerId);
-
-                            if (playerData) {
-                                console.log(`Before delete:`, playerData.games);
-                                delete playerData.games[newGameId];
-
-                                console.log(`After delete:`, playerData.games);
-
-                                if (
-                                    Object.keys(playerData.games).length === 0
-                                ) {
-                                    console.log(
-                                        `Removing player ${playerId} from playersMap`
-                                    );
-                                    playersMap.delete(playerId);
-                                }
-                            } else {
+                            setTimeout(() => {
+                                io.to(newGameId).disconnectSockets(true);
+                                clearInterval(game.countdownInterval);
                                 console.log(
-                                    `Player ${playerId} not found in playersMap.`
+                                    "Socket disconnessi dopo invio awaiting-scores."
                                 );
-                            }
-                        });
+                            }, 500);
+                        } else {
+                            const players = game.players.players;
+                            console.log("Players array:", players);
 
-                        activeGames.delete(newGameId);
-                        io.to(newGameId).emit("gameCompleted");
-                        return;
+                            players.forEach((player) => {
+                                const playerId = player.id;
+                                console.log(`Checking player ${playerId}`);
+
+                                const playerData = playersMap.get(playerId);
+
+                                if (playerData) {
+                                    console.log(
+                                        `Before delete:`,
+                                        playerData.games
+                                    );
+                                    delete playerData.games[newGameId];
+
+                                    console.log(
+                                        `After delete:`,
+                                        playerData.games
+                                    );
+
+                                    if (
+                                        Object.keys(playerData.games).length ===
+                                        0
+                                    ) {
+                                        console.log(
+                                            `Removing player ${playerId} from playersMap`
+                                        );
+                                        playersMap.delete(playerId);
+                                    }
+                                } else {
+                                    console.log(
+                                        `Player ${playerId} not found in playersMap.`
+                                    );
+                                }
+                            });
+                            activeGames.delete(newGameId);
+                            io.to(newGameId).emit("gameCompleted");
+                            return;
+                        }
+                    } else {
+                        // Se il salvataggio del gioco non ha avuto successo, invia un errore
+                        return res.status(500).json({
+                            message: "Errore nel salvataggio del gioco.",
+                        });
                     }
                 } catch (err) {
-                    console.error("Errore nel salvataggio del gioco:", err);
+                    console.error(
+                        "Errore durante il processo di salvataggio del gioco:",
+                        err
+                    );
+                    return res.status(500).json({
+                        message:
+                            "Errore nel processo di completamento del gioco.",
+                    });
                 }
             }
 

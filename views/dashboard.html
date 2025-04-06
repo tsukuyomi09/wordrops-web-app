@@ -22,6 +22,111 @@
 
     <body class="h-screen">
         <div
+            id="overlay-books"
+            style="display: none"
+            class="fixed w-full h-full inset-0 bg-black opacity-0 bg-opacity-75 transform translate-y-10 transition-all duration-500 z-50 flex items-center justify-center p-8"
+        >
+            <button
+                onclick="closeBookOverlay()"
+                class="absolute top-0 left-1/2 bg-red-600 text-white mt-4 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
+            >
+                ESCI
+            </button>
+            <div
+                class="bg-white p-24 rounded-lg shadow-lg max-w-6xl w-full flex flex-col overflow-y-auto"
+            >
+                <!-- Prima parte: Immagine e informazioni libro -->
+                <div class="flex">
+                    <!-- Immagine del libro -->
+                    <div class="w-1/3 flex justify-left items-start">
+                        <img
+                            src="/images/book-icon.png"
+                            alt="Icona Libro"
+                            class="w-48 h-64 rounded shadow-md"
+                        />
+                    </div>
+
+                    <!-- Dettagli libro -->
+                    <div class="w-2/3 flex flex-col">
+                        <!-- Titolo -->
+                        <h2 class="text-6xl font-bold" id="book-title">
+                            Titolo del Libro
+                        </h2>
+
+                        <!-- Rating -->
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-lg font-semibold">Rating:</span>
+                            <div id="book-rating" class="flex gap-1">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+                        </div>
+
+                        <!-- Autori -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">Autori:</h3>
+                            <div class="flex gap-4 mt-2">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 bg-gray-300 rounded-full"
+                                    ></div>
+                                    <span class="text-sm mt-1">Utente1</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 bg-gray-300 rounded-full"
+                                    ></div>
+                                    <span class="text-sm mt-1">Utente2</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 bg-gray-300 rounded-full"
+                                    ></div>
+                                    <span class="text-sm mt-1">Utente3</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 bg-gray-300 rounded-full"
+                                    ></div>
+                                    <span class="text-sm mt-1">Utente4</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 bg-gray-300 rounded-full"
+                                    ></div>
+                                    <span class="text-sm mt-1">Utente5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Genere -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">Genere:</h3>
+                            <p id="book-genre" class="text-gray-700">
+                                Fantasy, Avventura
+                            </p>
+                        </div>
+
+                        <!-- Descrizione -->
+                        <div class="mt-4">
+                            <h3 class="text-lg font-semibold">Descrizione:</h3>
+                            <p id="book-summary" class="text-gray-700">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seconda parte: Capitoli -->
+                <div
+                    class="pt-40 max-h-80 book-chapters-container flex flex-col gap-20"
+                >
+                    <!-- dynamic chapters -->
+                </div>
+            </div>
+        </div>
+
+        <div
             id="overlay-new-game"
             class="fixed inset-0 z-50 flex bg-black opacity-0 bg-opacity-100 transform translate-y-10 transition-all duration-500"
             style="display: none"
@@ -248,15 +353,13 @@
 
                         <div
                             id="stories-container-wrapper"
-                            class="hidden relative w-full max-w-xl mx-auto flex justify-center mt-20"
+                            class="hidden relative w-full max-w-6xl mx-auto flex justify-center mt-20 px-4"
                         >
                             <div
                                 id="stories-container"
-                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16"
+                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-8 w-full"
                             >
-                                <div
-                                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-16"
-                                ></div>
+                                <!-- Qui vengono inserite le storie -->
                             </div>
                         </div>
                     </div>

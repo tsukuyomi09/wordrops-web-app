@@ -20,6 +20,7 @@ router.get(
 
         if (isInGame && URLgameId === gameId) {
             const game = activeGames.get(URLgameId);
+            console.log("Game object:", game);
 
             if (game.status == "to-start") {
                 console.log(

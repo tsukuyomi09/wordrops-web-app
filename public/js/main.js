@@ -117,6 +117,21 @@ function initSocket() {
             currentGameId = data.gameId;
         });
 
+        socket.on("receiveChatMessage", (messageData) => {
+            const { game_id } = messageData;
+            console.log("New message for game:", game_id);
+
+            const wrapper = document.querySelector(
+                `[data-game-id="${game_id}"]`
+            );
+            if (wrapper) {
+                const dot = wrapper.querySelector(".notification-dot");
+                if (dot) {
+                    dot.classList.remove("hidden");
+                }
+            }
+        });
+
         socket.on("game-cancelled", (message) => {
             // Modifica la UI
             document.getElementById("countdown-seconds").style.display = "none"; // Nascondi il countdown
@@ -301,89 +316,97 @@ function updateAvatarImage(avatar) {
 
 let username;
 
-function fetchdashboardData() {
-    fetch("/userData", {
-        method: "GET", // Metodo GET per ottenere gli item
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Errore nella rete");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            username = data.username;
-            const status = data.status;
-            const games = data.games; // Più giochi attivi
-            const maxGamesReached = data.maxGamesReached; // Nuova proprietà ricevuta
-            console.log(`games: ${JSON.stringify(games, null, 2)}`);
-            console.log(`Max games reached: ${maxGamesReached}`);
-
-            const statusContainer = document.getElementById("status-div");
-            const gameUiContainer = document.getElementById("gameUI-update");
-            const buttonsContainer = document.getElementById(
-                "game-buttons-container"
-            );
-
-            // Pulizia pulsanti precedenti
-            buttonsContainer.innerHTML = "";
-
-            const newGameButton = document.getElementById("new-game-button");
-            if (newGameButton) {
-                if (maxGamesReached) {
-                    newGameButton.innerText = "LIMITE RAGGIUNTO";
-                    newGameButton.disabled = true;
-                    newGameButton.classList.add(
-                        "opacity-50",
-                        "cursor-not-allowed"
-                    );
-                } else {
-                    newGameButton.innerText = "NUOVA PARTITA";
-                    newGameButton.disabled = false;
-                    newGameButton.classList.remove(
-                        "opacity-50",
-                        "cursor-not-allowed"
-                    );
-                }
-            }
-
-            if (
-                status === "in_game" &&
-                games &&
-                Object.keys(games).length > 0
-            ) {
-                gameUiContainer.classList.remove("hidden");
-                statusContainer.classList.remove("hidden");
-
-                // Creazione di un pulsante per ogni gioco attivo
-                Object.entries(games).forEach(([gameId, gameStatus], index) => {
-                    const button = document.createElement("button");
-                    button.innerText = `Torna al game ${index + 1}`; // Usa un numero sequenziale invece del gameId
-                    button.onclick = () => handleBackToGame(gameId);
-                    button.className =
-                        "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
-
-                    buttonsContainer.appendChild(button);
-                });
-            } else {
-                gameUiContainer.classList.add("hidden");
-                statusContainer.classList.add("hidden");
-            }
-
-            fetchAvatarData(username);
-            displayItems(username);
-        })
-        .catch((error) => {
-            console.error("Errore durante il recupero degli elementi:", error);
-            console.log(
-                "Response status:",
-                error.response ? error.response.status : "nessuna risposta"
-            );
+async function fetchdashboardData() {
+    try {
+        const response = await fetch("/userData", {
+            method: "GET", // Metodo GET per ottenere gli item
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
         });
+
+        if (!response.ok) {
+            throw new Error("Errore nella rete");
+        }
+        const data = await response.json();
+        localStorage.setItem("user_id", data.user_id);
+        const username = data.username;
+        const status = data.status;
+        const games = data.games;
+        const maxGamesReached = data.maxGamesReached;
+        console.log(`games: ${JSON.stringify(games, null, 2)}`);
+        console.log(`Max games reached: ${maxGamesReached}`);
+        const statusContainer = document.getElementById("status-div");
+        const gameUiContainer = document.getElementById("gameUI-update");
+        const buttonsContainer = document.getElementById(
+            "game-buttons-container"
+        );
+
+        // Pulizia pulsanti precedenti
+        buttonsContainer.innerHTML = "";
+        const newGameButton = document.getElementById("new-game-button");
+        if (newGameButton) {
+            if (maxGamesReached) {
+                newGameButton.innerText = "LIMITE RAGGIUNTO";
+                newGameButton.disabled = true;
+                newGameButton.classList.add("opacity-50", "cursor-not-allowed");
+            } else {
+                newGameButton.innerText = "NUOVA PARTITA";
+                newGameButton.disabled = false;
+                newGameButton.classList.remove(
+                    "opacity-50",
+                    "cursor-not-allowed"
+                );
+            }
+        }
+
+        if (status === "in_game" && games && Object.keys(games).length > 0) {
+            await initSocket(); // Assicurati che initSocket sia una funzione asincrona
+
+            Object.keys(games).forEach((gameId) => {
+                console.log(`Gmae id to connect: ${gameId}`);
+                socket.emit("joinNewGame", { gameId });
+            });
+
+            gameUiContainer.classList.remove("hidden");
+            statusContainer.classList.remove("hidden");
+
+            // Creazione di un pulsante per ogni gioco attivo
+            Object.entries(games).forEach(([gameId, gameStatus], index) => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "relative inline-block m-2"; // per posizionare il badge
+                wrapper.setAttribute("data-game-id", gameId); // utile per selezionarlo dopo
+
+                const button = document.createElement("button");
+                button.innerText = `Torna al game ${index + 1}`;
+                button.onclick = () => handleBackToGame(gameId);
+                button.className =
+                    "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
+
+                // Icona di notifica (inizialmente nascosta)
+                const notificationDot = document.createElement("div");
+                notificationDot.className =
+                    "notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden";
+
+                wrapper.appendChild(button);
+                wrapper.appendChild(notificationDot);
+                buttonsContainer.appendChild(wrapper);
+            });
+
+            gameUiContainer.classList.add("hidden");
+            statusContainer.classList.add("hidden");
+        }
+
+        fetchAvatarData(username);
+        displayItems(username);
+    } catch (error) {
+        console.error("Errore durante il recupero degli elementi:", error);
+        console.log(
+            "Response status:",
+            error.response ? error.response.status : "nessuna risposta"
+        );
+    }
 }
 
 function displayItems(username) {
@@ -406,6 +429,7 @@ async function joinQueue(mode) {
     // setTimeout(async () => {
     //     await startBackgroundMusic(backgroundMusicPath);
     // }, 1000);
+    closeOverlay();
 
     await initSocket();
 
