@@ -12,12 +12,12 @@
 }
 
 .chatNotVisible {
-  right: -17rem; 
+  right: -18rem; 
   transition: right 0.3s ease-in-out; 
 }
 
 .chatVisible {
-  right: 0rem; 
+  right: 4rem; 
   transition: right 0.3s ease-in-out; 
 }
 
