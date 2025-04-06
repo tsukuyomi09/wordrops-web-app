@@ -21,6 +21,7 @@ connectDB();
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+const chatReadMap = new Map();
 
 io.on("connection", (socket) => {
     console.log("Nuovo client connesso:", socket.id);
@@ -121,36 +122,77 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("chatRead", (data) => {
+        const { game_id, user_id, readUntil } = data;
+
+        if (!chatReadMap.has(game_id)) {
+            // Se il gioco (chat) non è presente nella mappa, creiamo una nuova entry
+            chatReadMap.set(game_id, new Map());
+        }
+
+        const gameChatMap = chatReadMap.get(game_id);
+        gameChatMap.set(user_id, readUntil);
+
+        console.log(
+            `Updated read status for chat: ${game_id}, user: ${user_id}, readUntil: ${readUntil}`
+        );
+    });
+
     socket.on("startGameCountdown", ({ gameId }) => {
         startGameCountdown(io, gameId);
     });
 
-    socket.on("joinNewGame", ({ gameId }) => {
-        // console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
-        // console.log(`gameId convertito in numero:`, gameId);
-        // console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
+    socket.on("joinNewGame", ({ gameId, user_id }) => {
         socket.join(gameId);
 
-        setTimeout(() => {
-            const connectedSockets = io.sockets.adapter.rooms.get(gameId);
-            console.log(
-                `Client connessi alla stanza ${gameId} dopo un ritardo:`,
-                connectedSockets
-                    ? Array.from(connectedSockets)
-                    : "Nessun client connesso"
-            );
-        }, 50);
+        const game = activeGames.get(gameId);
+        const gameChatMap = chatReadMap.get(gameId);
+        const lastRead = gameChatMap ? gameChatMap.get(user_id) : null;
+        const lastMessage = game?.chat[game.chat.length - 1];
 
+        console.log(`Last read for user ${user_id}: ${lastRead}`);
         console.log(
-            `Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`,
-            {
-                message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
-                socketId: socket.id,
-            }
+            `Last message in chat: ${
+                lastMessage ? lastMessage.sentAt : "No messages"
+            }`
         );
 
+        let allMessagesRead = false;
+        if (game.chat.length > 0 && lastRead && lastMessage) {
+            console.log(
+                `Comparing last read (${new Date(
+                    lastRead
+                )}) with last message sentAt (${new Date(lastMessage.sentAt)})`
+            );
+
+            // Verifica se l'utente ha letto tutti i messaggi fino all'ultimo
+            allMessagesRead =
+                new Date(lastRead) >= new Date(lastMessage.sentAt);
+            console.log(`All messages read: ${allMessagesRead}`);
+        } else {
+            console.log(
+                "No messages in the chat or no last read info, setting allMessagesRead to true."
+            );
+        }
+
+        if (game.chat.length === 0) {
+            allMessagesRead = true; // Non c'è nulla da leggere
+        }
+
+        // Invia la chat e lo stato di lettura al client
+        socket.emit("chatStatus", {
+            allMessagesRead,
+            chat: game?.chat || [],
+            game_id: gameId,
+        });
+        console.log(
+            `Sent chatStatus to client: allMessagesRead=${allMessagesRead}`
+        );
+
+        // Log
+        console.log(`Player with socket ID ${socket.id} joined game ${gameId}`);
         io.in(gameId).emit("playerJoined", {
-            message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
+            message: `A new player has joined the game ${gameId}`,
             socketId: socket.id,
         });
     });
