@@ -230,7 +230,7 @@ function initializeSocket(game_id) {
             if (!allMessagesRead) {
                 // Condizione corretta per i messaggi non letti
                 console.log("Ci sono messaggi non letti.");
-                displayNotificationSymbol(); // Mostra la notifica
+                displayNotificationSymbol();
             } else {
                 console.log("Tutti i messaggi sono stati letti.");
             }

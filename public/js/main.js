@@ -1,3 +1,5 @@
+const user_id = Number(localStorage.getItem("user_id"));
+
 document.addEventListener("DOMContentLoaded", function () {
     const swiper = new Swiper(".swiper-container", {
         loop: true,
@@ -128,6 +130,35 @@ function initSocket() {
                 const dot = wrapper.querySelector(".chat-notification-dot");
                 if (dot) {
                     dot.classList.remove("hidden");
+                }
+            }
+        });
+
+        socket.on("chatStatus", ({ allMessagesRead, chat, game_id }) => {
+            const gameWrapper = document.querySelector(
+                `[data-game-id="${game_id}"]`
+            );
+
+            // Controlla se il wrapper per il gioco esiste
+            if (gameWrapper) {
+                const chatNotificationDot = gameWrapper.querySelector(
+                    ".chat-notification-dot"
+                );
+
+                if (chatNotificationDot) {
+                    if (!allMessagesRead) {
+                        // Se ci sono messaggi non letti, rimuovi 'hidden' per visualizzare la notifica
+                        chatNotificationDot.classList.remove("hidden");
+                        console.log(
+                            `Notifica di chat visibile per il gioco ${game_id}`
+                        );
+                    } else {
+                        // Se tutti i messaggi sono letti, mantieni la notifica nascosta
+                        chatNotificationDot.classList.add("hidden");
+                        console.log(
+                            `Notifica di chat nascosta per il gioco ${game_id}`
+                        );
+                    }
                 }
             }
         });
@@ -385,7 +416,7 @@ async function fetchdashboardData() {
 
             Object.keys(games).forEach((gameId) => {
                 console.log(`Gmae id to connect: ${gameId}`);
-                socket.emit("joinNewGame", { gameId });
+                socket.emit("joinNewGame", { gameId, user_id });
             });
 
             gameUiContainer.classList.remove("hidden");

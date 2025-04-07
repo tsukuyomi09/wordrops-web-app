@@ -112,6 +112,14 @@ io.on("connection", (socket) => {
         game.chat.push(message);
         console.log("Chat aggiornata:", game.chat);
 
+        if (!chatReadMap.has(game_id)) {
+            // Se il gioco (chat) non è presente nella mappa, creiamo una nuova entry
+            chatReadMap.set(game_id, new Map());
+        }
+
+        const gameChatMap = chatReadMap.get(game_id);
+        gameChatMap.set(user_id, message.sentAt);
+
         // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
         socket.to(game_id).emit("receiveChatMessage", {
             game_id: game_id,
