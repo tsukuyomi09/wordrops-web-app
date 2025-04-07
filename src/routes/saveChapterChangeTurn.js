@@ -49,6 +49,12 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     };
 
     game.chapters.push(newChapter);
+
+    req.io.in(gameId).emit("newChapterNotification", {
+        chapter: newChapter,
+        gameId,
+    });
+
     if (game.chapters.length === 5) {
         try {
             console.log(`five games reached`);

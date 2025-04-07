@@ -40,6 +40,7 @@ async function createGameAndAssignPlayers(game) {
             votes: {},
             players: game,
             chapters: [],
+            chapterReadMap: new Map(), // Nuovo campo per tenere traccia dei capitoli letti
             status: "to-start",
             turnOrder: turnOrder,
             readyPlayersCount: 0,

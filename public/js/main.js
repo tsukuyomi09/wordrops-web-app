@@ -125,9 +125,28 @@ function initSocket() {
                 `[data-game-id="${game_id}"]`
             );
             if (wrapper) {
-                const dot = wrapper.querySelector(".notification-dot");
+                const dot = wrapper.querySelector(".chat-notification-dot");
                 if (dot) {
                     dot.classList.remove("hidden");
+                }
+            }
+        });
+
+        socket.on("newChapterNotification", ({ chapter, gameId }) => {
+            console.log(`Nuovo capitolo inviato: ${chapter.title}`);
+            console.log(`game id in arrivo: ${gameId}`);
+
+            const gameWrapper = document.querySelector(
+                `[data-game-id="${gameId}"]`
+            );
+            if (gameWrapper) {
+                // Trova l'icona di notifica per il nuovo capitolo
+                const chapterNotificationDot = gameWrapper.querySelector(
+                    ".chapter-notification-dot"
+                );
+                if (chapterNotificationDot) {
+                    // Mostra la notifica per il capitolo
+                    chapterNotificationDot.classList.remove("hidden");
                 }
             }
         });
@@ -382,15 +401,19 @@ async function fetchdashboardData() {
                 button.innerText = `Torna al game ${index + 1}`;
                 button.onclick = () => handleBackToGame(gameId);
                 button.className =
-                    "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
+                    "text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
 
-                // Icona di notifica (inizialmente nascosta)
-                const notificationDot = document.createElement("div");
-                notificationDot.className =
-                    "notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden";
+                // Crea le due notifiche (per la chat e il nuovo capitolo)
+                const notificationHtml = `
+        <div class="chat-notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
+        <div class="chapter-notification-dot absolute top-0 left-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
+    `;
 
-                wrapper.appendChild(button);
-                wrapper.appendChild(notificationDot);
+                // Aggiungi il pulsante e le notifiche al wrapper
+                wrapper.innerHTML += notificationHtml;
+                wrapper.appendChild(button); // Puoi anche appendere il bottone se non vuoi usare innerHTML
+
+                // Aggiungi il wrapper al contenitore
                 buttonsContainer.appendChild(wrapper);
             });
 
