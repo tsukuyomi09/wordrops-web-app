@@ -163,8 +163,29 @@ function initSocket() {
             }
         });
 
-        socket.on("newChapterNotification", ({ chapter, gameId }) => {
-            console.log(`Nuovo capitolo inviato: ${chapter.title}`);
+        socket.on("chapterStatus", ({ game_id, hasUnreadChapter }) => {
+            console.log(`allChaptersRead = ${hasUnreadChapter}`);
+            const gameWrapper = document.querySelector(
+                `[data-game-id="${game_id}"]`
+            );
+            if (!gameWrapper) return;
+
+            const chapterNotificationDot = gameWrapper.querySelector(
+                ".chapter-notification-dot"
+            );
+            if (!chapterNotificationDot) return;
+
+            if (hasUnreadChapter) {
+                // Ci sono capitoli non letti, mostra il badge
+                chapterNotificationDot.classList.remove("hidden");
+            } else {
+                // Tutto letto, nascondi il badge
+                chapterNotificationDot.classList.add("hidden");
+            }
+        });
+
+        socket.on("newChapterNotification", ({ timestamp, gameId }) => {
+            console.log(`Nuovo capitolo arrivato: ${timestamp}`);
             console.log(`game id in arrivo: ${gameId}`);
 
             const gameWrapper = document.querySelector(
@@ -555,7 +576,11 @@ function abandonQueue() {
 
 function handleBackToGame(firstGameId) {
     if (firstGameId) {
-        // Reindirizza alla pagina del gioco
+        socket.emit("updateChapterStatus", {
+            game_id: firstGameId,
+            user_id,
+        });
+
         window.location.href = `/game/${firstGameId}`;
     } else {
         console.error("game_id non trovato. Impossibile tornare in partita.");

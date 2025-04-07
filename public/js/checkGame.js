@@ -226,6 +226,15 @@ function initializeSocket(game_id) {
             }
         });
 
+        socket.on("newChapterNotification", ({ timestamp, gameId }) => {
+            // Solo conferma lettura col timestamp
+            socket.emit("chapterRead", {
+                game_id: gameId,
+                readUntil: timestamp,
+                user_id,
+            });
+        });
+
         socket.on("chatStatus", ({ allMessagesRead, chat, game_id }) => {
             if (!allMessagesRead) {
                 // Condizione corretta per i messaggi non letti
