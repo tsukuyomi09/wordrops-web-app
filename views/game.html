@@ -7,18 +7,23 @@
             Wordrops game – La piattaforma per scrivere e collaborare in tempo
             reale
         </title>
-        <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-3ZQFCG562T"
-        ></script>
+        <!-- Google Tag Manager -->
         <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag("js", new Date());
-            gtag("config", "G-3ZQFCG562T");
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
         </script>
+        <!-- End Google Tag Manager -->
         <link rel="icon" href="./images/favicon.ico" type="image/x-icon" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +42,15 @@
         />
     </head>
     <body class="bbg-gradient-to-r from-white to-gray-200 overflow-x-hidden">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
+                height="0"
+                width="0"
+                style="display: none; visibility: hidden"
+            ></iframe
+        ></noscript>
         <div
             id="scoreModal"
             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden z-50"
