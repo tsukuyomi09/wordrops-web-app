@@ -201,6 +201,11 @@ function initializeSocket(game_id) {
                 console.log("message read:");
 
                 displayReceivedMessage(messageText, avatar, username);
+                socket.emit("chatRead", {
+                    game_id: game_id,
+                    user_id: user_id, // o recuperalo dal contesto auth
+                    readUntil: sentAt,
+                });
             } else {
                 // Se la chat non è aperta, salva il messaggio nell'oggetto unreadMessages
                 if (!unreadMessages[game_id]) {
@@ -221,6 +226,45 @@ function initializeSocket(game_id) {
             }
         });
 
+        socket.on("newChapterNotification", ({ timestamp, gameId }) => {
+            // Solo conferma lettura col timestamp
+            socket.emit("chapterRead", {
+                game_id: gameId,
+                readUntil: timestamp,
+                user_id,
+            });
+        });
+
+        socket.on("chatStatus", ({ allMessagesRead, chat, game_id }) => {
+            if (!allMessagesRead) {
+                // Condizione corretta per i messaggi non letti
+                console.log("Ci sono messaggi non letti.");
+                displayNotificationSymbol();
+            } else {
+                console.log("Tutti i messaggi sono stati letti.");
+            }
+
+            console.log(`read status: ${allMessagesRead}`);
+
+            // Salva i messaggi nell'oggetto unreadMessages
+            if (!unreadMessages[game_id]) {
+                unreadMessages[game_id] = []; // inizializza un array se non esiste già
+            }
+
+            // Salva tutti i messaggi ricevuti
+            chat.forEach((message) => {
+                const { messageText, avatar, username, sentAt } = message;
+                unreadMessages[game_id].push({
+                    messageText,
+                    avatar,
+                    username,
+                    sentAt,
+                });
+            });
+
+            console.log("unreadMessages:", unreadMessages);
+        });
+
         socket.on("awaiting_scores", (data) => {
             console.log("Awaiting scores event. Opening modal...");
             openScoreModal(data.chapters); // Apri il modale con i capitoli
@@ -239,7 +283,7 @@ function initializeSocket(game_id) {
         });
 
         socket.on("connect", () => {
-            socket.emit("joinNewGame", { gameId: game_id });
+            socket.emit("joinNewGame", { gameId: game_id, user_id });
         });
     } catch (error) {
         console.error(
@@ -261,6 +305,7 @@ toggleChatButton.addEventListener("click", () => {
     // Cambia lo stato della chat
     isChatOpen = !isChatOpen;
     console.log("isChatOpen:", isChatOpen);
+
     // Mostra o nasconde la chat in base allo stato
     if (isChatOpen) {
         console.log("it is open:", isChatOpen);
@@ -272,19 +317,27 @@ toggleChatButton.addEventListener("click", () => {
             document.getElementById("notificationSymbol");
         notificationSymbol.classList.add("hidden");
 
+        // Visualizza i messaggi non letti
         for (let game_id in unreadMessages) {
-            unreadMessages[game_id].forEach((msg) => {
+            const messages = unreadMessages[game_id];
+
+            messages.forEach((msg) => {
                 displayReceivedMessage(
                     msg.messageText,
                     msg.avatar,
                     msg.username
                 );
             });
+            const lastMessage = messages[messages.length - 1];
+            socket.emit("chatRead", {
+                game_id: game_id,
+                user_id: user_id, // o recuperalo dal contesto auth
+                readUntil: lastMessage.sentAt,
+            });
+            console.log(`chat read event sent`);
         }
-
-        // Pulisci i messaggi non letti una volta che sono stati visualizzati
-        unreadMessages = {};
-        console.log(`unreadMessages should be empty: ${unreadMessages} `);
+        unreadMessages = {}; // Resetta i messaggi non letti
+        console.log(`unreadMessages should be empty:`, unreadMessages);
     } else {
         console.log("it is closed:", isChatOpen);
 

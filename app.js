@@ -21,6 +21,7 @@ connectDB();
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+const chatReadMap = new Map();
 
 io.on("connection", (socket) => {
     console.log("Nuovo client connesso:", socket.id);
@@ -110,6 +111,14 @@ io.on("connection", (socket) => {
         // Salva il messaggio nel backend
         game.chat.push(message);
         console.log("Chat aggiornata:", game.chat);
+        let gameChatMap = chatReadMap.get(game_id);
+        if (!gameChatMap) {
+            gameChatMap = new Map(); // Se non esiste ancora, creiamo una nuova mappa
+            chatReadMap.set(game_id, gameChatMap);
+        }
+
+        // Aggiungi o aggiorna il timestamp dell'utente nella mappa del gioco
+        gameChatMap.set(user_id, message.sentAt);
 
         // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
         socket.to(game_id).emit("receiveChatMessage", {
@@ -121,38 +130,128 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("chatRead", (data) => {
+        const { game_id, user_id, readUntil } = data;
+
+        if (!chatReadMap.has(game_id)) {
+            // Se il gioco (chat) non è presente nella mappa, creiamo una nuova entry
+            chatReadMap.set(game_id, new Map());
+        }
+
+        const gameChatMap = chatReadMap.get(game_id);
+        gameChatMap.set(user_id, readUntil);
+
+        console.log(
+            `Updated read status for chat: ${game_id}, user: ${user_id}, readUntil: ${readUntil}`
+        );
+    });
+
+    socket.on("chapterRead", ({ game_id, user_id, readUntil }) => {
+        const game = activeGames.get(game_id);
+        if (!game) return;
+
+        const readMap = game.chapterReadMap;
+        const previous = readMap.get(user_id);
+
+        if (!previous || readUntil > previous) {
+            readMap.set(user_id, readUntil);
+            console.log(
+                `Utente ${user_id} ha letto fino al capitolo con timestamp ${readUntil}`
+            );
+        }
+    });
+
     socket.on("startGameCountdown", ({ gameId }) => {
         startGameCountdown(io, gameId);
     });
 
-    socket.on("joinNewGame", ({ gameId }) => {
-        // console.log(`gameId ricevuto dal client:`, gameId); // Log del valore originale
-        // console.log(`gameId convertito in numero:`, gameId);
-        // console.log(`Socket ${socket.id} si è unito al gioco ${gameId}`);
+    socket.on("joinNewGame", ({ gameId, user_id }) => {
         socket.join(gameId);
 
-        setTimeout(() => {
-            const connectedSockets = io.sockets.adapter.rooms.get(gameId);
-            console.log(
-                `Client connessi alla stanza ${gameId} dopo un ritardo:`,
-                connectedSockets
-                    ? Array.from(connectedSockets)
-                    : "Nessun client connesso"
-            );
-        }, 50);
+        const game = activeGames.get(gameId);
+        const gameChatMap = chatReadMap.get(gameId);
 
-        console.log(
-            `Sta per essere emesso 'playerJoined' nella stanza ${gameId} con i seguenti dati:`,
-            {
-                message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
-                socketId: socket.id,
+        const readMap = game.chapterReadMap;
+        const readUntil = readMap.get(user_id);
+        const lastRead = gameChatMap ? gameChatMap.get(user_id) : null;
+        const lastMessage = game?.chat[game.chat.length - 1];
+        const chapters = game?.chapters || [];
+
+        let hasUnreadChapter = false;
+        let allMessagesRead = false;
+
+        if (chapters.length > 0) {
+            const lastChapter = chapters[chapters.length - 1];
+            const lastTimestamp = lastChapter.timestamp;
+
+            // Se l'utente non ha ancora letto nulla, o ha letto fino a un timestamp più vecchio
+            if (!readUntil || isNaN(readUntil) || readUntil < lastTimestamp) {
+                hasUnreadChapter = true;
             }
-        );
+        }
+
+        if (game.chat.length > 0 && lastRead && lastMessage) {
+            console.log(
+                `Comparing last read (${new Date(
+                    lastRead
+                )}) with last message sentAt (${new Date(lastMessage.sentAt)})`
+            );
+
+            // Verifica se l'utente ha letto tutti i messaggi fino all'ultimo
+            allMessagesRead =
+                new Date(lastRead) >= new Date(lastMessage.sentAt);
+            console.log(`All messages read: ${allMessagesRead}`);
+        }
+
+        if (game.chat.length === 0) {
+            allMessagesRead = true; // Non c'è nulla da leggere
+        }
+
+        // Invia la chat e lo stato di lettura al client
+        socket.emit("chatStatus", {
+            allMessagesRead,
+            chat: game?.chat || [],
+            game_id: gameId,
+        });
+
+        socket.emit("chapterStatus", {
+            game_id: gameId,
+            hasUnreadChapter,
+        });
 
         io.in(gameId).emit("playerJoined", {
-            message: `Un nuovo giocatore si è unito alla stanza ${gameId}`,
+            message: `A new player has joined the game ${gameId}`,
             socketId: socket.id,
         });
+    });
+
+    socket.on("updateChapterStatus", ({ game_id, user_id }) => {
+        const game = activeGames.get(game_id);
+
+        // Verifica che il gioco esista
+        if (game) {
+            // Ottieni l'ultimo capitolo del gioco
+            const lastChapter = game?.chapters[game.chapters.length - 1];
+            const lastChapterTimestamp = lastChapter
+                ? lastChapter.timestamp
+                : null;
+            console.log(
+                `Confronto dei timestamp per il gioco ${game_id}, utente ${user_id}:`
+            );
+            console.log(
+                `Timestamp dell'ultimo capitolo: ${new Date(
+                    lastChapterTimestamp
+                )}`
+            );
+
+            // Aggiorna il timestamp dell'ultimo capitolo letto per l'utente
+            game.chapterReadMap.set(user_id, lastChapterTimestamp);
+            console.log(
+                `Aggiornato il capitolo letto per l'utente ${user_id} nel gioco ${game_id}`
+            );
+        } else {
+            console.error(`Gioco con ID ${game_id} non trovato.`);
+        }
     });
 
     socket.on("disconnect", () => {

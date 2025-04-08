@@ -1,3 +1,5 @@
+const user_id = Number(localStorage.getItem("user_id"));
+
 document.addEventListener("DOMContentLoaded", function () {
     const swiper = new Swiper(".swiper-container", {
         loop: true,
@@ -125,9 +127,78 @@ function initSocket() {
                 `[data-game-id="${game_id}"]`
             );
             if (wrapper) {
-                const dot = wrapper.querySelector(".notification-dot");
+                const dot = wrapper.querySelector(".chat-notification-dot");
                 if (dot) {
                     dot.classList.remove("hidden");
+                }
+            }
+        });
+
+        socket.on("chatStatus", ({ allMessagesRead, chat, game_id }) => {
+            const gameWrapper = document.querySelector(
+                `[data-game-id="${game_id}"]`
+            );
+
+            // Controlla se il wrapper per il gioco esiste
+            if (gameWrapper) {
+                const chatNotificationDot = gameWrapper.querySelector(
+                    ".chat-notification-dot"
+                );
+
+                if (chatNotificationDot) {
+                    if (!allMessagesRead) {
+                        // Se ci sono messaggi non letti, rimuovi 'hidden' per visualizzare la notifica
+                        chatNotificationDot.classList.remove("hidden");
+                        console.log(
+                            `Notifica di chat visibile per il gioco ${game_id}`
+                        );
+                    } else {
+                        // Se tutti i messaggi sono letti, mantieni la notifica nascosta
+                        chatNotificationDot.classList.add("hidden");
+                        console.log(
+                            `Notifica di chat nascosta per il gioco ${game_id}`
+                        );
+                    }
+                }
+            }
+        });
+
+        socket.on("chapterStatus", ({ game_id, hasUnreadChapter }) => {
+            console.log(`allChaptersRead = ${hasUnreadChapter}`);
+            const gameWrapper = document.querySelector(
+                `[data-game-id="${game_id}"]`
+            );
+            if (!gameWrapper) return;
+
+            const chapterNotificationDot = gameWrapper.querySelector(
+                ".chapter-notification-dot"
+            );
+            if (!chapterNotificationDot) return;
+
+            if (hasUnreadChapter) {
+                // Ci sono capitoli non letti, mostra il badge
+                chapterNotificationDot.classList.remove("hidden");
+            } else {
+                // Tutto letto, nascondi il badge
+                chapterNotificationDot.classList.add("hidden");
+            }
+        });
+
+        socket.on("newChapterNotification", ({ timestamp, gameId }) => {
+            console.log(`Nuovo capitolo arrivato: ${timestamp}`);
+            console.log(`game id in arrivo: ${gameId}`);
+
+            const gameWrapper = document.querySelector(
+                `[data-game-id="${gameId}"]`
+            );
+            if (gameWrapper) {
+                // Trova l'icona di notifica per il nuovo capitolo
+                const chapterNotificationDot = gameWrapper.querySelector(
+                    ".chapter-notification-dot"
+                );
+                if (chapterNotificationDot) {
+                    // Mostra la notifica per il capitolo
+                    chapterNotificationDot.classList.remove("hidden");
                 }
             }
         });
@@ -366,7 +437,7 @@ async function fetchdashboardData() {
 
             Object.keys(games).forEach((gameId) => {
                 console.log(`Gmae id to connect: ${gameId}`);
-                socket.emit("joinNewGame", { gameId });
+                socket.emit("joinNewGame", { gameId, user_id });
             });
 
             gameUiContainer.classList.remove("hidden");
@@ -382,15 +453,19 @@ async function fetchdashboardData() {
                 button.innerText = `Torna al game ${index + 1}`;
                 button.onclick = () => handleBackToGame(gameId);
                 button.className =
-                    "hover-sound text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
+                    "text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
 
-                // Icona di notifica (inizialmente nascosta)
-                const notificationDot = document.createElement("div");
-                notificationDot.className =
-                    "notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden";
+                // Crea le due notifiche (per la chat e il nuovo capitolo)
+                const notificationHtml = `
+        <div class="chat-notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
+        <div class="chapter-notification-dot absolute top-0 left-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
+    `;
 
-                wrapper.appendChild(button);
-                wrapper.appendChild(notificationDot);
+                // Aggiungi il pulsante e le notifiche al wrapper
+                wrapper.innerHTML += notificationHtml;
+                wrapper.appendChild(button); // Puoi anche appendere il bottone se non vuoi usare innerHTML
+
+                // Aggiungi il wrapper al contenitore
                 buttonsContainer.appendChild(wrapper);
             });
 
@@ -501,7 +576,11 @@ function abandonQueue() {
 
 function handleBackToGame(firstGameId) {
     if (firstGameId) {
-        // Reindirizza alla pagina del gioco
+        socket.emit("updateChapterStatus", {
+            game_id: firstGameId,
+            user_id,
+        });
+
         window.location.href = `/game/${firstGameId}`;
     } else {
         console.error("game_id non trovato. Impossibile tornare in partita.");
