@@ -30,19 +30,18 @@ router.post("/login", async (req, res) => {
 
         const isProduction = process.env.NODE_ENV === "production";
 
-        res.cookie("token", accessToken, {
-            httpOnly: true, // Il cookie non può essere letto tramite
-            maxAge: 30 * 1000, // La durata del cookie (30 secondi)
-            // maxAge: 15 * 60 * 100, // La durata del cookie (15 minuti)
-            secure: isProduction, // Usa HTTPS durante la produzione
-            sameSite: "Strict", // Impedisce l'invio in richieste cross-origin
+        res.cookie("accesstoken", newAccessToken, {
+            httpOnly: true,
+            maxAge: 15 * 60 * 1000,
+            secure: isProduction,
+            sameSite: "Strict",
         });
 
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true, // Il cookie non può essere letto tramite JavaScript
-            maxAge: 15 * 24 * 3600 * 1000, // Durata del cookie (15 giorni)
-            secure: isProduction, // Usa HTTPS durante la produzione
-            sameSite: "Strict", // Impedisce l'invio in richieste cross-origin
+            httpOnly: true,
+            maxAge: 15 * 24 * 3600 * 1000,
+            secure: isProduction,
+            sameSite: "Strict",
         });
 
         res.status(200).json({ success: true });

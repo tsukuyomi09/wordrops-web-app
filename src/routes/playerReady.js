@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { activeGames, startCountdown } = require("../services/gameManager");
+const checkAuth = require("../middlewares/checkAuthToken");
 
-router.post("/game/:gameId/player-ready", async (req, res) => {
+router.post("/game/:gameId/player-ready", checkAuth, async (req, res) => {
     const { gameId } = req.params;
 
     // Cerca il gioco nella mappa activeGames
