@@ -1,39 +1,33 @@
-document
-    .getElementById("registrationForm")
-    .addEventListener("submit", async (e) => {
-        e.preventDefault();
+async function registerUser() {
+    const userEmail = document.getElementById("email").value;
+    const userPassword = document.getElementById("password").value;
 
-        const userEmail = document.getElementById("regEmail").value;
-        const userPassword = document.getElementById("regPassword").value;
+    try {
+        const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({ userEmail, userPassword }),
+        });
 
-        try {
-            const response = await fetch("/register", {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({ userEmail, userPassword }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                alert("You are now registered");
-                document.getElementById("registrationForm").reset();
-            } else {
-                const errorData = await response.json();
-                alert(`Errore: ${errorData.message}`);
-            }
-        } catch (error) {
-            console.error("Errore:", error);
-            alert("Si è verificato un errore durante la registrazione.");
+        if (response.ok) {
+            const data = await response.json();
+            alert("You are now registered");
+            document.getElementById("registrationForm").reset();
+        } else {
+            const errorData = await response.json();
+            alert(`Errore: ${errorData.message}`);
         }
-    });
+    } catch (error) {
+        console.error("Errore:", error);
+        alert("Si è verificato un errore durante la registrazione.");
+    }
+}
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const loginEmail = document.getElementById("loginEmail").value; // Usato per cercare l'utente, invece di loginUserName
-    const loginPassword = document.getElementById("loginPassword").value;
+async function loginUser() {
+    const userEmail = document.getElementById("email").value;
+    const userPassword = document.getElementById("password").value;
 
     try {
         const response = await fetch("/login", {
@@ -42,7 +36,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
                 "Content-type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ loginEmail, loginPassword }),
+            body: JSON.stringify({ userEmail, userPassword }),
         });
 
         const data = await response.json(); // Parsing della risposta JSON
@@ -52,7 +46,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
                 window.location.href = data.redirectTo;
             } else {
                 localStorage.setItem("username", data.username);
-                document.getElementById("loginForm").reset();
+                document.getElementById("registrationForm").reset();
                 window.location.href = `/dashboard/${data.username}`;
             }
         } else {
@@ -65,7 +59,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     } catch (error) {
         console.error("Errore durante il login:", error);
     }
-});
+}
 
 // google sign in
 
@@ -80,24 +74,34 @@ function handleCredentialResponse(response) {
         .then((res) => res.json())
         .then((data) => {
             console.log("Risposta dal server:", data);
-            // Qui puoi fare qualcosa con la risposta del server (ad esempio, reindirizzare o mostrare un messaggio)
+            if (data.success) {
+                if (data.needsProfileCompletion && data.redirectTo) {
+                    window.location.href = data.redirectTo;
+                } else {
+                    // Reindirizza alla homepage o dashboard se ha già completato il profilo
+                    localStorage.setItem("username", data.user.username);
+                    window.location.href = `/dashboard/${data.user.username}`;
+                }
+            }
         })
         .catch((error) => {
             console.error("Errore durante l'invio del token al server:", error);
         });
 }
-window.onload = function () {
-    google.accounts.id.initialize({
-        client_id:
-            "706006966723-3qafmigciao7oo5vguvhks4353i6cvhq.apps.googleusercontent.com",
-        callback: handleCredentialResponse,
-    });
 
-    google.accounts.id.renderButton(
-        document.getElementById("buttonDiv"), // cambia se usi un altro ID
-        {
+window.onload = function () {
+    if (typeof google !== "undefined" && google.accounts) {
+        google.accounts.id.initialize({
+            client_id:
+                "706006966723-3qafmigciao7oo5vguvhks4353i6cvhq.apps.googleusercontent.com",
+            callback: handleCredentialResponse,
+        });
+
+        google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
             theme: "outline",
             size: "large",
-        }
-    );
+        });
+    } else {
+        console.error("Google API non caricato correttamente.");
+    }
 };

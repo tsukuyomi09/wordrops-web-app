@@ -6,14 +6,14 @@ const { getUserByEmail } = require("../services/userService");
 const { verifyPassword } = require("../utils/authUtility");
 
 router.post("/login", async (req, res) => {
-    const { loginEmail, loginPassword } = req.body;
-    if (!loginEmail || !loginPassword) {
+    const { userEmail, userPassword } = req.body;
+    if (!userEmail || !userPassword) {
         return res.status(400).json({ message: "Fill up all fields" });
     }
 
     try {
-        const user = await getUserByEmail(loginEmail);
-        await verifyPassword(user.password, loginPassword);
+        const user = await getUserByEmail(userEmail);
+        await verifyPassword(user.password, userPassword);
 
         console.log(`email da utilizzare: ${user.email}`);
         console.log(`is verified? ${user.verified}`);
