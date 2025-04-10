@@ -46,7 +46,7 @@ async function loginUser() {
                 window.location.href = data.redirectTo;
             } else {
                 localStorage.setItem("username", data.username);
-                document.getElementById("loginForm").reset();
+                document.getElementById("registrationForm").reset();
                 window.location.href = `/dashboard/${data.username}`;
             }
         } else {
@@ -74,7 +74,15 @@ function handleCredentialResponse(response) {
         .then((res) => res.json())
         .then((data) => {
             console.log("Risposta dal server:", data);
-            // Qui puoi fare qualcosa con la risposta del server (ad esempio, reindirizzare o mostrare un messaggio)
+            if (data.success) {
+                if (data.needsProfileCompletion && data.redirectTo) {
+                    window.location.href = data.redirectTo;
+                } else {
+                    // Reindirizza alla homepage o dashboard se ha già completato il profilo
+                    localStorage.setItem("username", data.user.username);
+                    window.location.href = `/dashboard/${data.user.username}`;
+                }
+            }
         })
         .catch((error) => {
             console.error("Errore durante l'invio del token al server:", error);

@@ -4,7 +4,7 @@ const checkAuth = require("../middlewares/checkAuthToken");
 
 router.delete("/logout", checkAuth, (req, res) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("accesstoken");
         res.clearCookie("refreshToken");
 
         res.status(200).json({ message: "Logout effettuato con successo" });

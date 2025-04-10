@@ -39,7 +39,7 @@ async function checkUsernameAndProceed() {
         usernameAvailable = data.available;
 
         if (usernameAvailable) {
-            goToStep2(); // se tutto ok, passo al secondo step
+            goToStep2(username); // se tutto ok, passo al secondo step
         } else {
             usernameErrorAnimation();
         }
@@ -65,8 +65,7 @@ function usernameErrorAnimation() {
 }
 
 // Step navigation
-function goToStep2() {
-    const username = document.getElementById("username").value;
+function goToStep2(username) {
     if (username) {
         // Fade-out di step1
         const step1 = document.getElementById("step1");
@@ -118,39 +117,74 @@ function gobackToStep1() {
 // Confirm profile and submit
 function confirmProfile() {
     const username = document.getElementById("username").value;
-    const avatarId = 1; // Here you would get the selected avatar dynamically.
-    if (username && avatarId) {
-        alert("Profilo confermato: " + username);
-        // You can send this info to the server here, e.g., via AJAX
+    const avatarName = document.getElementById("selectedAvatar").value; // Recupera il nome dell'avatar
+    if (username && avatarName) {
+        finishOnboarding(username, avatarName);
     } else {
         alert("Assicurati di aver selezionato un avatar.");
     }
 }
 
 function selectAvatar(id) {
-    // Rimuove la classe da tutti i contenitori avatar
     document.querySelectorAll(".avatar").forEach((el) => {
         el.classList.remove("selected-avatar");
     });
 
-    // Mostra il pulsante di conferma con un fade-in
     const confirmButton = document.getElementById("confirm-profile");
     confirmButton.classList.remove("hidden");
     confirmButton.classList.remove("opacity-0");
     confirmButton.classList.add("opacity-100");
 
-    // Nasconde il testo "Scegli un Avatar" con un fade-out
     const chooseAvatarText = document.getElementById("choose-avatar-text");
     chooseAvatarText.classList.remove("opacity-100");
     chooseAvatarText.classList.add("opacity-0");
 
-    // Trova il contenitore genitore dell'immagine cliccata e aggiunge la selezione
     const clickedImg = document.querySelector(
         `.avatar-image[onclick="selectAvatar(${id})"]`
     );
 
     if (clickedImg) {
+        const avatarName = clickedImg.getAttribute("data-name");
         const container = clickedImg.closest(".avatar");
         if (container) container.classList.add("selected-avatar");
+
+        // Trova il campo input nascosto e imposta il valore dell'avatar selezionato
+        const selectedAvatarInput = document.getElementById("selectedAvatar");
+        if (selectedAvatarInput) {
+            selectedAvatarInput.value = avatarName; // Imposta il nome dell'avatar nel campo nascosto
+            console.log(`Avatar selezionato: ${avatarName}`);
+        } else {
+            console.error("Campo 'selectedAvatar' non trovato");
+        }
+    }
+}
+
+async function finishOnboarding(username, avatarName) {
+    try {
+        const urlPath = window.location.pathname;
+        const email = urlPath.split("/")[2];
+        const response = await fetch(`/finish-onboarding/${email}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, avatarName }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("username", data.username);
+            console.log("Dati ricevuti dal server:", data);
+            window.location.href = `/dashboard/${data.username}`;
+        } else {
+            const errorData = await response.json();
+            alert(
+                "Errore durante il completamento dell'onboarding: " +
+                    errorData.message
+            );
+        }
+    } catch (error) {
+        console.error("Errore nella fetch:", error);
+        alert("Si è verificato un errore durante l'invio dei dati.");
     }
 }
