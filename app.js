@@ -8,6 +8,7 @@ const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
 const { preGameQueue } = require("./src/routes/queueRoutesNew");
 const { activeGames } = require("./src/services/gameManager");
+const { client } = require("./src/database/db");
 
 const app = express();
 const server = http.createServer(app);
@@ -304,6 +305,30 @@ app.get("/libreria", (req, res) => {
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
 });
+app.get("/completa-profilo/:email", (req, res) => {
+    const email = req.params.email;
+    // Assicurati che l'email esista nel database
+    client.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email],
+        (err, result) => {
+            if (err) {
+                console.error("Errore nel recuperare i dati dell'utente", err);
+                return res.status(500).send("Errore nel recupero dell'utente.");
+            }
+
+            if (result.rows.length === 0) {
+                return res.status(404).send("Utente non trovato.");
+            }
+
+            // Se l'utente esiste, mostra la pagina di completamento profilo
+            res.sendFile(
+                path.join(__dirname, "views", "completa-profilo.html")
+            );
+        }
+    );
+    res.sendFile(path.join(__dirname, "views", "completa-profilo.html"));
+});
 app.get("/image", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "image.html"));
 });
@@ -311,6 +336,9 @@ app.get("/image", (req, res) => {
 const waitingListRoute = require("./src/routes/waitingList");
 const registerRoutes = require("./src/routes/registerRoutes");
 const loginRoutes = require("./src/routes/loginRoutes");
+const googleLogin = require("./src/routes/googleLogin");
+const verifyEmail = require("./src/routes/verifyEmail");
+const createProfileCheckUsername = require("./src/routes/createProfileCheckUsername");
 const dashboardRoutes = require("./src/routes/dashboardRoutes");
 const usersProfileRoute = require("./src/routes/usersProfileRoute");
 const usersProfileData = require("./src/routes/usersProfileData");
@@ -325,7 +353,6 @@ const playerReady = require("./src/routes/playerReady");
 const gameRoute = require("./src/routes/gameRoute");
 const gameRouteData = require("./src/routes/gameData");
 const gamesRouteData = require("./src/routes/gamesData");
-
 const saveChapterChangeTurn = require("./src/routes/saveChapterChangeTurn");
 const getChapters = require("./src/routes/getChapters");
 const verifyLogIn = require("./src/routes/verifyLogIn");
@@ -337,6 +364,9 @@ app.use(waitingListRoute);
 app.use(verifyLogIn);
 app.use(registerRoutes);
 app.use(loginRoutes);
+app.use(googleLogin);
+app.use(verifyEmail);
+app.use(createProfileCheckUsername);
 app.use(dashboardRoutes);
 app.use(usersProfileRoute);
 app.use(getPersonalLibrary);

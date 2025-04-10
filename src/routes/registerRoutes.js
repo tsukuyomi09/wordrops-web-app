@@ -1,20 +1,23 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 const router = express.Router();
-const { client } = require('../database/db'); 
-const { sendWelcomeEmail } = require('../utils/registration-email');  
-const argon2 = require('argon2');
+const { client } = require("../database/db");
+const { sendWelcomeEmail } = require("../utils/registration-email");
+const argon2 = require("argon2");
+const crypto = require("crypto");
 
 router.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "register.html"))
-})
+    res.sendFile(path.join(__dirname, "public", "register.html"));
+});
 
 router.post("/register", async (req, res) => {
-    const { userEmail, userPassword, userName } = req.body;
+    const { userEmail, userPassword } = req.body;
 
     // Controlla che tutti i campi siano presenti
-    if (!userName || !userEmail || !userPassword) {
-        return res.status(400).json({ message: "Tutti i campi sono richiesti." });
+    if (!userEmail || !userPassword) {
+        return res
+            .status(400)
+            .json({ message: "Tutti i campi sono richiesti." });
     }
 
     let hashedPassword;
@@ -28,23 +31,33 @@ router.post("/register", async (req, res) => {
         });
     } catch (err) {
         console.error("Errore durante hashing della password");
-        return res.status(500).json({ message: "Errore durante la registrazione." });
+        return res
+            .status(500)
+            .json({ message: "Errore durante la registrazione." });
     }
 
     try {
+        const verificationToken = crypto.randomBytes(32).toString("hex");
+
         // Inserimento dei dati nel database
-        const query = "INSERT INTO users (email, password, username) VALUES ($1, $2, $3) RETURNING *";
-        const result = await client.query(query, [userEmail, hashedPassword, userName]);
+        const query =
+            "INSERT INTO users (email, password, username, verification_token) VALUES ($1, $2, $3, $4) RETURNING *";
+        const result = await client.query(query, [
+            userEmail,
+            hashedPassword,
+            null,
+            verificationToken,
+        ]);
 
         // Invia una mail di benvenuto
-        sendWelcomeEmail(userEmail, userName);
+        sendWelcomeEmail(userEmail, verificationToken);
 
         // Risposta con i dati dell'utente registrato
         res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error("Errore durante l'inserimento nel database", err);
         if (err.code === "23505") {
-            return res.status(400).json({ message: "L'email o il nome utente sono già in uso." });
+            return res.status(400).json({ message: "L'email e già in uso." });
         } else {
             return res.status(500).json({ message: "Errore del server." });
         }

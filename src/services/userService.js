@@ -1,13 +1,15 @@
 const { client } = require("../database/db");
 
-async function getUserByUsername(loginUserName) {
+async function getUserByEmail(email) {
+    console.log(`email da utilizzare funzione getUserByEmail: ${email}`);
+
     const query =
-        "SELECT user_id, password, username, avatar FROM users WHERE username = $1";
-    const result = await client.query(query, [loginUserName]);
+        "SELECT user_id, password, username, avatar, email, verified FROM users WHERE email = $1";
+    const result = await client.query(query, [email]);
     if (result.rows.length === 0) {
-        throw new Error("Invalid Credentials");
+        throw new Error("User not found");
     }
     return result.rows[0];
 }
 
-module.exports = { getUserByUsername };
+module.exports = { getUserByEmail };

@@ -385,8 +385,8 @@ function logMessage(messageText) {
     wrapper.className =
         "p-2 mb-2 bg-blue-100 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
     wrapper.innerHTML = `
-        <img src="/images/avatars/${current_player_avatar}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
-        <div>
+
+    <div>
             <div class="font-semibold text-sm text-gray-800">${
                 username || "Anonimo"
             }</div>
