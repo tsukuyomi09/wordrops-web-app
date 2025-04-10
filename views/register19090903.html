@@ -35,6 +35,11 @@
             rel="stylesheet"
         />
         <script src="./js/checkAuth.js"></script>
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
     </head>
     <body>
         <!-- Google Tag Manager (noscript) -->
@@ -47,41 +52,89 @@
             ></iframe
         ></noscript>
         <div
-            class="page-wrapper flex items-center justify-center bg-cover relative"
-            style="
-                background-image: url('./images/register-image.jpg');
-                height: 100vh;
-            "
-        >
-            <div
-                class="absolute inset-0 bg-gradient-to-b from-black to-transparent"
-            >
+        class="page-wrapper p-36 flex-row items-center justify-center bg-cover relative"
+        style="
+        background-image: url('./images/blue-background.jpg');
+        height: 100vh;
+        background-size: 50% 100%;
+        background-position: right center;
+        background-repeat: no-repeat;
+    "
+>
+                    <img
+                    class="absolute bottom-0 right-0"
+                    src="/images/library_platypus.png"
+                    alt="ornitorinco davanti alla libreria"
+                    style="
+                        height: 50vh; 
+                        width: auto; /
+                    "
+                />
+                <div class="logo-container absolute left-4 top-4">
+                    <img src="/images/wordrops_logo.png" alt="Wordrops Logo" class="mx-auto w-36 lg:w-64" />
+                </div>
+
                 <div
                     class="flex flex-col justify-start items-center justify-center relative z-10 h-full"
                 >
                     <div
-                        class="wrapper flex-col bg-gray-100 bg-opacity-60 p-8 rounded-lg"
+                        class="wrapper bg-gray-100 px-24  bg-opacity-90 p-8 rounded-lg shadow-md relative"
                     >
-                        <form id="registrationForm" class="flex-col mb-16">
+                    <img src="./images/pen.png" alt="penna grossa colorata" class="absolute -top-3 -left-2 w-16 h-16">
+                        <form id="registrationForm" class="flex-col">
                             <h2
-                                class="mb-4 text-xl font-bold border-amber-600"
-                                style="color: rgb(120 53 15)"
+                                class="mb-4 text-xl font-bold text-gray-600"
                             >
-                                Create Account
+                                CREA ACCOUNT
                             </h2>
-
+                            <br />
                             <input
-                                id="regUserName"
-                                class="p-2 rounded-lg mb-4 border border-solid"
-                                style="border-color: rgb(120 53 15)"
-                                type="text"
-                                id="regUserName"
-                                placeholder="Username"
+                                id="regEmail"
+                                class="p-2 rounded-lg mb-4 border border-blue-400 w-full"
+                                type="email"
+                                placeholder="Email"
                                 required
                             />
                             <br />
                             <input
-                                id="regEmail"
+                                id="regPassword"
+                                class="p-2 rounded-lg mb-4 border border-blue-400 w-full"
+                                type="password"
+                                placeholder="Password"
+                                autocomplete="new-password"
+                                required
+                            />
+                            <br />
+                            <div style="display: flex; gap: 16px; align-items: center;">
+                                <button
+                                    class="p-2 border-2 font-semibold rounded-lg px-4 text-sg text-white bg-blue-400 hover:bg-blue-600"
+                                    type="submit"
+                                >
+                                    CREA
+                                </button>
+                                <div id="buttonDiv"></div>
+
+                            </div>
+
+                        </form>
+                        <button class="mt-8 text-grey-400 underline">hai giá un account?</button>
+
+                        
+                    </div>
+                    <div class="wrapper flex-col bg-gray-100 px-24 hidden bg-opacity-90 p-8 rounded-lg"
+                    >
+                    <h2
+                    class="mb-4 text-xl font-bold text-gray-600"
+                >
+                    Login
+                </h2>
+                        <form
+                            id="loginForm"
+                            class="flex-col"
+                            autocomplete="off"
+                        >
+                            <input
+                                id="loginEmail"
                                 class="p-2 rounded-lg mb-4 border border-solid"
                                 style="border-color: rgb(120 53 15)"
                                 type="email"
@@ -90,46 +143,8 @@
                             />
                             <br />
                             <input
-                                id="regPassword"
-                                class="p-2 rounded-lg mb-4 border border-solid"
-                                style="border-color: rgb(120 53 15)"
-                                type="password"
-                                placeholder="Password"
-                                autocomplete="new-password"
-                                required
-                            />
-                            <br />
-                            <button
-                                class="p-2 border-2 text-white rounded-lg"
-                                style="background-color: rgb(120 53 15)"
-                                type="submit"
-                            >
-                                SIGN UP
-                            </button>
-                        </form>
-                        <h2
-                            class="mb-4 text-xl font-bold"
-                            style="color: rgb(120 53 15)"
-                        >
-                            Login
-                        </h2>
-                        <form
-                            id="loginForm"
-                            class="flex-col"
-                            autocomplete="off"
-                        >
-                            <input
-                                id="loginUserName"
-                                class="p-2 rounded-lg mb-4 border border-solid"
-                                style="border-color: rgb(120 53 15)"
-                                type="text"
-                                placeholder="Username"
-                                required
-                            />
-                            <br />
-                            <input
                                 id="loginPassword"
-                                class="p-2 rounded-lg mb-4 border border-solid"
+                                class="p-2 rounded-lg mb-4 border border-solid w-full"
                                 style="border-color: rgb(120 53 15)"
                                 type="password"
                                 placeholder="Password"
@@ -138,11 +153,10 @@
                             />
                             <br />
                             <button
-                                class="p-2 border-2 text-white bg-orange-800 rounded-lg"
-                                style="background-color: rgb(120 53 15)"
-                                type="submit"
+                            class="p-2 border-2 font-semibold rounded-lg px-4 text-sg text-white bg-blue-400 hover:bg-blue-600"
+                            type="submit"
                             >
-                                SIGN IN
+                                ENTRA
                             </button>
                         </form>
                     </div>

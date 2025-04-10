@@ -21,6 +21,15 @@
   transition: right 0.3s ease-in-out; 
 }
 
+.pastel-color {
+  background-color: #FAF4F4;
+}
+
+.selected-avatar {
+  border-color: #22c55e !important; /* forza il colore del bordo */
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5) !important;
+  transition: all 0.3s ease-in-out;
+}
 
 .font-consolas {
 font-family: 'Consolas', 'Courier New', monospace;

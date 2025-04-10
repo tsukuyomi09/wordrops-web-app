@@ -6,13 +6,12 @@ const checkUserStatus = require("../middlewares/checkUserStatus");
 router.get("/userData", checkAuth, checkUserStatus, async (req, res) => {
     try {
         const { user_id, username, userStatus, userGames, maxGamesReached } =
-            req; // Recupera il `username` direttamente da `req`
+            req;
 
         if (!username) {
             return res.status(404).json({ error: "Username non trovato" });
         }
 
-        // Puoi restituire direttamente lo `username` senza fare una query al database
         res.status(200).json({
             user_id,
             username,

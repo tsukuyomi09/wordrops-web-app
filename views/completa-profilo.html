@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link href="/style/style.css" rel="stylesheet" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            rel="stylesheet"
+        />
+
+        <link
+            href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="relative w-full h-screen flex items-center justify-center">
+            <!-- Immagine sfondo interna -->
+            <img
+                src="/images/reading_platypus.png"
+                class="absolute top-0 left-0 w-full h-full object-contain opacity-100 pointer-events-none z-0"
+                alt="Reading Platypus"
+            />
+            <div
+                class="absolute top-0 left-0 w-full flex justify-center mt-6 z-10"
+            >
+                <img
+                    src="/images/wordrops_logo.png"
+                    alt="Wordrops Logo"
+                    class="w-48 lg:w-72"
+                />
+            </div>
+            <!-- Modal Container -->
+            <div class="modal rounded-lg w-128 h-128 p-8 z-10">
+                <!-- Step 1: Username Selection -->
+                <div
+                    id="step1"
+                    class="flex flex-col gap-24 step h-full w-full transition-opacity duration-500 opacity-100"
+                >
+                    <h2 class="text-2xl font-semibold mb-4 text-center">
+                        Benvenuto.. chi sei?
+                    </h2>
+                    <div>
+                        <input
+                            type="text"
+                            id="username"
+                            class="w-full p-3 border border-gray-300 rounded-md mb-4"
+                            placeholder="Scegli un username"
+                        />
+                        <button
+                            id="confirmButton"
+                            onclick="checkUsernameAndProceed()"
+                            class="w-full p-3 bg-blue-400 text-white rounded-md"
+                        >
+                            Continua
+                        </button>
+                        <div
+                            id="username-error"
+                            class="opacity-0 mt-8 text-red-400 font-semibold text-center transition-opacity duration-600"
+                        >
+                            username già in uso..
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Avatar Selection -->
+                <div
+                    id="step2"
+                    class="step h-full w-full hidden relative transition-opacity duration-500 opacity-100"
+                >
+                    <div class="relative w-96 h-96">
+                        <div
+                            id="choose-avatar-text"
+                            class="absolute font-semibold top-1/2 left-1/2 transform text-gray-600 -translate-x-1/2 -translate-y-1/2 text-center text-xl font-semibold"
+                        >
+                            Scegli un Avatar
+                        </div>
+                        <button
+                            id="confirm-profile"
+                            onclick="confirmProfile()"
+                            class="absolute z-10 px-4 py-2 top-1/2 left-1/2 text-white font-semibold transform -translate-x-1/2 -translate-y-1/2 hidden mb-2 bg-blue-400 text-white rounded-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300"
+                        >
+                            CREA PROFILO
+                        </button>
+
+                        <div
+                            class="absolute w-full h-full flex items-center justify-center"
+                        >
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(320deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/panda-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(40deg)"
+                                    onclick="selectAvatar(1)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(280deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/nami-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(80deg)"
+                                    onclick="selectAvatar(2)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(240deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/luffy-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(120deg)"
+                                    onclick="selectAvatar(3)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(200deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/shanks-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(160deg)"
+                                    onclick="selectAvatar(4)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(160deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/boa-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(200deg)"
+                                    onclick="selectAvatar(5)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(120deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/zoro-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(240deg)"
+                                    onclick="selectAvatar(6)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(80deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/chopper-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(280deg)"
+                                    onclick="selectAvatar(7)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(40deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/sanji-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(320deg)"
+                                    onclick="selectAvatar(8)"
+                                />
+                            </div>
+                            <div
+                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
+                                style="
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%)
+                                        rotate(0deg) translateX(180px);
+                                "
+                            >
+                                <img
+                                    src="/images/avatars/robin-icon-chibi.png"
+                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
+                                    style="transform: rotate(360deg)"
+                                    onclick="selectAvatar(9)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="px-3 absolute flex bottom-0 left-1/2 transform -translate-x-1/2 translate-y-36"
+                    >
+                        <button
+                            id="back-to-step-1"
+                            onclick="gobackToStep1()"
+                            class="p-3 bottom-0 font-semibold mb-2 text-gray-600 rounded-md"
+                        >
+                            <i class="fas fa-arrow-left mr-2"></i> indietro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/completeProfile.js" defer></script>
+    </body>
+</html>

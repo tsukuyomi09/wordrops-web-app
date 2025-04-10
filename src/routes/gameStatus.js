@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { activeGames } = require("../services/gameManager");
+const checkAuth = require("../middlewares/checkAuthToken");
 
-router.get("/game-status/:gameId", async (req, res) => {
+router.get("/game-status/:gameId", checkAuth, async (req, res) => {
     const { gameId } = req.params;
     const game = activeGames.get(gameId); // Ottieni il gioco dalla mappa
 
