@@ -305,9 +305,9 @@ app.get("/libreria", (req, res) => {
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
 });
-app.get("/completa-profilo", (req, res) => {
+app.get("/completa-profilo/:email", (req, res) => {
     const email = req.params.email;
-    // Assicurati che l'email esista nel database
+
     client.query(
         "SELECT * FROM users WHERE email = $1",
         [email],
@@ -320,12 +320,13 @@ app.get("/completa-profilo", (req, res) => {
             if (result.rows.length === 0) {
                 return res.status(404).send("Utente non trovato.");
             }
+
+            // Se tutto va bene, mostra la pagina HTML
             res.sendFile(
                 path.join(__dirname, "views", "completa-profilo.html")
             );
         }
     );
-    res.sendFile(path.join(__dirname, "views", "completa-profilo.html"));
 });
 app.get("/image", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "image.html"));
