@@ -45,6 +45,7 @@ font-family: 'Consolas', 'Courier New', monospace;
   }
 }
 
+
 .section-wrapper {
     background-image: url('/images/blobs.png');
     background-size: 50%; /* Riduce l'immagine al 50% della larghezza del contenitore */

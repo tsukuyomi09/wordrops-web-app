@@ -38,6 +38,7 @@ router.post("/register", async (req, res) => {
 
     try {
         const verificationToken = crypto.randomBytes(32).toString("hex");
+        console.log(`verific token ${verificationToken}`);
 
         // Inserimento dei dati nel database
         const query =
