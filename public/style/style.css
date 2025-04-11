@@ -53,6 +53,12 @@ font-family: 'Consolas', 'Courier New', monospace;
     background-repeat: no-repeat; /* Impedisce la ripetizione dell'immagine */
 }
 
+.editor-container {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
 @media (max-width: 1024px) { /* Schermi medi (tablet o piccoli desktop) */
   .section-wrapper {
       background-size: 80%; /* Aumenta al 80% */

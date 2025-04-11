@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const http = require("http");
-const socketio = require("socket.io");
+const { initSocket } = require("./src/services/socketManager");
 const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
 const { preGameQueue } = require("./src/routes/queueRoutesNew");
@@ -12,10 +12,9 @@ const { client } = require("./src/database/db");
 
 const app = express();
 const server = http.createServer(app);
-const { initSocket } = require("./src/services/socketManager");
 const io = initSocket(server);
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 connectDB();
 
@@ -386,6 +385,6 @@ app.use(gamesRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
 
-app.listen(PORT, "0.0.0.0", () => {
-    console.log("Server avviato su http://0.0.0.0:3000");
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
