@@ -105,10 +105,6 @@ function gobackToStep1() {
             el.classList.remove("selected-avatar");
         });
 
-        const chooseAvatarText = document.getElementById("choose-avatar-text");
-        chooseAvatarText.classList.remove("hidden"); // Mostra il testo
-
-        // Fade-in di step1
         step1.classList.remove("opacity-0");
         step1.classList.add("opacity-100");
     }, 500); // Tempo per completare il fade-out di step2 (500ms)
@@ -134,10 +130,6 @@ function selectAvatar(id) {
     confirmButton.classList.remove("hidden");
     confirmButton.classList.remove("opacity-0");
     confirmButton.classList.add("opacity-100");
-
-    const chooseAvatarText = document.getElementById("choose-avatar-text");
-    chooseAvatarText.classList.remove("opacity-100");
-    chooseAvatarText.classList.add("opacity-0");
 
     const clickedImg = document.querySelector(
         `.avatar-image[onclick="selectAvatar(${id})"]`

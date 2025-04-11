@@ -13,8 +13,12 @@ async function registerUser() {
 
         if (response.ok) {
             const data = await response.json();
-            alert("You are now registered");
-            document.getElementById("registrationForm").reset();
+            const modal = document.getElementById("registration-modal");
+            modal.classList.remove("hidden");
+
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 5000);
         } else {
             const errorData = await response.json();
             alert(`Errore: ${errorData.message}`);
@@ -53,7 +57,15 @@ async function loginUser() {
             if (data.error === "unverified_email") {
                 alert(data.message);
             } else {
-                alert("Credenziali errate");
+                const errorEl = document.getElementById("login-error");
+                errorEl.classList.remove("opacity-0");
+                errorEl.classList.add("opacity-100");
+
+                // Nasconde con fade-out dopo 1.5s
+                setTimeout(() => {
+                    errorEl.classList.remove("opacity-100");
+                    errorEl.classList.add("opacity-0");
+                }, 1500);
             }
         }
     } catch (error) {

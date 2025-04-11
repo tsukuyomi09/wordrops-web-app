@@ -16,7 +16,9 @@
         />
     </head>
     <body>
-        <div class="relative w-full h-screen flex items-center justify-center">
+        <div
+            class="relative w-full h-screen flex items-start justify-center md:py-64 py-36"
+        >
             <!-- Immagine sfondo interna -->
             <img
                 src="/images/reading_platypus.png"
@@ -70,23 +72,15 @@
                     id="step2"
                     class="step h-full w-full hidden relative transition-opacity duration-500 opacity-100"
                 >
-                    <div class="relative w-96 h-96">
+                    <div class="relative flex-col w-auto">
                         <div
-                            id="choose-avatar-text"
-                            class="absolute font-semibold top-1/2 left-1/2 transform text-gray-600 -translate-x-1/2 -translate-y-1/2 text-center text-xl font-semibold"
+                            class="font-semibold text-gray-600 text-center text-xl font-semibold mb-12"
                         >
                             Scegli un Avatar
                         </div>
-                        <button
-                            id="confirm-profile"
-                            onclick="confirmProfile()"
-                            class="absolute z-10 px-4 py-2 top-1/2 left-1/2 text-white font-semibold transform -translate-x-1/2 -translate-y-1/2 hidden mb-2 bg-blue-400 text-white rounded-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300"
-                        >
-                            CREA PROFILO
-                        </button>
 
                         <div
-                            class="absolute w-full h-full flex items-center justify-center"
+                            class="relative w-full h-full grid grid-cols-4 gap-4"
                         >
                             <input
                                 type="hidden"
@@ -96,167 +90,112 @@
                             />
 
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(320deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/panda-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(40deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(1)"
                                     data-name="panda-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(280deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/nami-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(80deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(2)"
                                     data-name="nami-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(240deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/luffy-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(120deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(3)"
                                     data-name="luffy-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(200deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/shanks-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(160deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(4)"
                                     data-name="shanks-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(160deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/boa-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(200deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(5)"
                                     data-name="boa-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(120deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/zoro-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(240deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(6)"
                                     data-name="zoro-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(80deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/chopper-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(280deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(7)"
                                     data-name="chopper-icon-chibi"
                                 />
                             </div>
                             <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(40deg) translateX(180px);
-                                "
-                            >
-                                <img
-                                    src="/images/avatars/sanji-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(320deg)"
-                                    onclick="selectAvatar(8)"
-                                    data-name="sanji-icon-chibi"
-                                />
-                            </div>
-                            <div
-                                class="avatar w-24 h-24 rounded-full flex items-center justify-center absolute cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500"
-                                style="
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%)
-                                        rotate(0deg) translateX(180px);
-                                "
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
                             >
                                 <img
                                     src="/images/avatars/robin-icon-chibi.png"
-                                    class="avatar-image w-18 h-20 rounded-full absolute p-2 cursor-pointer"
-                                    style="transform: rotate(360deg)"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
                                     onclick="selectAvatar(9)"
                                     data-name="robin-icon-chibi"
                                 />
                             </div>
+                            <div
+                                class="avatar md:w-24 md:h-24 w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg border-2 border-gray-300 transition-all duration-300 hover:border-gray-500 p-2 md:p-4"
+                            >
+                                <img
+                                    src="/images/avatars/sanji-icon-chibi.png"
+                                    class="avatar-image md:w-full md:h-full w-full h-full object-fit"
+                                    onclick="selectAvatar(8)"
+                                    data-name="sanji-icon-chibi"
+                                />
+                            </div>
                         </div>
                     </div>
+
                     <div
-                        class="px-3 absolute flex bottom-0 left-1/2 transform -translate-x-1/2 translate-y-36"
+                        class="px-3 relative w-full flex flex-col text-center justify-center bottom-0 left-1/2 transform -translate-x-1/2 translate-y-12"
                     >
+                        <button
+                            id="confirm-profile"
+                            onclick="confirmProfile()"
+                            class="inline-flex z-10 px-4 py-2 hidden text-white font-semibold mb-2 bg-blue-400 rounded-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300 mx-auto"
+                        >
+                            CREA PROFILO
+                        </button>
                         <button
                             id="back-to-step-1"
                             onclick="gobackToStep1()"
-                            class="p-3 bottom-0 font-semibold mb-2 text-gray-600 rounded-md"
+                            class="p-3 font-semibold mb-2 text-gray-600 rounded-md"
                         >
                             <i class="fas fa-arrow-left mr-2"></i> indietro
                         </button>
