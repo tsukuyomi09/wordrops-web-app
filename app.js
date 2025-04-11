@@ -306,27 +306,25 @@ app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
 });
 app.get("/completa-profilo", (req, res) => {
-    // const email = req.params.email;
-    // // Assicurati che l'email esista nel database
-    // client.query(
-    //     "SELECT * FROM users WHERE email = $1",
-    //     [email],
-    //     (err, result) => {
-    //         if (err) {
-    //             console.error("Errore nel recuperare i dati dell'utente", err);
-    //             return res.status(500).send("Errore nel recupero dell'utente.");
-    //         }
+    const email = req.params.email;
+    // Assicurati che l'email esista nel database
+    client.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email],
+        (err, result) => {
+            if (err) {
+                console.error("Errore nel recuperare i dati dell'utente", err);
+                return res.status(500).send("Errore nel recupero dell'utente.");
+            }
 
-    //         if (result.rows.length === 0) {
-    //             return res.status(404).send("Utente non trovato.");
-    //         }
-
-    //         // Se l'utente esiste, mostra la pagina di completamento profilo
-    //         res.sendFile(
-    //             path.join(__dirname, "views", "completa-profilo.html")
-    //         );
-    //     }
-    // );
+            if (result.rows.length === 0) {
+                return res.status(404).send("Utente non trovato.");
+            }
+            res.sendFile(
+                path.join(__dirname, "views", "completa-profilo.html")
+            );
+        }
+    );
     res.sendFile(path.join(__dirname, "views", "completa-profilo.html"));
 });
 app.get("/image", (req, res) => {
