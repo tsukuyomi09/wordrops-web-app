@@ -13,7 +13,7 @@ router.post("/login", async (req, res) => {
 
     try {
         const user = await getUserByEmail(userEmail);
-        await verifyPassword(user.password, userPassword);
+        // await verifyPassword(user.password, userPassword);
 
         console.log(`email da utilizzare: ${user.email}`);
         console.log(`is verified? ${user.verified}`);

@@ -575,8 +575,7 @@ function saveChapterChangeTurn(data) {
         })
         .then((result) => {
             document.getElementById("chapter-title").value = ""; // Reset del titolo
-            editor.setText("");
-            localStorage.removeItem("chapterContent");
+            clearDraft();
         })
         .catch((error) => {
             console.error("Errore:", error);
@@ -602,6 +601,54 @@ editor = new Quill("#editor-container", {
         toolbar: toolbarOptions,
     },
 });
+
+// Recuperiamo l'ID della partita dalla URL
+const gameIdQuill = window.location.pathname.split("/")[2]; // esempio per ottenere l'ID della partita dalla URL
+
+// Funzione per salvare il draft
+function salvaDraft() {
+    const contenuto = editor.root.innerHTML; // Otteniamo il contenuto dell'editor
+    localStorage.setItem("draft-" + gameIdQuill, contenuto); // Salviamo nel localStorage
+    console.log("Draft salvato per la partita " + gameIdQuill);
+}
+
+// Funzione debounce
+function debounce(callback, delay) {
+    let timeoutId;
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            callback(...args);
+        }, delay);
+    };
+}
+
+// Creiamo la versione debounced della funzione salvaDraft
+const saveDraftDebounced = debounce(salvaDraft, 3000);
+
+// Ascoltiamo gli eventi text-change di Quill
+editor.on("text-change", () => {
+    saveDraftDebounced();
+});
+
+// Carichiamo il draft al caricamento della pagina, se esiste
+const savedDraft = localStorage.getItem("draft-" + gameIdQuill);
+if (savedDraft) {
+    editor.root.innerHTML = savedDraft; // Carica il contenuto nel Quill
+    console.log("Draft caricato per la partita " + gameIdQuill);
+}
+
+// Funzione per pulire il draft quando non serve più
+function clearDraft() {
+    localStorage.removeItem("draft-" + gameIdQuill); // Rimuove il draft
+    editor.root.innerHTML = ""; // Pulisce l'editor
+    console.log("Draft cancellato per la partita " + gameIdQuill);
+}
+
+// editor.root.addEventListener("paste", function (e) {
+//     e.preventDefault();
+//     alert("Non puoi incollare testo. Devi scrivere manualmente.");
+// });
 
 const toolbar = document.querySelector(".ql-toolbar");
 toolbar.classList.add("rounded", "mb-4", "text-2xl");

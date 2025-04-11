@@ -87,13 +87,25 @@ let socketId = null;
 let countdownStarted = false;
 
 function initSocket() {
-    return new Promise((resolve) => {
-        socket = io(); // Inizializza la connessione WebSocket
+    return new Promise((resolve, reject) => {
+        console.log("Tentativo di connessione a /socket.io...");
+        socket = io(); // Prova prima con il percorso predefinito; // Connessione a /socket.io
 
-        // Quando il WebSocket è connesso, salva il socketId
+        // Quando il WebSocket è connesso
         socket.on("connect", () => {
+            console.log("Connesso a Socket.IO con ID:", socket.id); // Log con socket.id
             socketId = socket.id;
-            resolve(); // Una volta connesso, risolvi la promessa
+            resolve(); // Risolvi la promessa
+        });
+
+        socket.on("connect_error", (err) => {
+            console.error("Errore di connessione:", err);
+            reject(err);
+        });
+
+        socket.on("connect_timeout", () => {
+            console.log("Timeout di connessione.");
+            reject("Timeout di connessione");
         });
 
         // Listener per quando il gioco è pronto
