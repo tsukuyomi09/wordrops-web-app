@@ -17,10 +17,10 @@ router.post("/finish-onboarding/:email", async (req, res) => {
         // Inserimento nel database
         const result = await client.query(
             `UPDATE users
-             SET username = $1, avatar = $2
-             WHERE email = $3
+             SET username = $1, avatar = $2, is_onboarding_complete = $3
+             WHERE email = $4
              RETURNING user_id, username, avatar`,
-            [username, avatarName, email]
+            [username, avatarName, true, email]
         );
 
         const { user_id, username: updatedUsername } = result.rows[0];
