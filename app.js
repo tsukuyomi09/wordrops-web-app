@@ -15,7 +15,7 @@ const server = http.createServer(app);
 const { initSocket } = require("./src/services/socketManager");
 const io = initSocket(server);
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 connectDB();
 
@@ -290,8 +290,8 @@ app.get("/", (req, res) => {
 app.get("/privacy-policy", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "privacy-policy.html"));
 });
-app.get("/register19090903", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "register19090903.html"));
+app.get("/register01", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "register01.html"));
 });
 app.get("/game", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
@@ -387,6 +387,6 @@ app.use(gamesRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
 
-app.listen(3000, "0.0.0.0", () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log("Server avviato su http://0.0.0.0:3000");
 });
