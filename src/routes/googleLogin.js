@@ -81,8 +81,8 @@ const findUserByGoogleId = async (googleId) => {
 
 const createUser = async (email, googleId) => {
     const result = await client.query(
-        "INSERT INTO users (email, password, google_id) VALUES ($1, $2, $3) RETURNING user_id, username, avatar",
-        [email, googleId, googleId]
+        "INSERT INTO users (email, password, google_id, verified) VALUES ($1, $2, $3, $4) RETURNING user_id, username, avatar",
+        [email, googleId, googleId, true]
     );
     return result.rows[0];
 };
