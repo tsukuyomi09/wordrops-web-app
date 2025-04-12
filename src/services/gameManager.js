@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const { getSocket } = require("./socketManager");
 const { saveNormalGame } = require("../services/saveGame");
+const { client } = require("../database/db");
 
 const activeGames = new Map();
 const playersMap = new Map();
@@ -26,7 +27,7 @@ async function createGameAndAssignPlayers(game) {
 
         let countdownDuration;
         if (gameMode.includes("fast")) {
-            countdownDuration = 500000; // 10 secondi per le modalità "fast"
+            countdownDuration = 10000; // 10 secondi per le modalità "fast"
         } else {
             countdownDuration = 1000000; // 20 secondi per le modalità "slow" o altre
         }
@@ -113,14 +114,19 @@ function startCountdown(newGameId) {
                 user_id: currentPlayer.id,
                 isValid: false,
             };
-            // console.log(`author ${currentPlayer.username}`);
-            // console.log(`user_id ${currentPlayer.id}`);
-            // console.log(
-            //     "currentPlayer:",
-            //     JSON.stringify(currentPlayer, null, 2)
-            // );
 
             game.chapters.push(emptyChapter);
+
+            const nullChapters = game.chapters.filter(
+                (ch) => ch.content === "null" || ch.content === null
+            );
+            console.log(`Capitoli vuoti o nulli:`, nullChapters.length);
+            console.log(`nullChapters: ${nullChapters}`);
+
+            if (nullChapters.length >= 2) {
+                await cancelGameAndSave(newGameId); // Cancella il gioco e salva
+                return { canceled: true }; // Restituisci stato per informare se il gioco è stato annullato
+            }
 
             if (game.chapters.length === 5) {
                 console.log(`five games reached`);
@@ -244,6 +250,107 @@ function addGameForPlayer(playerId, gameId, status = "in_progress", mode) {
     playersMap.set(playerId, playerData);
 
     console.log("📌 Stato attuale di playersMap:", playersMap);
+}
+
+/// delete game /////
+
+async function cancelGameAndSave(gameId) {
+    const io = getSocket();
+
+    const game = activeGames.get(gameId);
+
+    if (!game) {
+        console.log(`[cancelGame] Partita ${gameId} non trovata.`);
+        return;
+    }
+
+    try {
+        const finishedAt = new Date();
+
+        // 1️⃣ Salviamo la partita annullata
+        const result = await client.query(
+            `INSERT INTO games_completed (started_at, finished_at, mode, publish, status)
+             VALUES ($1, $2, $3, $4, $5)
+             RETURNING id`,
+            [
+                game.startedAt,
+                finishedAt,
+                game.gameMode,
+                "cancelled",
+                "cancelled",
+            ]
+        );
+
+        const databaseGameId = result.rows[0].id;
+
+        // 2️⃣ Salviamo tutti i capitoli scritti (se ci sono)
+        if (game.chapters && game.chapters.length > 0) {
+            await Promise.all(
+                game.chapters.map((chapter, index) => {
+                    return client.query(
+                        `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, created_at)
+                         VALUES ($1, $2, $3, $4, $5, NOW())`,
+                        [
+                            databaseGameId,
+                            chapter.title,
+                            chapter.content,
+                            chapter.user_id,
+                            index + 1,
+                        ]
+                    );
+                })
+            );
+        }
+
+        // 3️⃣ Emit a tutti nella stanza
+        await new Promise((resolve, reject) => {
+            try {
+                io.to(gameId).emit("gameCanceled", {
+                    reason: "La partita è stata annullata: troppi capitoli nulli.",
+                });
+                // Risolviamo la promessa quando l'emit è stato eseguito
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+
+        const players = game.players.players;
+        console.log("Players array:", players);
+
+        players.forEach((player) => {
+            const playerId = player.id;
+            console.log(`Checking player ${playerId}`);
+
+            const playerData = playersMap.get(playerId);
+
+            if (playerData) {
+                console.log(`Before delete:`, playerData.games);
+                delete playerData.games[newGameId];
+
+                console.log(`After delete:`, playerData.games);
+
+                if (Object.keys(playerData.games).length === 0) {
+                    console.log(`Removing player ${playerId} from playersMap`);
+                    playersMap.delete(playerId);
+                }
+            } else {
+                console.log(`Player ${playerId} not found in playersMap.`);
+            }
+        });
+
+        // 4️⃣ Pulizia
+        activeGames.delete(gameId);
+
+        console.log(
+            `[cancelGame] Partita ${gameId} annullata, salvata e notificata.`
+        );
+    } catch (err) {
+        console.error(
+            `[cancelGame] Errore durante la cancellazione della partita:`,
+            err
+        );
+    }
 }
 
 module.exports = {

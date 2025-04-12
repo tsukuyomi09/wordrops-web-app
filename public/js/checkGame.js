@@ -167,6 +167,12 @@ function initializeSocket(game_id) {
             }
         });
 
+        socket.on("gameCanceled", (data) => {
+            showGameCanceledPopup(
+                data.reason || "La partita è stata annullata."
+            );
+        });
+
         socket.on("nextChapterUpdate", (data) => {
             let activeGames =
                 JSON.parse(sessionStorage.getItem("active_games")) || {};
@@ -291,6 +297,35 @@ function initializeSocket(game_id) {
             error
         );
     }
+}
+
+function showGameCanceledPopup(message) {
+    const overlay = document.createElement("div");
+    overlay.className =
+        "fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50";
+
+    overlay.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center animate-scaleIn">
+            <h2 class="text-2xl font-bold mb-4 text-red-600">Partita Annullata</h2>
+            <p class="text-gray-700 mb-6">${message}</p>
+            <button id="backToDashboardBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition">
+                Torna alla Dashboard
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    document
+        .getElementById("backToDashboardBtn")
+        .addEventListener("click", function () {
+            const username = localStorage.getItem("username");
+            if (username) {
+                window.location.href = `/dashboard/${username}`;
+            } else {
+                alert("Errore: nome utente non trovato.");
+            }
+        });
 }
 
 //chat messages
