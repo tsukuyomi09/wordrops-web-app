@@ -4,6 +4,7 @@ const { activeGames, startCountdown } = require("../services/gameManager");
 const { saveNormalGame } = require("../services/saveGame");
 const { playersMap } = require("../services/gameManager");
 const checkAuth = require("../middlewares/checkAuthToken");
+const { client } = require("../database/db");
 
 router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     const { gameId } = req.params;
