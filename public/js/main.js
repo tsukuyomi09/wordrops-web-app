@@ -642,7 +642,8 @@ selectButton.addEventListener("click", () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                localStorage.setItem(`avatar_${username}`, selectedAvatar);
+                console.log(data);
+                localStorage.setItem(`avatar_${data.username}`, selectedAvatar);
                 closeMenu();
             })
             .catch((error) => {
