@@ -37,6 +37,11 @@
             href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
             rel="stylesheet"
         />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap"
+            rel="stylesheet"
+        />
+
         <script src="/js/checkAuth.js"></script>
     </head>
 
@@ -269,125 +274,232 @@
             </div>
         </div>
 
-        <div class="swiper-container absolute w-full h-full overflow-hidden">
-            <div class="swiper-wrapper flex w-full">
+        <div
+            style="
+                height: 30vh;
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 10;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding-left: 4rem;
+                padding-right: 4rem;
+            "
+        >
+            <div class="flex-1 flex items-center justify-start h-full">
+                <div style="padding: 10px; border-radius: 8px" class="relative">
+                    <div
+                        class="avatar-container relative flex flex-col justify-center items-center p-6 w-32 h-32 bg-white border border-gray-200 rounded-full"
+                        style="box-shadow: -3px 3px rgba(0, 0, 0, 0.473)"
+                    >
+                        <img
+                            id="main-avatar"
+                            class="h-full w-auto object-contain"
+                            src=""
+                            alt=""
+                        />
+                        <div
+                            class="absolute -mr-2 bottom-0 right-0 h-6 w-6 rounded-full bg-white"
+                        >
+                            <img
+                                class="hover-rotate cursor-pointer"
+                                src="/images/icons/change-avatar-icon.png"
+                                onclick="openAvatarMenu()"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="flex absolute -top-6 -right-10 flex-col justify-center items-center"
+                    >
+                        <div class="username_container inline-block">
+                            <h2
+                                id="username"
+                                class="text-gray-800 text-4xl font-extrabold"
+                            ></h2>
+                            <h4 id="userStatus"></h4>
+                        </div>
+                    </div>
+                    <div
+                        id="status-div"
+                        class="flex items-center justify-center space-x-2 mt-4"
+                    >
+                        <!-- Testo con il pallino verde -->
+                        <span class="text-sm font-semibold">SEI IN GAME</span>
+                        <span
+                            id="game-status-indicator"
+                            class="w-2 h-2 rounded-full bg-green-500"
+                        ></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenitore 2 -->
+            <div class="flex-1 flex items-start justify-center h-full">
                 <div
-                    class="swiper-slide flex items-start justify-center px-10 py-40 h-screen bg-gradient-to-r from-white to-gray-200 w-full flex-shrink-0 h-full"
+                    style="padding: 10px"
+                    class="flex flex-col justify-center items-center h-full"
                 >
-                    <div id="ui-container" class="">
-                        <div class="flex flex-col justify-center items-center">
+                    <div
+                        class="relative"
+                        id="lottie-button"
+                        onclick="openOverlay()"
+                    >
+                        <div id="lottie-book"></div>
+                        <img
+                            src="/images/pen.png"
+                            alt=""
+                            class="absolute w-12 right-6 top-6"
+                        />
+                    </div>
+                    <h2 class="my-title text-2xl">Nuova Storia</h2>
+                </div>
+            </div>
+
+            <!-- Contenitore 3 -->
+            <div class="flex-1 flex items-center justify-end h-full">
+                <div style="padding: 10px; border-radius: 8px">
+                    <div
+                        class="inline-flex justify-center relative items-center gap-6"
+                    >
+                        <div
+                            id="dashboard-icon"
+                            class="icon-container border-2 border-blue-400"
+                            onclick="dashboardButton()"
+                        >
+                            <img
+                                src="/images/icons/icons8-casa-100.png"
+                                alt="Search Icon"
+                                class="w-6 h-6"
+                            />
+                        </div>
+                        <a href="/classifiche">
                             <div
-                                class="flex flex-col justify-center items-center"
+                                id="leaderboard-icon"
+                                class="icon-container border-2 border-blue-400"
                             >
-                                <!-- main avatar container -->
-                                <div
-                                    class="avatar-container relative flex flex-col justify-center items-center p-10 bg-green-500 bg-opacity-40 shadow-md rounded-2xl h-30 w-30"
-                                >
-                                    <img
-                                        id="main-avatar"
-                                        class="h-full w-auto object-contain"
-                                        src=""
-                                        alt=""
-                                    />
-                                    <div
-                                        class="absolute -mr-2 bottom-0 right-0 h-6 w-6 rounded-full bg-white"
-                                    >
-                                        <img
-                                            class="hover-rotate cursor-pointer"
-                                            src="/images/icons/change-avatar-icon.png"
-                                            onclick="openAvatarMenu()"
-                                            alt=""
-                                        />
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="username_container p-4 px-10 inline-block"
-                                >
-                                    <h2
-                                        id="username"
-                                        class="text-gray-800 text-4xl font-extrabold"
-                                    ></h2>
-                                    <h4 id="userStatus"></h4>
-                                </div>
-                                <div
-                                    id="status-div"
-                                    class="hidden flex items-center justify-center space-x-2 mt-4"
-                                >
-                                    <!-- Testo con il pallino verde -->
-                                    <span class="text-sm font-semibold"
-                                        >SEI IN GAME</span
-                                    >
-                                    <span
-                                        id="game-status-indicator"
-                                        class="w-2 h-2 rounded-full bg-green-500"
-                                    ></span>
-                                </div>
-                                <button
-                                    onclick="openOverlay()"
-                                    class="bg-green-600 text-white font-bold mt-20 px-4 py-2 w-32 h-16 rounded-xl flex items-center justify-center shadow-lg hover:bg-green-700 transition duration-300"
-                                >
-                                    NUOVA PARTITA
-                                </button>
-                                <div
-                                    id="gameUI-update"
-                                    class="items-center justify-between p-4"
-                                >
-                                    <div
-                                        id="turn-order"
-                                        class="flex items-center justify-center gap-2 p-4 rounded"
-                                    ></div>
-                                    <div
-                                        class="flex items-center justify-center gap-2 rounded"
-                                    >
-                                        <div
-                                            id="countdown-display"
-                                            class="w-1/2 text-4xl font-bold text-center"
-                                        ></div>
-                                        <div
-                                            id="current-turn"
-                                            class="w-1/2 text-lg font-semibold text-right"
-                                        ></div>
-                                    </div>
-                                </div>
+                                <img
+                                    src="/images/icons/icons8-trofeo-48.png"
+                                    alt="leaderboard Icon"
+                                    class="w-6 h-6"
+                                />
                             </div>
-
+                        </a>
+                        <a href="/libreria">
                             <div
-                                id="game-buttons-container"
-                                class="flex flex-wrap gap-4 mt-6"
-                            ></div>
+                                id="library-icon"
+                                class="icon-container border-2 border-blue-400"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="w-6 h-6"
+                                />
+                            </div>
+                        </a>
+                        <div
+                            id="search-icon"
+                            class="icon-container border-2 border-blue-400"
+                            onclick="openSearch()"
+                        >
+                            <img
+                                src="/images/icons/users-icon-menu.png"
+                                alt="Search Icon"
+                                class="w-6 h-6"
+                            />
+                        </div>
+                        <div
+                            id="logout-button"
+                            class="icon-container icon cursor-pointer p-2 border-2 border-red-400"
+                            onclick="logout()"
+                        >
+                            <img
+                                class="cursor-pointer"
+                                src="/images/icons/logout-icon.png"
+                                alt="logout Icon"
+                                class="w-6 h-6"
+                            />
                         </div>
                     </div>
                 </div>
-                <div
-                    class="swiper-slide flex items-start justify-center px-10 py-40 h-screen bg-gradient-to-r from-white to-gray-200 w-full flex-shrink-0 h-full"
-                >
-                    <h2 class="text-gray-800 text-4xl font-bold text-center">
-                        Statistiche
-                    </h2>
-                </div>
-                <div
-                    class="swiper-slide flex items-start justify-center px-10 py-40 h-screen bg-gradient-to-r from-white to-gray-200 w-full flex-shrink-0 h-full"
-                >
-                    <h2 class="text-gray-800 text-4xl font-bold text-center">
-                        Libreria Personale
-                    </h2>
-                </div>
-                <div
-                    class="swiper-slide flex items-start justify-center px-10 py-40 h-screen bg-gradient-to-r from-white to-gray-200 w-full flex-shrink-0 h-full"
-                >
+            </div>
+        </div>
+        <div
+            style="
+                height: 70vh;
+                width: 100%;
+                margin-top: 30vh;
+                position: absolute;
+                border-top-left-radius: 12rem;
+                border-top-right-radius: 12rem;
+                background-color: #faf4f4;
+                box-shadow: 0 -10px 10px rgba(104, 104, 104, 0.15);
+            "
+        >
+            <div
+                class="swiper-container overflow-hidden"
+                style="height: 100%; width: 100%"
+            >
+                <div class="swiper-wrapper" style="display: flex; height: 100%">
                     <div
-                        class="w-full max-w-4xl mx-auto flex flex-col items-center justify-start"
+                        class="swiper-slide flex items-start justify-center px-10 h-screen w-full flex-shrink-0 h-full"
+                    >
+                        <div id="ui-container" class="">
+                            <div
+                                class="flex flex-col justify-center items-center"
+                            >
+                                <h2
+                                    class="slide-title opacity-0 transition-opacity duration-500 text-gray-800 text-4xl my-12 font-bold text-center"
+                                >
+                                    Partite in Corso
+                                </h2>
+                                <div
+                                    id="game-buttons-container"
+                                    class="flex flex-wrap gap-4 mt-6"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="swiper-slide flex items-start justify-center px-10 h-screen w-full flex-shrink-0 h-full"
                     >
                         <h2
-                            class="text-gray-800 text-4xl font-bold text-center mb-8"
+                            class="slide-title text-gray-800 opacity-0 transition-opacity duration-700 text-4xl my-12 font-bold text-center"
+                        >
+                            Statistiche
+                        </h2>
+                    </div>
+                    <div
+                        class="swiper-slide flex items-start justify-center px-10 h-screen w-full flex-shrink-0 h-full"
+                    >
+                        <div
+                            class="w-full max-w-4xl mx-auto flex flex-col items-center justify-start"
+                        >
+                            <h2
+                                class="slide-title text-gray-800 opacity-0 transition-opacity duration-700 text-4xl my-12 font-bold text-center mb-8"
+                            >
+                                Libreria Personale
+                            </h2>
+
+                            <div
+                                id="stories-container-wrapper"
+                                class="hidden relative w-full max-w-6xl mx-auto flex justify-center mt-20 px-4"
+                            ></div>
+                        </div>
+                    </div>
+                    <div
+                        class="swiper-slide flex flex-col items-center justify-center px-10 h-full w-full flex-shrink-0"
+                    >
+                        <h2
+                            class="slide-title text-gray-800 opacity-0 transition-opacity duration-700 text-4xl my-12 font-bold text-center"
                         >
                             Storie Completate
                         </h2>
-
                         <div
-                            id="stories-container-wrapper"
-                            class="hidden relative w-full max-w-6xl mx-auto flex justify-center mt-20 px-4"
+                            class="w-full h-full max-w-4xl scrollbar-hidden flex flex-col justify-start items-center overflow-y-auto px-4"
                         >
                             <div
                                 id="stories-container"
@@ -398,15 +510,8 @@
                         </div>
                     </div>
                 </div>
-                <div
-                    class="swiper-slide flex items-start justify-center px-10 py-40 h-screen bg-gradient-to-r from-white to-gray-200 w-full flex-shrink-0 h-full"
-                >
-                    <h2 class="text-gray-800 text-4xl font-bold text-center">
-                        Storie suggerite
-                    </h2>
-                </div>
+                <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-pagination"></div>
         </div>
 
         <div
@@ -649,68 +754,6 @@
                 class="menu-wrapper w-full flex justify-center fixed left-0 right-0 z-20"
             >
                 <div
-                    id="logout-button"
-                    class="icon-container icon absolute top-0 left-6 cursor-pointer p-2 border-2 border-red-400"
-                    onclick="logout()"
-                >
-                    <img
-                        class="cursor-pointer"
-                        src="/images/icons/logout-icon.png"
-                        alt="logout Icon"
-                        class="w-6 h-6"
-                    />
-                </div>
-                <div
-                    class="inline-flex justify-center relative items-center gap-6"
-                >
-                    <div
-                        id="dashboard-icon"
-                        class="icon-container border-2 border-blue-400"
-                        onclick="dashboardButton()"
-                    >
-                        <img
-                            src="/images/icons/icons8-casa-100.png"
-                            alt="Search Icon"
-                            class="w-6 h-6"
-                        />
-                    </div>
-                    <a href="/classifiche">
-                        <div
-                            id="leaderboard-icon"
-                            class="icon-container border-2 border-blue-400"
-                        >
-                            <img
-                                src="/images/icons/icons8-trofeo-48.png"
-                                alt="leaderboard Icon"
-                                class="w-6 h-6"
-                            />
-                        </div>
-                    </a>
-                    <a href="/libreria">
-                        <div
-                            id="library-icon"
-                            class="icon-container border-2 border-blue-400"
-                        >
-                            <img
-                                src="/images/icons/library-icon.png"
-                                alt="library Icon"
-                                class="w-6 h-6"
-                            />
-                        </div>
-                    </a>
-                    <div
-                        id="search-icon"
-                        class="icon-container border-2 border-blue-400"
-                        onclick="openSearch()"
-                    >
-                        <img
-                            src="/images/icons/users-icon-menu.png"
-                            alt="Search Icon"
-                            class="w-6 h-6"
-                        />
-                    </div>
-                </div>
-                <div
                     id="user-search-wrapper"
                     class="user-search-wrapper absolute top-0 right-6 opacity-0"
                 >
@@ -748,11 +791,14 @@
 
             <!-- ui container -->
         </div>
+
         <script src="/socket.io/socket.io.js"></script>
         <script src="/swiper/swiper-bundle.min.js"></script>
         <script src="/js/main.js" defer></script>
         <script src="/js/menu.js" defer></script>
         <script src="/js/personalLibrary.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+
         <audio
             id="click-sound"
             src="/images/button-hover-sound.mp3"

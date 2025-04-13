@@ -1,13 +1,27 @@
 const user_id = Number(localStorage.getItem("user_id"));
 
 document.addEventListener("DOMContentLoaded", function () {
-    const swiper = new Swiper(".swiper-container", {
+    const mainSwiper = new Swiper(".swiper-container", {
         loop: true,
         pagination: {
             el: ".swiper-pagination",
             clickable: true,
         },
+        on: {
+            slideChangeTransitionEnd: function () {
+                document.querySelectorAll(".slide-title").forEach((el, idx) => {
+                    if (idx === mainSwiper.activeIndex) {
+                        el.classList.add("opacity-100");
+                    } else {
+                        el.classList.remove("opacity-100");
+                    }
+                });
+            },
+        },
     });
+    document
+        .querySelectorAll(".slide-title")
+        [mainSwiper.activeIndex].classList.add("opacity-100");
 });
 
 function showLoadingAnimation() {
@@ -27,6 +41,21 @@ function showLoadingAnimation() {
         }, 1000);
     }, 3000);
 }
+
+const bookAnimation = lottie.loadAnimation({
+    container: document.getElementById("lottie-book"),
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "/images/book_animation.json", // ✅ estensione giusta
+});
+
+const button = document.getElementById("lottie-button");
+
+button.addEventListener("mouseenter", () => {
+    bookAnimation.stop(); // resetta da inizio
+    bookAnimation.play(); // parte all'hover
+});
 
 function showAvatarTransition() {
     const avatarContainer = document.querySelector(".avatar-container");
