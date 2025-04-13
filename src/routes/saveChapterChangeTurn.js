@@ -52,11 +52,6 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     game.chapters.push(newChapter);
 
-    req.io.in(gameId).emit("newChapterNotification", {
-        timestamp: newChapter.timestamp,
-        gameId,
-    });
-
     if (game.chapters.length === 5) {
         try {
             const saveSuccess = await saveNormalGame(game);
@@ -65,11 +60,12 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
                     .status(500)
                     .json({ message: "Errore nel salvataggio del gioco." });
             }
+            clearInterval(game.countdownInterval);
 
             if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
-                handleRankedGameFlow(game, newGameId, req.io);
+                handleRankedGameFlow(game, gameId, req.io);
             } else {
-                handleCasualGameFlow(game, newGameId, req.io);
+                handleCasualGameFlow(game, gameId, req.io);
             }
 
             return res.json({
@@ -79,6 +75,11 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
             return handleFinalError(err, res);
         }
     }
+
+    req.io.in(gameId).emit("newChapterNotification", {
+        timestamp: newChapter.timestamp,
+        gameId,
+    });
 
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
     const nextPlayer = game.turnOrder[game.turnIndex];
@@ -114,6 +115,9 @@ function handleRankedGameFlow(game, gameId, io) {
 function handleCasualGameFlow(game, gameId, io) {
     removeGameFromPlayers(game);
     activeGames.delete(gameId);
-    io.to(gameId).emit("gameCompleted");
+    io.to(gameId).emit("gameCompleted", {
+        reason: "La partita è stata annullata: troppi capitoli nulli.",
+        gameId: gameId, // oppure semplicemente `gameId,`
+    });
 }
 module.exports = router;

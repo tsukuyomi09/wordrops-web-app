@@ -113,7 +113,7 @@
         <div class="page-wrap p-6 relative">
             <div
                 id="new-popup-message"
-                class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
+                class="hidden z-50 fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
             >
                 <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                     <p
@@ -152,60 +152,18 @@
             <!-- menu container -->
             <div
                 id="menu-container"
-                class="menu-wrapper w-full flex justify-center fixed left-0 right-0"
+                class="menu-wrapper w-full flex justify-center fixed left-0 right-0 z-10"
             >
-                <div
-                    id="logout-button"
-                    class="icon-container icon absolute top-0 left-6 cursor-pointer p-2"
-                    onclick="logout()"
-                >
-                    <img
-                        class="cursor-pointer"
-                        src="/images/icons/logout-icon.png"
-                        alt="logout Icon"
-                        class="w-6 h-6"
-                    />
-                </div>
-
                 <div
                     class="inline-flex justify-center relative items-center gap-6"
                 >
                     <div
                         id="dashboard-icon"
-                        class="icon-container"
+                        class="icon-container border-2 border-blue-400"
                         onclick="dashboardButton()"
                     >
                         <img
                             src="/images/icons/icons8-casa-100.png"
-                            alt="Search Icon"
-                            class="w-6 h-6"
-                        />
-                    </div>
-                    <a href="/classifiche">
-                        <div id="leaderboard-icon" class="icon-container">
-                            <img
-                                src="/images/icons/icons8-trofeo-48.png"
-                                alt="leaderboard Icon"
-                                class="w-6 h-6"
-                            />
-                        </div>
-                    </a>
-                    <a href="/libreria">
-                        <div id="library-icon" class="icon-container">
-                            <img
-                                src="/images/icons/icons8-lettura-64.png"
-                                alt="library Icon"
-                                class="w-6 h-6"
-                            />
-                        </div>
-                    </a>
-                    <div
-                        id="search-icon"
-                        class="icon-container"
-                        onclick="openSearch()"
-                    >
-                        <img
-                            src="/images/icons/users-icon-menu.png"
                             alt="Search Icon"
                             class="w-6 h-6"
                         />
@@ -276,13 +234,8 @@
                     class="game-ui-container flex-row items-start justify-center max-w-4xl min-h-screen px-8 sm:px-8 mx-auto"
                 >
                     <div
-                        id="turn-order"
-                        class="fixed left-0 ml-4 top-1/2 transform -translate-y-1/2 flex flex-col items-center gap-4 p-4 rounded"
-                    ></div>
-
-                    <div
                         id="gameUI-update"
-                        class="items-center justify-between p-4"
+                        class="flex flex-col items-center justify-center p-4 bg-gray-50 mt-24"
                     >
                         <div
                             class="flex items-center justify-center gap-16 rounded"
@@ -295,6 +248,24 @@
                                 id="current-turn"
                                 class="text-lg font-semibold text-right"
                             ></div>
+                        </div>
+                        <div class="mt-4 flex flex-col items-center">
+                            <button
+                                id="toggle-participants"
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                            >
+                                Partecipanti
+                            </button>
+
+                            <div
+                                id="turn-order-wrapper"
+                                class="hidden mt-2 transition-all duration-300 ease-in-out"
+                            >
+                                <div
+                                    id="turn-order"
+                                    class="flex flex-wrap items-center gap-4 p-4 bg-gray-100 rounded"
+                                ></div>
+                            </div>
                         </div>
                     </div>
 
