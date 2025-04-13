@@ -147,6 +147,10 @@ function initializeSocket(game_id) {
         });
 
         socket.on("gameCompleted", () => {
+            const existingPopup = document.getElementById("change-turn-popup");
+            if (existingPopup) {
+                existingPopup.remove();
+            }
             // Recupera gli elementi del nuovo popup
             sessionStorage.clear();
             const newPopup = document.getElementById("new-popup-message");
@@ -168,6 +172,10 @@ function initializeSocket(game_id) {
         });
 
         socket.on("gameCanceled", (data) => {
+            const existingPopup = document.getElementById("change-turn-popup");
+            if (existingPopup) {
+                existingPopup.remove();
+            }
             showGameCanceledPopup(
                 data.reason || "La partita è stata annullata."
             );
@@ -549,7 +557,6 @@ function updateTurnOrderDisplay(turnOrder, currentPlayer) {
                 <img src="${avatarSrc}" alt="Avatar" class="w-4 h-4 rounded-full mb-1" />
                 <span class="text-sm font-medium">${player.username}</span>
                 </div>
-                <span class="text-xl ml-4 font-medium mt-2">${index + 1}°</span>
             </div>
         `;
             })
@@ -558,6 +565,11 @@ function updateTurnOrderDisplay(turnOrder, currentPlayer) {
         turnOrderDisplay.innerHTML = turnOrderHTML;
     }
 }
+
+document.getElementById("toggle-participants").addEventListener("click", () => {
+    const wrapper = document.getElementById("turn-order-wrapper");
+    wrapper.classList.toggle("hidden");
+});
 
 function getAvatarSrc(avatar) {
     // Controlla se l'avatar è definito, altrimenti usa un avatar di default
@@ -784,8 +796,13 @@ function foxAnimation() {
 }
 
 function changeTurnShowPopup(author, nextPlayer) {
+    const existingPopup = document.getElementById("change-turn-popup");
+    if (existingPopup) {
+        existingPopup.remove();
+    }
     // Crea un div che rappresenta il popup
     const popup = document.createElement("div");
+    popup.id = "change-turn-popup";
     popup.classList.add(
         "fixed",
         "inset-0",
@@ -794,7 +811,7 @@ function changeTurnShowPopup(author, nextPlayer) {
         "justify-center",
         "bg-black",
         "bg-opacity-50",
-        "z-50"
+        "z-40"
     );
 
     // Aggiungi il contenuto del popup

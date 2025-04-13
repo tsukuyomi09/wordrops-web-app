@@ -53,6 +53,7 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
         author: currentPlayer.username,
         user_id: currentPlayer.id,
         isValid: false,
+        timestamp: Date.now(),
     };
 
     game.chapters.push(emptyChapter);
@@ -76,6 +77,11 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
     const nextPlayer = game.turnOrder[game.turnIndex];
 
     startCountdown(gameId);
+
+    io.in(gameId).emit("newChapterNotification", {
+        timestamp: emptyChapter.timestamp,
+        gameId,
+    });
 
     io.to(gameId).emit("nextChapterUpdate", {
         gameId,

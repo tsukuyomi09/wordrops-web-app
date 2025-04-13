@@ -213,6 +213,7 @@ function initSocket() {
                     chapterNotificationDot.classList.remove("hidden");
                 }
             }
+            showNotification("NUOVO CAPITOLO", "📚");
         });
 
         socket.on("gameCanceled", (data) => {
@@ -223,6 +224,18 @@ function initSocket() {
             if (wrapperToRemove) {
                 wrapperToRemove.remove();
             }
+            showNotification("PARTITA ANNULLATA", "❌");
+        });
+
+        socket.on("gameCompleted", (data) => {
+            const canceledGameId = data.gameId;
+            const wrapperToRemove = document.querySelector(
+                `[data-game-id="${canceledGameId}"]`
+            );
+            if (wrapperToRemove) {
+                wrapperToRemove.remove();
+            }
+            showNotification("PARTITA CONCLUSA", "🏆");
         });
 
         socket.on("gamequeue-cancelled", (message) => {
@@ -266,6 +279,33 @@ function initSocket() {
             waitingOverlay.classList.add("hidden");
         });
     });
+}
+
+//// notification box  //////
+
+function showNotification(message, icon) {
+    const container = document.getElementById("notification-container");
+
+    const notification = document.createElement("div");
+
+    notification.innerHTML = `
+            <div
+                class="bg-white relative text-red-400 text-sm font-semibold px-4 py-4 mt-2 rounded-lg shadow-lg font-sans opacity-100 transition-opacity duration-500"
+            >
+                ${message}
+            </div>
+            <div class="absolute -left-2 -top-2 text-lg">${icon}</div>
+    `;
+
+    container.append(notification);
+
+    // Fade-out + remove dopo 5 secondi
+    setTimeout(() => {
+        notification.firstElementChild.style.opacity = "0";
+        setTimeout(() => {
+            notification.remove();
+        }, 500); // attende che finisca il fade
+    }, 5000);
 }
 
 function readyToPlay() {

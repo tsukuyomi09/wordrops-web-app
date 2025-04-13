@@ -51,9 +51,14 @@
             ></iframe
         ></noscript>
         <div
+            id="notification-container"
+            class="fixed top-8 right-8 flex justify-center items-center z-50"
+        ></div>
+
+        <div
             id="overlay-books"
             style="display: none"
-            class="fixed w-full h-full inset-0 bg-black opacity-0 bg-opacity-75 transform translate-y-10 transition-all duration-500 z-50 flex items-center justify-center p-8"
+            class="absolute w-full h-full inset-0 bg-black text-red-400 opacity-0 bg-opacity-75 transform translate-y-10 transition-all duration-500 z-50 flex items-center justify-center p-8"
         >
             <button
                 onclick="closeBookOverlay()"
