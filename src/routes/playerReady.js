@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { activeGames, startCountdown } = require("../services/gameManager");
+const { activeGames } = require("../services/gameManager");
+const { startCountdown } = require("../services/gameCountdownStart");
+
 const checkAuth = require("../middlewares/checkAuthToken");
 
 router.post("/game/:gameId/player-ready", checkAuth, async (req, res) => {
@@ -18,6 +20,7 @@ router.post("/game/:gameId/player-ready", checkAuth, async (req, res) => {
 
     // Se il numero di giocatori pronti raggiunge 5, inizia il gioco
     if (game.readyPlayersCount === 5) {
+        console.log(`player-ready funciton - players are ready`);
         game.status = "in-progress"; // Imposta lo stato del gioco come "in-progress"
         startCountdown(gameId); // Avvia il countdown
         req.io.to(gameId).emit("game-ready-popup");

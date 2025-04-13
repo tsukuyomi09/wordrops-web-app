@@ -1,8 +1,4 @@
 const { v4: uuidv4 } = require("uuid");
-const { getSocket } = require("./socketManager");
-const { saveNormalGame } = require("../services/saveGame");
-const { client } = require("../database/db");
-
 const activeGames = new Map();
 const playersMap = new Map();
 
@@ -27,9 +23,9 @@ async function createGameAndAssignPlayers(game) {
 
         let countdownDuration;
         if (gameMode.includes("fast")) {
-            countdownDuration = 10000; // 10 secondi per le modalità "fast"
+            countdownDuration = 5000; // 10 secondi per le modalità "fast"
         } else {
-            countdownDuration = 1000000; // 20 secondi per le modalità "slow" o altre
+            countdownDuration = 300000; // 20 secondi per le modalità "slow" o altre
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
@@ -41,7 +37,7 @@ async function createGameAndAssignPlayers(game) {
             votes: {},
             players: game,
             chapters: [],
-            chapterReadMap: new Map(), // Nuovo campo per tenere traccia dei capitoli letti
+            chapterReadMap: new Map(),
             status: "to-start",
             turnOrder: turnOrder,
             readyPlayersCount: 0,
@@ -73,171 +69,6 @@ function shuffleArray(array) {
     return array;
 }
 
-function getActiveGames() {
-    return activeGames;
-}
-
-function startCountdown(newGameId) {
-    const io = getSocket();
-    const game = activeGames.get(newGameId);
-    if (!game) {
-        console.error(`Gioco con ID ${newGameId} non trovato`);
-        return;
-    }
-
-    const now = Date.now();
-    game.countdownStart = now;
-    game.countdownEnd = now + game.countdownDuration;
-
-    if (game.countdownInterval) {
-        clearInterval(game.countdownInterval);
-    }
-
-    game.countdownInterval = setInterval(async () => {
-        const remainingTime = game.countdownEnd - Date.now();
-        if (remainingTime <= 0) {
-            clearInterval(game.countdownInterval);
-            game.countdownInterval = null;
-
-            console.log(
-                `Tempo scaduto per il turno di ${
-                    game.turnOrder[game.turnIndex].username
-                }`
-            );
-
-            // Esegui la logica di cambio turno anche senza capitolo scritto
-            const currentPlayer = game.turnOrder[game.turnIndex];
-            const emptyChapter = {
-                title: "null",
-                content: "null",
-                author: currentPlayer.username,
-                user_id: currentPlayer.id,
-                isValid: false,
-            };
-
-            game.chapters.push(emptyChapter);
-
-            const nullChapters = game.chapters.filter(
-                (ch) => ch.content === "null" || ch.content === null
-            );
-            console.log(`Capitoli vuoti o nulli:`, nullChapters.length);
-            console.log(`nullChapters: ${nullChapters}`);
-
-            if (nullChapters.length >= 2) {
-                await cancelGameAndSave(newGameId); // Cancella il gioco e salva
-                return { canceled: true }; // Restituisci stato per informare se il gioco è stato annullato
-            }
-
-            if (game.chapters.length === 5) {
-                console.log(`five games reached`);
-                console.log(`games chapters = ${game.chapters.length}`);
-
-                try {
-                    const saveSuccess = await saveNormalGame(game);
-                    if (saveSuccess) {
-                        if (
-                            ["ranked_slow", "ranked_fast"].includes(
-                                game.gameMode
-                            )
-                        ) {
-                            console.log(
-                                "Ranked game detected, starting scoring process..."
-                            );
-                            game.status === "awaiting_scores";
-                            io.to(newGameId).emit("awaiting_scores", {
-                                chapters: game.chapters,
-                                status: game.status,
-                                // Altri dati...
-                            });
-
-                            setTimeout(() => {
-                                io.to(newGameId).disconnectSockets(true);
-                                clearInterval(game.countdownInterval);
-                                console.log(
-                                    "Socket disconnessi dopo invio awaiting-scores."
-                                );
-                            }, 500);
-                        } else {
-                            const players = game.players.players;
-                            console.log("Players array:", players);
-
-                            players.forEach((player) => {
-                                const playerId = player.id;
-                                console.log(`Checking player ${playerId}`);
-
-                                const playerData = playersMap.get(playerId);
-
-                                if (playerData) {
-                                    console.log(
-                                        `Before delete:`,
-                                        playerData.games
-                                    );
-                                    delete playerData.games[newGameId];
-
-                                    console.log(
-                                        `After delete:`,
-                                        playerData.games
-                                    );
-
-                                    if (
-                                        Object.keys(playerData.games).length ===
-                                        0
-                                    ) {
-                                        console.log(
-                                            `Removing player ${playerId} from playersMap`
-                                        );
-                                        playersMap.delete(playerId);
-                                    }
-                                } else {
-                                    console.log(
-                                        `Player ${playerId} not found in playersMap.`
-                                    );
-                                }
-                            });
-                            activeGames.delete(newGameId);
-                            io.to(newGameId).emit("gameCompleted");
-                            return;
-                        }
-                    } else {
-                        // Se il salvataggio del gioco non ha avuto successo, invia un errore
-                        return res.status(500).json({
-                            message: "Errore nel salvataggio del gioco.",
-                        });
-                    }
-                } catch (err) {
-                    console.error(
-                        "Errore durante il processo di salvataggio del gioco:",
-                        err
-                    );
-                    return res.status(500).json({
-                        message:
-                            "Errore nel processo di completamento del gioco.",
-                    });
-                }
-            }
-
-            game.turnIndex = (game.turnIndex + 1) % game.turnOrder.length;
-            const nextPlayer = game.turnOrder[game.turnIndex];
-
-            startCountdown(newGameId);
-
-            io.to(newGameId).emit("nextChapterUpdate", {
-                gameId: newGameId,
-                chapter: emptyChapter,
-                nextPlayer: nextPlayer,
-                previousAuthor: currentPlayer.username,
-            });
-        } else {
-            const minutes = Math.floor(remainingTime / 60000);
-            const seconds = Math.floor((remainingTime % 60000) / 1000);
-            io.in(newGameId).emit("gameUpdate", {
-                remainingTime,
-                formatted: `${minutes}m ${seconds}s`,
-            });
-        }
-    }, 1000);
-}
-
 function addGameForPlayer(playerId, gameId, status = "in_progress", mode) {
     if (!playersMap.has(playerId)) {
         playersMap.set(playerId, {
@@ -252,111 +83,15 @@ function addGameForPlayer(playerId, gameId, status = "in_progress", mode) {
     console.log("📌 Stato attuale di playersMap:", playersMap);
 }
 
-/// delete game /////
-
-async function cancelGameAndSave(gameId) {
-    const io = getSocket();
-
-    const game = activeGames.get(gameId);
-
-    if (!game) {
-        console.log(`[cancelGame] Partita ${gameId} non trovata.`);
-        return;
-    }
-
-    try {
-        const finishedAt = new Date();
-
-        // 1️⃣ Salviamo la partita annullata
-        const result = await client.query(
-            `INSERT INTO games_completed (started_at, finished_at, mode, publish, status)
-             VALUES ($1, $2, $3, $4, $5)
-             RETURNING id`,
-            [
-                game.startedAt,
-                finishedAt,
-                game.gameMode,
-                "cancelled",
-                "cancelled",
-            ]
-        );
-
-        const databaseGameId = result.rows[0].id;
-
-        // 2️⃣ Salviamo tutti i capitoli scritti (se ci sono)
-        if (game.chapters && game.chapters.length > 0) {
-            await Promise.all(
-                game.chapters.map((chapter, index) => {
-                    return client.query(
-                        `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, created_at)
-                         VALUES ($1, $2, $3, $4, $5, NOW())`,
-                        [
-                            databaseGameId,
-                            chapter.title,
-                            chapter.content,
-                            chapter.user_id,
-                            index + 1,
-                        ]
-                    );
-                })
-            );
-        }
-
-        // 3️⃣ Emit a tutti nella stanza
-        await new Promise((resolve, reject) => {
-            try {
-                io.to(gameId).emit("gameCanceled", {
-                    reason: "La partita è stata annullata: troppi capitoli nulli.",
-                });
-                // Risolviamo la promessa quando l'emit è stato eseguito
-                resolve();
-            } catch (error) {
-                reject(error);
-            }
-        });
-
-        const players = game.players.players;
-        console.log("Players array:", players);
-
-        players.forEach((player) => {
-            const playerId = player.id;
-            console.log(`Checking player ${playerId}`);
-
-            const playerData = playersMap.get(playerId);
-
-            if (playerData) {
-                console.log(`Before delete:`, playerData.games);
-                delete playerData.games[newGameId];
-
-                console.log(`After delete:`, playerData.games);
-
-                if (Object.keys(playerData.games).length === 0) {
-                    console.log(`Removing player ${playerId} from playersMap`);
-                    playersMap.delete(playerId);
-                }
-            } else {
-                console.log(`Player ${playerId} not found in playersMap.`);
-            }
-        });
-
-        // 4️⃣ Pulizia
-        activeGames.delete(gameId);
-
-        console.log(
-            `[cancelGame] Partita ${gameId} annullata, salvata e notificata.`
-        );
-    } catch (err) {
-        console.error(
-            `[cancelGame] Errore durante la cancellazione della partita:`,
-            err
-        );
-    }
+function getActiveGames() {
+    return activeGames;
 }
+
+/// delete game /////
 
 module.exports = {
     createGameAndAssignPlayers,
     activeGames,
     getActiveGames,
-    startCountdown,
     playersMap,
 };

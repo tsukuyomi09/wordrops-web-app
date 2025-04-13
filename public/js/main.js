@@ -215,7 +215,17 @@ function initSocket() {
             }
         });
 
-        socket.on("game-cancelled", (message) => {
+        socket.on("gameCanceled", (data) => {
+            const canceledGameId = data.gameId;
+            const wrapperToRemove = document.querySelector(
+                `[data-game-id="${canceledGameId}"]`
+            );
+            if (wrapperToRemove) {
+                wrapperToRemove.remove();
+            }
+        });
+
+        socket.on("gamequeue-cancelled", (message) => {
             // Modifica la UI
             document.getElementById("countdown-seconds").style.display = "none"; // Nascondi il countdown
             document.getElementById("countdown").innerText = message;
