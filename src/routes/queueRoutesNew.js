@@ -141,7 +141,7 @@ async function startCountdownPreGame(io, gameId) {
                     });
                 } else {
                     io.to(gameId).emit(
-                        "game-cancelled",
+                        "gamequeue-cancelled",
                         "Non tutti i giocatori erano pronti, partita annullata"
                     ); // Rimuovi la coda del gioco dal server
                 }

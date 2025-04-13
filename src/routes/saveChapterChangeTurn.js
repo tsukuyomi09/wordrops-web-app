@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { activeGames, startCountdown } = require("../services/gameManager");
+const { activeGames } = require("../services/gameManager");
+const { startCountdown } = require("../services/gameCountdownStart");
 const { saveNormalGame } = require("../services/saveGame");
-const { playersMap } = require("../services/gameManager");
+const { removeGameFromPlayers } = require("../utils/removeGameFromPlayers");
 const checkAuth = require("../middlewares/checkAuthToken");
-const { client } = require("../database/db");
 
 router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     const { gameId } = req.params;
@@ -59,77 +59,24 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     if (game.chapters.length === 5) {
         try {
-            console.log(`five games reached`);
-            console.log(`games chapters = ${game.chapters.length}`);
             const saveSuccess = await saveNormalGame(game);
-
-            if (saveSuccess) {
-                if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
-                    console.log(
-                        "Ranked game detected, starting scoring process..."
-                    );
-                    game.status === "awaiting_scores";
-                    req.io.to(newGameId).emit("awaiting_scores", {
-                        chapters: game.chapters,
-                        status: game.status,
-                        // Altri dati...
-                    });
-
-                    setTimeout(() => {
-                        req.io.to(newGameId).disconnectSockets(true);
-                        clearInterval(game.countdownInterval);
-                        console.log(
-                            "Socket disconnessi dopo invio awaiting-scores."
-                        );
-                    }, 500);
-                } else {
-                    const players = game.players.players;
-
-                    console.log("Contenuto di players:", players);
-
-                    // Rimuovi il gioco dalla playersMap
-                    players.forEach((player) => {
-                        const playerId = player.id; // Ora otteniamo correttamente l'ID
-                        const playerData = playersMap.get(playerId);
-                        console.log(`Checking player ${playerId}`, playerData); // Debug
-
-                        if (playerData) {
-                            console.log(`Before delete:`, playerData.games);
-                            delete playerData.games[gameId]; // Rimuovi il gioco
-
-                            console.log(`After delete:`, playerData.games); // Verifica se è stato rimosso
-
-                            // Se il giocatore non ha più giochi, rimuovilo dalla playersMap
-                            if (Object.keys(playerData.games).length === 0) {
-                                console.log(
-                                    `Removing player ${playerId} from playersMap`
-                                );
-                                playersMap.delete(playerId);
-                            }
-                        }
-                    });
-                    activeGames.delete(newGameId);
-                    req.io.to(gameId).emit("gameCompleted");
-                }
-
-                // Risposta positiva al client
-                return res.json({
-                    message: "Gioco completato e giocatori notificati.",
-                });
-            } else {
-                // Se il salvataggio del gioco non ha avuto successo, invia un errore
+            if (!saveSuccess) {
                 return res
                     .status(500)
                     .json({ message: "Errore nel salvataggio del gioco." });
             }
-        } catch (err) {
-            console.error(
-                "Errore durante il processo di salvataggio del gioco:",
-                err
-            );
-            return res.status(500).json({
-                message: "Errore nel processo di completamento del gioco.",
+
+            if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
+                handleRankedGameFlow(game, newGameId, req.io);
+            } else {
+                handleCasualGameFlow(game, newGameId, req.io);
+            }
+
+            return res.json({
+                message: "Gioco completato e giocatori notificati.",
             });
+        } catch (err) {
+            return handleFinalError(err, res);
         }
     }
 
@@ -148,4 +95,25 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     res.json({ message: "Dati ricevuti correttamente." });
 });
 
+function handleRankedGameFlow(game, gameId, io) {
+    console.log("Ranked game detected, starting scoring process...");
+    game.status = "awaiting_scores"; // <-- era `===` prima, corretto ora
+
+    io.to(gameId).emit("awaiting_scores", {
+        chapters: game.chapters,
+        status: game.status,
+    });
+
+    setTimeout(() => {
+        io.to(gameId).disconnectSockets(true);
+        clearInterval(game.countdownInterval);
+        console.log("Socket disconnessi dopo invio awaiting-scores.");
+    }, 500);
+}
+
+function handleCasualGameFlow(game, gameId, io) {
+    removeGameFromPlayers(game);
+    activeGames.delete(gameId);
+    io.to(gameId).emit("gameCompleted");
+}
 module.exports = router;

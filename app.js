@@ -169,9 +169,15 @@ io.on("connection", (socket) => {
         socket.join(gameId);
 
         const game = activeGames.get(gameId);
+
+        if (!game) {
+            console.error(`Game with ID ${gameId} not found.`);
+            return; // Interrompi l'esecuzione se il gioco non esiste
+        }
+
         const gameChatMap = chatReadMap.get(gameId);
 
-        const readMap = game.chapterReadMap;
+        const readMap = game.chapterReadMap || new Map();
         const readUntil = readMap.get(user_id);
         const lastRead = gameChatMap ? gameChatMap.get(user_id) : null;
         const lastMessage = game?.chat[game.chat.length - 1];
