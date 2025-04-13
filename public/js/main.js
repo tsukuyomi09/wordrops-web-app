@@ -506,28 +506,35 @@ async function fetchdashboardData() {
             statusContainer.classList.remove("hidden");
 
             // Creazione di un pulsante per ogni gioco attivo
-            Object.entries(games).forEach(([gameId, gameStatus], index) => {
+            Object.entries(games).forEach(([gameId, gameData], index) => {
+                const isRanked =
+                    gameData.mode === "ranked_slow" ||
+                    gameData.mode === "ranked_fast";
+
                 const wrapper = document.createElement("div");
-                wrapper.className = "relative inline-block m-2"; // per posizionare il badge
-                wrapper.setAttribute("data-game-id", gameId); // utile per selezionarlo dopo
+                wrapper.className = "relative inline-block m-2";
+                wrapper.setAttribute("data-game-id", gameId);
 
                 const button = document.createElement("button");
                 button.innerText = `Torna al game ${index + 1}`;
                 button.onclick = () => handleBackToGame(gameId);
-                button.className =
-                    "text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
+                button.className = `
+                    text-sm text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold
+                    ${
+                        isRanked
+                            ? "border-4 border-yellow-400 ring-yellow-300 text-gray-600"
+                            : "border-4 border-white focus:ring-green-200 bg-green-600"
+                    }
+                `;
 
-                // Crea le due notifiche (per la chat e il nuovo capitolo)
                 const notificationHtml = `
-        <div class="chat-notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
-        <div class="chapter-notification-dot absolute top-0 left-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
-    `;
+                    <div class="chat-notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
+                    <div class="chapter-notification-dot absolute top-0 left-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
+                `;
 
-                // Aggiungi il pulsante e le notifiche al wrapper
                 wrapper.innerHTML += notificationHtml;
-                wrapper.appendChild(button); // Puoi anche appendere il bottone se non vuoi usare innerHTML
+                wrapper.appendChild(button);
 
-                // Aggiungi il wrapper al contenitore
                 buttonsContainer.appendChild(wrapper);
             });
 
