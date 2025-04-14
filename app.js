@@ -336,6 +336,9 @@ app.get("/completa-profilo/:email", (req, res) => {
 app.get("/image", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "image.html"));
 });
+app.get("/sitemap.xml", (req, res) => {
+    res.sendFile(path.join(__dirname, "sitemap.xml"));
+});
 
 const waitingListRoute = require("./src/routes/waitingList");
 const registerRoutes = require("./src/routes/registerRoutes");
