@@ -1,13 +1,42 @@
 const user_id = Number(localStorage.getItem("user_id"));
 
 document.addEventListener("DOMContentLoaded", function () {
-    const swiper = new Swiper(".swiper-container", {
+    const mainSwiper = new Swiper(".swiper-container", {
         loop: true,
         pagination: {
             el: ".swiper-pagination",
             clickable: true,
         },
+        on: {
+            slideChangeTransitionEnd: function () {
+                // Titoli
+                document.querySelectorAll(".slide-title").forEach((el, idx) => {
+                    if (idx === mainSwiper.realIndex) {
+                        el.classList.add("opacity-100");
+                    } else {
+                        el.classList.remove("opacity-100");
+                    }
+                });
+
+                // Immagini
+                document.querySelectorAll(".slide-image").forEach((el, idx) => {
+                    if (idx === mainSwiper.realIndex) {
+                        el.classList.add("opacity-10");
+                    } else {
+                        el.classList.remove("opacity-10");
+                    }
+                });
+            },
+        },
     });
+
+    // Imposta lo stato iniziale
+    document
+        .querySelectorAll(".slide-title")
+        [mainSwiper.realIndex].classList.add("opacity-100");
+    document
+        .querySelectorAll(".slide-image")
+        [mainSwiper.realIndex].classList.add("opacity-10");
 });
 
 function showLoadingAnimation() {
@@ -27,6 +56,21 @@ function showLoadingAnimation() {
         }, 1000);
     }, 3000);
 }
+
+const bookAnimation = lottie.loadAnimation({
+    container: document.getElementById("lottie-book"),
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: "/images/book_animation.json", // ✅ estensione giusta
+});
+
+const button = document.getElementById("lottie-button");
+
+button.addEventListener("mouseenter", () => {
+    bookAnimation.stop(); // resetta da inizio
+    bookAnimation.play(); // parte all'hover
+});
 
 function showAvatarTransition() {
     const avatarContainer = document.querySelector(".avatar-container");
@@ -135,11 +179,11 @@ function initSocket() {
             const { game_id } = messageData;
             console.log("New message for game:", game_id);
 
-            const wrapper = document.querySelector(
+            const gameWrapper = document.querySelector(
                 `[data-game-id="${game_id}"]`
             );
-            if (wrapper) {
-                const dot = wrapper.querySelector(".chat-notification-dot");
+            if (gameWrapper) {
+                const dot = gameWrapper.querySelector(".chat-notification-dot");
                 if (dot) {
                     dot.classList.remove("hidden");
                 }
@@ -197,9 +241,6 @@ function initSocket() {
         });
 
         socket.on("newChapterNotification", ({ timestamp, gameId }) => {
-            console.log(`Nuovo capitolo arrivato: ${timestamp}`);
-            console.log(`game id in arrivo: ${gameId}`);
-
             const gameWrapper = document.querySelector(
                 `[data-game-id="${gameId}"]`
             );
@@ -218,22 +259,24 @@ function initSocket() {
 
         socket.on("gameCanceled", (data) => {
             const canceledGameId = data.gameId;
-            const wrapperToRemove = document.querySelector(
+            const gameWrapper = document.querySelector(
                 `[data-game-id="${canceledGameId}"]`
             );
-            if (wrapperToRemove) {
-                wrapperToRemove.remove();
+
+            if (gameWrapper) {
+                gameWrapper.remove();
             }
+
             showNotification("PARTITA ANNULLATA", "❌");
         });
 
         socket.on("gameCompleted", (data) => {
             const canceledGameId = data.gameId;
-            const wrapperToRemove = document.querySelector(
+            const gameWrapper = document.querySelector(
                 `[data-game-id="${canceledGameId}"]`
             );
-            if (wrapperToRemove) {
-                wrapperToRemove.remove();
+            if (gameWrapper) {
+                gameWrapper.remove();
             }
             showNotification("PARTITA CONCLUSA", "🏆");
         });
@@ -502,37 +545,56 @@ async function fetchdashboardData() {
                 socket.emit("joinNewGame", { gameId, user_id });
             });
 
-            gameUiContainer.classList.remove("hidden");
-            statusContainer.classList.remove("hidden");
-
             // Creazione di un pulsante per ogni gioco attivo
-            Object.entries(games).forEach(([gameId, gameStatus], index) => {
-                const wrapper = document.createElement("div");
-                wrapper.className = "relative inline-block m-2"; // per posizionare il badge
-                wrapper.setAttribute("data-game-id", gameId); // utile per selezionarlo dopo
+            Object.entries(games).forEach(([gameId, gameData], index) => {
+                // Assicurati di non superare il massimo di 5 contenitori
+                if (index >= 5) return;
 
-                const button = document.createElement("button");
-                button.innerText = `Torna al game ${index + 1}`;
-                button.onclick = () => handleBackToGame(gameId);
-                button.className =
-                    "text-sm bg-green-600 border-4 border-white text-white font-semibold w-32 h-32 rounded-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 focus:ring-green-200 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold";
+                const isRanked =
+                    gameData.mode === "ranked_slow" ||
+                    gameData.mode === "ranked_fast";
 
-                // Crea le due notifiche (per la chat e il nuovo capitolo)
-                const notificationHtml = `
-        <div class="chat-notification-dot absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
-        <div class="chapter-notification-dot absolute top-0 left-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
-    `;
+                // Trova il contenitore corrispondente
+                const container = document.getElementById(`game-${index + 1}`);
 
-                // Aggiungi il pulsante e le notifiche al wrapper
-                wrapper.innerHTML += notificationHtml;
-                wrapper.appendChild(button); // Puoi anche appendere il bottone se non vuoi usare innerHTML
+                if (container) {
+                    // Pulisci il contenitore precedente (se c'è)
+                    container.innerHTML = "";
 
-                // Aggiungi il wrapper al contenitore
-                buttonsContainer.appendChild(wrapper);
+                    container.setAttribute("data-game-id", gameId);
+
+                    // Crea il wrapper per il gioco (contenitore principale)
+                    const gameWrapper = document.createElement("div");
+                    gameWrapper.className =
+                        "relative w-full h-full flex items-center justify-center"; // Questo assicura che i dot siano relativi al wrapper
+
+                    // Crea il pulsante per il gioco
+                    const button = document.createElement("button");
+                    button.innerText = `Torna al game ${index + 1}`;
+                    button.onclick = () => handleBackToGame(gameId);
+                    button.className = `
+                        text-sm text-white font-semibold w-full h-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold
+                        ${
+                            isRanked
+                                ? "border-4 border-yellow-400 ring-yellow-300 rounded-xl text-gray-600 p-2"
+                                : "border-4 border-white text-gray-600 rounded-xl focus:ring-green-200 p-2"
+                        }
+                    `;
+
+                    // Aggiungi notifiche (dot) dentro il wrapper
+                    const notificationHtml = `
+                        <div class="chat-notification-dot absolute -top-4 -right-4 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
+                        <div class="chapter-notification-dot absolute -top-4 -left-4 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
+                    `;
+
+                    // Aggiungi il contenuto al wrapper
+                    gameWrapper.innerHTML = notificationHtml;
+                    gameWrapper.appendChild(button);
+
+                    // Aggiungi il wrapper al contenitore principale
+                    container.appendChild(gameWrapper);
+                }
             });
-
-            gameUiContainer.classList.add("hidden");
-            statusContainer.classList.add("hidden");
         }
 
         fetchAvatarData(username);
@@ -767,31 +829,4 @@ function closeMenu() {
     avatarContainer.classList.add("hidden"); // Nascondi il menu
     selectedAvatar = null; // Resetta la selezione
     selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
-}
-
-function logout() {
-    buttonSound();
-    sessionStorage.clear();
-    fetch("/logout", {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-    })
-        .then((response) => {
-            if (response.ok) {
-                window.location.href = "/";
-            } else {
-                return response.json();
-            }
-        })
-        .then((errorData) => {
-            if (errorData && errorData.error) {
-                console.error("Errore durante il logout: ", errorData.error);
-            }
-        })
-        .catch((error) => {
-            console.error("Errore: Problema con il logout: ", error);
-        });
 }

@@ -23,7 +23,7 @@ async function createGameAndAssignPlayers(game) {
 
         let countdownDuration;
         if (gameMode.includes("fast")) {
-            countdownDuration = 5000; // 10 secondi per le modalità "fast"
+            countdownDuration = 15000; // 10 secondi per le modalità "fast"
         } else {
             countdownDuration = 300000; // 20 secondi per le modalità "slow" o altre
         }
