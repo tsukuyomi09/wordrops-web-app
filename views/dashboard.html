@@ -62,8 +62,7 @@
 
         <div
             id="overlay-books"
-            style="display: none"
-            class="absolute w-full h-full inset-0 bg-black opacity-0 bg-opacity-75 transform translate-y-10 transition-all duration-500 z-50 flex items-center justify-center p-8"
+            class="fixed inset-0 w-full h-full bg-black bg-opacity-75 z-50 flex items-center justify-center p-8 transition-all duration-500 opacity-0 pointer-events-none translate-y-10"
         >
             <button
                 onclick="closeBookOverlay()"
@@ -285,8 +284,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding-left: 4rem;
-                padding-right: 4rem;
+                padding-left: 2rem;
+                padding-right: 2rem;
             "
         >
             <div class="flex-1 flex items-center justify-start h-full">
@@ -325,10 +324,10 @@
                     </div>
                     <div
                         id="status-div"
-                        class="flex items-center justify-center space-x-2 mt-4"
+                        class="flex hidden items-center justify-center space-x-2 mt-4"
                     >
                         <!-- Testo con il pallino verde -->
-                        <span class="text-sm font-semibold">SEI IN GAME</span>
+                        <span class="text-sm font-semibold">Sei in game</span>
                         <span
                             id="game-status-indicator"
                             class="w-2 h-2 rounded-full bg-green-500"
@@ -355,73 +354,186 @@
                             class="absolute w-12 right-6 top-6"
                         />
                     </div>
-                    <h2 class="my-title text-2xl">Nuova Storia</h2>
+                    <h2 class="my-title text-2xl text-gray-800">
+                        Write a new Story
+                    </h2>
                 </div>
             </div>
 
             <!-- Contenitore 3 -->
-            <div class="flex-1 flex items-center justify-end h-full">
+            <div class="flex-1 flex items-start justify-end h-full">
                 <div style="padding: 10px; border-radius: 8px">
                     <div
-                        class="inline-flex justify-center relative items-center gap-6"
+                        class="flex flex-col justify-center py-6 relative items-center gap-6"
                     >
-                        <div
-                            id="dashboard-icon"
-                            class="icon-container border-2 border-blue-400"
-                            onclick="dashboardButton()"
-                        >
-                            <img
-                                src="/images/icons/icons8-casa-100.png"
-                                alt="Search Icon"
-                                class="w-6 h-6"
-                            />
-                        </div>
-                        <a href="/classifiche">
+                        <div class="flex justify-center items-center gap-4">
                             <div
-                                id="leaderboard-icon"
-                                class="icon-container border-2 border-blue-400"
+                                class="flex justify-between px-8 border-2 rounded-full py-2 border-purple-200"
                             >
-                                <img
-                                    src="/images/icons/icons8-trofeo-48.png"
-                                    alt="leaderboard Icon"
-                                    class="w-6 h-6"
-                                />
+                                <div id="leaderboard-icon" class="px-4">
+                                    <a
+                                        href="/classifiche"
+                                        class="button-container flex flex-col justify-center items-center"
+                                    >
+                                        <div>
+                                            <img
+                                                src="/images/icons/icons8-trofeo-48.png"
+                                                alt="leaderboard Icon"
+                                                class="icon-image"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-sm font-semibold text-gray-800"
+                                        >
+                                            leaderboard
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div id="leaderboard-icon" class="px-4">
+                                    <a
+                                        href="/libreria"
+                                        class="button-container flex flex-col justify-center items-center"
+                                    >
+                                        <div>
+                                            <img
+                                                src="/images/icons/library-icon.png"
+                                                alt="library Icon"
+                                                class="icon-image"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-sm font-semibold text-gray-800"
+                                        >
+                                            community
+                                        </div>
+                                    </a>
+                                </div>
+                                <div id="leaderboard-icon" class="px-4">
+                                    <a
+                                        class="button-container flex flex-col justify-center items-center cursor-pointer"
+                                        onclick="dashboardButton()"
+                                    >
+                                        <div>
+                                            <img
+                                                src="/images/icons/icons8-casa-100.png"
+                                                alt="Search Icon"
+                                                class="icon-image"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-sm font-semibold text-gray-800"
+                                        >
+                                            dashboard
+                                        </div>
+                                    </a>
+                                </div>
+                                <div id="leaderboard-icon" class="px-4">
+                                    <a
+                                        id="search-icon"
+                                        class="button-container absolute top-0 left-0 border-2 p-2 rounded-full border-blue-400 z-2 cursor-pointer"
+                                        onclick="openSearch()"
+                                    >
+                                        <div>
+                                            <img
+                                                src="/images/icons/users-icon-menu.png"
+                                                alt="Search Icon"
+                                                class="w-6 h-6"
+                                                class="icon-image"
+                                            />
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </a>
-                        <a href="/libreria">
-                            <div
-                                id="library-icon"
-                                class="icon-container border-2 border-blue-400"
-                            >
-                                <img
-                                    src="/images/icons/library-icon.png"
-                                    alt="library Icon"
-                                    class="w-6 h-6"
-                                />
+                            <!-- HAMBURGER BUTTON -->
+                            <div class="relative inline-block text-left">
+                                <button
+                                    onclick="toggleDropdown()"
+                                    class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none cursor-pointer"
+                                >
+                                    <!-- Hamburger Icon -->
+                                    <svg
+                                        class="w-6 h-6 cursor-pointer"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 6h16M4 12h16M4 18h16"
+                                        ></path>
+                                    </svg>
+                                </button>
+
+                                <!-- DROPDOWN -->
+                                <div
+                                    id="dropdownMenu"
+                                    class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                                >
+                                    <div
+                                        class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                                        onclick="logout()"
+                                    >
+                                        <button
+                                            class="w-full text-sm text-left text-red-600 hover:bg-red-100"
+                                        >
+                                            logout
+                                        </button>
+                                        <div class="w-6 h-6">
+                                            <img
+                                                class="cursor-pointer"
+                                                src="/images/icons/logout-icon.png"
+                                                alt="logout Icon"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </a>
-                        <div
-                            id="search-icon"
-                            class="icon-container border-2 border-blue-400"
-                            onclick="openSearch()"
-                        >
-                            <img
-                                src="/images/icons/users-icon-menu.png"
-                                alt="Search Icon"
-                                class="w-6 h-6"
-                            />
                         </div>
                         <div
-                            id="logout-button"
-                            class="icon-container icon cursor-pointer p-2 border-2 border-red-400"
-                            onclick="logout()"
+                            id="menu-container"
+                            class="menu-wrapper w-full flex justify-center z-20"
                         >
-                            <img
-                                class="cursor-pointer"
-                                src="/images/icons/logout-icon.png"
-                                alt="logout Icon"
-                                class="w-6 h-6"
-                            />
+                            <div
+                                id="user-search-wrapper"
+                                class="user-search-wrapper opacity-0"
+                            >
+                                <div class="relative">
+                                    <div
+                                        id="close-button"
+                                        onclick="closeSearch()"
+                                        class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2"
+                                        onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')"
+                                    >
+                                        <img
+                                            src="/images/icons/x-icon.png"
+                                            alt="close-search-user"
+                                        />
+                                    </div>
+                                    <div
+                                        class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm"
+                                    >
+                                        <form
+                                            id="search-form"
+                                            class="flex flex-col space-y-1"
+                                        >
+                                            <input
+                                                type="text"
+                                                id="search-input"
+                                                placeholder="Cerca un utente..."
+                                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
+                                            />
+                                        </form>
+                                    </div>
+                                    <div
+                                        class="results my-2"
+                                        id="results"
+                                    ></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -433,8 +545,8 @@
                 width: 100%;
                 margin-top: 30vh;
                 position: absolute;
-                border-top-left-radius: 12rem;
-                border-top-right-radius: 12rem;
+                border-top-left-radius: 6rem;
+                border-top-right-radius: 6rem;
                 background-color: #faf4f4;
                 box-shadow: 0 -10px 10px rgba(104, 104, 104, 0.15);
             "
@@ -445,43 +557,83 @@
             >
                 <div class="swiper-wrapper" style="display: flex; height: 100%">
                     <div
-                        class="swiper-slide flex items-start justify-center px-10 h-screen w-full flex-shrink-0 h-full"
+                        class="swiper-slide flex relative items-start justify-center w-full flex-shrink-0 h-full"
                     >
+                        <img
+                            class="absolute bottom-0 right-0 w-1/4 opacity-10"
+                            src="/images/platy-read.png"
+                            alt="Platy Read"
+                        />
                         <div id="ui-container" class="">
                             <div
                                 class="flex flex-col justify-center items-center"
                             >
                                 <h2
-                                    class="slide-title opacity-0 transition-opacity duration-500 text-gray-800 text-4xl my-12 font-bold text-center"
+                                    class="text-gray-800 text-4xl my-12 font-bold text-center"
                                 >
-                                    Partite in Corso
+                                    Ongoing Games
                                 </h2>
                                 <div
                                     id="game-buttons-container"
-                                    class="flex flex-wrap gap-4 mt-6"
+                                    class="flex flex-wrap gap-4 mt-24"
                                 ></div>
+                                <div
+                                    id="buttons-container"
+                                    class="flex flex-wrap gap-12"
+                                >
+                                    <div
+                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                        id="game-1"
+                                    ></div>
+                                    <div
+                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                        id="game-2"
+                                    ></div>
+                                    <div
+                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                        id="game-3"
+                                    ></div>
+                                    <div
+                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                        id="game-4"
+                                    ></div>
+                                    <div
+                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                        id="game-5"
+                                    ></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div
-                        class="swiper-slide flex items-start justify-center px-10 h-screen w-full flex-shrink-0 h-full"
+                        class="swiper-slide flex items-start justify-center px-10 w-full flex-shrink-0 h-full"
                     >
+                        <img
+                            class="slide-imag absolute bottom-0 left-0 w-1/4 opacity-10"
+                            src="/images/platy-win.png"
+                            alt="Platy Read"
+                        />
                         <h2
-                            class="slide-title text-gray-800 opacity-0 transition-opacity duration-700 text-4xl my-12 font-bold text-center"
+                            class="text-gray-800 text-4xl my-12 font-bold text-center"
                         >
-                            Statistiche
+                            Your Stats
                         </h2>
                     </div>
                     <div
-                        class="swiper-slide flex items-start justify-center px-10 h-screen w-full flex-shrink-0 h-full"
+                        class="swiper-slide flex items-start justify-center px-10 w-full flex-shrink-0 h-full"
                     >
+                        <img
+                            class="absolute bottom-0 right-0 w-1/4 opacity-10"
+                            src="/images/platy-library.png"
+                            alt="Platy Read"
+                        />
                         <div
                             class="w-full max-w-4xl mx-auto flex flex-col items-center justify-start"
                         >
                             <h2
-                                class="slide-title text-gray-800 opacity-0 transition-opacity duration-700 text-4xl my-12 font-bold text-center mb-8"
+                                class="text-gray-800 text-4xl my-12 font-bold text-center mb-8"
                             >
-                                Libreria Personale
+                                Personal Library
                             </h2>
 
                             <div
@@ -494,9 +646,9 @@
                         class="swiper-slide flex flex-col items-center justify-center px-10 h-full w-full flex-shrink-0"
                     >
                         <h2
-                            class="slide-title text-gray-800 opacity-0 transition-opacity duration-700 text-4xl my-12 font-bold text-center"
+                            class="text-gray-800 text-4xl my-12 font-bold text-center"
                         >
-                            Storie Completate
+                            Completed Stories
                         </h2>
                         <div
                             class="w-full h-full max-w-4xl scrollbar-hidden flex flex-col justify-start items-center overflow-y-auto px-4"
@@ -749,45 +901,6 @@
             </div>
 
             <!-- menu container -->
-            <div
-                id="menu-container"
-                class="menu-wrapper w-full flex justify-center fixed left-0 right-0 z-20"
-            >
-                <div
-                    id="user-search-wrapper"
-                    class="user-search-wrapper absolute top-0 right-6 opacity-0"
-                >
-                    <div class="relative">
-                        <div
-                            id="close-button"
-                            onclick="closeSearch()"
-                            class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2"
-                            onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')"
-                        >
-                            <img
-                                src="/images/icons/x-icon.png"
-                                alt="close-search-user"
-                            />
-                        </div>
-                        <div
-                            class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm"
-                        >
-                            <form
-                                id="search-form"
-                                class="flex flex-col space-y-1"
-                            >
-                                <input
-                                    type="text"
-                                    id="search-input"
-                                    placeholder="Cerca un utente..."
-                                    class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
-                                />
-                            </form>
-                        </div>
-                        <div class="results my-2" id="results"></div>
-                    </div>
-                </div>
-            </div>
 
             <!-- ui container -->
         </div>

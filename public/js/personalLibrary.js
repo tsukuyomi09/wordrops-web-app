@@ -117,19 +117,19 @@ function openBookOverlay(title, storyDetails) {
         chaptersContainer.appendChild(chapterDiv);
     });
 
-    overlay.style.display = "flex";
-    setTimeout(() => {
-        overlay.classList.remove("opacity-0", "translate-y-10");
-        overlay.classList.add("opacity-100", "translate-y-0");
-    }, 10);
+    overlay.classList.add("open");
+
+    // Disabilita scroll sotto al modal
+    document.body.style.overflow = "hidden";
 }
 
 function closeBookOverlay() {
-    var overlay = document.getElementById("overlay-books");
-    overlay.classList.remove("opacity-100", "translate-y-0");
-    overlay.classList.add("opacity-0", "translate-y-10");
+    const overlay = document.getElementById("overlay-books");
+    overlay.classList.remove("open");
+
+    // Riabilita lo scroll dopo l'animazione (match `duration-500`)
     setTimeout(() => {
-        overlay.style.display = "none";
+        document.body.style.overflow = "";
     }, 500);
 }
 

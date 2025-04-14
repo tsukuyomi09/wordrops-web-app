@@ -139,26 +139,23 @@ font-family: 'Consolas', 'Courier New', monospace;
     transition-delay: 0.3s;
   }
 
-  .icon-container {
-    width: 3rem; /* equivalente a w-12 in Tailwind */
-    height: 3rem; /* equivalente a h-12 in Tailwind */
-    background-color: white;
-    border-radius: 50%;
+  .button-container {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-.icon-container:hover {
-    transform: scale(1.20);
-}
-
-.icon-image {
+    align-items: center;
+    transition: transform 0.3s ease-in-out; /* applica la transizione al contenitore */
+  }
+  
+  .button-container:hover {
+    transform: scale(1.1); /* ingrandisce tutto il contenitore (icona + testo) */
+  }
+  
+  .icon-image {
     width: 1.5rem; /* equivalente a w-6 in Tailwind */
     height: 1.5rem; /* equivalente a h-6 in Tailwind */
-}
+    transition: transform 0.3s ease-in-out; /* animazione dell'immagine */
+  }
 
 .user-search-wrapper {
   transition: opacity 0.4s ease-in-out;
@@ -292,4 +289,10 @@ font-family: 'Consolas', 'Courier New', monospace;
   height: 300px !important;
   transform: scale(2); /* ingrandisce ulteriormente se serve */
   transform-origin: center;
+}
+
+#overlay-books.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
