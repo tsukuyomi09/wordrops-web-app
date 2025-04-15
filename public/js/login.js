@@ -15,9 +15,11 @@ async function registerUser() {
             const data = await response.json();
             const modal = document.getElementById("registration-modal");
             modal.classList.remove("hidden");
+            modal.classList.add("flex");
 
             setTimeout(() => {
                 modal.classList.add("hidden");
+                modal.classList.remove("flex");
             }, 5000);
         } else {
             const errorData = await response.json();

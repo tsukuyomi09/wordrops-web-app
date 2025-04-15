@@ -49,6 +49,9 @@ async function initializeGame(game_id) {
             document
                 .getElementById("popup-start-countdown")
                 .classList.remove("hidden");
+            document
+                .getElementById("popup-start-countdown")
+                .classList.add("flex");
         }
     } catch (error) {
         console.error("Errore nel recupero dello stato del gioco:", error);
@@ -117,6 +120,7 @@ function openScoreModal(chapters) {
 
     // Mostra il modale
     modal.classList.remove("hidden");
+    modal.classList.add("flex");
 }
 
 async function fetchGameChapters(game_id) {
@@ -153,7 +157,7 @@ function initializeSocket(game_id) {
             }
             // Recupera gli elementi del nuovo popup
             sessionStorage.clear();
-            const newPopup = document.getElementById("new-popup-message");
+            const newPopup = document.getElementById("popup-message");
             const newPopupText = document.getElementById("new-popup-text");
             const newPopupClose = document.getElementById("new-popup-close");
 
@@ -161,12 +165,15 @@ function initializeSocket(game_id) {
                 "Congratulazioni, un nuovo racconto ha preso vita!";
 
             newPopup.classList.remove("hidden");
+            newPopup.classList.add("flex");
+
             newPopupClose.removeEventListener("click", handleNewPopupClose);
             newPopupClose.addEventListener("click", handleNewPopupClose);
 
             function handleNewPopupClose() {
                 const username = localStorage.getItem("username");
                 newPopup.classList.add("hidden");
+                newPopup.classList.remove("flex");
                 window.location.href = `/dashboard/${username}`;
             }
         });
@@ -464,6 +471,7 @@ function displayReceivedMessage(messageText, avatar, username) {
 
 function buttonStartGame() {
     document.getElementById("popup-start-countdown").classList.add("hidden");
+    document.getElementById("popup-start-countdown").classList.remove("flex");
 
     fetch(`/game/${game_id}/player-ready`, {
         method: "POST",
@@ -784,14 +792,10 @@ function foxAnimation() {
     thinkingFox.classList.add("hidden");
 
     // Confronta i nomi utente
-    if (currentPlayerUsername === ownUsername) {
-        // Se sono uguali, non mostrare nulla
-        foxAnimationsBox.classList.add("hidden");
-    } else {
-        // Se sono diversi, mostra l'animazione "thinking"
+    if (currentPlayerUsername !== ownUsername) {
         foxAnimationsBox.classList.remove("hidden");
         thinkingFox.classList.remove("hidden");
-        thinkingText.textContent = `${currentPlayerUsername} sta pensando...`; // Aggiungi il testo
+        thinkingText.textContent = `${currentPlayerUsername} sta pensando...`;
     }
 }
 

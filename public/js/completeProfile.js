@@ -100,7 +100,9 @@ function gobackToStep1() {
         step1.classList.remove("hidden"); // Mostra step1
 
         const confirmButton = document.getElementById("confirm-profile");
-        confirmButton.classList.add("hidden"); // Nasconde il pulsante
+        confirmButton.classList.add("hidden");
+        confirmButton.classList.remove("inline-flex");
+
         document.querySelectorAll(".avatar").forEach((el) => {
             el.classList.remove("selected-avatar");
         });
@@ -128,6 +130,7 @@ function selectAvatar(id) {
 
     const confirmButton = document.getElementById("confirm-profile");
     confirmButton.classList.remove("hidden");
+    confirmButton.classList.add("inline-flex");
     confirmButton.classList.remove("opacity-0");
     confirmButton.classList.add("opacity-100");
 

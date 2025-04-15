@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Storie della Community</title>
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
+        <link rel="icon" href="./images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="/style/output.css" rel="stylesheet" />
+
+        <link href="/style/style.css" rel="stylesheet" />
+    </head>
+    <body class="bg-gradient-to-r from-white to-gray-200">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
+                height="0"
+                width="0"
+                style="display: none; visibility: hidden"
+            ></iframe
+        ></noscript>
+        <header class="py-12" style="background-color: #faf4f4">
+            <div class="max-w-screen-xl mx-auto px-6 text-center py-12">
+                <h1
+                    class="text-gray-800 text-4xl font-extrabold sm:text-5xl lg:text-6xl"
+                >
+                    Storie della Community
+                </h1>
+                <p class="mt-4 font-semibold text-lg sm:text-xl">
+                    Esplora, vota e pubblica le tue storie. Unisciti alla nostra
+                    community creativa!
+                </p>
+            </div>
+            <div class="max-w-screen-lg mx-auto px-6">
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
+                >
+                    <div class="flex justify-center items-center gap-2">
+                        <h3 class="text-md font-bold text-orange-400">
+                            Autori:
+                        </h3>
+                        <p class="text-lg text-gray-800 font-bold" id="autori">
+                            0
+                        </p>
+                    </div>
+
+                    <div class="flex justify-center items-center gap-2">
+                        <h3 class="text-md font-bold text-orange-400">
+                            Storie Pubblicate:
+                        </h3>
+                        <p class="text-lg text-gray-800 font-bold" id="storie">
+                            0
+                        </p>
+                    </div>
+
+                    <div class="flex justify-center items-center gap-2">
+                        <h3 class="text-md font-bold text-orange-400">
+                            Voti Totali:
+                        </h3>
+                        <p class="text-lg text-gray-800 font-bold" id="voti">
+                            0
+                        </p>
+                    </div>
+
+                    <div class="flex justify-center items-center gap-2">
+                        <h3 class="text-md font-bold text-orange-400">
+                            Partite Concluse:
+                        </h3>
+                        <p class="text-lg text-gray-800 font-bold" id="partite">
+                            0
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Statistiche Community (Above the Fold) -->
+        <section class="mb-16 text-center py-12"></section>
+        <script src="/js/menu.js" defer></script>
+    </body>
+</html>
