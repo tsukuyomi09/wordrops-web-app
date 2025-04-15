@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wordrops – La piattaforma per scrivere, collaborare e competere in tempo reale</title>
-    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">   
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon//favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
 
     <!-- Descrizione e keyword per SEO -->
     <meta name="description" content="Wordrops è la piattaforma dove la scrittura diventa un gioco. Collabora con altri scrittori, competi in sfide creative, scala le classifiche e leggi storie uniche. Un'esperienza di scrittura interattiva unica nel suo genere.">
@@ -55,7 +56,7 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-    <div id="beta-form" class=" hidden w-full h-screen flex items-center justify-center bg-black bg-opacity-60 fixed z-20">
+    <div id="beta-form" class=" hidden w-full h-screen items-center justify-center bg-black bg-opacity-60 fixed z-20">
         <form id="waiting-list-form" class="relative bg-white p-6 rounded-lg shadow-lg w-full md:max-w-xl max-w-full">
             <button onclick="closeBetaForm()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
                 X
@@ -118,11 +119,11 @@
     </div>
     <div class="wrap lg:pt-6 pt-2 overflow-hidden">
         <div class="section mx-auto md:px-6">
-            <div class="relative md:my-10 my-4">
+            <div class="relative md:my-10 my-4 px-6">
                 <img src="/images/wordrops_logo.png" alt="Wordrops Logo" class="mx-auto w-48 lg:w-72" />
 
                 <!-- <h1 class="text-center lg:text-7xl md:text-3xl text-3xl font-bold ">NO ORDINARY WRITERS</h1> -->
-                <p class="text-center md:text-xl text-sm ">La prima piattaforma dove scrivere, leggere e competere <br> diventano un'esperienza unica.</p>
+                <p class="text-center text-gray-800 md:text-xl text-md font-bold">La prima piattaforma dove scrivere leggere e competere diventano un'esperienza unica.</p>
 
                 <div class="absolute top-0 right-0 md:block hidden">
                     <button id="registerButton" class="bg-gradient-to-r from-purple-500 to-red-500 py-2 px-4  text-white rounded-md shadow-lg hover:shadow-2xl transition duration-300">
@@ -145,7 +146,7 @@
                     <img src="/images/new-book-image.png" alt="Immagine desktop" class="hidden md:block w-full h-auto max-h-screen object-fill">
                 </div>
                 <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col mt-40">
-                    <div class="z-3 text-center text-l text-white font-bold mb-4 text-blue-500">beta tester?</div>
+                    <div class="z-3 text-center text-l font-bold mb-4 text-blue-500">beta tester?</div>
 
                     <div class="button-container z-3 p-1 border-2 border-blue-500 rounded-md">
                         <button onclick="openBetaForm()" class="beta-button bg-white md:text-xl text:mg text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-blue-100 transition duration-300 cursor-pointer">
@@ -157,8 +158,8 @@
         </div>
         <div class="section-wrapper pt-40 px-6">            
             <section >
-                <h2 class="reveal-on-scroll text-center lg:text-6xl text-3xl font-bold mg:mb-20 mb-10 opacity-0 transform translate-y-10 transition duration-700">Scrivi storie, collabora con altri autori
-                    <br> conquista le classifiche</h2>
+                <h2 class="reveal-on-scroll text-center lg:text-6xl text-2xl font-bold mg:mb-20 mb-10 opacity-0 transform translate-y-10 transition duration-700">Scrivi storie, collabora con altri autori e
+                     conquista le classifiche</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 md:gap-20 gap-14 max-w-6xl mx-auto md:px-4 pl-4 pr-0">
                    <div class=" md:text-xl text-lg">
                         <strong><span class="relative"><div class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform -translate-x-8 md:-translate-y-2 -translate-y-4"></div>
@@ -185,12 +186,12 @@
                         <div class="flex flex-column items-center gap-4 p-14">
                             <div id="number-1" class="big-number text-red-500 font-bold ">1</div>
                             <div class="text-4xl font-bold ">vs</div>
-                            <div id="number-4" class="big-number text-red-500 font-bold ">4</div>
+                            <div id="number-4" class="big-number text-red-500 font-bold ">4</div>   
                         </div>
                         <div class="absolute md:-top-10 md:-left-60 -top-20 -left-2 mt-10 ml-10 md:text-5xl text-lg font-bold ">Collabora</div>
-                        <div class="absolute md:-top-10 md:-right-60 -top-2 -right-2 mt-10 mr-10 text-lg text-right md:text-5xl text-2xl font-bold ">Competi</div>
-                        <div class="absolute md:-bottom-10 md:-left-60 -bottom-20 -left-2  mb-10 ml-10 text-lg md:text-5xl text-xl font-bold ">Leggi</div>
-                        <div class="absolute md:-bottom-10 md:-right-60 -bottom-6 -right-2 mb-10 mr-10 text-lg text-right md:text-5xl text-3xl font-bold ">Improvvisa</div>
+                        <div class="absolute md:-top-10 md:-right-60 -top-2 -right-2 mt-10 mr-10 text-lg text-right md:text-5xl font-bold ">Competi</div>
+                        <div class="absolute md:-bottom-10 md:-left-60 -bottom-20 -left-2  mb-10 ml-10 text-lg md:text-5xl  font-bold ">Leggi</div>
+                        <div class="absolute md:-bottom-10 md:-right-60 -bottom-6 -right-2 mb-10 mr-10 text-lg text-right md:text-5xl font-bold ">Improvvisa</div>
                      </div>                
                 </div>            
             </section>            
@@ -302,7 +303,7 @@
         src="/images/colored-bg-image-mobile.png" 
         alt="background mobile" 
         class="absolute inset-0 w-full h-full object-cover overflow-hidden block md:hidden">  
-        <div class="content-top flex flex-col items-center justify-center relative z-10 max-w-5xl mx-auto h-screen">
+        <div class="content-top flex flex-col items-center justify-center relative z-10 max-w-5xl mx-auto md:h-screen">
             <img src="/images/icon-3.png" alt="icon" class="mb-20 md:mt-4 mt-40 md:w-36 md:h-36 w-30 h-30">
             <h2 class="md:mb-6 reveal-on-scroll text-center ls:text-6xl md:text-4xl text-3xl font-bold  opacity-0 transform translate-y-6 transition duration-700">
                 ANCHE OLTRE LA SCRITTURA

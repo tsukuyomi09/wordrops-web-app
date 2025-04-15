@@ -37,10 +37,7 @@
         />
         <link href="/style/style.css" rel="stylesheet" />
         <link rel="stylesheet" href="/swiper/swiper-bundle.min.css" />
-        <link
-            href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
-            rel="stylesheet"
-        />
+        <link href="/style/output.css" rel="stylesheet" />
         <link
             href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap"
             rel="stylesheet"
@@ -70,7 +67,7 @@
         >
             <button
                 onclick="closeBookOverlay()"
-                class="absolute top-0 left-1/2 bg-red-600 text-white mt-4 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
+                class="cursor-pointer absolute top-0 left-1/2 bg-red-600 text-white mt-4 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
             >
                 ESCI
             </button>
@@ -344,7 +341,7 @@
             <div class="flex-1 flex items-start justify-center h-full">
                 <div
                     style="padding: 10px"
-                    class="flex flex-col justify-center items-center h-full"
+                    class="flex flex-col justify-start items-center h-full"
                 >
                     <div
                         class="relative"
@@ -362,6 +359,7 @@
                         Nuova Storia
                     </h2>
                 </div>
+                <div class="swiper-pagination"></div>
             </div>
 
             <!-- Contenitore 3 -->
@@ -894,26 +892,29 @@
                         </div>
                     </div>
                     <div
-                        class="swiper-slide flex flex-col items-center justify-center px-10 h-full w-full flex-shrink-0"
+                        class="swiper-slide flex flex-col items-center justify-center px-10 h-full"
                     >
-                        <h2
-                            class="text-gray-800 text-4xl my-12 font-bold text-center"
-                        >
-                            Storie Completate
-                        </h2>
                         <div
-                            class="w-full h-full max-w-4xl scrollbar-hidden flex flex-col justify-start items-center overflow-y-auto px-4"
+                            class="w-full h-full pb-6 flex overflow-hdden flex-col items-center justify-center flex-shrink-0"
                         >
-                            <div
-                                id="stories-container"
-                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-8 w-full"
+                            <h2
+                                class="text-gray-800 text-4xl my-12 font-bold text-center"
                             >
-                                <!-- Qui vengono inserite le storie -->
+                                Storie Completate
+                            </h2>
+                            <div
+                                class="w-full h-full max-w-4xl scrollbar-hidden flex flex-col justify-start items-center overflow-y-auto px-4"
+                            >
+                                <div
+                                    id="stories-container"
+                                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-8 w-full"
+                                >
+                                    <!-- Qui vengono inserite le storie -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
         </div>
 

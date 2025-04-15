@@ -161,6 +161,10 @@ font-family: 'Consolas', 'Courier New', monospace;
   transition: opacity 0.4s ease-in-out;
 }
 
+.bg-cream{
+  background-color: #faf4f4;
+}
+
 
 .hover-rotate {
   transition: transform 0.3s ease; /* Animazione fluida */
@@ -214,10 +218,9 @@ font-family: 'Consolas', 'Courier New', monospace;
   gap: 12px;
   align-items: center !important;
   position: absolute !important;
-  bottom: 20px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  bottom: 40px !important; 
+  bottom:  !important; 
 }
 
 .swiper-pagination-bullet {

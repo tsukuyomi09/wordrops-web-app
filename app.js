@@ -304,8 +304,8 @@ app.get("/game", (req, res) => {
 app.get("/gamequeue", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "gamequeue.html"));
 });
-app.get("/libreria", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "libreria.html"));
+app.get("/storie-community", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "storie-community.html"));
 });
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
