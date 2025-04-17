@@ -295,6 +295,9 @@ app.get("/", (req, res) => {
 app.get("/privacy-policy", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "privacy-policy.html"));
 });
+app.get("/termini-e-condizioni", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "termini-e-condizioni.html"));
+});
 app.get("/register01", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "register01.html"));
 });
