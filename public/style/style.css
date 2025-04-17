@@ -203,6 +203,35 @@ font-family: 'Consolas', 'Courier New', monospace;
   to { opacity: 1; }
 }
 
+.custom-blue {
+  color: #0095AD;
+}
+
+.custom-blue-dark {
+  color: #007A8C;
+}
+
+.custom-blue-light {
+  color: #33AFC1; 
+}
+
+.bg-custom-blue {
+  background-color: #0095AD;
+}
+.bg-custom-blue-light {
+  background-color: #33AFC1;
+}
+.bg-custom-blue-dark {
+  background-color: #007A8C;
+}
+.bg-custom-blue:hover {
+  background-color: #33AFC1;
+}
+.border-custom-blue {
+  border-color: #0095AD;
+}
+
+
 
 .swiper-pagination {
   background: rgba(5, 81, 223, 0.18) !important; /* Azzurro chiaro con opacità */
