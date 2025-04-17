@@ -1,372 +1,800 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wordrops – La piattaforma per scrivere, collaborare e competere in tempo reale</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script type="text/javascript">
+            var _iub = _iub || [];
+            _iub.csConfiguration = {
+                siteId: 4000663,
+                cookiePolicyId: 64172027,
+                lang: "it",
+                storage: { useSiteId: true },
+            };
+        </script>
+        <script
+            type="text/javascript"
+            src="https://cs.iubenda.com/autoblocking/4000663.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="//cdn.iubenda.com/cs/iubenda_cs.js"
+            charset="UTF-8"
+            async
+        ></script>
+        <title>
+            Wordrops – La piattaforma per scrivere, collaborare e competere in
+            tempo reale
+        </title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
 
-    <!-- Descrizione e keyword per SEO -->
-    <meta name="description" content="Wordrops è la piattaforma dove la scrittura diventa un gioco. Collabora con altri scrittori, competi in sfide creative, scala le classifiche e leggi storie uniche. Un'esperienza di scrittura interattiva unica nel suo genere.">
-    <meta name="author" content="Wordrops Team">
-    <meta name="keywords" content="scrittura creativa, scrittura collaborativa online, sfide di scrittura, competizione di scrittura, piattaforma di scrittura, storie collaborative, scrivere insieme, giochi di scrittura, community creativa, scrivere e competere, narrativa interattiva">
-    
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-N6J3B7DJ');</script>
-    <!-- End Google Tag Manager -->
+        <!-- Descrizione e keyword per SEO -->
+        <meta
+            name="description"
+            content="Wordrops è la piattaforma dove la scrittura diventa un gioco. Collabora con altri scrittori, competi in sfide creative, scala le classifiche e leggi storie uniche. Un'esperienza di scrittura interattiva unica nel suo genere."
+        />
+        <meta name="author" content="Wordrops Team" />
+        <meta
+            name="keywords"
+            content="scrittura creativa, scrittura collaborativa online, sfide di scrittura, competizione di scrittura, piattaforma di scrittura, storie collaborative, scrivere insieme, giochi di scrittura, community creativa, scrivere e competere, narrativa interattiva"
+        />
 
-    <!-- Open Graph tags for Social Media -->
-    <meta property="og:title" content="wordrops">
-    <meta property="og:description" content="Su Wordrop la scrittura diventa un gioco collaborativo. Sfida altre persone, unisciti a una community creativa, migliora divertendoti e scala le classifiche.">
-    <meta property="og:image" content="Da creare dopo aver fatto il logo">
-    <meta property="og:url" content="https://wordrops.com/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="wordrops">
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
 
-    <script type="application/ld+json">
-        {
-          "@context": "http://schema.org",
-          "@type": "WebSite",
-          "name": "Wordrops",
-          "url": "https://wordrops.com",
-          "description": "Scrittura collaborativa e competitiva per creativi che amano sfide e comunità.",
-          "sameAs": [
-            "https://www.facebook.com/wordrops",
-            "https://twitter.com/wordrops"
-          ]
-        }
-    </script>
-      
-    <!-- Preconnect per font e risorse esterne -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <!-- Open Graph tags for Social Media -->
+        <meta property="og:title" content="wordrops" />
+        <meta
+            property="og:description"
+            content="Su Wordrop la scrittura diventa un gioco collaborativo. Sfida altre persone, unisciti a una community creativa, migliora divertendoti e scala le classifiche."
+        />
+        <meta property="og:image" content="Da creare dopo aver fatto il logo" />
+        <meta property="og:url" content="https://wordrops.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="wordrops" />
 
-    <!-- TailwindCSS e stile personalizzato -->
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <link href="/style/style.css" rel="stylesheet">
-</head>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "WebSite",
+                "name": "Wordrops",
+                "url": "https://wordrops.com",
+                "description": "Scrittura collaborativa e competitiva per creativi che amano sfide e comunità.",
+                "sameAs": [
+                    "https://www.facebook.com/wordrops",
+                    "https://twitter.com/wordrops"
+                ]
+            }
+        </script>
 
-    <div id="beta-form" class=" hidden w-full h-screen items-center justify-center bg-black bg-opacity-60 fixed z-20">
-        <form id="waiting-list-form" class="relative bg-white p-6 rounded-lg shadow-lg w-full md:max-w-xl max-w-full">
-            <button onclick="closeBetaForm()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center">
-                X
-            </button>
-            <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Unisciti alla lista d'attesa</h2>
-            <div class="md:mb-8 mb-4">
-                <input type="text" id="name" name="name" placeholder="Nome*" required 
-                class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none">
-            </div>
-            <div class="md:mb-8 mb-4">
-                <input type="email" id="email" name="email" placeholder="Email*" required 
-                    class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none">
-            </div>
-            <div class="md:mb-8 mb-4">
-                <label for="preferences" class="block text-m font-medium text-gray-800">Cosa preferisci?*</label>
-                <select id="preferences" name="preferences" required 
-                class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none">
-                    <option value="" disabled selected>scegli..</option>
-                    <option value="scrivere">Scrivere</option>
-                    <option value="leggere">Leggere</option>
-                    <option value="entrambi">Entrambi</option>
-                </select>
-            </div>   
-            <div class="md:mb-8 mb-4">
-                <label for="gender" class="block text-m font-medium text-gray-800">Genere*</label>
-                <select id="gender" name="gender" required 
-                class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none">
-                    <option value="" disabled selected>scegli..</option>
-                    <option value="uomo">Uomo</option>
-                    <option value="donna">Donna</option>
-                    <option value="non specifico">Non specifico</option>
-                </select>
-            </div>
-            <div class="md:mb-8 mb-4">
-                <label for="age_range" class="block text-m font-medium text-gray-800">Fascia di età*</label>
-                <select id="age_range" name="age_range" required 
-                class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none">
-                    <option value="" disabled selected>scegli..</option>
-                    <option value="&lt; 18">&lt;18</option>
-                    <option value="19-25">19-25</option>
-                    <option value="26-35">26-35</option>
-                    <option value="36-50">36-50</option>
-                    <option value="50+">50+</option>
-                </select>
-            </div>
-            <div class="flex items-center justify-left mb-2">
-                <label class="text-sm font-medium text-gray-800 flex items-center gap-2">
-                    <input type="checkbox" name="consenso" id="consenso" required class="mr-2 rounded border-gray-300 focus:ring-indigo-500">
-                    Acconsento al trattamento dei miei dati personali come descritto nell'informativa. 
-                </label>
-            </div>
-            <div class="flex justify-left md:mb-8 mb-4">
-                <a href="/privacy-policy" target="_blank" class="text-blue-500 hover:underline">Informativa sulla privacy</a>.
-            </div>
-            <button type="submit" 
-                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md shadow">
-                Unisciti alla lista d'attesa
-            </button>
-        </form>
-    </div>
-    <div class="wrap pt-2 overflow-hidden">
-        <div class="section mx-auto md:px-6">
-            <div class="relative md:my-6 my-4 px-6">
-                <img src="/images/logo_wordrops_classic_blue.svg" alt="Wordrops Logo" class="mx-auto w-28 lg:w-52" />
+        <!-- Preconnect per font e risorse esterne -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-                <!-- <h1 class="text-center lg:text-7xl md:text-3xl text-3xl font-bold ">NO ORDINARY WRITERS</h1> -->
-                <h1 class="text-center md:py-8 py-4 text-gray-800 text-md  md:text-3xl text-md font-bold">La prima piattaforma dove scrivere, leggere e competere diventano <br> un'esperienza unica.</p>
+        <!-- TailwindCSS e stile personalizzato -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <link href="/style/style.css" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
+                height="0"
+                width="0"
+                style="display: none; visibility: hidden"
+            ></iframe
+        ></noscript>
 
-                <div class="absolute top-0 right-0 hidden">
-                    <button id="registerButton" class="bg-gradient-to-r from-purple-500 to-red-500 py-2 px-4  text-white rounded-md shadow-lg hover:shadow-2xl transition duration-300">
-                        REGISTRATI
-                    </button>                    
+        <div
+            id="beta-form"
+            class="hidden w-full h-screen items-center justify-center bg-black bg-opacity-60 fixed z-20"
+        >
+            <form
+                id="waiting-list-form"
+                class="relative bg-white p-6 rounded-lg shadow-lg w-full md:max-w-xl max-w-full"
+            >
+                <button
+                    onclick="closeBetaForm()"
+                    class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white text-black text-xl flex items-center justify-center"
+                >
+                    X
+                </button>
+                <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">
+                    Unisciti alla lista d'attesa
+                </h2>
+                <div class="md:mb-8 mb-4">
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Nome*"
+                        required
+                        class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none"
+                    />
+                </div>
+                <div class="md:mb-8 mb-4">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Email*"
+                        required
+                        class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none"
+                    />
+                </div>
+                <div class="md:mb-8 mb-4">
+                    <label
+                        for="preferences"
+                        class="block text-m font-medium text-gray-800"
+                        >Cosa preferisci?*</label
+                    >
+                    <select
+                        id="preferences"
+                        name="preferences"
+                        required
+                        class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none"
+                    >
+                        <option value="" disabled selected>scegli..</option>
+                        <option value="scrivere">Scrivere</option>
+                        <option value="leggere">Leggere</option>
+                        <option value="entrambi">Entrambi</option>
+                    </select>
+                </div>
+                <div class="md:mb-8 mb-4">
+                    <label
+                        for="gender"
+                        class="block text-m font-medium text-gray-800"
+                        >Genere*</label
+                    >
+                    <select
+                        id="gender"
+                        name="gender"
+                        required
+                        class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none"
+                    >
+                        <option value="" disabled selected>scegli..</option>
+                        <option value="uomo">Uomo</option>
+                        <option value="donna">Donna</option>
+                        <option value="non specifico">Non specifico</option>
+                    </select>
+                </div>
+                <div class="md:mb-8 mb-4">
+                    <label
+                        for="age_range"
+                        class="block text-m font-medium text-gray-800"
+                        >Fascia di età*</label
+                    >
+                    <select
+                        id="age_range"
+                        name="age_range"
+                        required
+                        class="block w-full py-2 pr-2 border-b-2 border-gray-200 placeholder-gray-600 focus:outline-none"
+                    >
+                        <option value="" disabled selected>scegli..</option>
+                        <option value="&lt; 18">&lt;18</option>
+                        <option value="19-25">19-25</option>
+                        <option value="26-35">26-35</option>
+                        <option value="36-50">36-50</option>
+                        <option value="50+">50+</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-left mb-2">
+                    <label
+                        class="text-sm font-medium text-gray-800 flex items-center gap-2"
+                    >
+                        <input
+                            type="checkbox"
+                            name="consenso"
+                            id="consenso"
+                            required
+                            class="mr-2 rounded border-gray-300 focus:ring-indigo-500"
+                        />
+                        Acconsento al trattamento dei miei dati personali come
+                        descritto nell'informativa.
+                    </label>
+                </div>
+                <div class="flex justify-left md:mb-8 mb-4">
+                    <a
+                        href="/privacy-policy"
+                        target="_blank"
+                        class="text-blue-500 hover:underline"
+                        >Informativa sulla privacy</a
+                    >.
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md shadow"
+                >
+                    Unisciti alla lista d'attesa
+                </button>
+            </form>
+        </div>
+        <div class="wrap pt-2 overflow-hidden">
+            <div class="section mx-auto md:px-6">
+                <div class="relative md:my-6 my-4 px-6">
+                    <img
+                        src="/images/logo_wordrops_classic_blue.png"
+                        alt="Wordrops Logo"
+                        class="mx-auto w-28 lg:w-52"
+                    />
+
+                    <!-- <h1 class="text-center lg:text-7xl md:text-3xl text-3xl font-bold ">NO ORDINARY WRITERS</h1> -->
+                    <h1
+                        class="text-center md:py-8 py-4 text-gray-800 text-md md:text-3xl font-bold"
+                    >
+                        La prima piattaforma dove scrivere, leggere e competere
+                        diventano <br />
+                        un'esperienza unica.
+                    </h1>
+                    <div class="absolute top-0 right-0 hidden">
+                        <button
+                            id="registerButton"
+                            class="bg-gradient-to-r from-purple-500 to-red-500 py-2 px-4 text-white rounded-md shadow-lg hover:shadow-2xl transition duration-300"
+                        >
+                            Registrati
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div
+                        class="fire-background-container absolute top-0 left-0 w-full h-full z-10"
+                    >
+                        <video
+                            class="w-full h-full object-cover mix-blend-screen"
+                            autoplay
+                            loop
+                            muted
+                        >
+                            <source
+                                src="/images/fire-bg-video.mp4"
+                                type="video/mp4"
+                            />
+                        </video>
+                    </div>
+                    <div class="relative z-1">
+                        <!-- Immagine per dispositivi mobili -->
+                        <img
+                            src="/images/new-book-image-mobile.png"
+                            alt="Immagine mobile"
+                            class="md:hidden w-full h-2/3 object-cover md:h-auto md:max-h-screen"
+                        />
+
+                        <!-- Immagine per dispositivi medi o superiori -->
+                        <img
+                            src="/images/new-book-image.png"
+                            alt="Immagine desktop"
+                            class="hidden md:block w-full h-auto max-h-screen object-fill"
+                        />
+                    </div>
+                    <div
+                        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col mt-40"
+                    >
+                        <div
+                            class="z-3 text-center text-l font-bold mb-4 text-blue-500"
+                        >
+                            beta tester?
+                        </div>
+
+                        <div
+                            class="button-container z-3 p-1 border-2 border-blue-500 rounded-md"
+                        >
+                            <button
+                                onclick="openBetaForm()"
+                                class="beta-button bg-white md:text-xl text:mg text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-blue-100 transition duration-300 cursor-pointer"
+                            >
+                                ENTRA IN LISTA
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="relative">
-                
-                <div class="fire-background-container absolute top-0 left-0 w-full h-full z-10">
-                    <video class="w-full h-full object-cover mix-blend-screen" autoplay loop muted>
-                        <source src="/images/fire-bg-video.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="relative z-1 ">
-                    <!-- Immagine per dispositivi mobili -->
-                    <img src="/images/new-book-image-mobile.png" alt="Immagine mobile" class="md:hidden w-full h-2/3 object-cover md:h-auto md:max-h-screen">
-                  
-                    <!-- Immagine per dispositivi medi o superiori -->
-                    <img src="/images/new-book-image.png" alt="Immagine desktop" class="hidden md:block w-full h-auto max-h-screen object-fill">
-                </div>
-                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col mt-40">
-                    <div class="z-3 text-center text-l font-bold mb-4 text-blue-500">beta tester?</div>
+            <div class="section-wrapper pt-40 px-6">
+                <section>
+                    <h2
+                        class="reveal-on-scroll text-center lg:text-4xl text-2xl font-bold mg:mb-20 mb-10 opacity-0 transform translate-y-10 transition duration-700"
+                    >
+                        Scrivi storie, collabora con altri autori <br />
+                        e conquista le classifiche
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 md:gap-20 gap-14 max-w-6xl mx-auto md:px-4 pl-4 pr-0"
+                    >
+                        <div class="md:text-xl text-lg">
+                            <div class="relative">
+                                <div
+                                    class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform -translate-x-8 md:-translate-y-2 -translate-y-4"
+                                ></div>
+                                <strong
+                                    >Scrittura collaborativa in tempo
+                                    reale:</strong
+                                >
+                                Crea una storia con altri 4 scrittori dove ogni
+                                capitolo si costruisce a turni, in un intreccio
+                                imprevedibile.
+                            </div>
+                        </div>
+                        <div class="md:text-xl text-lg">
+                            <div class="relative">
+                                <div
+                                    class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform -translate-x-8 md:-translate-y-2 -translate-y-4"
+                                ></div>
+                                <strong>Allenati alla creatività:</strong> Rendi
+                                ogni tuo paragrafo un colpo di scena. Più
+                                sorprendi, più lasci il segno.
+                            </div>
+                        </div>
+                        <div class="md:text-xl text-lg">
+                            <div class="relative">
+                                <div
+                                    class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform -translate-x-8 md:-translate-y-2 -translate-y-4"
+                                ></div>
+                                <strong
+                                    >Sfide di scrittura e classifiche:</strong
+                                >
+                                Fai vibrare la tastiera, crea capitoli esaltanti
+                                e guadagna punti per raggiungere la vetta!
+                            </div>
+                        </div>
+                        <div class="md:text-xl text-lg">
+                            <div class="relative">
+                                <div
+                                    class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform -translate-x-8 md:-translate-y-2 -translate-y-4"
+                                ></div>
+                                <strong>Gioca come vuoi tu:</strong> Modalità
+                                competitiva per chi ama vincere, o relax per chi
+                                vuole solo scrivere e divertirsi.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div
+                        class="relative w-full md:h-screen py-40 md:py-2 flex items-center justify-center"
+                    >
+                        <div class="relative w-xl h-xl">
+                            <div
+                                class="flex flex-column items-center gap-4 p-14"
+                            >
+                                <div
+                                    id="number-1"
+                                    class="big-number text-red-500 font-bold"
+                                >
+                                    1
+                                </div>
+                                <div class="text-4xl font-bold">vs</div>
+                                <div
+                                    id="number-4"
+                                    class="big-number text-red-500 font-bold"
+                                >
+                                    4
+                                </div>
+                            </div>
+                            <div
+                                class="absolute md:-top-10 md:-left-60 -top-20 -left-2 mt-10 ml-10 md:text-5xl text-lg font-bold"
+                            >
+                                Collabora
+                            </div>
+                            <div
+                                class="absolute md:-top-10 md:-right-60 -top-2 -right-2 mt-10 mr-10 text-lg text-right md:text-5xl font-bold"
+                            >
+                                Competi
+                            </div>
+                            <div
+                                class="absolute md:-bottom-10 md:-left-60 -bottom-20 -left-2 mb-10 ml-10 text-lg md:text-5xl font-bold"
+                            >
+                                Leggi
+                            </div>
+                            <div
+                                class="absolute md:-bottom-10 md:-right-60 -bottom-6 -right-2 mb-10 mr-10 text-lg text-right md:text-5xl font-bold"
+                            >
+                                Improvvisa
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="section pt-40 pb-40 px-6 bg-blue-500">
+                <section>
+                    <h2
+                        class="reveal-on-scroll text-center lg:text-6xl text-3xl font-bold text-white opacity-0 transform translate-y-2 transition duration-700"
+                    >
+                        SCEGLI IL TUO STILE DI GIOCO
+                    </h2>
+                    <h3 class="text-center mb:text-xl text-lg mb-20 text-white">
+                        Che tipo di scrittore sei? Ami la sfida o preferisci
+                        lasciarti ispirare con calma?<br />
+                        Scegli come vivere ogni storia: ci sono
+                        <strong>modalità per ogni stile</strong>, e presto ne
+                        arriveranno altre.
+                    </h3>
+                    <div
+                        class="flex flex-col md:mt-40 mt-6 md:gap-20 gap-10 w-full mx-auto max-w-6xl"
+                    >
+                        <div
+                            class="flex border-2 border-white p-2 md:w-3/5 rounded-md reveal-left"
+                            id="top-container"
+                        >
+                            <div
+                                class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white"
+                            >
+                                <div class="flex items-center mb-2 gap-4">
+                                    <h2 class="text-3xl font-bold">
+                                        Modalità
+                                        <span class="text-red-600"
+                                            >Classificata</span
+                                        >
+                                    </h2>
+                                    <img
+                                        src="/images/icons/icon1.png"
+                                        alt="Icona Sfida"
+                                        class="md:w-12 md:h-12 w-24 h-24"
+                                    />
+                                </div>
+                                <p>
+                                    Per chi ha il
+                                    <strong>pennino rovente</strong> e la mente
+                                    sempre accesa. Sfida il tempo, accumula
+                                    punti e scala la
+                                    <strong>classifica degli scrittori</strong>.
+                                    Ogni parola conta in questa modalità
+                                    adrenalinica, dove il tuo contributo ti
+                                    porta sempre più vicino alla vetta!
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex border-2 border-white p-2 md:w-3/5 ml-auto rounded-md reveal-right"
+                            id="bottom-container"
+                        >
+                            <div
+                                class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white"
+                            >
+                                <div class="flex items-center mb-2 gap-4">
+                                    <h2 class="text-3xl font-bold">
+                                        Modalità
+                                        <span class="text-green-600"
+                                            >Relax</span
+                                        >
+                                    </h2>
+                                    <img
+                                        src="/images/icons/icon2.png"
+                                        alt="Icona Relax"
+                                        class="md:w-12 md:h-12 w-24 h-24"
+                                    />
+                                </div>
+                                <p>
+                                    Scrivi senza pressioni, goditi il piacere
+                                    della <strong>scrittura condivisa</strong>.
+                                    Senza voti, senza fretta, solo pura
+                                    creatività. Qui ogni capitolo è
+                                    un'opportunità per esprimere te stesso,
+                                    costruendo storie uniche insieme agli altri,
+                                    un capitolo alla volta.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <section class="md:py-40 pt-20 relative">
+            <div
+                class="hidden md:block absolute top-1/2 md:right-0 md:h-3/5 h-full md:w-2/5 bg-contain bg-no-repeat opacity-5 transform -translate-y-1/2"
+                style="background-image: url('/images/books-bg.png')"
+            ></div>
+            <div
+                class="md:hidden absolute inset-0 bg-contain bg-no-repeat opacity-5 bg-center"
+                style="background-image: url('/images/books-bg.png')"
+            ></div>
+            <!-- Primo container con titolo centrale -->
+            <div class="text-center md:mb-8 mb-4">
+                <h2
+                    class="ls:text-6xl md:text-4xl text-3xl font-bold text-gray-800"
+                >
+                    MA COME FUNZIONA?
+                </h2>
+            </div>
 
-                    <div class="button-container z-3 p-1 border-2 border-blue-500 rounded-md">
-                        <button onclick="openBetaForm()" class="beta-button bg-white md:text-xl text:mg text-blue-500 px-4 py-2 rounded-md font-bold hover:bg-blue-100 transition duration-300 cursor-pointer">
+            <!-- Quattro containers -->
+            <div
+                class="grid grid-cols-1 md:grid-cols md:gap-20 gap-4 max-w-5xl mx-auto md:mt-40 mt-6"
+            >
+                <div
+                    class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0"
+                >
+                    <div class="flex px-4 relative">
+                        <img
+                            src="/images/blue-frame.png"
+                            alt="Frame"
+                            class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible"
+                        />
+                        <p
+                            class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold"
+                        >
+                            1
+                        </p>
+                    </div>
+                    <div class="flex-col">
+                        <h3
+                            class="md:text-3xl text-xl font-semibold mb-4 text-gray-800"
+                        >
+                            Unisciti alla storia
+                        </h3>
+                        <p>
+                            Entra in gioco con 4 altri scrittori sconosciuti e
+                            inizia a creare una storia unica. Ogni volta, la
+                            trama si sviluppa in modo imprevedibile: questa è
+                            l'opportunità perfetta per sfidare la tua
+                            creatività! Preparati a sorprenderti con ogni nuovo
+                            capitolo.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0"
+                >
+                    <div class="flex px-4 relative">
+                        <img
+                            src="/images/purple-frame.png"
+                            alt="Frame"
+                            class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible"
+                        />
+                        <p
+                            class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold"
+                        >
+                            2
+                        </p>
+                    </div>
+                    <div class="flex-col">
+                        <h3 class="text-3xl font-semibold mb-4 text-gray-800">
+                            Scrivi il tuo capitolo
+                        </h3>
+                        <p>
+                            Quando è il tuo turno, avrai un tempo definito per
+                            aggiungere il tuo tocco personale alla storia. Ma
+                            attenzione: ogni capitolo deve intrecciarsi con
+                            quelli precedenti. Costruisci sulla creatività degli
+                            altri e porta avanti la trama con il tuo stile
+                            unico. Ogni parola conta per mantenere il flusso!
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0"
+                >
+                    <div class="flex px-4 relative">
+                        <img
+                            src="/images/green-frame.png"
+                            alt="Frame"
+                            class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible"
+                        />
+                        <p
+                            class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold"
+                        >
+                            3
+                        </p>
+                    </div>
+                    <div class="flex-col">
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">
+                            La storia è completa
+                        </h3>
+                        <p>
+                            Dopo 5 turni, la tua squadra avrà completato una
+                            storia epica (si spera). A seconda della modalità
+                            scelta, il gioco si sviluppa in modi diversi::
+                        </p>
+                        <br />
+                        <p>
+                            <span class="text-red-500 font-bold"
+                                >Competitiva:</span
+                            >
+                            Vota i capitoli degli altri e ricevi voti sul tuo.
+                            Ogni contributo che fa la differenza ti farà
+                            guadagnare punti per scalare la classifica globale.
+                            <br /><span class="text-green-500 font-bold"
+                                >Normale:</span
+                            >
+                            Nessun voto, nessun punteggio. Solo il piacere di
+                            scrivere e divertirsi insieme, senza pressioni.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0"
+                >
+                    <div class="flex px-4 relative">
+                        <img
+                            src="/images/orange-frame.png"
+                            alt="Frame"
+                            class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible"
+                        />
+                        <p
+                            class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold"
+                        >
+                            4
+                        </p>
+                    </div>
+                    <div class="flex-col">
+                        <h3 class="text-3xl font-semibold mb-4 text-gray-800">
+                            Sfida la tua creatività
+                        </h3>
+                        <p>
+                            Ogni storia completata e ogni capitolo scritto ti
+                            permette di scalare la classifica e dimostrare a
+                            tutti chi è il miglior narratore. In questa
+                            piattaforma,
+                            <strong>collaborazione e competizione</strong> vanno
+                            sempre di pari passo!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="py-40 px-4 relative">
+            <img
+                src="/images/wave-background.png"
+                alt="background desktop"
+                class="absolute inset-0 w-full h-full object-cover overflow-hidden hidden md:block"
+            />
+
+            <!-- Immagine per mobile -->
+            <img
+                src="/images/colored-bg-image-mobile.png"
+                alt="background mobile"
+                class="absolute inset-0 w-full h-full object-cover overflow-hidden block md:hidden"
+            />
+            <div
+                class="content-top flex flex-col items-center justify-center relative z-10 max-w-5xl mx-auto md:h-screen"
+            >
+                <img
+                    src="/images/icon-3.png"
+                    alt="icon"
+                    class="mb-20 md:mt-4 mt-40 md:w-36 md:h-36 w-30 h-30"
+                />
+                <h2
+                    class="md:mb-6 reveal-on-scroll text-center ls:text-6xl md:text-4xl text-3xl font-bold opacity-0 transform translate-y-6 transition duration-700"
+                >
+                    ANCHE OLTRE LA SCRITTURA
+                </h2>
+                <div>
+                    <p class="text-center text-xl mb-6">
+                        Oltre a scrivere e competere, puoi immergerti nel mondo
+                        delle storie create dalla nostra comunità di scrittori.
+                    </p>
+                    <p class="text-center text-xl mb-6">
+                        <strong>Prenditi una pausa</strong> e lasciati ispirare
+                        da racconti unici, ricchi di emozioni, risate e
+                        sorprese. Scopri nuove prospettive, esplora mondi
+                        fantastici, e trova la tua nuova storia preferita.
+                    </p>
+                    <p class="text-center text-xl mb-20">
+                        Che tu voglia farti trasportare in un'avventura
+                        emozionante o semplicemente rilassarti con un racconto
+                        coinvolgente, la nostra
+                        <strong>biblioteca dinamica</strong> è sempre pronta ad
+                        accoglierti con contenuti freschi e originali. Unisciti
+                        alla nostra comunità e
+                        <strong>vivi la creatività da ogni angolazione</strong>
+                        .
+                    </p>
+                </div>
+                <div class="flex-col">
+                    <div
+                        class="z-3 text-center text-l text-blue-400 font-bold mb-4"
+                    >
+                        beta tester?
+                    </div>
+
+                    <div
+                        class="button-container z-3 p-1 border-2 border-blue-400 rounded-md"
+                    >
+                        <button
+                            onclick="openBetaForm()"
+                            class="beta-button bg-blue-400 text-xl text-white px-4 py-2 rounded-md font-bold hover:bg-blue-600 transition duration-300 cursor-pointer"
+                        >
                             ENTRA IN LISTA
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="section-wrapper pt-40 px-6">            
-            <section >
-                <h2 class="reveal-on-scroll text-center lg:text-4xl text-2xl font-bold mg:mb-20 mb-10 opacity-0 transform translate-y-10 transition duration-700">Scrivi storie, collabora con altri autori <br> e
-                     conquista le classifiche</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 md:gap-20 gap-14 max-w-6xl mx-auto md:px-4 pl-4 pr-0">
-                   <div class=" md:text-xl text-lg">
-                        <strong><span class="relative"><div class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform -translate-x-8 md:-translate-y-2 -translate-y-4"></div>
-                            Scrittura collaborativa</span> in tempo reale:</strong> Crea una storia con altri 4 scrittori dove ogni capitolo si costruisce a turni, in un intreccio imprevedibile.
-                    </div> 
-                    <div class=" md:text-xl text-lg">
-                        <strong><span class="relative"><div class="absolute border-2 border-blue-500 h-10 w-16 top-0 transform  -translate-x-8 md:-translate-y-2 -translate-y-4"></div>
-                            Allenati alla creatività:</strong> Rendi ogni tuo paragrafo un colpo di scena. Più sorprendi, più lasci il segno.
-                    </div>
-                    <div class=" md:text-xl text-lg">
-                        <strong><span class="relative"><div class="absolute border-2 border-blue-500 h-10 w-16  top-0 transform  -translate-x-8 md:-translate-y-2 -translate-y-4"></div>
-                            Sfide</span> di scrittura e classifiche:</strong> Fai vibrare la tastiera, crea capitoli 
-                            esaltanti e guadagna punti per raggiungere la vetta!
-                    </div>
-                    <div class=" md:text-xl text-lg">
-                        <strong><span class="relative"><div class="absolute border-2 border-blue-500 h-10 w-16  top-0 transform  -translate-x-8 md:-translate-y-2 -translate-y-4"></div>
-                            Gioca</span> come vuoi tu:</strong> Modalità competitiva per chi ama vincere, o relax per chi vuole solo scrivere e divertirsi.
-                    </div>                
-                </div>
-            </section>
-            <section >
-                <div class="relative w-full md:h-screen py-40 md:py-2 flex items-center justify-center">
-                     <div class="relative w-xl h-xl">
-                        <div class="flex flex-column items-center gap-4 p-14">
-                            <div id="number-1" class="big-number text-red-500 font-bold ">1</div>
-                            <div class="text-4xl font-bold ">vs</div>
-                            <div id="number-4" class="big-number text-red-500 font-bold ">4</div>   
-                        </div>
-                        <div class="absolute md:-top-10 md:-left-60 -top-20 -left-2 mt-10 ml-10 md:text-5xl text-lg font-bold ">Collabora</div>
-                        <div class="absolute md:-top-10 md:-right-60 -top-2 -right-2 mt-10 mr-10 text-lg text-right md:text-5xl font-bold ">Competi</div>
-                        <div class="absolute md:-bottom-10 md:-left-60 -bottom-20 -left-2  mb-10 ml-10 text-lg md:text-5xl  font-bold ">Leggi</div>
-                        <div class="absolute md:-bottom-10 md:-right-60 -bottom-6 -right-2 mb-10 mr-10 text-lg text-right md:text-5xl font-bold ">Improvvisa</div>
-                     </div>                
-                </div>            
-            </section>            
-        </div>
-        <div class="section pt-40 pb-40 px-6 bg-blue-500">
-            <section >
-                <h2 class="reveal-on-scroll text-center lg:text-6xl text-3xl font-bold text-white  opacity-0 transform translate-y-2 transition duration-700">
-                    SCEGLI IL TUO STILE DI GIOCO</h2>
-                <h3 class="text-center mb:text-xl text-lg mb-20  text-white">Che tipo di scrittore sei? Ami la sfida o preferisci lasciarti ispirare con calma?<br> Scegli come vivere ogni storia: ci sono <strong>modalità per ogni stile</strong>, e presto ne arriveranno altre.</h3>
-                <div class="flex flex-col md:mt-40 mt-6 md:gap-20 gap-10 w-full mx-auto max-w-6xl">
-                    <div class="flex border-2 border-white p-2 md:w-3/5 rounded-md reveal-left" id="top-container">
-                        <div class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white">
-                            <div class="flex items-center mb-2 gap-4">
-                                <h2 class="text-3xl font-bold ">Modalità <span class="text-red-600">Classificata</span></h2>
-                                <img src="/images/icons/icon1.png" alt="Icona Sfida" class="md:w-12 md:h-12 w-24 h-24">
+        </section>
+        <section class="md:py-12 py-6 px-4 relative">
+            <footer class="text-gray-800 py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <!-- Link ai Termini e Privacy -->
+                        <div
+                            class="flex flex-col justify-center md:items-center items-start"
+                        >
+                            <div class="flex-col justify-center items-start">
+                                <h3 class="font-semibold text-lg mb-4">
+                                    Informazioni Legali
+                                </h3>
+                                <ul class="text-sm">
+                                    <li class="mb-2">
+                                        <a
+                                            href="/termini-e-condizioni"
+                                            class="hover:text-blue-500 font-semibold py-4"
+                                            target="_blank"
+                                            >Termini e Condizioni</a
+                                        >
+                                    </li>
+                                    <li class="mb-2">
+                                        <a
+                                            href="/privacy-policy"
+                                            class="hover:text-blue-500 font-semibold py-4"
+                                            target="_blank"
+                                            >Privacy Policy</a
+                                        >
+                                    </li>
+                                </ul>
                             </div>
-                            <p>Per chi ha il <strong>pennino rovente</strong> e la mente sempre accesa. Sfida il tempo, accumula punti e scala la <strong>classifica degli scrittori</strong>. Ogni parola conta in questa modalità adrenalinica, dove il tuo contributo ti porta sempre più vicino alla vetta!
-
-                            </p>
                         </div>
-                    </div>
-                    <div class="flex  border-2 border-white p-2 md:w-3/5 ml-auto rounded-md reveal-right" id="bottom-container">
-                        <div class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white">
-                            <div class="flex items-center mb-2 gap-4">
-                                <h2 class="text-3xl font-bold ">Modalità <span class="text-green-600">Relax</span></h2>
-                                <img src="/images/icons/icon2.png" alt="Icona Relax" class="md:w-12 md:h-12 w-24 h-24">
-                            </div>
-                            <p>Scrivi senza pressioni, goditi il piacere della <strong>scrittura condivisa</strong>. Senza voti, senza fretta, solo pura creatività. Qui ogni capitolo è un'opportunità per esprimere te stesso, costruendo storie uniche insieme agli altri, un capitolo alla volta.
 
+                        <!-- Supporto -->
+                        <div class="flex flex-col justify-center items-center">
+                            <div class="flex-col justify-center items-start">
+                                <h3 class="font-semibold text-lg mb-2">
+                                    Supporto
+                                </h3>
+                                <p class="text-sm">
+                                    Per qualsiasi domanda o problema, contattaci
+                                    via email:
+                                </p>
+                                <a
+                                    href="mailto:support@wordrops.com"
+                                    class="text-blue-500 hover:text-blue-700"
+                                    >support@wordrops.com</a
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Copyright -->
+                        <div
+                            class="col-span-1 sm:col-span-2 lg:col-span-4 text-center mt-4 sm:mt-0"
+                        >
+                            <p class="text-sm">
+                                © 2025 wordrops. Tutti i diritti riservati.
                             </p>
                         </div>
                     </div>
                 </div>
-            </section>  
-        </div>
-    </div>
-    <section class="md:py-40 pt-20 relative">
-        <div 
-        class="hidden md:block absolute top-1/2 md:right-0 md:h-3/5 h-full md:w-2/5 bg-contain bg-no-repeat opacity-5 transform -translate-y-1/2" 
-        style="background-image: url('/images/books-bg.png');">
-        </div>
-        <div 
-        class="md:hidden absolute inset-0 bg-contain bg-no-repeat opacity-5 bg-center" 
-        style="background-image: url('/images/books-bg.png');">
-        </div>
-        <!-- Primo container con titolo centrale -->
-        <div class="text-center md:mb-8 mb-4">
-          <h2 class="ls:text-6xl md:text-4xl text-3xl font-bold text-gray-800 ">MA COME FUNZIONA?</h2>
-        </div>
-      
-        <!-- Quattro containers -->
-        <div class="grid grid-cols-1 md:grid-cols md:gap-20 gap-4 max-w-5xl mx-auto md:mt-40 mt-6">
-            <div class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0">
-                <div class="flex px-4 relative ">
-                    <img src="/images/blue-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
-                    <p class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold">1</p>
-                </div>
-                <div class="flex-col">
-                    <h3 class="md:text-3xl text-xl font-semibold mb-4 text-gray-800 ">Unisciti alla storia</h3>
-                    <p>Entra in gioco con 4 altri scrittori sconosciuti e inizia a creare una storia unica. Ogni volta, la trama si sviluppa in modo imprevedibile: questa è l'opportunità perfetta per sfidare la tua creatività! Preparati a sorprenderti con ogni nuovo capitolo.
-                        </p>
-                </div>
-            </div>
-            <div class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0">
-                <div class="flex px-4 relative ">
-                    <img src="/images/purple-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
-                    <p class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold">2</p>
-                </div>
-                <div class="flex-col">
-                    <h3 class="text-3xl font-semibold mb-4 text-gray-800 ">Scrivi il tuo capitolo</h3>
-                    <p>Quando è il tuo turno, avrai un tempo definito per aggiungere il tuo tocco personale alla storia. Ma attenzione: ogni capitolo deve intrecciarsi con quelli precedenti. Costruisci sulla creatività degli altri e porta avanti la trama con il tuo stile unico. Ogni parola conta per mantenere il flusso!
-                    </p>
-                </div>
-            </div>
-            <div class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0">
-                <div class="flex px-4 relative ">
-                    <img src="/images/green-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
-                    <p class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold">3</p>
-                </div>
-                <div class="flex-col">
-                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 ">La storia è completa</h3>
-                    <p>Dopo 5 turni, la tua squadra avrà completato una storia epica (si spera). A seconda della modalità scelta, il gioco si sviluppa in modi diversi::</p> <br>
-                    <p><span class="text-red-500 font-bold">Competitiva:</span> Vota i capitoli degli altri e ricevi voti sul tuo. Ogni contributo che fa la differenza ti farà guadagnare punti per scalare la classifica globale.
-                    <br><span class="text-green-500 font-bold">Normale:</span> Nessun voto, nessun punteggio. Solo il piacere di scrivere e divertirsi insieme, senza pressioni.
-
-                </p></br>
-                </div>
-            </div>
-            <div class="flex md:flex-row flex-col items-start md:gap-12 gap-4 md:p-2 p-8 ls:p-0">
-                <div class="flex px-4 relative ">
-                    <img src="/images/orange-frame.png" alt="Frame" class="absolute inset-0 w-full h-full object-contain -z-10 overflow-visible">
-                    <p class="text-black md:px-4 py-2 md:text-8xl text-6xl font-bold">4</p>
-                </div>
-                <div class="flex-col">
-                    <h3 class="text-3xl font-semibold mb-4 text-gray-800 ">Sfida la tua creatività</h3>
-                    <p>Ogni storia completata e ogni capitolo scritto ti permette di scalare la classifica e dimostrare a tutti chi è il miglior narratore. In questa piattaforma, <strong>collaborazione e competizione</strong> vanno sempre di pari passo!</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="py-40 px-4 relative">
-        <img 
-        src="/images/wave-background.png" 
-        alt="background desktop" 
-        class="absolute inset-0 w-full h-full object-cover overflow-hidden hidden md:block">
-    
-    <!-- Immagine per mobile -->
-        <img 
-        src="/images/colored-bg-image-mobile.png" 
-        alt="background mobile" 
-        class="absolute inset-0 w-full h-full object-cover overflow-hidden block md:hidden">  
-        <div class="content-top flex flex-col items-center justify-center relative z-10 max-w-5xl mx-auto md:h-screen">
-            <img src="/images/icon-3.png" alt="icon" class="mb-20 md:mt-4 mt-40 md:w-36 md:h-36 w-30 h-30">
-            <h2 class="md:mb-6 reveal-on-scroll text-center ls:text-6xl md:text-4xl text-3xl font-bold  opacity-0 transform translate-y-6 transition duration-700">
-                ANCHE OLTRE LA SCRITTURA
-            </h2>
-            <div>
-            
-                <p class="text-center text-xl mb-6">Oltre a scrivere e competere, puoi immergerti nel mondo delle storie create dalla nostra comunità di scrittori.</p>
-                <p class="text-center text-xl mb-6"><strong>Prenditi una pausa</strong> e lasciati ispirare da racconti unici, ricchi di emozioni, risate e sorprese. Scopri nuove prospettive, esplora mondi fantastici, e trova la tua nuova storia preferita.</p>
-                <p class="text-center text-xl mb-20">Che tu voglia farti trasportare in un'avventura emozionante o semplicemente rilassarti con un racconto coinvolgente, la nostra <strong>biblioteca dinamica</strong> è sempre pronta ad accoglierti con contenuti freschi e originali. Unisciti alla nostra comunità e <strong>vivi la creatività da ogni angolazione</strong> .
-
-                </p>
-
-            </div>
-            <div class="flex-col ">
-                <div class="z-3 text-center text-l text-blue-400 font-bold mb-4">beta tester?</div>
-    
-                <div class="button-container z-3 p-1 border-2 border-blue-400 rounded-md">
-                    <button onclick="openBetaForm()" class="beta-button bg-blue-400 text-xl text-white px-4 py-2 rounded-md font-bold hover:bg-blue-600 transition duration-300 cursor-pointer">
-                        ENTRA IN LISTA
-                    </button>
-                </div>
-            </div>        
-        </div>
-
-        
-        
-    </section>
-    <section class="md:py-12 py-6 px-4 relative">
-        <footer class=" text-gray-800 py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <!-- Link ai Termini e Privacy -->
-                    <div class="flex flex-col justify-center md:items-center items-start">
-                        <div class="flex-col justify-center items-start " >
-
-                            <h3 class="font-semibold text-lg mb-4">Informazioni Legali</h3>
-                            <ul class="text-sm">
-                                <li class="mb-2"><a href="/termini-e-condizioni" class="hover:text-blue-500 font-semibold py-4" target="_blank">Termini e Condizioni</a></li>
-                                <li class="mb-2"><a href="/privacy-policy" class="hover:text-blue-500 font-semibold py-4" target="_blank">Privacy Policy</a></li>
-                            </ul>
-                            
-                        </div>
-                    </div>
-        
-                    <!-- Supporto -->
-                    <div class="flex flex-col justify-center items-center">
-                        <div class="flex-col justify-center items-start" >
-
-                        <h3 class="font-semibold text-lg mb-2">Supporto</h3>
-                        <p class="text-sm">Per qualsiasi domanda o problema, contattaci via email:</p>
-                        <a href="mailto:support@wordrops.com" class="text-blue-500 hover:text-blue-700">support@wordrops.com</a>
-                        </div>
-                    
-                    </div>
-        
-                    <!-- Copyright -->
-                    <div class="col-span-1 sm:col-span-2 lg:col-span-4 text-center mt-4 sm:mt-0">
-                        <p class="text-sm">© 2025 wordrops. Tutti i diritti riservati.</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </section>
-<script src="/js/homepage.js"></script>
-</body>
+            </footer>
+        </section>
+        <script src="/js/homepage.js"></script>
+    </body>
 </html>

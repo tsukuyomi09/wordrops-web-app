@@ -4,10 +4,12 @@ const nodemailer = require("nodemailer");
 const sendWelcomeEmail = async (userEmail, verificationToken) => {
     // Configurazione del trasportatore per Gmail (può essere anche un altro provider)
     const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.zoho.eu", // oppure smtp.zoho.com se non sei su EU
+        port: 465,
+        secure: true, // true per SSL
         auth: {
-            user: "samuelesala9999@gmail.com", // Sostituisci con il tuo indirizzo email
-            pass: "ivwz spph hpfb orob", // Sostituisci con la tua password o una password specifica per app
+            user: "noreply@wordrops.com",
+            pass: "JXfigN73LePZ",
         },
     });
 
@@ -22,10 +24,18 @@ const sendWelcomeEmail = async (userEmail, verificationToken) => {
 
     // Opzioni per l'email
     const mailOptions = {
-        from: "samuelesala9999@gmail.com",
-        to: userEmail, // L'email dell'utente che si è appena registrato
-        subject: "Welcome nella nostra piattaforma!",
-        text: `Ciao! Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:\n\n${verificationUrl}`,
+        from: '"Wordrops Team" <noreply@wordrops.com>',
+        to: userEmail,
+        subject: "🎉 Sei nella waiting list di Wordrops!",
+        text: `Ciao! Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:\n\n${verificationUrl}\n\n
+    Grazie per esserti iscritto! Ti avviseremo quando sarà il tuo turno per accedere alla beta di Wordrops.`,
+        html: `
+            <img src="https://wordrops.com/images/logo_wordrops_classic_blue.png" alt="Wordrops" width="120" />
+            <h2>🎉 Grazie per esserti iscritto!</h2>
+            <p>Sei ufficialmente nella nostra waiting list. Ti invieremo una notifica quando sarà il tuo turno per accedere alla beta di <strong>Wordrops</strong>.</p>
+            <br/>
+            <small>Questa è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.</small>
+        `,
     };
 
     // Invia l'email
