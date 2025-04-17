@@ -224,9 +224,7 @@ font-family: 'Consolas', 'Courier New', monospace;
 .bg-custom-blue-dark {
   background-color: #007A8C;
 }
-.bg-custom-blue:hover {
-  background-color: #33AFC1;
-}
+
 .border-custom-blue {
   border-color: #0095AD;
 }
