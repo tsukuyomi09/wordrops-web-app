@@ -30,7 +30,6 @@ const sendWelcomeEmail = async (userEmail, verificationToken) => {
         text: `Ciao! Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:\n\n${verificationUrl}\n\n
     Grazie per esserti iscritto! Ti avviseremo quando sarà il tuo turno per accedere alla beta di Wordrops.`,
         html: `
-            <img src="https://wordrops.com/images/logo_wordrops_classic_blue.png" alt="Wordrops" width="120" />
             <h2>🎉 Grazie per esserti iscritto!</h2>
             <p>Sei ufficialmente nella nostra waiting list. Ti invieremo una notifica quando sarà il tuo turno per accedere alla beta di <strong>Wordrops</strong>.</p>
             <br/>
