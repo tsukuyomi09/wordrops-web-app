@@ -326,3 +326,20 @@ font-family: 'Consolas', 'Courier New', monospace;
   pointer-events: auto;
   transform: translateY(0);
 }
+
+
+//// homepage pen animation
+@keyframes testAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(20px);
+  }
+}
+
+.test-animate {
+  animation: testAnimation 1s infinite;
+}
+
+

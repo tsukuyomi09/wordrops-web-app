@@ -15,6 +15,7 @@
         --color-red-600: oklch(57.7% 0.245 27.325);
         --color-red-700: oklch(50.5% 0.213 27.518);
         --color-red-800: oklch(32.5% 0.213 27.518);
+        --color-orange-100: oklch(93.6% 0.183 55.934);
         --color-orange-400: oklch(75% 0.183 55.934);
         --color-orange-500: oklch(70.5% 0.213 47.604);
         --color-amber-200: oklch(92.4% 0.12 95.746);
@@ -1119,6 +1120,9 @@
     .bg-blue-600 {
         background-color: var(--color-blue-600);
     }
+    .bg-purple-200 {
+        background-color: var(--color-purple-200);
+    }
     .bg-gray-50 {
         background-color: var(--color-gray-50);
     }
@@ -1157,6 +1161,9 @@
     }
     .bg-yellow-500 {
         background-color: var(--color-yellow-500);
+    }
+    .bg-orange-100 {
+        background-color: var(--color-orange-100);
     }
     .bg-gradient-to-r {
         --tw-gradient-position: to right in oklab;
