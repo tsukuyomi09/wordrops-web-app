@@ -13,6 +13,11 @@
     opacity: 1;            
 }
 
+#toolbar-container {
+  height: 50px; /* Almeno 50px di altezza per la toolbar */
+  background-color: #f1f1f1; /* Colore di sfondo per visibilità */
+}
+
 .chatNotVisible {
   right: -18rem; 
   transition: right 0.3s ease-in-out; 
@@ -55,11 +60,19 @@ font-family: 'Consolas', 'Courier New', monospace;
     background-repeat: no-repeat; /* Impedisce la ripetizione dell'immagine */
 }
 
+#editor-container {
+  overflow-y: auto;       /* Scroll verticale solo se necessario */
+  border-radius: 8px;     /* Optional: angoli arrotondati */
+}
+
 .ql-editor {
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  font-size: 20px;
+
 }
+
 
 @media (max-width: 1024px) { /* Schermi medi (tablet o piccoli desktop) */
   .section-wrapper {
@@ -327,6 +340,9 @@ font-family: 'Consolas', 'Courier New', monospace;
   transform: translateY(0);
 }
 
+.swiper-slide .content {
+  overflow-y: auto;
+}
 
 //// homepage pen animation
 @keyframes testAnimation {

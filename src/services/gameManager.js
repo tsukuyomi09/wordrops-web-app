@@ -23,9 +23,9 @@ async function createGameAndAssignPlayers(game) {
 
         let countdownDuration;
         if (gameMode.includes("fast")) {
-            countdownDuration = 15000; // 10 secondi per le modalità "fast"
+            countdownDuration = 150000000; // 10 secondi per le modalità "fast"
         } else {
-            countdownDuration = 300000; // 20 secondi per le modalità "slow" o altre
+            countdownDuration = 300000000; // 20 secondi per le modalità "slow" o altre
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server

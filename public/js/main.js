@@ -573,13 +573,13 @@ async function fetchdashboardData() {
                     button.innerText = `Torna al game ${index + 1}`;
                     button.onclick = () => handleBackToGame(gameId);
                     button.className = `
-                        text-sm text-white font-semibold w-full h-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold
-                        ${
-                            isRanked
-                                ? "border-4 border-yellow-400 ring-yellow-300 rounded-xl text-gray-600 p-2"
-                                : "border-4 border-white text-gray-600 rounded-xl focus:ring-green-200 p-2"
-                        }
-                    `;
+                    w-full h-full text-center text-base sm:text-lg font-bold 
+                    text-gray-800 border-4 border-yellow-400 
+                    rounded-xl shadow-md hover:shadow-lg hover:scale-105 
+                    transition duration-300 ease-in-out p-2     cursor-pointer
+
+                    ${isRanked ? "" : "bg-white border-white"}
+                `;
 
                     // Aggiungi notifiche (dot) dentro il wrapper
                     const notificationHtml = `

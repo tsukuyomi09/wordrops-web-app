@@ -4,6 +4,10 @@ const user_id = Number(localStorage.getItem("user_id"));
 let unreadMessages = {};
 
 window.onload = function initialize() {
+    const swiper = new Swiper(".mySwiper", {
+        effect: "cards",
+        grabCursor: true,
+    });
     fetchUserData();
 };
 
@@ -402,9 +406,9 @@ function displayNotificationSymbol() {
     notificationSymbol.classList.remove("hidden"); // Rimuove la classe 'hidden' per mostrare il simbolo
 }
 
-const sendButton = document.getElementById("sendButton");
+const sendMessageButton = document.getElementById("sendMessageButton");
 
-sendButton.addEventListener("click", () => {
+sendMessageButton.addEventListener("click", () => {
     if (!game_id) {
         console.log("game_id non è stato ancora impostato!");
         return;
@@ -538,15 +542,31 @@ function updateCurrentPlayerDisplay(currentPlayer) {
     if (currentTurnDisplay && currentPlayer) {
         const avatarSrc = getAvatarSrc(currentPlayer.avatar);
 
+        const currentUser = localStorage.getItem("username");
+        const isMyTurn = currentPlayer.username === currentUser;
+        const turnText = isMyTurn
+            ? "Turno corrente: É il tuo turno"
+            : `Turno corrente:`;
+
         currentTurnDisplay.innerHTML = `
-            <div class="flex items-center">
-                <div class="text-lg font-bold mr-10">Turno corrente:</div>
-                <div class="p-2 h-20 w-20 flex flex-col items-center rounded bg-white">
-                    <img src="${avatarSrc}" alt="Avatar" class="w-8 h-8 rounded-full mr-2" />
-                    <span class="text-lg font-bold">${currentPlayer.username}</span>
-                </div>    
+        <div class="flex items-center gap-4 bg-white px-4 py-3 rounded-xl shadow border border-gray-200">
+            <div class="text-base sm:text-lg font-semibold text-gray-800 whitespace-nowrap">
+                ${turnText}
             </div>
-        `;
+            ${
+                !isMyTurn
+                    ? `
+            <div class="flex items-center gap-4">
+                <span class="text-xl sm:text-xl font-semibold text-gray-800">${currentPlayer.username}</span>
+                <div class="p-1 border-2 border-teal-500 rounded-full shadow-lg">
+                    <img src="${avatarSrc}" alt="Avatar" class="w-auto h-auto sm:w-12 sm:h-12 rounded-full" />
+                </div>
+            </div>
+            `
+                    : ""
+            }
+        </div>
+    `;
     } else if (currentTurnDisplay) {
         currentTurnDisplay.textContent = `Turno corrente non trovato!`; // Messaggio di errore
     }
@@ -561,7 +581,7 @@ function updateTurnOrderDisplay(turnOrder, currentPlayer) {
                 const avatarSrc = getAvatarSrc(player.avatar);
                 return `
             <div class="turn-order-item flex flex-row items-center ">
-                <div class="p-2 h-12 w-10 flex flex-col items-center rounded bg-white">
+                <div class="p-2 h-12 w-10 flex flex-col w-full items-center rounded bg-white">
                 <img src="${avatarSrc}" alt="Avatar" class="w-4 h-4 rounded-full mb-1" />
                 <span class="text-sm font-medium">${player.username}</span>
                 </div>
@@ -573,11 +593,6 @@ function updateTurnOrderDisplay(turnOrder, currentPlayer) {
         turnOrderDisplay.innerHTML = turnOrderHTML;
     }
 }
-
-document.getElementById("toggle-participants").addEventListener("click", () => {
-    const wrapper = document.getElementById("turn-order-wrapper");
-    wrapper.classList.toggle("hidden");
-});
 
 function getAvatarSrc(avatar) {
     // Controlla se l'avatar è definito, altrimenti usa un avatar di default
@@ -657,6 +672,13 @@ editor = new Quill("#editor-container", {
     },
 });
 
+const qlEditor = document.querySelector(".ql-editor");
+
+qlEditor.setAttribute("spellcheck", "false");
+qlEditor.setAttribute("autocorrect", "off");
+qlEditor.setAttribute("autocapitalize", "off");
+qlEditor.setAttribute("autocomplete", "off");
+
 // Recuperiamo l'ID della partita dalla URL
 const gameIdQuill = window.location.pathname.split("/")[2]; // esempio per ottenere l'ID della partita dalla URL
 
@@ -720,49 +742,58 @@ function getChapterFromLocal() {
 getChapterFromLocal();
 
 function handleEditorAccess(currentPlayer, currentUser) {
-    const sendButton = document.getElementById("send-chapter-button");
-    if (!sendButton) {
+    console.log(`current player: ${currentPlayer.username}`);
+    console.log(`current currentUser: ${currentUser}`);
+
+    const sendChapterButton = document.getElementById("send-chapter-button");
+    if (!sendChapterButton) {
         console.error("Pulsante 'send-chapter-button' non trovato.");
         return;
     }
 
     if (currentPlayer.username === currentUser) {
         editor.enable(true); // Abilita l'editor
-        sendButton.classList.remove("hidden"); // Mostra il pulsante
+        sendChapterButton.classList.remove("hidden"); // Mostra il pulsante
     } else {
         editor.enable(false); // Disabilita l'editor
-        sendButton.classList.add("hidden"); // Nascondi il pulsante
+        sendChapterButton.classList.add("hidden"); // Nascondi il pulsante
     }
 }
 
 function updateChaptersDisplay(chaptersData) {
-    const updatesList = document.getElementById("updates-list");
+    const swiperWrapper = document.querySelector(".book-chapters-container");
 
-    // Aggiungi ogni capitolo alla lista
     chaptersData.forEach((chapter) => {
-        const newUpdate = document.createElement("div"); // Usa un <div> invece di un <li>
-        newUpdate.classList.add(
-            "bg-gray-100",
-            "p-4",
-            "mb-4",
-            "rounded-lg",
-            "shadow-md"
-        ); // Classi Tailwind
+        const slide = document.createElement("div");
+        slide.classList.add(
+            "swiper-slide",
+            "bg-gray-50",
+            "shadow-md",
+            "rounded-xl",
+            "p-12",
+            "flex",
+            "h-full"
+        );
 
         // Creazione della struttura per ogni capitolo
-        newUpdate.innerHTML = `
+        slide.innerHTML = `
+        <div class="flex flex-col w-full h-full ">
             <div class="font-semibold text-xl mb-2">
                 <strong>Titolo:</strong> "${chapter.title}"
             </div>
             <div class="text-gray-600 text-lg mb-2">
                 <em>Autore:</em> ${chapter.author}
             </div>
-            <div class="text-gray-800 text-base">
+            <div class="text-gray-800 pr-4 text-base h-full overflow-y-auto">
                 <p>${chapter.content}</p>
             </div>
-        `;
-        updatesList.appendChild(newUpdate);
+        </div>
+    `;
+        swiperWrapper.appendChild(slide);
     });
+    if (window.swiper) {
+        window.swiper.update();
+    }
 }
 
 function foxAnimation() {
@@ -841,4 +872,56 @@ function changeTurnShowPopup(author, nextPlayer) {
 function closeChangeTurnPopup(button) {
     const popupContainer = button.closest(".fixed"); // Trova il contenitore del popup
     popupContainer.remove(); // Rimuovi il popup dal DOM
+}
+
+// Funzione per aprire il modal su mobile
+function openGameInfo() {
+    const container = document.getElementById("game-info-container");
+    container.classList.remove("hidden"); // Rimuove la classe 'hidden' per mostrare il modal
+    container.classList.add(
+        "fixed",
+        "top-0",
+        "left-0",
+        "right-0",
+        "bottom-0",
+        "z-50",
+        "overflow-auto",
+        "bg-white"
+    );
+}
+
+// Funzione per chiudere il modal su mobile
+function closeGameInfo() {
+    const container = document.getElementById("game-info-container");
+    container.classList.add("hidden"); // Aggiunge la classe 'hidden' per nascondere il modal
+    container.classList.remove(
+        "fixed",
+        "top-0",
+        "left-0",
+        "right-0",
+        "bottom-0",
+        "z-50",
+        "overflow-auto",
+        "bg-white"
+    );
+}
+
+function openBookOverlay() {
+    const bookOverlay = document.getElementById("overlay-books");
+    bookOverlay.classList.add("open");
+
+    // Riabilita lo scroll dopo l'animazione (match `duration-500`)
+    setTimeout(() => {
+        document.body.style.overflow = "";
+    }, 500);
+}
+
+function closeBookOverlay() {
+    const bookOverlay = document.getElementById("overlay-books");
+    bookOverlay.classList.remove("open");
+
+    // Riabilita lo scroll dopo l'animazione (match `duration-500`)
+    setTimeout(() => {
+        document.body.style.overflow = "";
+    }, 500);
 }

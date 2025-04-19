@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full" lang="en">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,8 +43,6 @@
             href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="/swiper/swiper-bundle.min.css" />
-
         <link href="/style/style.css" rel="stylesheet" />
         <link href="/style/output.css" rel="stylesheet" />
         <link
@@ -52,7 +50,7 @@
             rel="stylesheet"
         />
     </head>
-    <body class="overflow-x-hidden h-screen h-full">
+    <body class="overflow-x-hidden h-screen">
         <!-- Google Tag Manager (noscript) -->
         <noscript
             ><iframe
@@ -83,31 +81,7 @@
                 </button>
             </div>
         </div>
-        <div
-            id="overlay-books"
-            class="fixed inset-0 h-full bg-white bg-opacity-75 z-50 flex items-center justify-center p-8 transition-all duration-500 opacity-0 pointer-events-none"
-        >
-            <div
-                class="p-12 relative h-full rounded-lg shadow-lg w-full flex flex-col overflow-y-auto"
-            >
-                <button
-                    onclick="closeBookOverlay()"
-                    class="cursor-pointer text-gray-600 absolute top-0 left-1/2 bg-red-200 -translate-x-1/2 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
-                >
-                    ESCI
-                </button>
-                <!-- Seconda parte: Capitoli -->
-                <div class="h-full flex flex-col">
-                    <div
-                        class="swiper mySwiper w-full h-full max-w-4xl mx-auto"
-                    >
-                        <div
-                            class="swiper-wrapper h-full book-chapters-container"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div id="chatContainer" class="fixed bottom-2 z-50 chatNotVisible">
             <div class="w-full max-w-md bg-white p-4 rounded-lg shadow-lg">
                 <!-- Area messaggi -->
@@ -127,13 +101,14 @@
                         placeholder="Scrivi un messaggio..."
                     />
                     <button
-                        id="sendMessageButton"
+                        id="sendButton"
                         class="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         Invia
                     </button>
                 </div>
             </div>
+        </div>
         </div>
         <div class="flex flex-col md:flex-row md:p-4 gap-4 h-screen relative">
             <div
@@ -277,19 +252,6 @@
                                     ></div>
                                 </div>
                             </div>
-                            <div
-                                class="flex flex-col justify-center items-center font-semibold"
-                            >
-                                <div>
-                                    <img
-                                        class="cursor-pointer h-48 w-48 transition duration-300 transform hover:scale-[1.03]"
-                                        onclick="openBookOverlay()"
-                                        src="/images/game_book_image.svg"
-                                        alt=""
-                                    />
-                                </div>
-                            </div>
-                            <div id="updates-list" class="mt-20"></div>
                         </div>
                     </div>
                 </div>
@@ -326,15 +288,14 @@
                         <button
                             id="send-chapter-button"
                             onclick="getChapter()"
-                            class="px-4 py-2 hidden font-semibold text-gray-800 bg-white border-2 border-teal-500 text-teal-500 rounded shadow hover:text-white hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                            class="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         >
-                            INVIA CAPITOLO
+                            Invia Capitolo
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
         <script src="/js/menu.js" defer></script>
         <script src="/socket.io/socket.io.js"></script>
