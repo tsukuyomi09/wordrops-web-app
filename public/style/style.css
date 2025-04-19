@@ -19,13 +19,15 @@
 }
 
 .chatNotVisible {
-  right: -18rem; 
-  transition: right 0.3s ease-in-out; 
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .chatVisible {
-  right: 4rem; 
-  transition: right 0.3s ease-in-out; 
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .pastel-color {

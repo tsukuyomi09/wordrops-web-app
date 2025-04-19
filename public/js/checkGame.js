@@ -7,6 +7,9 @@ window.onload = function initialize() {
     const swiper = new Swiper(".mySwiper", {
         effect: "cards",
         grabCursor: true,
+        zoom: {
+            maxRatio: 3,
+        },
     });
     fetchUserData();
 };
@@ -437,7 +440,7 @@ function logMessage(messageText) {
 
     const wrapper = document.createElement("div");
     wrapper.className =
-        "p-2 mb-2 bg-blue-100 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
+        "p-2 mb-2 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
     wrapper.innerHTML = `
 
     <div>
@@ -461,7 +464,7 @@ function displayReceivedMessage(messageText, avatar, username) {
 
     // Utilizza innerHTML per creare il contenuto del messaggio
     wrapper.innerHTML = `
-        <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-4 h-4 rounded-full" />
+        <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-auto h-4 rounded-full" />
         <div>
             <div class="font-semibold text-sm text-gray-800">${
                 username || "Anonimo"
@@ -550,16 +553,16 @@ function updateCurrentPlayerDisplay(currentPlayer) {
 
         currentTurnDisplay.innerHTML = `
         <div class="flex items-center gap-4 bg-white px-4 py-3 rounded-xl shadow border border-gray-200">
-            <div class="text-base sm:text-lg font-semibold text-gray-800 whitespace-nowrap">
+            <div class="text-2xl sm:text-xl font-semibold text-gray-800 whitespace-nowrap">
                 ${turnText}
             </div>
             ${
                 !isMyTurn
                     ? `
             <div class="flex items-center gap-4">
-                <span class="text-xl sm:text-xl font-semibold text-gray-800">${currentPlayer.username}</span>
-                <div class="p-1 border-2 border-teal-500 rounded-full shadow-lg">
-                    <img src="${avatarSrc}" alt="Avatar" class="w-auto h-auto sm:w-12 sm:h-12 rounded-full" />
+            <p class=" text-2xl sm:text-xl font-semibold text-gray-800">${currentPlayer.username}</p>
+                <div class="p-2 border-2 border-teal-300 h-14 w-14 rounded-full shadow-2xl flex items-center justify-center relative">
+                    <img src="${avatarSrc}" alt="Avatar" class="w-auto h-full " />
                 </div>
             </div>
             `
@@ -580,11 +583,11 @@ function updateTurnOrderDisplay(turnOrder, currentPlayer) {
             .map((player, index) => {
                 const avatarSrc = getAvatarSrc(player.avatar);
                 return `
-            <div class="turn-order-item flex flex-row items-center ">
-                <div class="p-2 h-12 w-10 flex flex-col w-full items-center rounded bg-white">
-                <img src="${avatarSrc}" alt="Avatar" class="w-4 h-4 rounded-full mb-1" />
-                <span class="text-sm font-medium">${player.username}</span>
+            <div class="turn-order-item flex flex-col items-center justify-center gap-2">
+                <div class="p-2 h-12 w-12 flex flex-col items-center rounded-full bg-gray-100 shadow-2xl">
+                <img src="${avatarSrc}" alt="Avatar" class="w-auto h-full  mb-1" />
                 </div>
+                <span class="text-sm font-medium">${player.username}</span>
             </div>
         `;
             })
@@ -763,28 +766,40 @@ function handleEditorAccess(currentPlayer, currentUser) {
 function updateChaptersDisplay(chaptersData) {
     const swiperWrapper = document.querySelector(".book-chapters-container");
 
-    chaptersData.forEach((chapter) => {
+    const placeholder = document.querySelector(".placeholder-title");
+
+    chaptersData.forEach((chapter, index) => {
+        if (placeholder) {
+            placeholder.remove();
+        }
         const slide = document.createElement("div");
         slide.classList.add(
             "swiper-slide",
             "bg-gray-50",
             "shadow-md",
             "rounded-xl",
-            "p-12",
+            "py-4",
+            "px-8",
             "flex",
             "h-full"
         );
 
         // Creazione della struttura per ogni capitolo
         slide.innerHTML = `
-        <div class="flex flex-col w-full h-full ">
-            <div class="font-semibold text-xl mb-2">
-                <strong>Titolo:</strong> "${chapter.title}"
+        <div class="flex flex-col w-full h-full gap-8">
+            <div class="flex flex-row gap-4">
+                <div class="text-gray-600 font-bold text-lg">
+                    Capitolo ${index + 1}
+                </div>
+                <div class="text-gray-600 text-lg">
+                    <em>Autore:</em> ${chapter.author}
+                </div>
             </div>
-            <div class="text-gray-600 text-lg mb-2">
-                <em>Autore:</em> ${chapter.author}
+            <div class="font-semibold text-lg">
+                <strong>Titolo:</strong> ${chapter.title}
             </div>
-            <div class="text-gray-800 pr-4 text-base h-full overflow-y-auto">
+
+            <div class="text-gray-800 text-xl pr-4 text-base h-full overflow-y-auto leading-relaxed">
                 <p>${chapter.content}</p>
             </div>
         </div>

@@ -90,9 +90,14 @@
             <div
                 class="p-12 relative h-full rounded-lg shadow-lg w-full flex flex-col overflow-y-auto"
             >
+                <div
+                    class="placeholder-title absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-gray-600 font-semibold text-2xl"
+                >
+                    Il Libro é Ancora Vuoto
+                </div>
                 <button
                     onclick="closeBookOverlay()"
-                    class="cursor-pointer text-gray-600 absolute top-0 left-1/2 bg-red-200 -translate-x-1/2 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
+                    class="cursor-pointer text-white absolute top-0 left-1/2 bg-teal-500 -translate-x-1/2 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-teal-600 transition duration-300"
                 >
                     ESCI
                 </button>
@@ -108,33 +113,7 @@
                 </div>
             </div>
         </div>
-        <div id="chatContainer" class="fixed bottom-2 z-50 chatNotVisible">
-            <div class="w-full max-w-md bg-white p-4 rounded-lg shadow-lg">
-                <!-- Area messaggi -->
-                <div
-                    id="chatBox"
-                    class="h-80 overflow-y-auto mb-4 p-2 bg-gray-50 border rounded-lg"
-                >
-                    <!-- I messaggi verranno visualizzati qui -->
-                </div>
 
-                <!-- Campo di input per il messaggio -->
-                <div class="flex">
-                    <input
-                        id="messageInput"
-                        type="text"
-                        class="w-full p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Scrivi un messaggio..."
-                    />
-                    <button
-                        id="sendMessageButton"
-                        class="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Invia
-                    </button>
-                </div>
-            </div>
-        </div>
         <div class="flex flex-col md:flex-row md:p-4 gap-4 h-screen relative">
             <div
                 id="popup-start-countdown"
@@ -196,8 +175,13 @@
                 </div>
             </div>
             <!-- Left Box -->
-            <div class="md:w-[25%] w-full p-4 h-[15%] md:h-auto flex flex-col">
-                <div id="leaderboard-icon">
+            <div
+                class="md:w-[25%] w-full p-2 h-[15%] md:h-auto flex flex-col relative"
+            >
+                <div
+                    id="leaderboard-icon"
+                    class="w-full flex flex-row justify-between"
+                >
                     <a
                         class="button-container flex h-12 w-12 rounded-full border-2 border-custom-blue flex-col justify-center items-center cursor-pointer"
                         onclick="dashboardButton()"
@@ -210,6 +194,18 @@
                             />
                         </div>
                     </a>
+                    <div class="chat-icon-container">
+                        <button
+                            id="toggleChatButton"
+                            class="bg-blue-500 z-50 h-10 w-10 text-white rounded-full shadow-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 cursor-pointer focus:ring-blue-500"
+                        >
+                            💬
+                            <div
+                                id="notificationSymbol"
+                                class="absolute top-0 left-0 w-3 h-3 bg-red-500 rounded-full hidden"
+                            ></div>
+                        </button>
+                    </div>
                 </div>
                 <button
                     class="mt-4 md:hidden px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
@@ -238,30 +234,28 @@
                             class="flex flex-col gap-8 items-center justify-center py-8"
                         >
                             <div
-                                id="countdown-display"
-                                class="text-4xl w-full font-extrabold text-center text-gray-800 p-4 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 shadow-xl flex items-center justify-center gap-4"
+                                class="countdown-container flex flex-row items-center justify-center w-full"
                             >
-                                <!-- Icona clessidra -->
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-12 w-12 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 3v12m0 0v6m0-6H4m8 0h8"
-                                    />
-                                </svg>
-                                <!-- Countdown numerico -->
                                 <div
-                                    id="countdown-text"
-                                    class="text-4xl font-bold"
-                                ></div>
+                                    class="p-2 h-14 w-14 flex justify-center items-center"
+                                >
+                                    <img
+                                        src="/images/icons/hourglass-svgrepo-com.svg"
+                                        alt="countdown hourglass icon"
+                                        class="h-full w-auto"
+                                    />
+                                </div>
+                                <div
+                                    id="countdown-display"
+                                    class="flex text-2xl font-semibold text-gray-800"
+                                >
+                                    <div
+                                        id="countdown-text"
+                                        class="font-bold"
+                                    ></div>
+                                </div>
                             </div>
+
                             <div
                                 id="current-turn"
                                 class="text-lg w-full font-semibold text-right"
@@ -273,7 +267,7 @@
                                 >
                                     <div
                                         id="turn-order"
-                                        class="flex flex-wrap justify-between items-center gap-4 p-4 bg-gray-100 rounded"
+                                        class="flex flex-wrap justify-between items-center gap-4 rounded"
                                     ></div>
                                 </div>
                             </div>
@@ -289,28 +283,47 @@
                                     />
                                 </div>
                             </div>
-                            <div id="updates-list" class="mt-20"></div>
                         </div>
                     </div>
                 </div>
-                <div class="chat-icon-container">
-                    <button
-                        id="toggleChatButton"
-                        class="p-2 bg-blue-500 z-50 text-white rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                <div
+                    id="chatContainer"
+                    class="absolute bottom-0 w-full z-50 chatNotVisible"
+                >
+                    <div
+                        class="w-full max-w-md bg-gray-200 p-4 rounded-lg shadow-lg"
                     >
-                        💬
+                        <!-- Area messaggi -->
                         <div
-                            id="notificationSymbol"
-                            class="absolute top-0 left-0 w-3 h-3 bg-red-500 rounded-full hidden"
-                        ></div>
-                    </button>
+                            id="chatBox"
+                            class="h-80 overflow-y-auto mb-4 p-2 bg-white rounded-lg"
+                        >
+                            <!-- I messaggi verranno visualizzati qui -->
+                        </div>
+
+                        <!-- Campo di input per il messaggio -->
+                        <div class="flex">
+                            <input
+                                id="messageInput"
+                                type="text"
+                                class="w-full p-2 bg-white rounded-l-lg focus:outline-none focus:ring-1 focus:ring-blue-200"
+                                placeholder="Scrivi un messaggio..."
+                            />
+                            <button
+                                id="sendMessageButton"
+                                class="bg-blue-400 text-white p-2 rounded-r-lg cursor-pointer hover:bg-blue-500 focus:outline-none focus:ring-blue-200"
+                            >
+                                Invia
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Right Box -->
             <div class="md:w-[75%] w-full h-[85%] md:h-auto relative">
                 <div
-                    class="h-full flex flex-col gap-4 bg-amber-20 p-12 shadow-xl contenitore"
+                    class="h-full flex flex-col gap-4 p-12 shadow-xl contenitore"
                 >
                     <input
                         type="text"

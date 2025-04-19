@@ -30,14 +30,24 @@ function startCountdown(gameId) {
         if (remainingTime <= 0) {
             await handleCountdownExpiration(io, game, gameId, startCountdown);
         } else {
-            const minutes = Math.floor(remainingTime / 60000);
-            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            const formatted = formatMillisecondsToTime(remainingTime);
             io.in(gameId).emit("gameUpdate", {
                 remainingTime,
-                formatted: `${minutes}m ${seconds}s`,
+                formatted,
             });
         }
     }, 1000);
+}
+
+function formatMillisecondsToTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
 async function handleCountdownExpiration(io, game, gameId, startCountdown) {
