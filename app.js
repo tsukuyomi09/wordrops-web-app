@@ -368,6 +368,7 @@ const saveChapterChangeTurn = require("./src/routes/saveChapterChangeTurn");
 const getChapters = require("./src/routes/getChapters");
 const verifyLogIn = require("./src/routes/verifyLogIn");
 const logout = require("./src/routes/logout");
+const deleteAccount = require("./src/routes/deleteAccount");
 const updateAvatar = require("./src/services/updateAvatar");
 
 app.use(logout);
@@ -396,6 +397,7 @@ app.use(gameRouteData);
 app.use(gamesRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
+app.use(deleteAccount);
 
 server.listen(port, "0.0.0.0", () => {
     console.log(`Server is running on port ${port}`);

@@ -825,8 +825,48 @@ closeButton.addEventListener("click", () => {
 });
 
 function closeMenu() {
-    // Qui metti la logica per chiudere il menu degli avatar, ad esempio:
     avatarContainer.classList.add("hidden"); // Nascondi il menu
     selectedAvatar = null; // Resetta la selezione
     selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
+}
+
+function modalDeleteAccount() {
+    const modal = document.getElementById("delete-modal");
+    const passwordInput = document.getElementById("confirm-password");
+
+    passwordInput.value = "";
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById("delete-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+async function confirmDeleteAccount() {
+    const password = document.getElementById("confirm-password").value;
+
+    if (!password) {
+        alert("Inserisci la password per confermare.");
+        return;
+    }
+
+    const res = await fetch("/delete-account", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert("Account cancellato. Verrai disconnesso.");
+        window.location.href = "/"; // o home page
+    } else {
+        alert(data.message || "Errore nella cancellazione.");
+    }
 }
