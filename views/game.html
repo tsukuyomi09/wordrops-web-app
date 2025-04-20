@@ -85,24 +85,31 @@
         </div>
         <div
             id="overlay-books"
-            class="fixed inset-0 h-full bg-white bg-opacity-75 z-50 flex items-center justify-center p-8 transition-all duration-500 opacity-0 pointer-events-none"
+            class="fixed z-50 inset-0 h-full pointer-events-none bg-white flex items-center justify-center transition-all duration-500 opacity-0 z-50"
         >
             <div
-                class="p-12 relative h-full rounded-lg shadow-lg w-full flex flex-col overflow-y-auto"
+                class="md:p-12 py-12 px-2 relative h-full gap-4 rounded-lg shadow-lg w-full flex flex-col items-center justify-center"
             >
                 <div
                     class="placeholder-title absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-gray-600 font-semibold text-2xl"
                 >
                     Il Libro é Ancora Vuoto
                 </div>
-                <button
-                    onclick="closeBookOverlay()"
-                    class="cursor-pointer text-white absolute top-0 left-1/2 bg-teal-500 -translate-x-1/2 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-teal-600 transition duration-300"
-                >
-                    ESCI
-                </button>
+                <div class="flex flex-row justify-between items-center w-full">
+                    <button
+                        onclick="closeBookOverlay()"
+                        class="cursor-pointer text-white bg-teal-500 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-teal-600 transition duration-300"
+                    >
+                        ESCI
+                    </button>
+                    <div class="flex flex-row gap-2 items-center">
+                        <span>⬅️</span>
+                        <div class="text-sm">scorri laterale</div>
+                        <span>➡️</span>
+                    </div>
+                </div>
                 <!-- Seconda parte: Capitoli -->
-                <div class="h-full flex flex-col">
+                <div class="h-full w-full flex flex-col">
                     <div
                         class="swiper mySwiper w-full h-full max-w-4xl mx-auto"
                     >
@@ -176,11 +183,11 @@
             </div>
             <!-- Left Box -->
             <div
-                class="md:w-[25%] w-full p-2 h-[15%] md:h-auto flex flex-col relative"
+                class="md:w-[25%] w-full p-2 h-[10%] md:h-auto flex flex-col md:relative justify-between"
             >
                 <div
                     id="leaderboard-icon"
-                    class="w-full flex flex-row justify-between"
+                    class="w-full flex flex-row justify-between items-center"
                 >
                     <a
                         class="button-container flex h-12 w-12 rounded-full border-2 border-custom-blue flex-col justify-center items-center cursor-pointer"
@@ -194,10 +201,16 @@
                             />
                         </div>
                     </a>
-                    <div class="chat-icon-container">
+                    <button
+                        class="md:hidden px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
+                        onclick="openGameInfo()"
+                    >
+                        Game Info
+                    </button>
+                    <div class="chat-icon-container relative">
                         <button
                             id="toggleChatButton"
-                            class="bg-blue-500 z-50 h-10 w-10 text-white rounded-full shadow-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 cursor-pointer focus:ring-blue-500"
+                            class="bg-blue-500 z-50 h-12 w-12 text-white rounded-full shadow-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 cursor-pointer focus:ring-blue-500"
                         >
                             💬
                             <div
@@ -206,18 +219,22 @@
                             ></div>
                         </button>
                     </div>
+                    <div
+                        class="flex md:hidden h-12 w-12 flex-col justify-center items-center font-semibold p-1 rounded-full border border-cyan-400"
+                    >
+                        <img
+                            class="h-full w-auto"
+                            onclick="openBookOverlay()"
+                            src="/images/game_book_image.svg"
+                            alt=""
+                        />
+                    </div>
                 </div>
-                <button
-                    class="mt-4 md:hidden px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
-                    onclick="openGameInfo()"
-                >
-                    Game Info
-                </button>
 
                 <!-- Contenuto dinamico condiviso -->
                 <div
                     id="game-info-container"
-                    class="hidden absolute md:block md:relative w-full h-full"
+                    class="hidden bg-white z-20 md:block md:relative w-full h-full flex flex-col justify-center p-4 items-center"
                 >
                     <!-- Pulsante chiusura modal (solo mobile) -->
                     <button
@@ -276,7 +293,7 @@
                             >
                                 <div>
                                     <img
-                                        class="cursor-pointer h-48 w-48 transition duration-300 transform hover:scale-[1.03]"
+                                        class="cursor-pointer hidden md:block h-48 w-48 transition duration-300 transform hover:scale-[1.03]"
                                         onclick="openBookOverlay()"
                                         src="/images/game_book_image.svg"
                                         alt=""
@@ -288,11 +305,9 @@
                 </div>
                 <div
                     id="chatContainer"
-                    class="absolute bottom-0 w-full z-50 chatNotVisible"
+                    class="absolute chatNotVisible w-full mt-[25%] top-0 md:top-auto md:bottom-0 right-0 left-0 z-40"
                 >
-                    <div
-                        class="w-full max-w-md bg-gray-200 p-4 rounded-lg shadow-lg"
-                    >
+                    <div class="w-full bg-gray-600 p-4 rounded-lg shadow-lg">
                         <!-- Area messaggi -->
                         <div
                             id="chatBox"
@@ -321,9 +336,9 @@
             </div>
 
             <!-- Right Box -->
-            <div class="md:w-[75%] w-full h-[85%] md:h-auto relative">
+            <div class="md:w-[75%] w-full h-[90%] md:h-auto relative">
                 <div
-                    class="h-full flex flex-col gap-4 p-12 shadow-xl contenitore"
+                    class="h-full flex flex-col gap-4 p-4 md:p-12 shadow-xl contenitore"
                 >
                     <input
                         type="text"
@@ -333,7 +348,7 @@
                     />
                     <div
                         id="editor-container"
-                        class="bg-white p-4 rounded flex-1 overflow-auto"
+                        class="bg-white md:p-4 rounded flex-1 overflow-auto"
                     ></div>
                     <div class="flex items-start">
                         <button

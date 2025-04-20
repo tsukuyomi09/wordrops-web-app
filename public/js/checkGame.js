@@ -4,13 +4,6 @@ const user_id = Number(localStorage.getItem("user_id"));
 let unreadMessages = {};
 
 window.onload = function initialize() {
-    const swiper = new Swiper(".mySwiper", {
-        effect: "cards",
-        grabCursor: true,
-        zoom: {
-            maxRatio: 3,
-        },
-    });
     fetchUserData();
 };
 
@@ -779,14 +772,15 @@ function updateChaptersDisplay(chaptersData) {
             "shadow-md",
             "rounded-xl",
             "py-4",
-            "px-8",
+            "md:px-8",
+            "px-4",
             "flex",
             "h-full"
         );
 
         // Creazione della struttura per ogni capitolo
         slide.innerHTML = `
-        <div class="flex flex-col w-full h-full gap-8">
+        <div class="flex flex-col w-full h-full md:gap-8 gap-4">
             <div class="flex flex-row gap-4">
                 <div class="text-gray-600 font-bold text-lg">
                     Capitolo ${index + 1}
@@ -799,7 +793,7 @@ function updateChaptersDisplay(chaptersData) {
                 <strong>Titolo:</strong> ${chapter.title}
             </div>
 
-            <div class="text-gray-800 text-xl pr-4 text-base h-full overflow-y-auto leading-relaxed">
+            <div class="text-gray-800 md:text-xl text-md pr-4 text-base h-full overflow-y-auto leading-relaxed">
                 <p>${chapter.content}</p>
             </div>
         </div>
@@ -808,6 +802,11 @@ function updateChaptersDisplay(chaptersData) {
     });
     if (window.swiper) {
         window.swiper.update();
+    } else {
+        window.swiper = new Swiper(".mySwiper", {
+            effect: "cards",
+            grabCursor: true,
+        });
     }
 }
 
