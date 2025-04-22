@@ -919,10 +919,10 @@
                             alt="Platy Read"
                         />
                         <div
-                            class="w-full max-w-4xl mx-auto flex flex-col items-center justify-start"
+                            class="box-slider flex flex-col justify-start py-8 h-full items-center"
                         >
                             <h2
-                                class="text-gray-800 text-4xl my-12 font-bold text-center mb-8"
+                                class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
                                 Libreria Personale
                             </h2>
@@ -934,22 +934,22 @@
                         </div>
                     </div>
                     <div
-                        class="swiper-slide flex flex-col items-center justify-center px-10 h-full"
+                        class="swiper-slide flex flex-col items-center justify-center h-full"
                     >
                         <div
-                            class="w-full h-full pb-6 flex overflow-hdden flex-col items-center justify-center flex-shrink-0"
+                            class="box-slider flex flex-col justify-start py-8 h-full items-center"
                         >
                             <h2
-                                class="text-gray-800 text-4xl my-12 font-bold text-center"
+                                class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
                                 Storie Completate
                             </h2>
                             <div
-                                class="w-full h-full max-w-4xl scrollbar-hidden flex flex-col justify-start items-center overflow-y-auto px-4"
+                                class="w-full h-full max-w-6xl scrollbar-hidden mt-12 flex flex-col justify-start items-center overflow-y-auto px-4"
                             >
                                 <div
                                     id="stories-container"
-                                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-8 w-full"
+                                    class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8 w-full"
                                 >
                                     <!-- Qui vengono inserite le storie -->
                                 </div>
@@ -1124,11 +1124,11 @@
             </div>
         </div>
 
-        <div class="page-wrap p-6 fixed min-h-screen">
+        <div class="page-wrap p-6 fixed min-h-screen z-50">
             <!-- queue overlay -->
             <div
                 id="waiting-overlay"
-                class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-10 hidden"
+                class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center hidden"
             >
                 <div class="flex flex-col items-center">
                     <div id="waiting-text" class="text-white text-2xl mb-4">
@@ -1144,7 +1144,7 @@
                     <button
                         id="abandon-queue-button"
                         onclick="abandonQueue()"
-                        class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+                        class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
                     >
                         Abbandona
                     </button>
