@@ -1,305 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Wordrops game – La piattaforma per scrivere e collaborare in tempo
-            reale
-        </title>
-        <!-- Google Tag Manager -->
-        <script>
-            (function (w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({
-                    "gtm.start": new Date().getTime(),
-                    event: "gtm.js",
-                });
-                var f = d.getElementsByTagName(s)[0],
-                    j = d.createElement(s),
-                    dl = l != "dataLayer" ? "&l=" + l : "";
-                j.async = true;
-                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-                f.parentNode.insertBefore(j, f);
-            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
-        </script>
-        <!-- End Google Tag Manager -->
-
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/images/favicon/favicon-32x32.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/images/favicon/favicon-16x16.png"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
-            rel="stylesheet"
-        />
-        <link href="/style/style.css" rel="stylesheet" />
-        <link href="/style/output.css" rel="stylesheet" />
-        <link
-            href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
-            rel="stylesheet"
-        />
-    </head>
-    <body class="overflow-x-hidden h-screen">
-        <!-- Google Tag Manager (noscript) -->
-        <noscript
-            ><iframe
-                src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
-                height="0"
-                width="0"
-                style="display: none; visibility: hidden"
-            ></iframe
-        ></noscript>
-        <div
-            id="scoreModal"
-            class="fixed inset-0 items-center justify-center bg-black bg-opacity-80 hidden z-50"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 class="text-2xl font-semibold">Assegna i punteggi</h2>
-                <p class="mb-4">Ora puoi votare i capitoli.</p>
-
-                <!-- Contenitore per i capitoli -->
-                <div id="chaptersContainer" class="space-y-2">
-                    <!-- Qui verranno inseriti i capitoli dinamicamente -->
-                </div>
-
-                <button
-                    onclick="closeModal()"
-                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-                >
-                    Chiudi
-                </button>
-            </div>
-        </div>
-
-        <div id="chatContainer" class="fixed bottom-2 z-50 chatNotVisible">
-            <div class="w-full max-w-md bg-white p-4 rounded-lg shadow-lg">
-                <!-- Area messaggi -->
+<div class="h-[35%] w-full flex flex-col justify-between">
+    <div class="w-full flex h-full justify-center">
+        <!-- Top Menu -->
+        <div class="w-[80%] relative flex items-center justify-center h-full">
+            <div class="absolute left-0">
                 <div
-                    id="chatBox"
-                    class="h-80 overflow-y-auto mb-4 p-2 bg-gray-50 border rounded-lg"
+                    class="avatar-container relative flex flex-col justify-center items-center p-6 w-32 h-32 bg-white border border-gray-200 rounded-full"
+                    style="box-shadow: -3px 3px rgba(0, 0, 0, 0.473)"
                 >
-                    <!-- I messaggi verranno visualizzati qui -->
-                </div>
-
-                <!-- Campo di input per il messaggio -->
-                <div class="flex">
-                    <input
-                        id="messageInput"
-                        type="text"
-                        class="w-full p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Scrivi un messaggio..."
+                    <img
+                        id="main-avatar"
+                        class="h-full w-auto object-contain"
+                        src=""
+                        alt=""
                     />
-                    <button
-                        id="sendButton"
-                        class="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    <div
+                        class="absolute -mr-2 bottom-0 right-0 h-6 w-6 rounded-full bg-white"
                     >
-                        Invia
-                    </button>
+                        <img
+                            class="hover-rotate cursor-pointer"
+                            src="/images/icons/change-avatar-icon.png"
+                            onclick="openAvatarMenu()"
+                            alt=""
+                        />
+                    </div>
                 </div>
-            </div>
-        </div>
-        </div>
-        <div class="flex flex-col md:flex-row md:p-4 gap-4 h-screen relative">
-            <div
-                id="popup-start-countdown"
-                class="hidden fixed inset-0 bg-gray-800 bg-opacity-80 items-center justify-center z-40"
-            >
                 <div
-                    class="bg-white rounded-lg shadow-lg p-6 max-w-lg text-center"
+                    class="flex absolute -top-6 -right-10 flex-col justify-center items-center"
                 >
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800">
-                        Partita a Tempo
-                    </h2>
-                    <p class="text-gray-600 mb-6">
-                        La partita è a tempo! Quando tutti saranno pronti, il
-                        countdown non potrà piú essere fermato.
-                    </p>
-                    <button
-                        onClick="buttonStartGame()"
-                        class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300"
-                    >
-                        Sono pronto!
-                    </button>
+                    <div class="username_container inline-block">
+                        <h2
+                            id="username"
+                            class="text-gray-800 text-4xl font-extrabold"
+                        ></h2>
+                        <h4 id="userStatus"></h4>
+                    </div>
                 </div>
-            </div>
-            <div
-                id="new-popup-message"
-                class="hidden z-50 fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center"
-            >
-                <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                    <p
-                        id="new-popup-text"
-                        class="text-center text-xl font-semibold text-gray-800"
-                    ></p>
-                    <button
-                        id="new-popup-close"
-                        class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full w-full"
-                    >
-                        Chiudi
-                    </button>
-                </div>
-            </div>
-
-            <div
-                id="popup-message"
-                class="fixed inset-0 bg-black bg-opacity-60 items-center justify-center hidden z-40"
-            >
                 <div
-                    class="bg-white rounded-lg shadow-lg p-6 text-center max-w-sm w-full"
+                    id="status-div"
+                    class="flex hidden items-center justify-center space-x-2 mt-4"
                 >
-                    <p
-                        id="popup-text"
-                        class="text-lg font-semibold text-gray-800 mb-4"
-                    ></p>
-                    <button
-                        id="popup-close"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded"
-                    >
-                        Ok
-                    </button>
+                    <!-- Testo con il pallino verde -->
+                    <span class="text-sm font-semibold">Sei in game</span>
+                    <span
+                        id="game-status-indicator"
+                        class="w-2 h-2 rounded-full bg-green-500"
+                    ></span>
                 </div>
             </div>
-            <!-- Left Box -->
-            <div class="md:w-[25%] w-full p-4 h-[15%] md:h-auto flex flex-col">
-                <div id="leaderboard-icon">
-                    <a
-                        class="button-container flex h-12 w-12 rounded-full border-2 border-custom-blue flex-col justify-center items-center cursor-pointer"
-                        onclick="dashboardButton()"
+            <div class="flex flex-col justify-center items-center h-full">
+                <div
+                    class="relative"
+                    id="lottie-button"
+                    onclick="openOverlay()"
+                >
+                    <div id="lottie-book"></div>
+                    <img
+                        src="/images/pen.png"
+                        alt=""
+                        class="absolute w-12 right-6 top-6"
+                    />
+                </div>
+                <h2 class="my-title text-2xl text-gray-800">Nuova Storia</h2>
+            </div>
+            <div
+                class="absolute right-0 flex flex-row md:flex-col items-center md:items-stretch gap-2"
+            >
+                <!-- Box sinistro -->
+                <div class="relative flex flex-row gap-6">
+                    <div
+                        class="border-2 border-purple-200 rounded-full p-2 flex flex-row gap-8 px-8"
                     >
-                        <div>
+                        <a
+                            id="leaderboard-icon"
+                            href="/classifiche"
+                            class="button-container flex flex-col justify-center items-center"
+                        >
                             <img
-                                src="/images/icons/icons8-casa-100.png"
-                                alt="Search Icon"
+                                src="/images/icons/icons8-trofeo-48.png"
+                                alt="leaderboard Icon"
                                 class="icon-image"
                             />
-                        </div>
-                    </a>
-                </div>
-                <button
-                    class="mt-4 md:hidden px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
-                    onclick="openGameInfo()"
-                >
-                    Game Info
-                </button>
+                            <div class="text-sm font-semibold text-gray-800">
+                                classifiche
+                            </div>
+                        </a>
 
-                <!-- Contenuto dinamico condiviso -->
-                <div
-                    id="game-info-container"
-                    class="hidden absolute md:block md:relative w-full h-full"
-                >
-                    <!-- Pulsante chiusura modal (solo mobile) -->
-                    <button
-                        class="block md:hidden mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        onclick="closeGameInfo()"
-                    >
-                        Chiudi
-                    </button>
-
-                    <!-- CONTENUTO DINAMICO QUI -->
-                    <div class="text-gray-800 h-full">
-                        <div
-                            id="gameUI-update"
-                            class="flex flex-col gap-8 items-center justify-center py-8"
+                        <a
+                            id="leaderboard-icon"
+                            href="/storie-community"
+                            class="button-container flex flex-col justify-center items-center"
                         >
-                            <div
-                                id="countdown-display"
-                                class="text-4xl w-full font-extrabold text-center text-gray-800 p-4 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 shadow-xl flex items-center justify-center gap-4"
+                            <img
+                                src="/images/icons/library-icon.png"
+                                alt="library Icon"
+                                class="icon-image"
+                            />
+                            <div class="text-sm font-semibold text-gray-800">
+                                libreria
+                            </div>
+                        </a>
+                    </div>
+                    <div
+                        class="rounded-xl border border border-gray-300 hover:bg-gray-100 cursor-pointer p-4 w-full"
+                    >
+                        <div class="relative inline-block text-left">
+                            <button
+                                onclick="toggleDropdown()"
+                                class="p-2 rounded-md focus:outline-none"
                             >
-                                <!-- Icona clessidra -->
+                                <!-- Hamburger Icon -->
                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-12 w-12 text-white"
+                                    class="w-6 h-6 cursor-pointer"
                                     fill="none"
-                                    viewBox="0 0 24 24"
                                     stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M12 3v12m0 0v6m0-6H4m8 0h8"
-                                    />
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    ></path>
                                 </svg>
-                                <!-- Countdown numerico -->
-                                <div
-                                    id="countdown-text"
-                                    class="text-4xl font-bold"
-                                ></div>
-                            </div>
+                            </button>
+
+                            <!-- DROPDOWN -->
                             <div
-                                id="current-turn"
-                                class="text-lg w-full font-semibold text-right"
-                            ></div>
-                            <div class="flex flex-col w-full items-center">
+                                id="dropdownMenu"
+                                class="hidden absolute top-16 right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                            >
                                 <div
-                                    id="turn-order-wrapper"
-                                    class="mt-2 w-full transition-all duration-300 ease-in-out"
+                                    class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                                    onclick="logout()"
                                 >
-                                    <div
-                                        id="turn-order"
-                                        class="flex flex-wrap justify-between items-center gap-4 p-4 bg-gray-100 rounded"
-                                    ></div>
+                                    <button
+                                        class="w-full text-sm text-left text-red-600 hover:bg-red-100"
+                                    >
+                                        logout
+                                    </button>
+                                    <div class="w-6 h-6">
+                                        <img
+                                            class="cursor-pointer"
+                                            src="/images/icons/logout-icon.png"
+                                            alt="logout Icon"
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                                    onclick="modalDeleteAccount()"
+                                >
+                                    <button
+                                        id="delete-account-btn"
+                                        class="w-full pointer-events-none text-sm text-left text-red-600 hover:bg-red-100"
+                                    >
+                                        Cancella Account
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="chat-icon-container">
-                    <button
-                        id="toggleChatButton"
-                        class="p-2 bg-blue-500 z-50 text-white rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        💬
-                        <div
-                            id="notificationSymbol"
-                            class="absolute top-0 left-0 w-3 h-3 bg-red-500 rounded-full hidden"
-                        ></div>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Right Box -->
-            <div class="md:w-[75%] w-full h-[85%] md:h-auto relative">
-                <div
-                    class="h-full flex flex-col gap-4 bg-amber-20 p-12 shadow-xl contenitore"
-                >
-                    <input
-                        type="text"
-                        id="chapter-title"
-                        placeholder="Titolo.."
-                        class="text-xl border-0 border-b border-gray-400 focus:outline-none focus:ring-0 focus:border-gray-600"
-                    />
+                <div class="relative">
                     <div
-                        id="editor-container"
-                        class="bg-white p-4 rounded flex-1 overflow-auto"
-                    ></div>
-                    <div class="flex items-start">
-                        <button
-                            id="send-chapter-button"
-                            onclick="getChapter()"
-                            class="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                        >
-                            Invia Capitolo
-                        </button>
+                        class="text-xs px-3 py-2 rounded flex flex-col font-medium shadow-sm"
+                    >
+                        <form id="search-form" class="flex flex-col space-y-1">
+                            <input
+                                type="text"
+                                id="search-input"
+                                placeholder="Cerca un utente..."
+                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
+                            />
+                        </form>
                     </div>
+                    <div
+                        class="absolute left-0 right-0 mt-1 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
+                        id="results"
+                    ></div>
                 </div>
             </div>
         </div>
-
-        <script src="/js/menu.js" defer></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-        <script src="/js/checkGame.js" defer></script>
-    </body>
-</html>
+    </div>
+    <div class="w-full h-16 items-center relative justify-center">
+        <div class="swiper-pagination"></div>
+    </div>
+</div>

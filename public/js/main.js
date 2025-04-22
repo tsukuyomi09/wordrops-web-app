@@ -58,18 +58,22 @@ function showLoadingAnimation() {
 }
 
 const bookAnimation = lottie.loadAnimation({
-    container: document.getElementById("lottie-book"),
+    container: document.getElementById("lottie-book"), // Dove inserire l'animazione
     renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "/images/book_animation.json", // ✅ estensione giusta
+    loop: false, // Non loop
+    autoplay: false, // Non parte automaticamente
+    path: "/images/new-book-anime.json", // Percorso al tuo file JSON Lottie
 });
 
-const button = document.getElementById("lottie-button");
+// Partire con hover
+const lottieButton = document.getElementById("lottie-button");
 
-button.addEventListener("mouseenter", () => {
-    bookAnimation.stop(); // resetta da inizio
-    bookAnimation.play(); // parte all'hover
+lottieButton.addEventListener("mouseenter", function () {
+    bookAnimation.play(); // Inizia animazione on hover
+});
+
+lottieButton.addEventListener("mouseleave", function () {
+    bookAnimation.stop(); // Ferma l'animazione quando il mouse esce
 });
 
 function showAvatarTransition() {
@@ -474,6 +478,8 @@ function fetchAvatarData(username) {
             })
             .then((data) => {
                 const avatar = data.avatar;
+                console.log(`avatar ${avatar}`);
+
                 // Memorizza l'avatar nel localStorage per evitare future richieste
                 localStorage.setItem(`avatar_${username}`, avatar);
                 updateAvatarImage(avatar);
@@ -486,6 +492,7 @@ function fetchAvatarData(username) {
 
 // Funzione per aggiornare l'immagine dell'avatar
 function updateAvatarImage(avatar) {
+    console.log(`avatar ${avatar}`);
     const avatarContainer = document.getElementById("main-avatar");
     avatarContainer.src = `/images/avatars/${avatar}.png`; // Imposta il nuovo avatar
 }
@@ -514,28 +521,6 @@ async function fetchdashboardData() {
         console.log(`games: ${JSON.stringify(games, null, 2)}`);
         console.log(`Max games reached: ${maxGamesReached}`);
         const statusContainer = document.getElementById("status-div");
-        const gameUiContainer = document.getElementById("gameUI-update");
-        const buttonsContainer = document.getElementById(
-            "game-buttons-container"
-        );
-
-        // Pulizia pulsanti precedenti
-        buttonsContainer.innerHTML = "";
-        const newGameButton = document.getElementById("new-game-button");
-        if (newGameButton) {
-            if (maxGamesReached) {
-                newGameButton.innerText = "LIMITE RAGGIUNTO";
-                newGameButton.disabled = true;
-                newGameButton.classList.add("opacity-50", "cursor-not-allowed");
-            } else {
-                newGameButton.innerText = "NUOVA PARTITA";
-                newGameButton.disabled = false;
-                newGameButton.classList.remove(
-                    "opacity-50",
-                    "cursor-not-allowed"
-                );
-            }
-        }
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket(); // Assicurati che initSocket sia una funzione asincrona
