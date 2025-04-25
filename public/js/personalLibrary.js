@@ -104,8 +104,8 @@ function openBookOverlay(title, storyDetails) {
             </h3>
             <div class="flex items-center mt-2">
                 <a href="/profile/${item.username}" class="flex items-center">
-                    <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-10 h-10 rounded-full mr-2" />
-                    <span class="text-sm text-blue-600 hover:underline">${item.username}</span>
+                    <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-8 h-auto rounded-full mr-2" />
+                    <span class="text-mg md:text-lg text-blue-600 hover:underline">${item.username}</span>
                 </a>
             </div>
             <p class="text-gray-700 text-lg leading-relaxed md:text-2xl mt-2" id="chapter-text">
