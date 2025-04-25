@@ -108,7 +108,7 @@ function openBookOverlay(title, storyDetails) {
                     <span class="text-sm text-blue-600 hover:underline">${item.username}</span>
                 </a>
             </div>
-            <p class="text-gray-700 mt-2" id="chapter-text">
+            <p class="text-gray-700 text-lg leading-relaxed md:text-2xl mt-2" id="chapter-text">
                 ${item.content}
             </p>
         `;
@@ -117,15 +117,14 @@ function openBookOverlay(title, storyDetails) {
         chaptersContainer.appendChild(chapterDiv);
     });
 
-    overlay.classList.add("open");
+    overlay.classList.remove("hidden");
 
-    // Disabilita scroll sotto al modal
     document.body.style.overflow = "hidden";
 }
 
 function closeBookOverlay() {
     const overlay = document.getElementById("overlay-books");
-    overlay.classList.remove("open");
+    overlay.classList.add("hidden");
 
     // Riabilita lo scroll dopo l'animazione (match `duration-500`)
     setTimeout(() => {

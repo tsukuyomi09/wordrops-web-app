@@ -355,6 +355,10 @@ font-family: 'Consolas', 'Courier New', monospace;
   transform: translateY(0);
 }
 
+#overlay-backdrop.visible {
+  opacity: 1;
+}
+
 .swiper-slide .content {
   overflow-y: auto;
 }
