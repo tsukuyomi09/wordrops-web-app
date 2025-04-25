@@ -6,33 +6,36 @@ async function createGameAndAssignPlayers(game) {
     newGameId = uuidv4();
 
     try {
-        const gameMode = game.mode;
+        const { gameType, gameSpeed, players } = game;
 
-        game.players.forEach((player) => {
-            // Aggiungi il gioco per ogni giocatore
-            addGameForPlayer(player.id, newGameId, "in_progress", gameMode);
+        players.forEach((player) => {
+            addGameForPlayer(
+                player.user_id,
+                newGameId,
+                "in_progress",
+                gameType,
+                gameSpeed
+            );
         });
 
         const turnOrder = shuffleArray(
             game.players.map((player) => ({
-                id: player.id,
+                user_id: player.user_id,
                 username: player.username,
                 avatar: player.avatar, // Assicurati che l'avatar sia presente
             }))
         );
 
-        let countdownDuration;
-        if (gameMode.includes("fast")) {
-            countdownDuration = 150000000; // 10 secondi per le modalità "fast"
-        } else {
-            countdownDuration = 300000000; // 20 secondi per le modalità "slow" o altre
+        let countdownDuration = 300000000; // slow game
+        if (gameMode === "fast") {
+            countdownDuration = 150000000; // fast game
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
-            type: null,
-            gameMode: gameMode,
+            gameType: gameType,
+            gameSpeed: gameSpeed,
             publishStatus: null,
             votes: {},
             players: game,
@@ -69,25 +72,28 @@ function shuffleArray(array) {
     return array;
 }
 
-function addGameForPlayer(playerId, gameId, status = "in_progress", mode) {
-    if (!playersMap.has(playerId)) {
-        playersMap.set(playerId, {
+function addGameForPlayer(
+    user_id,
+    gameId,
+    status = "in_progress",
+    gameType,
+    gameSpeed
+) {
+    if (!playersMap.has(user_id)) {
+        playersMap.set(user_id, {
             games: {},
         });
     }
 
-    const playerData = playersMap.get(playerId);
-    playerData.games[gameId] = { status, mode }; // Aggiungi anche la modalità nel gioco
-    playersMap.set(playerId, playerData);
-
+    const playerData = playersMap.get(user_id);
+    playerData.games[gameId] = { status, gameType, gameSpeed };
+    playersMap.set(user_id, playerData);
     console.log("📌 Stato attuale di playersMap:", playersMap);
 }
 
 function getActiveGames() {
     return activeGames;
 }
-
-/// delete game /////
 
 module.exports = {
     createGameAndAssignPlayers,

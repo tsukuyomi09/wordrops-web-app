@@ -1,9 +1,8 @@
-const { client } = require("../database/db");
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
 
 async function saveNormalGame(game) {
     try {
-        // Commentato per evitare di generare con AI durante i test
+        const gameMode = game.mode;
         const validChapters = game.chapters.filter(
             (chapter) =>
                 chapter.content &&
@@ -14,8 +13,8 @@ async function saveNormalGame(game) {
         console.log("Valid Chapters:", validChapters);
 
         const chaptersToElaborate = validChapters.map((chapter, index) => ({
-            titolo: chapter.title,
-            contenuto: chapter.content,
+            title: chapter.title,
+            content: chapter.content,
         }));
 
         // Log per verificare il formato finale dei capitoli da elaborare

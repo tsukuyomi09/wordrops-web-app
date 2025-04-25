@@ -602,17 +602,15 @@ fetchdashboardData();
 
 let isInQueue = false;
 
-async function joinQueue(mode) {
-    if (!mode) {
-        console.error("Nessuna modalità selezionata.");
+async function joinQueue({ gametype, gamespeed }) {
+    if (
+        !["ranked", "normal"].includes(gametype) ||
+        !["fast", "slow"].includes(gamespeed)
+    ) {
         return;
     }
 
     newGameSound();
-    const backgroundMusicPath = "/images/new-queue-music.ogg";
-    // setTimeout(async () => {
-    //     await startBackgroundMusic(backgroundMusicPath);
-    // }, 1000);
     closeOverlay();
 
     await initSocket();
@@ -629,7 +627,12 @@ async function joinQueue(mode) {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ socketId, avatarForGame, mode }),
+                body: JSON.stringify({
+                    socketId,
+                    avatarForGame,
+                    gametype,
+                    gamespeed,
+                }),
             });
 
             if (!response.ok) {
