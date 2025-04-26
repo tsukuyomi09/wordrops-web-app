@@ -24,7 +24,7 @@ router.get("/games-data", checkAuth, async (req, res) => {
 
         const { players, turnOrder, turnIndex, status } = game;
         const currentPlayer = players.find(
-            (player) => player.id === turnOrder[turnIndex].id
+            (player) => player.user_id === turnOrder[turnIndex].user_id
         );
 
         if (!currentPlayer) {

@@ -91,17 +91,18 @@ io.on("connection", (socket) => {
 
         if (!game) return;
 
-        const player = game.turnOrder.find((p) => {
+        const player = game.players.find((p) => {
             console.log(
-                `Comparing user_id: ${user_id} with player id: ${p.id}`
+                `Comparing user_id: ${user_id} with player user_id: ${p.user_id}`
             );
-            return p.id === user_id;
+            return p.user_id === user_id; // Confronta con user_id
         });
+
         console.log(`player: ${player}`);
         if (!player) return;
 
         const message = {
-            userId: user_id,
+            user_id: user_id,
             username: player.username,
             avatar: player.avatar,
             messageText: messageText,

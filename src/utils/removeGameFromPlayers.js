@@ -1,18 +1,18 @@
 const { playersMap } = require("../services/gameManager");
 
 async function removeGameFromPlayers(game) {
-    if (!game || !game.players || !Array.isArray(game.players.players)) {
+    if (!game || !Array.isArray(game.players)) {
         console.log(
             `[removeGamePlayersMap] Game or players not found for gameId: ${game?.gameId}`
         );
         return;
     }
 
-    const players = game.players.players;
+    const players = game.players;
     console.log("Players array:", players);
 
     players.forEach((player) => {
-        const playerId = player.id;
+        const playerId = player.user_id; // <-- cambiato da .id a .user_id
         console.log(`Checking player ${playerId}`);
 
         const playerData = playersMap.get(playerId);

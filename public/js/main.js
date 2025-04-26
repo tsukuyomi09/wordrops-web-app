@@ -535,9 +535,10 @@ async function fetchdashboardData() {
                 // Assicurati di non superare il massimo di 5 contenitori
                 if (index >= 5) return;
 
-                const isRanked =
-                    gameData.mode === "ranked_slow" ||
-                    gameData.mode === "ranked_fast";
+                const isRanked = gameData.gameType === "ranked";
+
+                console.log(gameData);
+                console.log("gameType:", gameData.gameType);
 
                 // Trova il contenitore corrispondente
                 const container = document.getElementById(`game-${index + 1}`);
@@ -559,11 +560,13 @@ async function fetchdashboardData() {
                     button.onclick = () => handleBackToGame(gameId);
                     button.className = `
                     w-full h-full text-center text-base sm:text-lg font-bold 
-                    text-gray-800 border-4 border-yellow-400 
-                    rounded-xl shadow-md hover:shadow-lg hover:scale-105 
-                    transition duration-300 ease-in-out p-2     cursor-pointer
-
-                    ${isRanked ? "" : "bg-white border-white"}
+                    text-gray-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 
+                    transition duration-300 ease-in-out p-2 cursor-pointer
+                    ${
+                        isRanked
+                            ? "border-4 border-yellow-400"
+                            : "bg-white border-white"
+                    }
                 `;
 
                     // Aggiungi notifiche (dot) dentro il wrapper
@@ -602,10 +605,10 @@ fetchdashboardData();
 
 let isInQueue = false;
 
-async function joinQueue({ gametype, gamespeed }) {
+async function joinQueue({ gameType, gameSpeed }) {
     if (
-        !["ranked", "normal"].includes(gametype) ||
-        !["fast", "slow"].includes(gamespeed)
+        !["ranked", "normal"].includes(gameType) ||
+        !["fast", "slow"].includes(gameSpeed)
     ) {
         return;
     }
@@ -630,8 +633,8 @@ async function joinQueue({ gametype, gamespeed }) {
                 body: JSON.stringify({
                     socketId,
                     avatarForGame,
-                    gametype,
-                    gamespeed,
+                    gameType,
+                    gameSpeed,
                 }),
             });
 

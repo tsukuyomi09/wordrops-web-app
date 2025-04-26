@@ -19,10 +19,10 @@ router.post("/gamequeueNew", checkAuth, (req, res) => {
     const username = req.username;
     const socketId = req.body.socketId;
     const avatar = req.body.avatarForGame;
-    const gametype = req.body.gametype;
-    const gamespeed = req.body.gamespeed;
+    const gameType = req.body.gameType;
+    const gameSpeed = req.body.gameSpeed;
 
-    console.log(`players in queue on mode: ${gametype}`);
+    console.log(`players in queue on mode: ${gameType}`);
 
     if (!user_id) {
         return res.status(401).json({ error: "Utente non autenticato" });
@@ -32,18 +32,18 @@ router.post("/gamequeueNew", checkAuth, (req, res) => {
         return res.status(400).json({ error: "Utente già in coda" });
     }
 
-    gameQueues[gametype][gamespeed].push({
+    gameQueues[gameType][gameSpeed].push({
         user_id: user_id,
         username,
         avatar, // Includi l'avatar
         socketId,
-        gametype,
-        gamespeed,
+        gameType,
+        gameSpeed,
         timestamp: Date.now(),
         pronto: null,
     });
 
-    playerQueuePosition[user_id] = { gametype, gamespeed };
+    playerQueuePosition[user_id] = { gameType, gameSpeed };
 
     const socket = req.io.sockets.sockets.get(socketId);
     if (socket) {
@@ -57,12 +57,12 @@ router.post("/gamequeueNew", checkAuth, (req, res) => {
     }
 
     // Controlla se ci sono 5 giocatori nella coda
-    if (gameQueues[gametype][gamespeed].length >= 5) {
-        const players = gameQueues[gametype][gamespeed].splice(0, 5); // Rimuovi i primi 5 giocatori dalla coda
-        let gameId = `${gametype}_${gamespeed}:${Date.now()}`;
+    if (gameQueues[gameType][gameSpeed].length >= 5) {
+        const players = gameQueues[gameType][gameSpeed].splice(0, 5); // Rimuovi i primi 5 giocatori dalla coda
+        let gameId = `${gameType}_${gameSpeed}:${Date.now()}`;
         preGameQueue[gameId] = {
-            gametype,
-            gamespeed, // Salviamo la modalità
+            gameType,
+            gameSpeed, // Salviamo la modalità
             players, // I giocatori con la modalità già inclusa
         };
 
@@ -98,10 +98,10 @@ router.delete("/gamequeueNew", checkAuth, async (req, res) => {
             .json({ error: "Utente non trovato in nessuna coda" });
     }
 
-    const { gametype, gamespeed } = player;
+    const { gameType, gameSpeed } = player;
     delete playerQueuePosition[user_id];
 
-    gameQueues[gametype][gamespeed] = gameQueues[gametype][gamespeed].filter(
+    gameQueues[gameType][gameSpeed] = gameQueues[gameType][gameSpeed].filter(
         (player) => player.user_id !== user_id
     );
     console.log(playerQueuePosition);
@@ -133,6 +133,11 @@ async function startCountdownPreGame(io, gameId) {
                 if (allReady) {
                     const { gameId: newGameId, turnOrder } =
                         await createGameAndAssignPlayers(game);
+                    const players = game.players;
+                    delete preGameQueue[gameId];
+                    players.forEach((player) => {
+                        delete playerQueuePosition[player.user_id];
+                    });
 
                     io.to(gameId).emit("game-start", {
                         message: "Tutti pronti: inizia il gioco",

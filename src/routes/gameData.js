@@ -13,16 +13,15 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
 
     // Accedi correttamente all'array di giocatori
     const { players, turnOrder, turnIndex, status, chapters } = game;
-    const playersArray = players.players; // Qui accedi al vero array di giocatori
 
-    if (!Array.isArray(playersArray)) {
+    if (!Array.isArray(players)) {
         return res.status(500).json({
             error: "I giocatori non sono in formato array",
         });
     }
 
-    const currentPlayer = playersArray.find(
-        (player) => player.id === turnOrder[turnIndex].id
+    const currentPlayer = players.find(
+        (player) => player.user_id === turnOrder[turnIndex].user_id
     );
 
     if (!currentPlayer) {
@@ -32,7 +31,7 @@ router.get("/game-data/:gameId", checkAuth, (req, res) => {
     }
 
     res.status(200).json({
-        players: playersArray,
+        players,
         turnOrder,
         currentPlayer,
         status,

@@ -151,31 +151,28 @@ function initializeSocket(game_id) {
         });
 
         socket.on("gameCompleted", () => {
+            // Rimuove eventuale popup precedente
             const existingPopup = document.getElementById("change-turn-popup");
             if (existingPopup) {
                 existingPopup.remove();
             }
-            // Recupera gli elementi del nuovo popup
+
+            // Pulisce la sessione e mostra il nuovo popup
             sessionStorage.clear();
-            const newPopup = document.getElementById("popup-message");
-            const newPopupText = document.getElementById("new-popup-text");
-            const newPopupClose = document.getElementById("new-popup-close");
 
-            newPopupText.textContent =
+            const popup = document.getElementById("end-game-popup");
+            const popupText = document.getElementById("end-game-text");
+            const closeBtn = document.getElementById("end-game-close");
+
+            popupText.textContent =
                 "Congratulazioni, un nuovo racconto ha preso vita!";
+            popup.classList.remove("hidden");
+            popup.classList.add("flex");
 
-            newPopup.classList.remove("hidden");
-            newPopup.classList.add("flex");
-
-            newPopupClose.removeEventListener("click", handleNewPopupClose);
-            newPopupClose.addEventListener("click", handleNewPopupClose);
-
-            function handleNewPopupClose() {
+            closeBtn.onclick = () => {
                 const username = localStorage.getItem("username");
-                newPopup.classList.add("hidden");
-                newPopup.classList.remove("flex");
                 window.location.href = `/dashboard/${username}`;
-            }
+            };
         });
 
         socket.on("gameCanceled", (data) => {

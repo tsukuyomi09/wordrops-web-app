@@ -18,16 +18,16 @@ async function createGameAndAssignPlayers(game) {
             );
         });
 
-        const turnOrder = shuffleArray(
-            game.players.map((player) => ({
+        const turnOrder = game.players
+            .map((player) => ({
                 user_id: player.user_id,
                 username: player.username,
-                avatar: player.avatar, // Assicurati che l'avatar sia presente
+                avatar: player.avatar,
             }))
-        );
+            .sort(() => Math.random() - 0.5);
 
         let countdownDuration = 300000000; // slow game
-        if (gameMode === "fast") {
+        if (gameSpeed === "fast") {
             countdownDuration = 150000000; // fast game
         }
 
@@ -38,7 +38,7 @@ async function createGameAndAssignPlayers(game) {
             gameSpeed: gameSpeed,
             publishStatus: null,
             votes: {},
-            players: game,
+            players: players,
             chapters: [],
             chapterReadMap: new Map(),
             status: "to-start",
@@ -55,21 +55,16 @@ async function createGameAndAssignPlayers(game) {
         });
 
         console.log("Current activeGames map:", activeGames);
+        console.log("Turn Order after game creation:", turnOrder);
+
+        const currentPlayer = turnOrder[0];
+        console.log("Current Player:", currentPlayer);
 
         return { gameId: newGameId, turnOrder };
     } catch (err) {
         console.error("Errore nella creazione del gioco:", err);
         throw err;
     }
-}
-
-// get players and creare a random turn order
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Scambia gli elementi
-    }
-    return array;
 }
 
 function addGameForPlayer(
