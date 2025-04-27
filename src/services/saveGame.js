@@ -1,43 +1,27 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
+const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
 const { client } = require("../database/db");
 
-// if (
-//     !metadata.title ||
-//     !metadata.blurb ||
-//     !metadata.genres ||
-//     (game.gameType === "ranked" &&
-//         (!metadata.chapterRatings ||
-//             metadata.chapterRatings.length === 0))
-// ) {
-//     throw new Error("Dati AI incompleti.");
-// }
-
 async function saveGame(game) {
+    const isRanked = game.gameType === "ranked";
     try {
-        const validChapters = game.chapters.filter(
-            (chapter) =>
-                chapter.content &&
-                chapter.content.trim() !== "" &&
-                chapter.content !== "[Tempo scaduto]"
-        );
-
-        console.log("Valid Chapters:", validChapters);
-
-        const chaptersToElaborate = validChapters.map((chapter, index) => ({
+        const chaptersToElaborate = game.chapters.map((chapter, index) => ({
+            chapterNumber: index + 1,
             title: chapter.title,
             content: chapter.content,
         }));
-
-        // Log per verificare il formato finale dei capitoli da elaborare
-        console.log("Chapters to Elaborate:", chaptersToElaborate);
 
         const metadata = await generateFullMetadata(
             chaptersToElaborate,
             game.gameType
         );
 
-        if (!metadata.title || !metadata.backCover || !metadata.genres) {
-            throw new Error("Dati AI incompleti.");
+        if (isRanked) {
+            game.chapters = await calculateAndAssignRatings(
+                metadata.chapterRatings,
+                game.chapters
+            );
+            console.log("Chapters with ratings:", game.chapters);
         }
 
         const finishedAt = new Date();
@@ -61,16 +45,20 @@ async function saveGame(game) {
         // 2️⃣ Salviamo tutti i capitoli nella tabella games_chapters
         await Promise.all(
             game.chapters.map((chapter, index) => {
+                const chapterValues = [
+                    databaseGameId,
+                    chapter.title,
+                    chapter.content,
+                    chapter.user_id,
+                    index + 1,
+                    isRanked ? chapter.comment : null,
+                    isRanked ? chapter.points : null,
+                ];
+
                 return client.query(
-                    `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, created_at)
-                 VALUES ($1, $2, $3, $4, $5, NOW())`,
-                    [
-                        databaseGameId,
-                        chapter.title,
-                        chapter.content,
-                        chapter.user_id,
-                        index + 1,
-                    ]
+                    `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, score_comment, score, created_at)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
+                    chapterValues
                 );
             })
         );

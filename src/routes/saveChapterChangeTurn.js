@@ -67,6 +67,7 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     if (game.chapters.length === 5) {
         try {
+            clearInterval(game.countdownInterval);
             const saveSuccess = await saveGame(game);
             if (!saveSuccess) {
                 return res
@@ -114,13 +115,11 @@ function handleGameCompletion(game, gameId, io) {
     });
 
     removeGameFromPlayers(game);
-
     delete activeGames[gameId];
 
     // Disconnettiamo i socket e fermiamo il countdown
     setTimeout(() => {
         io.to(gameId).disconnectSockets(true);
-        clearInterval(game.countdownInterval);
         console.log("Socket disconnessi dopo gameCompleted.");
     }, 500);
 }

@@ -61,7 +61,7 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
         title: "null",
         content: "null",
         author: currentPlayer.username,
-        user_id: currentPlayer.id,
+        user_id: currentPlayer.user_id,
         isValid: false,
         timestamp: Date.now(),
     };

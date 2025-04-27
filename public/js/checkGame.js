@@ -202,7 +202,6 @@ function initializeSocket(game_id) {
             updateChaptersDisplay([newChapter]);
 
             const currentUser = localStorage.getItem("username");
-            foxAnimation();
             handleEditorAccess(data.nextPlayer, currentUser);
             updateCurrentPlayerDisplay(data.nextPlayer);
 
@@ -855,14 +854,12 @@ function changeTurnShowPopup(author, nextPlayer) {
         "flex",
         "items-center",
         "justify-center",
-        "bg-black",
-        "bg-opacity-50",
         "z-40"
     );
 
     // Aggiungi il contenuto del popup
     popup.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+        <div class="bg-gray-200 p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
             <p class="text-lg font-semibold text-gray-800">
                 <span class="font-bold text-blue-600">${author}</span> ha scritto un nuovo capitolo!
             </p>
