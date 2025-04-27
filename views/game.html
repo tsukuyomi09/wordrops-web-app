@@ -146,18 +146,24 @@
             </div>
             <div
                 id="end-game-popup"
-                class="hidden z-50 fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center"
+                class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50"
             >
-                <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <div
+                    id="confetti-animation-container"
+                    class="absolute inset-0 z-0"
+                ></div>
+                <div
+                    class="bg-white p-6 rounded-lg shadow-lg w-96 z-10 flex flex-col justify-center items-center"
+                >
                     <p
                         id="end-game-text"
                         class="text-center text-xl font-semibold text-gray-800"
                     ></p>
                     <button
-                        id="end-game-close"
-                        class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full w-full"
+                        id="end-game-redirect"
+                        class="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
                     >
-                        Chiudi
+                        Vai alla dashboard
                     </button>
                 </div>
             </div>
@@ -361,7 +367,7 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
         <script src="/js/menu.js" defer></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>

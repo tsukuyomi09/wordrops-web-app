@@ -1,7 +1,7 @@
 const { getSocket } = require("./socketManager");
-const { saveNormalGame } = require("./saveGame");
+const { saveGame } = require("./saveGame");
 const { cancelGameAndSave } = require("./cancelGame");
-const { removeGameFromPlayers } = require("../utils/removeGameFromPlayers");
+const { handleGameCompletion } = require("../utils/handleGameCompletion");
 const { activeGames } = require("./gameManager");
 
 function startCountdown(gameId) {
@@ -108,17 +108,12 @@ async function checkAndCompleteGame(io, game, gameId) {
     console.log(`Games chapters = ${game.chapters.length}`);
 
     try {
-        const saveSuccess = await saveNormalGame(game);
+        const saveSuccess = await saveGame(game);
+        handleGameCompletion(game, gameId, io);
         if (!saveSuccess) {
             return res.status(500).json({
                 message: "Errore nel salvataggio del gioco.",
             });
-        }
-
-        if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
-            await handleRankedGameCompletion(io, game, gameId);
-        } else {
-            await handleCasualGameCompletion(io, game, gameId);
         }
     } catch (err) {
         console.error(
@@ -129,29 +124,6 @@ async function checkAndCompleteGame(io, game, gameId) {
             message: "Errore nel processo di completamento del gioco.",
         });
     }
-}
-
-async function handleRankedGameCompletion(io, game, gameId) {
-    console.log("Ranked game detected, starting scoring process...");
-    game.status = "awaiting_scores";
-
-    io.to(gameId).emit("awaiting_scores", {
-        chapters: game.chapters,
-        status: game.status,
-    });
-
-    setTimeout(() => {
-        io.to(gameId).disconnectSockets(true);
-        clearInterval(game.countdownInterval);
-        console.log("Socket disconnessi dopo invio awaiting-scores.");
-    }, 500);
-}
-
-async function handleCasualGameCompletion(io, game) {
-    await removeGameFromPlayers(game);
-
-    activeGames.delete(gameId);
-    io.to(gameId).emit("gameCompleted");
 }
 
 module.exports = { startCountdown };

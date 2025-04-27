@@ -157,22 +157,38 @@ function initializeSocket(game_id) {
                 existingPopup.remove();
             }
 
-            // Pulisce la sessione e mostra il nuovo popup
+            // Pulisce la sessione
             sessionStorage.clear();
 
+            // Mostra il popup
             const popup = document.getElementById("end-game-popup");
             const popupText = document.getElementById("end-game-text");
-            const closeBtn = document.getElementById("end-game-close");
+            const username = localStorage.getItem("username");
+            const closeBtn = document.getElementById("end-game-redirect");
 
-            popupText.textContent =
-                "Congratulazioni, un nuovo racconto ha preso vita!";
+            popupText.textContent = "Un nuovo racconto ha preso vita!";
             popup.classList.remove("hidden");
             popup.classList.add("flex");
 
+            const confAnimation = lottie.loadAnimation({
+                container: document.getElementById(
+                    "confetti-animation-container"
+                ),
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                path: "/animations/confetti_animation.json",
+            });
+            confAnimation.setSpeed(2);
+
             closeBtn.onclick = () => {
-                const username = localStorage.getItem("username");
                 window.location.href = `/dashboard/${username}`;
             };
+
+            // Redirect automatico dopo 5 secondi
+            setTimeout(() => {
+                window.location.href = `/dashboard/${username}`;
+            }, 20000);
         });
 
         socket.on("gameCanceled", (data) => {

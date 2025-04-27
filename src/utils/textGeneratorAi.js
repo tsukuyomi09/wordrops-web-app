@@ -168,21 +168,21 @@ async function generateChapterRatings(chaptersToElaborate) {
     
     Restituisci la risposta **solo** in formato JSON, così strutturato:
 [
-  { "chapterNumber": x, "number": 1, comment: "tuo commento"},
-  { "chapterNumber": y, "number": 2, comment: "tuo commento" },
-  { "chapterNumber": z, "number": 3, comment: "tuo commento" },
-  { "chapterNumber": a, "number": 4, comment: "tuo commento" },
-  { "chapterNumber": b, "number": 5, comment: "tuo commento" }
+  { "chapterNumber": x, "number": 1, "comment": "tuo commento"},
+  { "chapterNumber": y, "number": 2, "comment": "tuo commento" },
+  { "chapterNumber": z, "number": 3, "comment": "tuo commento" },
+  { "chapterNumber": a, "number": 4, "comment": "tuo commento" },
+  { "chapterNumber": b, "number": 5, "comment": "tuo commento" }
 ]
 
 Esempio finale potrebbe essere:
 
 [
-  { "chapterNumber": 3, "number": 1, comment: "Un capitolo ricco di dettagli e atmosfera, che cattura l'attenzione del lettore."},
-  { "chapterNumber": 2, "number": 2, comment: "Buona costruzione della tensione, con un'ottima caratterizzazione dei personaggi." },
-  { "chapterNumber": 1, "number": 3, comment: "Un capitolo interessante, ma con meno impatto emotivo rispetto ai precedenti." },
-  { "chapterNumber": 5, "number": 4, comment: "Sviluppo della trama utile, ma manca di profondità e coinvolgimento." },
-  { "chapterNumber": 4, "number": 5, comment: "Capitolo poco avvincente, con dialoghi che non riescono a mantenere l'interesse." }
+  { "chapterNumber": 3, "number": 1, "comment": "Un capitolo ricco di dettagli e atmosfera, che cattura l'attenzione del lettore."},
+  { "chapterNumber": 2, "number": 2, "comment": "Buona costruzione della tensione, con un'ottima caratterizzazione dei personaggi." },
+  { "chapterNumber": 1, "number": 3, "comment": "Un capitolo interessante, ma con meno impatto emotivo rispetto ai precedenti." },
+  { "chapterNumber": 5, "number": 4, "comment": "Sviluppo della trama utile, ma manca di profondità e coinvolgimento." },
+  { "chapterNumber": 4, "number": 5, "comment": "Capitolo poco avvincente, con dialoghi che non riescono a mantenere l'interesse." }
 ]
 
 Importante: per ogni oggetto, usa il numero di capitolo (**chapterNumber**) come riferimento, NON il titolo.

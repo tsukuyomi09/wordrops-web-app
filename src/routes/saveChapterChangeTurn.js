@@ -3,7 +3,7 @@ const router = express.Router();
 const { activeGames } = require("../services/gameManager");
 const { startCountdown } = require("../services/gameCountdownStart");
 const { saveGame } = require("../services/saveGame");
-const { removeGameFromPlayers } = require("../utils/removeGameFromPlayers");
+const { handleGameCompletion } = require("../utils/handleGameCompletion");
 const checkAuth = require("../middlewares/checkAuthToken");
 
 router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
@@ -105,23 +105,5 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     res.json({ message: "Dati ricevuti correttamente." });
 });
-
-function handleGameCompletion(game, gameId, io) {
-    console.log("Game completed, starting final process...");
-
-    // Gestione dei socket (disconnessione dopo che il gioco è completato)
-    io.to(gameId).emit("gameCompleted", {
-        gameId: gameId,
-    });
-
-    removeGameFromPlayers(game);
-    delete activeGames[gameId];
-
-    // Disconnettiamo i socket e fermiamo il countdown
-    setTimeout(() => {
-        io.to(gameId).disconnectSockets(true);
-        console.log("Socket disconnessi dopo gameCompleted.");
-    }, 500);
-}
 
 module.exports = router;
