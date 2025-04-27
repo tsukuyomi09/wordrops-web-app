@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { activeGames } = require("../services/gameManager");
 const { startCountdown } = require("../services/gameCountdownStart");
-
+const { savePlayersDb } = require("../utils/savePlayersDb");
 const checkAuth = require("../middlewares/checkAuthToken");
 
 router.post("/game/:gameId/player-ready", checkAuth, async (req, res) => {
@@ -24,6 +24,7 @@ router.post("/game/:gameId/player-ready", checkAuth, async (req, res) => {
         game.status = "in-progress"; // Imposta lo stato del gioco come "in-progress"
         startCountdown(gameId); // Avvia il countdown
         req.io.to(gameId).emit("game-ready-popup");
+        savePlayersDb(game);
         return res.json({ status: "in-progress" });
     }
 

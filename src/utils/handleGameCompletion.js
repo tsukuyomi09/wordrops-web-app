@@ -8,7 +8,7 @@ function handleGameCompletion(game, gameId, io) {
     io.to(gameId).emit("gameCompleted", {
         gameId: gameId,
     });
-
+    clearInterval(game.countdownInterval);
     removeGameFromPlayers(game);
     delete activeGames[gameId];
 

@@ -67,16 +67,13 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     if (game.chapters.length === 5) {
         try {
-            clearInterval(game.countdownInterval);
+            handleGameCompletion(game, gameId, req.io);
             const saveSuccess = await saveGame(game);
             if (!saveSuccess) {
                 return res
                     .status(500)
                     .json({ message: "Errore nel salvataggio del gioco." });
             }
-            clearInterval(game.countdownInterval);
-
-            handleGameCompletion(game, gameId, req.io);
 
             return res.json({
                 message: "Gioco completato e giocatori notificati.",

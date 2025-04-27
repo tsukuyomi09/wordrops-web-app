@@ -2,6 +2,7 @@ const { getSocket } = require("./socketManager");
 const { saveGame } = require("./saveGame");
 const { cancelGameAndSave } = require("./cancelGame");
 const { handleGameCompletion } = require("../utils/handleGameCompletion");
+
 const { activeGames } = require("./gameManager");
 
 function startCountdown(gameId) {
@@ -75,7 +76,21 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
     console.log(`nullChapters: ${nullChapters}`);
 
     if (nullChapters.length >= 2) {
-        await cancelGameAndSave(gameId);
+        await new Promise((resolve, reject) => {
+            try {
+                io.to(gameId).emit("gameCanceled", {
+                    reason: "La partita è stata annullata: troppi capitoli nulli.",
+                    gameId,
+                });
+                // Risolviamo la promessa quando l'emit è stato eseguito
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+
+        handleGameCompletion(game, gameId, io);
+        await cancelGameAndSave(game);
         return { canceled: true };
     }
 
@@ -102,14 +117,12 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
 }
 
 async function checkAndCompleteGame(io, game, gameId) {
-    if (game.chapters.length !== 5) return;
-
     console.log(`Five games reached`);
     console.log(`Games chapters = ${game.chapters.length}`);
 
     try {
-        const saveSuccess = await saveGame(game);
         handleGameCompletion(game, gameId, io);
+        const saveSuccess = await saveGame(game);
         if (!saveSuccess) {
             return res.status(500).json({
                 message: "Errore nel salvataggio del gioco.",
