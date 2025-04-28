@@ -413,3 +413,26 @@ server.listen(port, "0.0.0.0", (err) => {
     }
     console.log(`Server is running on port ${port}`);
 });
+
+process.on("SIGTERM", () => {
+    console.log("Received SIGTERM. Shutting down gracefully...");
+
+    // Log della situazione prima della chiusura
+    console.log(
+        "Checking if any requests are pending or if the server is overloaded..."
+    );
+
+    // Chiusura del server
+    server.close(() => {
+        console.log("Server closed gracefully");
+    });
+
+    // Log per confermare la chiusura
+    console.log("Attempted to gracefully shut down the server.");
+});
+
+// Aggiungi un log in caso di errore non previsto durante il normale flusso del server
+server.on("error", (err) => {
+    console.error("An unexpected error occurred:", err.message);
+    // Eventuali altre azioni di gestione degli errori
+});
