@@ -1,7 +1,8 @@
 const { getSocket } = require("./socketManager");
-const { saveNormalGame } = require("./saveGame");
+const { saveGame } = require("./saveGame");
 const { cancelGameAndSave } = require("./cancelGame");
-const { removeGameFromPlayers } = require("../utils/removeGameFromPlayers");
+const { handleGameCompletion } = require("../utils/handleGameCompletion");
+
 const { activeGames } = require("./gameManager");
 
 function startCountdown(gameId) {
@@ -30,14 +31,24 @@ function startCountdown(gameId) {
         if (remainingTime <= 0) {
             await handleCountdownExpiration(io, game, gameId, startCountdown);
         } else {
-            const minutes = Math.floor(remainingTime / 60000);
-            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            const formatted = formatMillisecondsToTime(remainingTime);
             io.in(gameId).emit("gameUpdate", {
                 remainingTime,
-                formatted: `${minutes}m ${seconds}s`,
+                formatted,
             });
         }
     }, 1000);
+}
+
+function formatMillisecondsToTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
 async function handleCountdownExpiration(io, game, gameId, startCountdown) {
@@ -51,7 +62,7 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
         title: "null",
         content: "null",
         author: currentPlayer.username,
-        user_id: currentPlayer.id,
+        user_id: currentPlayer.user_id,
         isValid: false,
         timestamp: Date.now(),
     };
@@ -65,7 +76,23 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
     console.log(`nullChapters: ${nullChapters}`);
 
     if (nullChapters.length >= 2) {
-        await cancelGameAndSave(gameId);
+        await new Promise((resolve, reject) => {
+            try {
+                io.to(gameId).emit("gameCanceled", {
+                    reason: "La partita è stata annullata: troppi capitoli nulli.",
+                    gameId,
+                });
+                // Risolviamo la promessa quando l'emit è stato eseguito
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+
+        handleGameCompletion(game, gameId, io);
+        await cancelGameAndSave(game);
+        io.to(gameId).disconnectSockets(true);
+        console.log("Socket disconnessi dopo gameCompleted.");
         return { canceled: true };
     }
 
@@ -92,23 +119,16 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
 }
 
 async function checkAndCompleteGame(io, game, gameId) {
-    if (game.chapters.length !== 5) return;
-
     console.log(`Five games reached`);
     console.log(`Games chapters = ${game.chapters.length}`);
 
     try {
-        const saveSuccess = await saveNormalGame(game);
+        handleGameCompletion(game, gameId, io);
+        const saveSuccess = await saveGame(game);
         if (!saveSuccess) {
             return res.status(500).json({
                 message: "Errore nel salvataggio del gioco.",
             });
-        }
-
-        if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
-            await handleRankedGameCompletion(io, game, gameId);
-        } else {
-            await handleCasualGameCompletion(io, game, gameId);
         }
     } catch (err) {
         console.error(
@@ -119,29 +139,6 @@ async function checkAndCompleteGame(io, game, gameId) {
             message: "Errore nel processo di completamento del gioco.",
         });
     }
-}
-
-async function handleRankedGameCompletion(io, game, gameId) {
-    console.log("Ranked game detected, starting scoring process...");
-    game.status = "awaiting_scores";
-
-    io.to(gameId).emit("awaiting_scores", {
-        chapters: game.chapters,
-        status: game.status,
-    });
-
-    setTimeout(() => {
-        io.to(gameId).disconnectSockets(true);
-        clearInterval(game.countdownInterval);
-        console.log("Socket disconnessi dopo invio awaiting-scores.");
-    }, 500);
-}
-
-async function handleCasualGameCompletion(io, game) {
-    await removeGameFromPlayers(game);
-
-    activeGames.delete(gameId);
-    io.to(gameId).emit("gameCompleted");
 }
 
 module.exports = { startCountdown };

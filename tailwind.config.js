@@ -1,7 +1,5 @@
 module.exports = {
-    content: [
-        "./views/**/*.{html,js}", // Aggiungi il percorso dei tuoi file
-    ],
+    content: ["./views/**/*.{html}", "./public/**/*.js"],
     theme: {
         extend: {
             colors: {

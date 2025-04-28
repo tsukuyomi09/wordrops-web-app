@@ -31,9 +31,9 @@ async function searchUsers(query) {
                     data-username="${user.username}" 
                     data-avatar="${user.avatar}">
                     <div class="flex w-full items-center space-x-3 justify-start">
-                        <!-- Avatar -->
-                        <img src="/images/avatars/${user.avatar}.png" alt="${user.username} Avatar" class="w-8 h-8 rounded-full border-2 border-orange-400">
-                        <!-- Username -->
+                        <div class="p-2 h-12 w-12 flex flex-col items-center rounded-full bg-gray-100 shadow-2xl">
+                            <img src="/images/avatars/${user.avatar}.png" alt="${user.username} Avatar" class="w-auto h-full  mb-1" />
+                        </div>
                         <strong class="text-lg font-bold text-gray-800">${user.username}</strong>
                     </div>
                 </div>`
@@ -73,18 +73,22 @@ function dashboardButton() {
     }
 }
 
-function openSearch() {
-    const searchWrapper = document.getElementById("user-search-wrapper");
-    searchWrapper.classList.remove("opacity-0"); // Mostra il div con opacità 1
-}
-
-function closeSearch() {
-    const searchWrapper = document.getElementById("user-search-wrapper");
-    searchWrapper.classList.add("opacity-0"); // Nasconde il div con opacità 0
+function toggleSearch() {
+    const container = document.getElementById("search-container");
+    container.classList.toggle("hidden");
 }
 
 function toggleDropdown() {
-    const menu = document.getElementById("dropdownMenu");
+    console.log("fired");
+    const menu = document.querySelector(".dropdown-menu");
+    console.log(menu);
+    menu.classList.toggle("hidden");
+}
+
+function toggleDropdownMobile() {
+    console.log("fired");
+    const menu = document.querySelector(".dropdown-menu-mobile");
+    console.log(menu);
     menu.classList.toggle("hidden");
 }
 

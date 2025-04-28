@@ -54,7 +54,6 @@
             href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap"
             rel="stylesheet"
         />
-
         <script src="/js/checkAuth.js"></script>
     </head>
 
@@ -75,32 +74,45 @@
 
         <div
             id="overlay-books"
-            class="fixed inset-0 w-full h-full bg-black bg-opacity-75 z-50 flex items-center justify-center p-8 transition-all duration-500 opacity-0 pointer-events-none translate-y-10"
+            class="fixed hidden pb-2 md:pb-8 inset-0 w-full h-full z-50 flex flex-col items-center justify-start gap-2 transition-all duration-500"
         >
+            <div
+                id="overlay-backdrop"
+                class="absolute inset-0 bg-black/80 z-50 transition-opacity duration-500"
+            ></div>
             <button
                 onclick="closeBookOverlay()"
-                class="cursor-pointer absolute top-0 left-1/2 bg-red-600 text-white mt-4 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
+                class="cursor-pointer text-white z-50 font-bold mt-2 px-4 py-2 rounded flex items-center justify-center shadow-lg transition duration-300"
             >
-                ESCI
+                <img
+                    class="size-6 md:size-8"
+                    src="/images/icons/back_arrow.png"
+                    alt=""
+                />
             </button>
             <div
-                class="bg-white p-24 rounded-lg shadow-lg max-w-6xl w-full flex flex-col overflow-y-auto"
+                class="bg-white p-4 md:p-8 h-full rounded-lg shadow-lg max-w-6xl w-full flex flex-col overflow-y-auto z-50"
             >
                 <!-- Prima parte: Immagine e informazioni libro -->
-                <div class="flex">
+                <div
+                    class="flex flex-col gap-4 md:flex-row md:gap-12 p-4 border-2 border-gray-200 rounded-lg"
+                >
                     <!-- Immagine del libro -->
-                    <div class="w-1/3 flex justify-left items-start">
+                    <div class="w-auto flex justify-left items-start">
                         <img
                             src="/images/book-icon.png"
                             alt="Icona Libro"
-                            class="w-48 h-64 rounded shadow-md"
+                            class="size-14 md:size-26 lg:size-36 rounded shadow-md"
                         />
                     </div>
 
                     <!-- Dettagli libro -->
                     <div class="w-2/3 flex flex-col">
                         <!-- Titolo -->
-                        <h2 class="text-6xl font-bold" id="book-title">
+                        <h2
+                            class="text-2xl lg:text-6xl font-bold"
+                            id="book-title"
+                        >
                             Titolo del Libro
                         </h2>
 
@@ -170,9 +182,46 @@
 
                 <!-- Seconda parte: Capitoli -->
                 <div
-                    class="pt-40 max-h-80 book-chapters-container flex flex-col gap-20"
+                    class="mt-12 md:mt:24 max-h-80 book-chapters-container flex flex-col gap-20"
                 >
                     <!-- dynamic chapters -->
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="delete-modal"
+            class="fixed inset-0 z-50 hidden items-center justify-center bg-black/30"
+        >
+            <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
+                <h2 class="text-xl font-bold mb-4 text-red-600">
+                    Conferma Cancellazione
+                </h2>
+                <p class="mb-4 text-sm text-gray-600">
+                    Inserisci la tua password per confermare la cancellazione
+                    del tuo account. Questa azione è irreversibile.
+                </p>
+
+                <input
+                    type="password"
+                    id="confirm-password"
+                    class="w-full px-4 py-2 border rounded-lg mb-4 focus:outline-none focus:ring focus:border-blue-300"
+                    placeholder="Password"
+                />
+
+                <div class="flex justify-end gap-4">
+                    <button
+                        onclick="closeDeleteModal()"
+                        class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 cursor-pointer"
+                    >
+                        Annulla
+                    </button>
+                    <button
+                        onclick="confirmDeleteAccount()"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer"
+                    >
+                        Conferma
+                    </button>
                 </div>
             </div>
         </div>
@@ -184,7 +233,7 @@
         >
             <button
                 onclick="closeOverlay()"
-                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 z-50 -translate-y-1/2 bg-red-600 text-white font-bold w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
+                class="absolute cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 z-50 -translate-y-1/2 bg-red-600 text-white font-bold w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
             >
                 ESCI
             </button>
@@ -203,8 +252,8 @@
                 <div class="flex flex-col gap-10 items-center">
                     <button
                         id="new-game-button-normal-fast"
-                        onclick="joinQueue('normal_fast')"
-                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-blue-600 border border-white text-white font-semibold px-10 py-6 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
+                        class="w-40 cursor-pointer group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-blue-600 border border-white text-white font-semibold px-10 py-6 rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         QUICK
                         <div
@@ -222,8 +271,8 @@
 
                     <button
                         id="new-game-button-normal-slow"
-                        onclick="joinQueue('normal_slow')"
-                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-blue-600 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
+                        class="w-40 cursor-pointer group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-blue-600 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         ENDURANCE
                         <div
@@ -253,8 +302,8 @@
                 <div class="flex flex-col gap-10 items-center">
                     <button
                         id="new-game-button-ranked-fast"
-                        onclick="joinQueue('ranked_fast')"
-                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
+                        class="w-40 cursor-pointer group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         QUICK
                         <div
@@ -272,8 +321,8 @@
 
                     <button
                         id="new-game-button-ranked-slow"
-                        onclick="joinQueue('ranked_slow')"
-                        class="w-40 group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
+                        class="w-40 cursor-pointer group-hover:opacity-100 transition opacity-0 duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold px-10 py-6 rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         ENDURANCE
                         <div
@@ -286,283 +335,282 @@
             </div>
         </div>
 
-        <div
-            style="
-                height: 30vh;
-                width: 100%;
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 10;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding-left: 2rem;
-                padding-right: 2rem;
-            "
-        >
-            <div class="flex-1 flex items-center justify-start h-full">
-                <div style="padding: 10px; border-radius: 8px" class="relative">
-                    <div
-                        class="avatar-container relative flex flex-col justify-center items-center p-6 w-32 h-32 bg-white border border-gray-200 rounded-full"
-                        style="box-shadow: -3px 3px rgba(0, 0, 0, 0.473)"
+        <div class="h-[35%] flex flex-col w-full">
+            <!-- BOX_MENU (top center on mobile, right on desktop) -->
+            <div
+                class="w-full md:h-full md:hidden px-6"
+                style="
+                    background-color: #faf4f4;
+                    border-bottom-left-radius: 2rem;
+                    border-bottom-right-radius: 2rem;
+                "
+            >
+                <div
+                    class="md:rounded-full p-2 flex flex-row justify-center items-center gap-6 px-8 relative"
+                >
+                    <a
+                        href="/classifiche"
+                        class="button-container flex flex-col justify-center items-center"
                     >
                         <img
-                            id="main-avatar"
-                            class="h-full w-auto object-contain"
-                            src=""
-                            alt=""
+                            src="/images/icons/icons8-trofeo-48.png"
+                            alt="leaderboard Icon"
+                            class="icon-image size-10"
                         />
+                    </a>
+
+                    <a
+                        href="/storie-community"
+                        class="button-container flex flex-col justify-center items-center"
+                    >
+                        <img
+                            src="/images/icons/library-icon.png"
+                            alt="library Icon"
+                            class="icon-image size-10"
+                        />
+                    </a>
+                    <button
+                        onclick="toggleDropdownMobile()"
+                        class="p-2 absolute right-0 rounded-md border-2 border-white focus:outline-none"
+                    >
+                        <!-- Hamburger Icon with SVG image -->
+                        <img
+                            src="/images/icons/hamburger-menu-50.png"
+                            alt="Hamburger Menu"
+                            class="size-4 md:size-6 cursor-pointer"
+                        />
+                    </button>
+                    <div
+                        class="hidden dropdown-menu-mobile absolute top-16 right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                    >
                         <div
-                            class="absolute -mr-2 bottom-0 right-0 h-6 w-6 rounded-full bg-white"
+                            class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                            onclick="logout()"
                         >
-                            <img
-                                class="hover-rotate cursor-pointer"
-                                src="/images/icons/change-avatar-icon.png"
-                                onclick="openAvatarMenu()"
-                                alt=""
-                            />
+                            <button
+                                class="w-full text-sm text-left text-red-600 hover:bg-red-100"
+                            >
+                                logout
+                            </button>
+                            <div class="w-6 h-6">
+                                <img
+                                    class="cursor-pointer"
+                                    src="/images/icons/logout-icon.png"
+                                    alt="logout Icon"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div
-                        class="flex absolute -top-6 -right-10 flex-col justify-center items-center"
-                    >
-                        <div class="username_container inline-block">
-                            <h2
-                                id="username"
-                                class="text-gray-800 text-4xl font-extrabold"
-                            ></h2>
-                            <h4 id="userStatus"></h4>
+                        <div
+                            class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                            onclick="modalDeleteAccount()"
+                        >
+                            <button
+                                id="delete-account-btn"
+                                class="w-full pointer-events-none text-sm text-left text-red-600 hover:bg-red-100"
+                            >
+                                Cancella Account
+                            </button>
                         </div>
-                    </div>
-                    <div
-                        id="status-div"
-                        class="flex hidden items-center justify-center space-x-2 mt-4"
-                    >
-                        <!-- Testo con il pallino verde -->
-                        <span class="text-sm font-semibold">Sei in game</span>
-                        <span
-                            id="game-status-indicator"
-                            class="w-2 h-2 rounded-full bg-green-500"
-                        ></span>
                     </div>
                 </div>
             </div>
 
-            <!-- Contenitore 2 -->
-            <div class="flex-1 flex items-start justify-center h-full">
+            <!-- Middle row -->
+            <div
+                class="flex flex-row w-full h-full md:flex-1 md:justify-between"
+            >
+                <!-- BOX_USER (left on mobile and desktop) -->
                 <div
-                    style="padding: 10px"
-                    class="flex flex-col justify-start items-center h-full"
+                    class="w-1/2 md:flex-1 h-full relative flex flex-col justify-center items-center"
+                >
+                    <!-- Avatar e nome utente -->
+                    <div
+                        class="flex flex-col items-center justify-center relative"
+                    >
+                        <!-- Avatar container -->
+                        <div class="relative size-20 md:size-32">
+                            <div
+                                class="w-full h-full p-2 rounded-full border-4 border-white bg-white shadow-md overflow-hidden flex justify-center items-center"
+                            >
+                                <img id="main-avatar" class="w-auto h-full" />
+                            </div>
+
+                            <!-- Icona cambio avatar -->
+                            <div
+                                class="absolute bottom-0 right-0 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
+                            >
+                                <img
+                                    src="/images/icons/change-avatar-icon.png"
+                                    alt="Change Avatar"
+                                    class="size-5"
+                                    onclick="openAvatarMenu()"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="text-center">
+                            <h2
+                                id="username"
+                                class="text-gray-800 text-xl font-bold"
+                            ></h2>
+                        </div>
+
+                        <!-- Status -->
+                        <div
+                            id="status-div"
+                            class="flex items-center hidden justify-center space-x-2 mt-2"
+                        >
+                            <span class="text-sm font-semibold"
+                                >Sei in game</span
+                            >
+                            <span
+                                id="game-status-indicator"
+                                class="w-2 h-2 rounded-full bg-green-500"
+                            ></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOX_LIBRO (right on mobile, center on desktop) -->
+                <div
+                    class="w-1/2 md:flex-1 h-full flex flex-col justify-center items-center"
                 >
                     <div
-                        class="relative"
-                        id="lottie-button"
                         onclick="openOverlay()"
+                        class="relative size-16 md:size-42 mb-2"
+                        id="lottie-button"
                     >
                         <div id="lottie-book"></div>
                         <img
                             src="/images/pen.png"
                             alt=""
-                            class="absolute w-12 right-6 top-6"
+                            class="absolute w-6 md:w-8 lg:w-12 right-0 top-0"
                         />
                     </div>
-                    <h2 class="my-title text-2xl text-gray-800">
+                    <h2
+                        class="my-title text-lg md:text-xl lg:text-2xl text-gray-800"
+                    >
                         Nuova Storia
                     </h2>
                 </div>
-                <div class="swiper-pagination"></div>
-            </div>
 
-            <!-- Contenitore 3 -->
-            <div class="flex-1 flex items-start justify-end h-full">
-                <div style="padding: 10px; border-radius: 8px">
+                <!-- BOX_MENU (hidden on mobile, shown right on desktop) -->
+                <div
+                    class="box-menu-hidden md:flex-1 h-full justify-center items-center"
+                >
                     <div
-                        class="flex flex-col justify-center py-6 relative items-center gap-6"
+                        class="border-2 border-purple-200 rounded-full p-2 flex flex-row gap-8 px-8 relative"
                     >
-                        <div class="flex justify-center items-center gap-4">
+                        <div class="relative">
                             <div
-                                class="flex justify-between px-8 border-2 rounded-full py-2 border-purple-200"
+                                class="text-xs px-3 py-2 rounded flex flex-col font-medium shadow-sm"
                             >
-                                <div id="leaderboard-icon" class="px-4">
-                                    <a
-                                        href="/classifiche"
-                                        class="button-container flex flex-col justify-center items-center"
-                                    >
-                                        <div>
-                                            <img
-                                                src="/images/icons/icons8-trofeo-48.png"
-                                                alt="leaderboard Icon"
-                                                class="icon-image"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-sm font-semibold text-gray-800"
-                                        >
-                                            classifiche
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div id="leaderboard-icon" class="px-4">
-                                    <a
-                                        href="/libreria"
-                                        class="button-container flex flex-col justify-center items-center"
-                                    >
-                                        <div>
-                                            <img
-                                                src="/images/icons/library-icon.png"
-                                                alt="library Icon"
-                                                class="icon-image"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-sm font-semibold text-gray-800"
-                                        >
-                                            libreria
-                                        </div>
-                                    </a>
-                                </div>
-                                <div id="leaderboard-icon" class="px-4">
-                                    <a
-                                        class="button-container flex flex-col justify-center items-center cursor-pointer"
-                                        onclick="dashboardButton()"
-                                    >
-                                        <div>
-                                            <img
-                                                src="/images/icons/icons8-casa-100.png"
-                                                alt="Search Icon"
-                                                class="icon-image"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-sm font-semibold text-gray-800"
-                                        >
-                                            dashboard
-                                        </div>
-                                    </a>
-                                </div>
-                                <div id="leaderboard-icon" class="px-4">
-                                    <a
-                                        id="search-icon"
-                                        class="button-container absolute top-0 left-0 border-2 p-2 rounded-full border-blue-400 z-2 cursor-pointer"
-                                        onclick="openSearch()"
-                                    >
-                                        <div>
-                                            <img
-                                                src="/images/icons/users-icon-menu.png"
-                                                alt="Search Icon"
-                                                class="w-6 h-6"
-                                                class="icon-image"
-                                            />
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- HAMBURGER BUTTON -->
-                            <div class="relative inline-block text-left">
-                                <button
-                                    onclick="toggleDropdown()"
-                                    class="p-2 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none cursor-pointer"
+                                <form
+                                    id="search-form"
+                                    class="flex flex-col space-y-1"
                                 >
-                                    <!-- Hamburger Icon -->
-                                    <svg
-                                        class="w-6 h-6 cursor-pointer"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M4 6h16M4 12h16M4 18h16"
-                                        ></path>
-                                    </svg>
-                                </button>
-
-                                <!-- DROPDOWN -->
-                                <div
-                                    id="dropdownMenu"
-                                    class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-                                >
-                                    <div
-                                        class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
-                                        onclick="logout()"
-                                    >
-                                        <button
-                                            class="w-full text-sm text-left text-red-600 hover:bg-red-100"
-                                        >
-                                            logout
-                                        </button>
-                                        <div class="w-6 h-6">
-                                            <img
-                                                class="cursor-pointer"
-                                                src="/images/icons/logout-icon.png"
-                                                alt="logout Icon"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                    <input
+                                        type="text"
+                                        id="search-input"
+                                        placeholder="Cerca un utente..."
+                                        class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
+                                    />
+                                </form>
                             </div>
+                            <div
+                                class="absolute left-0 right-0 mt-2 text-sm rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
+                                id="results"
+                            ></div>
                         </div>
+                        <a
+                            href="/classifiche"
+                            class="button-container flex flex-col justify-center items-center"
+                        >
+                            <img
+                                src="/images/icons/icons8-trofeo-48.png"
+                                alt="leaderboard Icon"
+                                class="icon-image size-6"
+                            />
+                            <div class="text-sm font-semibold text-gray-800">
+                                classifiche
+                            </div>
+                        </a>
+
+                        <a
+                            href="/storie-community"
+                            class="button-container flex flex-col justify-center items-center"
+                        >
+                            <img
+                                src="/images/icons/library-icon.png"
+                                alt="library Icon"
+                                class="icon-image size-6"
+                            />
+                            <div class="text-sm font-semibold text-gray-800">
+                                libreria
+                            </div>
+                        </a>
+                        <button
+                            onclick="toggleDropdown()"
+                            class="p-2 rounded-md focus:outline-none"
+                        >
+                            <!-- Hamburger Icon with SVG image -->
+                            <img
+                                src="/images/icons/hamburger-menu-50.png"
+                                alt="Hamburger Menu"
+                                class="w-6 h-6 cursor-pointer"
+                            />
+                        </button>
                         <div
-                            id="menu-container"
-                            class="menu-wrapper w-full flex justify-center z-20"
+                            class="dropdown-menu hidden absolute top-16 right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
                         >
                             <div
-                                id="user-search-wrapper"
-                                class="user-search-wrapper opacity-0"
+                                class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                                onclick="logout()"
                             >
-                                <div class="relative">
-                                    <div
-                                        id="close-button"
-                                        onclick="closeSearch()"
-                                        class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2"
-                                        onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')"
-                                    >
-                                        <img
-                                            src="/images/icons/x-icon.png"
-                                            alt="close-search-user"
-                                        />
-                                    </div>
-                                    <div
-                                        class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm"
-                                    >
-                                        <form
-                                            id="search-form"
-                                            class="flex flex-col space-y-1"
-                                        >
-                                            <input
-                                                type="text"
-                                                id="search-input"
-                                                placeholder="Cerca un utente..."
-                                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
-                                            />
-                                        </form>
-                                    </div>
-                                    <div
-                                        class="results my-2"
-                                        id="results"
-                                    ></div>
+                                <button
+                                    class="w-full text-sm text-left text-red-600 hover:bg-red-100"
+                                >
+                                    logout
+                                </button>
+                                <div class="w-6 h-6">
+                                    <img
+                                        class="cursor-pointer"
+                                        src="/images/icons/logout-icon.png"
+                                        alt="logout Icon"
+                                    />
                                 </div>
+                            </div>
+                            <div
+                                class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
+                                onclick="modalDeleteAccount()"
+                            >
+                                <button
+                                    id="delete-account-btn"
+                                    class="w-full pointer-events-none text-sm text-left text-red-600 hover:bg-red-100"
+                                >
+                                    Cancella Account
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- BOX_PAGINATION (bottom center always) -->
+            <div
+                class="w-full md:w-1/2 mx-auto flex justify-center h-12 relative"
+            >
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
+
         <div
+            class="h-[65%] w-full shadow-4xl relative"
             style="
-                height: 70vh;
-                width: 100%;
-                margin-top: 30vh;
-                position: absolute;
-                border-top-left-radius: 6rem;
-                border-top-right-radius: 6rem;
+                border-top-left-radius: 4rem;
+                border-top-right-radius: 4rem;
                 background-color: #faf4f4;
-                box-shadow: 0 -10px 10px rgba(104, 104, 104, 0.15);
             "
         >
             <div
@@ -578,308 +626,65 @@
                             src="/images/platy-read.png"
                             alt="Platy Read"
                         />
-                        <div id="ui-container" class="">
-                            <div
-                                class="flex flex-col justify-center items-center"
+                        <div
+                            class="box-slider flex flex-col justify-start py-8 h-full items-center"
+                        >
+                            <h2
+                                class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                <h2
-                                    class="text-gray-800 text-4xl my-12 font-bold text-center"
-                                >
-                                    Partite in Corso
-                                </h2>
+                                Partite in Corso
+                            </h2>
+                            <div
+                                id="buttons-container"
+                                class="flex flex-wrap py-24 md:py-36 px-6 max-w-6xl h-auto gap-6 md:gap-10 justify-center items-center"
+                            >
                                 <div
-                                    id="game-buttons-container"
-                                    class="flex flex-wrap gap-4 mt-24"
+                                    class="game-container cursor-pointer shadow-lg rounded-xl relative size-20 md:size-42 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                    id="game-1"
                                 ></div>
                                 <div
-                                    id="buttons-container"
-                                    class="flex flex-wrap gap-12"
-                                >
-                                    <div
-                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                                        id="game-1"
-                                    ></div>
-                                    <div
-                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                                        id="game-2"
-                                    ></div>
-                                    <div
-                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                                        id="game-3"
-                                    ></div>
-                                    <div
-                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                                        id="game-4"
-                                    ></div>
-                                    <div
-                                        class="game-container shadow-lg rounded-xl relative w-36 h-36 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
-                                        id="game-5"
-                                    ></div>
-                                </div>
+                                    class="game-container cursor-pointer shadow-lg rounded-xl relative size-20 md:size-42 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                    id="game-2"
+                                ></div>
+                                <div
+                                    class="game-container cursor-pointer shadow-lg rounded-xl relative size-20 md:size-42 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                    id="game-3"
+                                ></div>
+                                <div
+                                    class="game-container cursor-pointer shadow-lg rounded-xl relative size-20 md:size-42 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                    id="game-4"
+                                ></div>
+                                <div
+                                    class="game-container cursor-pointer shadow-lg rounded-xl relative size-20 md:size-42 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                    id="game-5"
+                                ></div>
                             </div>
                         </div>
                     </div>
                     <div
-                        class="swiper-slide flex-col items-start justify-center px-10 w-full flex-shrink-0 h-full"
+                        class="swiper-slide flex flex-col items-center justify-center h-full"
                     >
-                        <img
-                            class="slide-imag absolute bottom-0 left-0 w-1/4 opacity-10"
-                            src="/images/platy-win.png"
-                            alt="Platy Read"
-                        />
-                        <h2
-                            class="text-gray-800 text-4xl my-12 font-bold text-center"
-                        >
-                            Statistiche
-                        </h2>
                         <div
-                            class="statistics-container w-1/2 mx-auto p-6 bg-white rounded-lg shadow-lg"
+                            class="box-slider flex flex-col justify-start py-8 h-full items-center"
                         >
+                            <h2
+                                class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
+                            >
+                                Storie Completate
+                            </h2>
                             <div
-                                class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6"
+                                class="w-full h-full max-w-6xl scrollbar-hidden mt-12 flex flex-col justify-start items-center overflow-y-auto px-4"
                             >
                                 <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                    id="stories-container"
+                                    class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8 w-full"
                                 >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-blue-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-book-open"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Storie Completate
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-yellow-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Media Voti Storie
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-red-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-trophy"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Ranking Attuale
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            #0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-green-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-medal"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Punteggio Medio Ranked
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-purple-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-gamepad"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Normal Games Giocati
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-orange-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-trophy"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Normal Games Vinti
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-teal-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-gamepad"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Ranked Games Giocati
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-red-400 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-trophy"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Ranked Games Vinti
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-yellow-600 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Storie Votate
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div
-                                    class="relative stat-card bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                >
-                                    <div
-                                        class="stat-icon absolute -top-2 -left-2 text-pink-500 text-2xl mb-2"
-                                    >
-                                        <i class="fas fa-comment"></i>
-                                    </div>
-                                    <div
-                                        class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                    >
-                                        <p
-                                            class="text-sm font-semibold text-gray-600"
-                                        >
-                                            Storie Commentate
-                                        </p>
-                                        <p
-                                            class="text-lg font-bold text-gray-800"
-                                        >
-                                            0
-                                        </p>
-                                    </div>
+                                    <!-- Qui vengono inserite le storie -->
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div
                         class="swiper-slide flex items-start justify-center px-10 w-full flex-shrink-0 h-full"
                     >
@@ -889,12 +694,12 @@
                             alt="Platy Read"
                         />
                         <div
-                            class="w-full max-w-4xl mx-auto flex flex-col items-center justify-start"
+                            class="box-slider flex flex-col justify-start py-8 h-full items-center"
                         >
                             <h2
-                                class="text-gray-800 text-4xl my-12 font-bold text-center mb-8"
+                                class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Libreria Personale
+                                Preferiti
                             </h2>
 
                             <div
@@ -904,24 +709,270 @@
                         </div>
                     </div>
                     <div
-                        class="swiper-slide flex flex-col items-center justify-center px-10 h-full"
+                        class="swiper-slide flex relative items-start justify-center w-full flex-shrink-0 h-full"
                     >
+                        <img
+                            class="slide-imag absolute bottom-0 left-0 w-1/4 opacity-10"
+                            src="/images/platy-win.png"
+                            alt="Platy Read"
+                        />
                         <div
-                            class="w-full h-full pb-6 flex overflow-hdden flex-col items-center justify-center flex-shrink-0"
+                            class="box-slider flex flex-col justify-start py-8 h-full items-center"
                         >
                             <h2
-                                class="text-gray-800 text-4xl my-12 font-bold text-center"
+                                class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Storie Completate
+                                Statistiche
                             </h2>
                             <div
-                                class="w-full h-full max-w-4xl scrollbar-hidden flex flex-col justify-start items-center overflow-y-auto px-4"
+                                class="flex md:py-36 md:px-6 max-w-6xl h-full gap-6 justify-center items-center"
                             >
                                 <div
-                                    id="stories-container"
-                                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-8 w-full"
+                                    class="statistics-container mx-auto p-6 md:bg-white rounded-lg shadow-lg h-full md:h-auto overflow-y-auto md:overflow-y-hidden"
                                 >
-                                    <!-- Qui vengono inserite le storie -->
+                                    <div
+                                        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:min-h-[350px]"
+                                    >
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-blue-500 text-lg md:text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-book-open"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Storie Completate
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-yellow-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Media Voti Storie
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-red-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-trophy"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Ranking Attuale
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    #0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-green-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-medal"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Punteggio Medio Ranked
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-purple-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-gamepad"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Normal Games Giocati
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-orange-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-trophy"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Normal Games Vinti
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-teal-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-gamepad"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Ranked Games Giocati
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-red-400 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-trophy"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Ranked Games Vinti
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-yellow-600 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Storie Votate
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-pink-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-comment"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <p
+                                                    class="text-sm font-semibold text-gray-600"
+                                                >
+                                                    Storie Commentate
+                                                </p>
+                                                <p
+                                                    class="text-lg font-bold text-gray-800"
+                                                >
+                                                    0
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -979,11 +1030,126 @@
             />
         </div>
 
-        <div class="page-wrap p-6 relative min-h-screen">
+        <div
+            id="avatarContainer"
+            class="hidden flex justify-center items-center p-50 fixed inset-0 bg-black/80 z-50"
+        >
+            <div class="flex flex-col justify-center items-center h-screen">
+                <div
+                    class="grid grid-cols-4 relative grid-rows-3 gap-4 p-6 rounded shadow-lg"
+                >
+                    <button
+                        id="close-avatar-menu"
+                        class="absolute cursor-pointer -top-2 -right-2 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center"
+                    >
+                        X
+                    </button>
+                    <div
+                        data-avatar="boa-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/boa-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="nami-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/nami-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="luffy-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/luffy-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="zoro-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/zoro-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="sanji-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/sanji-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="panda-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/panda-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="shanks-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/shanks-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="robin-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/robin-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                    <div
+                        data-avatar="chopper-icon-chibi"
+                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                    >
+                        <img
+                            class="w-4/5 h-4/5 object-contain"
+                            src="/images/avatars/chopper-icon-chibi.png"
+                            alt="Avatar"
+                        />
+                    </div>
+                </div>
+                <button
+                    id="select-avatar-button"
+                    class="bg-blue-500 cursor-pointer text-white py-2 px-4 rounded"
+                    disabled
+                >
+                    Seleziona
+                </button>
+            </div>
+        </div>
+
+        <div class="page-wrap p-6 fixed min-h-screen z-50">
             <!-- queue overlay -->
             <div
                 id="waiting-overlay"
-                class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-10 hidden"
+                class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center hidden"
             >
                 <div class="flex flex-col items-center">
                     <div id="waiting-text" class="text-white text-2xl mb-4">
@@ -999,7 +1165,7 @@
                     <button
                         id="abandon-queue-button"
                         onclick="abandonQueue()"
-                        class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+                        class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
                     >
                         Abbandona
                     </button>
@@ -1047,134 +1213,14 @@
                     </h2>
                 </div>
             </div>
-
-            <!-- avatars menu container -->
-            <div
-                id="avatarContainer"
-                class="hidden flex justify-center items-center p-50 fixed inset-0 bg-black z-10 bg-opacity-80"
-            >
-                <div class="flex flex-col justify-center items-center h-screen">
-                    <div
-                        class="grid grid-cols-4 relative grid-rows-3 gap-4 p-6 rounded shadow-lg"
-                    >
-                        <button
-                            id="close-avatar-menu"
-                            class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center"
-                        >
-                            X
-                        </button>
-                        <div
-                            data-avatar="boa-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/boa-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="nami-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/nami-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="luffy-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/luffy-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="zoro-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/zoro-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="sanji-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/sanji-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="panda-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/panda-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="shanks-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/shanks-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="robin-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/robin-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                        <div
-                            data-avatar="chopper-icon-chibi"
-                            class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
-                        >
-                            <img
-                                class="w-4/5 h-4/5 object-contain"
-                                src="/images/avatars/chopper-icon-chibi.png"
-                                alt="Avatar"
-                            />
-                        </div>
-                    </div>
-                    <button
-                        id="select-avatar-button"
-                        class="bg-blue-500 text-white py-2 px-4 rounded"
-                        disabled
-                    >
-                        Seleziona
-                    </button>
-                </div>
-            </div>
-
-            <!-- menu container -->
-
-            <!-- ui container -->
         </div>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/swiper/swiper-bundle.min.js"></script>
         <script src="/js/main.js" defer></script>
         <script src="/js/menu.js" defer></script>
         <script src="/js/personalLibrary.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
 
         <audio
             id="click-sound"

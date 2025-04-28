@@ -14,7 +14,8 @@ router.get("/personalLibrary", checkAuth, async (req, res) => {
              JOIN games_completed g ON gc.game_id = g.id
              WHERE gc.author_id = $1
              AND g.publish = 'publish'
-             ORDER BY g.finished_at DESC`,
+             ORDER BY g.finished_at DESC
+             LIMIT 10`,
             [user_id] // ID dell'utente
         );
 

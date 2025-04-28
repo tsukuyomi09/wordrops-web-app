@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const { client } = require("../database/db");
-const { sendWelcomeEmail } = require("../utils/registration-email");
+const { sendRegistrationEmail } = require("../utils/registration-email");
 const argon2 = require("argon2");
 const crypto = require("crypto");
 
@@ -51,7 +51,7 @@ router.post("/register", async (req, res) => {
         ]);
 
         // Invia una mail di benvenuto
-        sendWelcomeEmail(userEmail, verificationToken);
+        sendRegistrationEmail(userEmail, verificationToken);
 
         // Risposta con i dati dell'utente registrato
         res.status(201).json(result.rows[0]);

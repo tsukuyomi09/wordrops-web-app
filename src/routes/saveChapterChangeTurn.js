@@ -2,24 +2,30 @@ const express = require("express");
 const router = express.Router();
 const { activeGames } = require("../services/gameManager");
 const { startCountdown } = require("../services/gameCountdownStart");
-const { saveNormalGame } = require("../services/saveGame");
-const { removeGameFromPlayers } = require("../utils/removeGameFromPlayers");
+const { saveGame } = require("../services/saveGame");
+const { handleGameCompletion } = require("../utils/handleGameCompletion");
 const checkAuth = require("../middlewares/checkAuthToken");
 
 router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
-    const { gameId } = req.params;
     const user_id = req.user_id;
+    const username = req.username;
+    const { gameId } = req.params;
     const { title, content, currentUser } = req.body; // Dati inviati dal client
-    const username = req.username; // Dati dal middleware
+
+    console.log("== saveChapterChangeTurn ==");
+    console.log("user_id:", user_id);
+    console.log("username:", username);
+    console.log("currentUser (from client):", currentUser);
 
     if (username !== currentUser) {
+        console.log("❌ currentUser mismatch");
         res.status(403).json({ message: "Utente non autorizzato." });
         return;
     }
 
     const game = activeGames.get(gameId);
-
     if (!game) {
+        console.log("❌ Partita non trovata con ID:", gameId);
         res.status(404).json({ message: "Partita non trovata." });
         return;
     }
@@ -27,7 +33,13 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     const turnIndex = game.turnIndex;
     const currentTurnPlayer = game.turnOrder[turnIndex];
 
+    console.log("Game ID:", gameId);
+    console.log("Turn Index:", turnIndex);
+    console.log("Current Turn Player:", currentTurnPlayer);
+    console.log("Full Turn Order:", game.turnOrder);
+
     if (!currentTurnPlayer) {
+        console.log("❌ Nessun giocatore trovato al turno corrente");
         res.status(500).json({
             message: "Errore nel recupero del turno corrente.",
         });
@@ -35,6 +47,7 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     }
 
     if (currentTurnPlayer.username !== currentUser) {
+        console.log("currentTurnPlayer mismatch");
         res.status(403).json({
             message: "Non è il turno di questo giocatore.",
         });
@@ -54,25 +67,21 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
 
     if (game.chapters.length === 5) {
         try {
-            const saveSuccess = await saveNormalGame(game);
+            handleGameCompletion(game, gameId, req.io);
+            const saveSuccess = await saveGame(game);
+            req.io.to(gameId).disconnectSockets(true);
+            console.log("Socket disconnessi dopo gameCompleted.");
             if (!saveSuccess) {
                 return res
                     .status(500)
                     .json({ message: "Errore nel salvataggio del gioco." });
-            }
-            clearInterval(game.countdownInterval);
-
-            if (["ranked_slow", "ranked_fast"].includes(game.gameMode)) {
-                handleRankedGameFlow(game, gameId, req.io);
-            } else {
-                handleCasualGameFlow(game, gameId, req.io);
             }
 
             return res.json({
                 message: "Gioco completato e giocatori notificati.",
             });
         } catch (err) {
-            return handleFinalError(err, res);
+            console.log(`error: ${err}`);
         }
     }
 
@@ -96,28 +105,4 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
     res.json({ message: "Dati ricevuti correttamente." });
 });
 
-function handleRankedGameFlow(game, gameId, io) {
-    console.log("Ranked game detected, starting scoring process...");
-    game.status = "awaiting_scores"; // <-- era `===` prima, corretto ora
-
-    io.to(gameId).emit("awaiting_scores", {
-        chapters: game.chapters,
-        status: game.status,
-    });
-
-    setTimeout(() => {
-        io.to(gameId).disconnectSockets(true);
-        clearInterval(game.countdownInterval);
-        console.log("Socket disconnessi dopo invio awaiting-scores.");
-    }, 500);
-}
-
-function handleCasualGameFlow(game, gameId, io) {
-    removeGameFromPlayers(game);
-    activeGames.delete(gameId);
-    io.to(gameId).emit("gameCompleted", {
-        reason: "La partita è stata annullata: troppi capitoli nulli.",
-        gameId: gameId, // oppure semplicemente `gameId,`
-    });
-}
 module.exports = router;

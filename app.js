@@ -91,17 +91,18 @@ io.on("connection", (socket) => {
 
         if (!game) return;
 
-        const player = game.turnOrder.find((p) => {
+        const player = game.players.find((p) => {
             console.log(
-                `Comparing user_id: ${user_id} with player id: ${p.id}`
+                `Comparing user_id: ${user_id} with player user_id: ${p.user_id}`
             );
-            return p.id === user_id;
+            return p.user_id === user_id; // Confronta con user_id
         });
+
         console.log(`player: ${player}`);
         if (!player) return;
 
         const message = {
-            userId: user_id,
+            user_id: user_id,
             username: player.username,
             avatar: player.avatar,
             messageText: messageText,
@@ -166,6 +167,8 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinNewGame", ({ gameId, user_id }) => {
+        console.log(`User ${user_id} is joining game ${gameId}`);
+
         socket.join(gameId);
 
         const game = activeGames.get(gameId);
@@ -368,6 +371,7 @@ const saveChapterChangeTurn = require("./src/routes/saveChapterChangeTurn");
 const getChapters = require("./src/routes/getChapters");
 const verifyLogIn = require("./src/routes/verifyLogIn");
 const logout = require("./src/routes/logout");
+const deleteAccount = require("./src/routes/deleteAccount");
 const updateAvatar = require("./src/services/updateAvatar");
 
 app.use(logout);
@@ -396,6 +400,7 @@ app.use(gameRouteData);
 app.use(gamesRouteData);
 app.use(playersQueue);
 app.use(updateAvatar);
+app.use(deleteAccount);
 
 server.listen(port, "0.0.0.0", () => {
     console.log(`Server is running on port ${port}`);

@@ -13,14 +13,21 @@
     opacity: 1;            
 }
 
+#toolbar-container {
+  height: 50px; /* Almeno 50px di altezza per la toolbar */
+  background-color: #f1f1f1; /* Colore di sfondo per visibilità */
+}
+
 .chatNotVisible {
-  right: -18rem; 
-  transition: right 0.3s ease-in-out; 
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .chatVisible {
-  right: 4rem; 
-  transition: right 0.3s ease-in-out; 
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 .pastel-color {
@@ -36,6 +43,7 @@
 .font-consolas {
 font-family: 'Consolas', 'Courier New', monospace;
 }
+
 
 .big-number{
     font-size: 180px;
@@ -55,11 +63,19 @@ font-family: 'Consolas', 'Courier New', monospace;
     background-repeat: no-repeat; /* Impedisce la ripetizione dell'immagine */
 }
 
+#editor-container {
+  overflow-y: auto;       /* Scroll verticale solo se necessario */
+  border-radius: 8px;     /* Optional: angoli arrotondati */
+}
+
 .ql-editor {
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  font-size: 20px;
+
 }
+
 
 @media (max-width: 1024px) { /* Schermi medi (tablet o piccoli desktop) */
   .section-wrapper {
@@ -152,8 +168,7 @@ font-family: 'Consolas', 'Courier New', monospace;
   }
   
   .icon-image {
-    width: 1.5rem; /* equivalente a w-6 in Tailwind */
-    height: 1.5rem; /* equivalente a h-6 in Tailwind */
+
     transition: transform 0.3s ease-in-out; /* animazione dell'immagine */
   }
 
@@ -224,9 +239,7 @@ font-family: 'Consolas', 'Courier New', monospace;
 .bg-custom-blue-dark {
   background-color: #007A8C;
 }
-.bg-custom-blue:hover {
-  background-color: #33AFC1;
-}
+
 .border-custom-blue {
   border-color: #0095AD;
 }
@@ -234,23 +247,26 @@ font-family: 'Consolas', 'Courier New', monospace;
 
 
 .swiper-pagination {
-  background: rgba(5, 81, 223, 0.18) !important; /* Azzurro chiaro con opacità */
-  backdrop-filter: blur(15px) !important; /* Aggiungi più blur per un effetto più morbido */
-  border: 1px solid rgba(173, 216, 230, 0.5) !important; /* Bordo azzurro chiaro */
+  position: absolute !important; /* Swiper la imposta absolute */
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  background: rgba(5, 81, 223, 0.18) !important;
+  backdrop-filter: blur(15px) !important;
+  border: 1px solid rgba(173, 216, 230, 0.5) !important;
   border-radius: 15px !important;
   padding: 5px 10px !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
   width: auto !important;
   max-width: 100% !important;
-  display: flex !important;
-  justify-content: center !important;
   gap: 12px;
-  align-items: center !important;
-  position: absolute !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  bottom:  !important; 
 }
+
 
 .swiper-pagination-bullet {
   background-color: rgba(255, 255, 255, 1) !important;
@@ -297,18 +313,24 @@ font-family: 'Consolas', 'Courier New', monospace;
   scrollbar-width: none; 
 }
 
+.box-menu-hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .box-menu-hidden {
+    display: flex;
+  }
+}
+
 
 #lottie-button {
-  width: 200px;
-  height: 140px;
   cursor: pointer;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
-
-  margin-top: 18px
 }
 
 #lottie-button:hover {
@@ -316,11 +338,16 @@ font-family: 'Consolas', 'Courier New', monospace;
 }
 
 #lottie-book {
-  margin-top: 36px !important;
-  width: 300px !important;
-  height: 300px !important;
-  transform: scale(2); /* ingrandisce ulteriormente se serve */
-  transform-origin: center;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  #lottie-book {
+    width: 150px !important;
+    height: 150px !important;
+    transform: scale(1.2); /* più piccolo */
+  }
 }
 
 #overlay-books.open {
@@ -328,3 +355,27 @@ font-family: 'Consolas', 'Courier New', monospace;
   pointer-events: auto;
   transform: translateY(0);
 }
+
+#overlay-backdrop.visible {
+  opacity: 1;
+}
+
+.swiper-slide .content {
+  overflow-y: auto;
+}
+
+//// homepage pen animation
+@keyframes testAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(20px);
+  }
+}
+
+.test-animate {
+  animation: testAnimation 1s infinite;
+}
+
+

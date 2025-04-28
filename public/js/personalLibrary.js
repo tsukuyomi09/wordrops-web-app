@@ -50,16 +50,16 @@ function renderCompletedGames(completedGames) {
 
         // Crea solo il titolo per la storia
         storyDiv.innerHTML = `
-        <div class="border p-4 rounded-lg w-full flex items-center gap-4">
+        <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
             <!-- Immagine del libro -->
-            <div class="w-12 h-12 flex-shrink-0">
+            <div class="size-8 md:size-10 lg:size-14">
                 <img src="/images/book-icon.png" alt="Icona Libro" class="w-full h-full object-cover rounded">
             </div>
-    
-            <!-- Titolo a destra -->
-            <h3 class="story-title text-sm text-left font-semibold">Titolo: ${game.title}</h3>
+
+            <!-- Titolo sotto, allineato a sinistra -->
+            <h3 class="story-title text-sm md:text-lg  font-semibold text-left italic"> ${game.title}</h3>
         </div>
-    `;
+            `;
 
         // Aggiungi l'evento per il click sul titolo (anche se per ora non fa nulla)
         storyDiv.addEventListener("click", async () => {
@@ -104,11 +104,11 @@ function openBookOverlay(title, storyDetails) {
             </h3>
             <div class="flex items-center mt-2">
                 <a href="/profile/${item.username}" class="flex items-center">
-                    <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-10 h-10 rounded-full mr-2" />
-                    <span class="text-sm text-blue-600 hover:underline">${item.username}</span>
+                    <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-8 h-auto rounded-full mr-2" />
+                    <span class="text-mg md:text-lg text-blue-600 hover:underline">${item.username}</span>
                 </a>
             </div>
-            <p class="text-gray-700 mt-2" id="chapter-text">
+            <p class="text-gray-700 text-lg leading-relaxed md:text-2xl mt-2" id="chapter-text">
                 ${item.content}
             </p>
         `;
@@ -117,15 +117,14 @@ function openBookOverlay(title, storyDetails) {
         chaptersContainer.appendChild(chapterDiv);
     });
 
-    overlay.classList.add("open");
+    overlay.classList.remove("hidden");
 
-    // Disabilita scroll sotto al modal
     document.body.style.overflow = "hidden";
 }
 
 function closeBookOverlay() {
     const overlay = document.getElementById("overlay-books");
-    overlay.classList.remove("open");
+    overlay.classList.add("hidden");
 
     // Riabilita lo scroll dopo l'animazione (match `duration-500`)
     setTimeout(() => {

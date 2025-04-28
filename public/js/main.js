@@ -58,18 +58,22 @@ function showLoadingAnimation() {
 }
 
 const bookAnimation = lottie.loadAnimation({
-    container: document.getElementById("lottie-book"),
+    container: document.getElementById("lottie-book"), // Dove inserire l'animazione
     renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "/images/book_animation.json", // ✅ estensione giusta
+    loop: false, // Non loop
+    autoplay: false, // Non parte automaticamente
+    path: "/images/new-book-anime.json", // Percorso al tuo file JSON Lottie
 });
 
-const button = document.getElementById("lottie-button");
+// Partire con hover
+const lottieButton = document.getElementById("lottie-button");
 
-button.addEventListener("mouseenter", () => {
-    bookAnimation.stop(); // resetta da inizio
-    bookAnimation.play(); // parte all'hover
+lottieButton.addEventListener("mouseenter", function () {
+    bookAnimation.play(); // Inizia animazione on hover
+});
+
+lottieButton.addEventListener("mouseleave", function () {
+    bookAnimation.stop(); // Ferma l'animazione quando il mouse esce
 });
 
 function showAvatarTransition() {
@@ -80,9 +84,7 @@ function showAvatarTransition() {
 }
 
 window.addEventListener("load", () => {
-    const overlay = document.getElementById("loading-overlay");
     const pagewrap = document.getElementById("pagewrap");
-    const audioCtx = new window.AudioContext();
 
     if (!sessionStorage.getItem("hasVisited")) {
         showLoadingAnimation();
@@ -474,6 +476,8 @@ function fetchAvatarData(username) {
             })
             .then((data) => {
                 const avatar = data.avatar;
+                console.log(`avatar ${avatar}`);
+
                 // Memorizza l'avatar nel localStorage per evitare future richieste
                 localStorage.setItem(`avatar_${username}`, avatar);
                 updateAvatarImage(avatar);
@@ -486,6 +490,7 @@ function fetchAvatarData(username) {
 
 // Funzione per aggiornare l'immagine dell'avatar
 function updateAvatarImage(avatar) {
+    console.log(`avatar ${avatar}`);
     const avatarContainer = document.getElementById("main-avatar");
     avatarContainer.src = `/images/avatars/${avatar}.png`; // Imposta il nuovo avatar
 }
@@ -514,28 +519,6 @@ async function fetchdashboardData() {
         console.log(`games: ${JSON.stringify(games, null, 2)}`);
         console.log(`Max games reached: ${maxGamesReached}`);
         const statusContainer = document.getElementById("status-div");
-        const gameUiContainer = document.getElementById("gameUI-update");
-        const buttonsContainer = document.getElementById(
-            "game-buttons-container"
-        );
-
-        // Pulizia pulsanti precedenti
-        buttonsContainer.innerHTML = "";
-        const newGameButton = document.getElementById("new-game-button");
-        if (newGameButton) {
-            if (maxGamesReached) {
-                newGameButton.innerText = "LIMITE RAGGIUNTO";
-                newGameButton.disabled = true;
-                newGameButton.classList.add("opacity-50", "cursor-not-allowed");
-            } else {
-                newGameButton.innerText = "NUOVA PARTITA";
-                newGameButton.disabled = false;
-                newGameButton.classList.remove(
-                    "opacity-50",
-                    "cursor-not-allowed"
-                );
-            }
-        }
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket(); // Assicurati che initSocket sia una funzione asincrona
@@ -550,9 +533,14 @@ async function fetchdashboardData() {
                 // Assicurati di non superare il massimo di 5 contenitori
                 if (index >= 5) return;
 
-                const isRanked =
-                    gameData.mode === "ranked_slow" ||
-                    gameData.mode === "ranked_fast";
+                if (gameData.status === "waiting_score") {
+                    return; // Salta la creazione del pulsante e passa al gioco successivo
+                }
+
+                const isRanked = gameData.gameType === "ranked";
+
+                console.log(gameData);
+                console.log("gameType:", gameData.gameType);
 
                 // Trova il contenitore corrispondente
                 const container = document.getElementById(`game-${index + 1}`);
@@ -573,13 +561,15 @@ async function fetchdashboardData() {
                     button.innerText = `Torna al game ${index + 1}`;
                     button.onclick = () => handleBackToGame(gameId);
                     button.className = `
-                        text-sm text-white font-semibold w-full h-full flex items-center justify-center shadow-md focus:outline-none focus:ring-2 transition duration-300 transform hover:scale-105 hover:shadow-lg font-extrabold
-                        ${
-                            isRanked
-                                ? "border-4 border-yellow-400 ring-yellow-300 rounded-xl text-gray-600 p-2"
-                                : "border-4 border-white text-gray-600 rounded-xl focus:ring-green-200 p-2"
-                        }
-                    `;
+                    w-full h-full text-center text-base sm:text-lg font-bold 
+                    text-gray-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 
+                    transition duration-300 ease-in-out p-2 cursor-pointer
+                    ${
+                        isRanked
+                            ? "border-4 border-yellow-400"
+                            : "bg-white border-white"
+                    }
+                `;
 
                     // Aggiungi notifiche (dot) dentro il wrapper
                     const notificationHtml = `
@@ -617,17 +607,15 @@ fetchdashboardData();
 
 let isInQueue = false;
 
-async function joinQueue(mode) {
-    if (!mode) {
-        console.error("Nessuna modalità selezionata.");
+async function joinQueue({ gameType, gameSpeed }) {
+    if (
+        !["ranked", "normal"].includes(gameType) ||
+        !["fast", "slow"].includes(gameSpeed)
+    ) {
         return;
     }
 
     newGameSound();
-    const backgroundMusicPath = "/images/new-queue-music.ogg";
-    // setTimeout(async () => {
-    //     await startBackgroundMusic(backgroundMusicPath);
-    // }, 1000);
     closeOverlay();
 
     await initSocket();
@@ -644,7 +632,12 @@ async function joinQueue(mode) {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ socketId, avatarForGame, mode }),
+                body: JSON.stringify({
+                    socketId,
+                    avatarForGame,
+                    gameType,
+                    gameSpeed,
+                }),
             });
 
             if (!response.ok) {
@@ -825,8 +818,48 @@ closeButton.addEventListener("click", () => {
 });
 
 function closeMenu() {
-    // Qui metti la logica per chiudere il menu degli avatar, ad esempio:
     avatarContainer.classList.add("hidden"); // Nascondi il menu
     selectedAvatar = null; // Resetta la selezione
     selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
+}
+
+function modalDeleteAccount() {
+    const modal = document.getElementById("delete-modal");
+    const passwordInput = document.getElementById("confirm-password");
+
+    passwordInput.value = "";
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById("delete-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+async function confirmDeleteAccount() {
+    const password = document.getElementById("confirm-password").value;
+
+    if (!password) {
+        alert("Inserisci la password per confermare.");
+        return;
+    }
+
+    const res = await fetch("/delete-account", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert("Account cancellato. Verrai disconnesso.");
+        window.location.href = "/"; // o home page
+    } else {
+        alert(data.message || "Errore nella cancellazione.");
+    }
 }

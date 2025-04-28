@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Funzione per inviare l'email
-const sendRegistrationEmail = async (userEmail, verificationToken) => {
+const sendWaitingListEmail = async (userEmail, name) => {
     // Configurazione del trasportatore per Zoho SMTP
     const transporter = nodemailer.createTransport({
         host: "smtp.zoho.eu", // oppure smtp.zoho.com se non sei su EU
@@ -22,8 +22,6 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         ? "https://wordrops.com" // Produzione
         : "http://localhost:3000";
 
-    const verificationUrl = `${baseUrl}/verify-email?token=${verificationToken}`;
-
     // Percorso dell'immagine sul server
     const imagePath = path.join(
         __dirname,
@@ -38,27 +36,20 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
     const mailOptions = {
         from: '"Wordrops Team" <noreply@wordrops.com>',
         to: userEmail,
-        subject: "🎉 Benvenuto su wordrops.com!",
-
-        // Fallback testuale
-        text: `Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:\n\n${verificationUrl}\n\nQuesta è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.`,
-
-        // Quello che si vede realmente nella mail
+        subject: "🎉 Sei nella waiting list di Wordrops!",
+        text: `Ciao ${name}!`,
         html: `
-            <div style="font-family: sans-serif; color: #333;">
-                <img src="cid:wordropsLogo" alt="Wordrops" width="120" />
-                <p>Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:</p>
-                <p><a href="${verificationUrl}">${verificationUrl}</a></p>
-                <br />
-                <small>Questa è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.</small>
-            </div>
+            <img src="cid:wordropsLogo" alt="Wordrops" width="120" />
+            <h2>🎉 Grazie per esserti iscritto!</h2>
+            <p>Ciao ${name}! Sei ufficialmente nella nostra waiting list. Ti invieremo una notifica quando sarà il tuo turno per accedere alla beta di <strong>Wordrops</strong>.</p>
+            <br/>
+            <small>Questa è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.</small>
         `,
-
         attachments: [
             {
                 filename: "logo_wordrops_classic_blue.png",
-                path: imagePath, // Percorso dell’immagine
-                cid: "wordropsLogo", // Deve matchare con il src del <img>
+                path: imagePath, // Percorso dell'immagine sul server
+                cid: "wordropsLogo", // ID CID, deve corrispondere al src nell'HTML
             },
         ],
     };
@@ -72,4 +63,4 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
     }
 };
 
-module.exports = { sendRegistrationEmail };
+module.exports = { sendWaitingListEmail };

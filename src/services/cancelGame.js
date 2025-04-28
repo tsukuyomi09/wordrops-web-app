@@ -1,30 +1,23 @@
 const { client } = require("../database/db");
-const { getSocket } = require("./socketManager");
-const { activeGames } = require("../services/gameManager");
-const { removeGameFromPlayers } = require("../utils/removeGameFromPlayers");
 
-async function cancelGameAndSave(gameId) {
-    const io = getSocket();
-
-    const game = activeGames.get(gameId);
-
+async function cancelGameAndSave(game) {
     if (!game) {
-        console.log(`[cancelGame] Partita ${gameId} non trovata.`);
+        console.log(`[cancelGame] Partita non trovata.`);
         return;
     }
 
     try {
         const finishedAt = new Date();
 
-        // 1️⃣ Salviamo la partita annullata
         const result = await client.query(
-            `INSERT INTO games_completed (started_at, finished_at, mode, publish, status)
-             VALUES ($1, $2, $3, $4, $5)
+            `INSERT INTO games_completed (started_at, finished_at, game_type, game_speed, publish, status)
+             VALUES ($1, $2, $3, $4, $5, $6)
              RETURNING id`,
             [
                 game.startedAt,
                 finishedAt,
-                game.gameMode,
+                game.gameType,
+                game.gameSpeed,
                 "cancelled",
                 "cancelled",
             ]
@@ -32,46 +25,26 @@ async function cancelGameAndSave(gameId) {
 
         const databaseGameId = result.rows[0].id;
 
-        // 2️⃣ Salviamo tutti i capitoli scritti (se ci sono)
-        if (game.chapters && game.chapters.length > 0) {
-            await Promise.all(
-                game.chapters.map((chapter, index) => {
-                    return client.query(
-                        `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, created_at)
-                         VALUES ($1, $2, $3, $4, $5, NOW())`,
-                        [
-                            databaseGameId,
-                            chapter.title,
-                            chapter.content,
-                            chapter.user_id,
-                            index + 1,
-                        ]
-                    );
-                })
-            );
-        }
+        await Promise.all(
+            game.chapters.map((chapter, index) => {
+                const chapterValues = [
+                    databaseGameId,
+                    chapter.title,
+                    chapter.content,
+                    chapter.user_id,
+                    index + 1,
+                    -10,
+                ];
 
-        // 3️⃣ Emit a tutti nella stanza
-        await new Promise((resolve, reject) => {
-            try {
-                io.to(gameId).emit("gameCanceled", {
-                    reason: "La partita è stata annullata: troppi capitoli nulli.",
-                    gameId,
-                });
-                // Risolviamo la promessa quando l'emit è stato eseguito
-                resolve();
-            } catch (error) {
-                reject(error);
-            }
-        });
-
-        removeGameFromPlayers(game);
-
-        activeGames.delete(gameId);
-
-        console.log(
-            `[cancelGame] Partita ${gameId} annullata, salvata e notificata.`
+                return client.query(
+                    `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, score, created_at)
+                 VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+                    chapterValues
+                );
+            })
         );
+
+        console.log(`[cancelGame] Partita annullata, salvata e notificata.`);
     } catch (err) {
         console.error(
             `[cancelGame] Errore durante la cancellazione della partita:`,
