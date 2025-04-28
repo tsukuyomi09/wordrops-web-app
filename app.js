@@ -406,6 +406,10 @@ app.use(playersQueue);
 app.use(updateAvatar);
 app.use(deleteAccount);
 
-server.listen(port, "0.0.0.0", () => {
+server.listen(port, "0.0.0.0", (err) => {
+    if (err) {
+        console.error("Failed to start server:", err);
+        return;
+    }
     console.log(`Server is running on port ${port}`);
 });
