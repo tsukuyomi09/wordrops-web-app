@@ -12,6 +12,9 @@ const { activeGames } = require("./src/services/gameManager");
 const { client } = require("./src/database/db");
 
 const app = express();
+app.get("/status", (req, res) => {
+    res.status(200).send("OK");
+});
 const server = http.createServer(app);
 const io = initSocket(server);
 
