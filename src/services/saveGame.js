@@ -1,5 +1,7 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
+const { saveAndEmitNotification } = require("../utils/saveAndEmitNotification");
+
 const { client } = require("../database/db");
 
 async function saveGame(game) {
@@ -63,24 +65,6 @@ async function saveGame(game) {
             })
         );
 
-        // // 3️⃣ Filtriamo gli utenti con capitoli validi
-        // const validUserIds = [
-        //     ...new Set(
-        //         game.chapters
-        //             .filter((chapter) => chapter.isValid)
-        //             .map((chapter) => chapter.user_id)
-        //     ),
-        // ];
-
-        // // 4️⃣ Aggiorniamo il conteggio dei capitoli scritti solo per gli utenti coinvolti
-        // if (validUserIds.length > 0) {
-        //     await client.query(
-        //         `UPDATE users SET capitoli_scritti = capitoli_scritti + 1
-        //          WHERE user_id = ANY($1)`,
-        //         [validUserIds]
-        //     );
-        // }
-
         await Promise.all(
             metadata.genres.map((genreId) => {
                 return client.query(
@@ -89,7 +73,9 @@ async function saveGame(game) {
                 );
             })
         );
-
+        if (isRanked) {
+            await saveAndEmitNotification(game, databaseGameId);
+        }
         console.log("Game and chapters saved successfully!");
         return true;
     } catch (err) {

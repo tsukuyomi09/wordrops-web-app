@@ -1,5 +1,5 @@
 const { activeGames } = require("../services/gameManager");
-const { removeGameFromPlayers } = require("./removeGameFromPlayers");
+const { handlePlayersMap } = require("./removeGameFromPlayers");
 
 function handleGameCompletion(game, gameId, io) {
     console.log("Game completed, starting final process...");
@@ -9,14 +9,8 @@ function handleGameCompletion(game, gameId, io) {
         gameId: gameId,
     });
     clearInterval(game.countdownInterval);
-    removeGameFromPlayers(game);
+    handlePlayersMap(game);
     delete activeGames[gameId];
-
-    // Disconnettiamo i socket e fermiamo il countdown
-    setTimeout(() => {
-        io.to(gameId).disconnectSockets(true);
-        console.log("Socket disconnessi dopo gameCompleted.");
-    }, 500);
 }
 
 module.exports = { handleGameCompletion };

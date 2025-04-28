@@ -69,6 +69,8 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
         try {
             handleGameCompletion(game, gameId, req.io);
             const saveSuccess = await saveGame(game);
+            req.io.to(gameId).disconnectSockets(true);
+            console.log("Socket disconnessi dopo gameCompleted.");
             if (!saveSuccess) {
                 return res
                     .status(500)
@@ -79,7 +81,7 @@ router.post("/saveChapterChangeTurn/:gameId", checkAuth, async (req, res) => {
                 message: "Gioco completato e giocatori notificati.",
             });
         } catch (err) {
-            return handleFinalError(err, res);
+            console.log(`error: ${err}`);
         }
     }
 

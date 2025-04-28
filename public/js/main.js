@@ -84,9 +84,7 @@ function showAvatarTransition() {
 }
 
 window.addEventListener("load", () => {
-    const overlay = document.getElementById("loading-overlay");
     const pagewrap = document.getElementById("pagewrap");
-    const audioCtx = new window.AudioContext();
 
     if (!sessionStorage.getItem("hasVisited")) {
         showLoadingAnimation();
@@ -534,6 +532,10 @@ async function fetchdashboardData() {
             Object.entries(games).forEach(([gameId, gameData], index) => {
                 // Assicurati di non superare il massimo di 5 contenitori
                 if (index >= 5) return;
+
+                if (gameData.status === "waiting_score") {
+                    return; // Salta la creazione del pulsante e passa al gioco successivo
+                }
 
                 const isRanked = gameData.gameType === "ranked";
 

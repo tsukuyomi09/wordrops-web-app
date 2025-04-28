@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { createGameAndAssignPlayers } = require("../services/gameManager");
-const { activeGames } = require("../services/gameManager");
 const checkAuth = require("../middlewares/checkAuthToken");
 
 gameQueues = {

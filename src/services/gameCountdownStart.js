@@ -91,6 +91,8 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
 
         handleGameCompletion(game, gameId, io);
         await cancelGameAndSave(game);
+        io.to(gameId).disconnectSockets(true);
+        console.log("Socket disconnessi dopo gameCompleted.");
         return { canceled: true };
     }
 

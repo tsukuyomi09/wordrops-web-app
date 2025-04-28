@@ -167,6 +167,8 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinNewGame", ({ gameId, user_id }) => {
+        console.log(`User ${user_id} is joining game ${gameId}`);
+
         socket.join(gameId);
 
         const game = activeGames.get(gameId);
