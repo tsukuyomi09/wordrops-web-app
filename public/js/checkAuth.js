@@ -1,6 +1,6 @@
 async function checkSessionStatus() {
     try {
-        const response = await fetch("/check-session", {
+        const response = await fetch("/auth/check-session", {
             method: "GET",
             credentials: "same-origin",
         });

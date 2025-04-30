@@ -33,7 +33,9 @@ async function checkUsernameAndProceed() {
 
     try {
         const response = await fetch(
-            `/check-username?username=${encodeURIComponent(username)}`
+            `/onboarding/check-username?username=${encodeURIComponent(
+                username
+            )}`
         );
         const data = await response.json();
         usernameAvailable = data.available;
@@ -158,7 +160,7 @@ async function finishOnboarding(username, avatarName) {
     try {
         const urlPath = window.location.pathname;
         const email = urlPath.split("/")[2];
-        const response = await fetch(`/finish-onboarding/${email}`, {
+        const response = await fetch(`/onboarding/finish-onboarding/${email}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

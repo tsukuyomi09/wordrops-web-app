@@ -7,7 +7,7 @@ const http = require("http");
 const { initSocket } = require("./src/services/socketManager");
 const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
-const { preGameQueue } = require("./src/routes/queueRoutesNew");
+const { preGameQueue } = require("./src/routes/game/gameQueue");
 const { activeGames } = require("./src/services/gameManager");
 const { client } = require("./src/database/db");
 
@@ -299,6 +299,9 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
+app.get("/dashboard/:user_id", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "dashboard.html"));
+});
 app.get("/privacy-policy", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "privacy-policy.html"));
 });
@@ -308,11 +311,8 @@ app.get("/termini-e-condizioni", (req, res) => {
 app.get("/register01", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "register01.html"));
 });
-app.get("/game", (req, res) => {
+app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
-});
-app.get("/gamequeue", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "gamequeue.html"));
 });
 app.get("/storie-community", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "storie-community.html"));
@@ -343,68 +343,23 @@ app.get("/completa-profilo/:email", (req, res) => {
         }
     );
 });
-app.get("/image", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "image.html"));
-});
 app.get("/sitemap.xml", (req, res) => {
     res.sendFile(path.join(__dirname, "sitemap.xml"));
 });
 
-const waitingListRoute = require("./src/routes/waitingList");
-const registerRoutes = require("./src/routes/registerRoutes");
-const loginRoutes = require("./src/routes/loginRoutes");
-const googleLogin = require("./src/routes/googleLogin");
-const verifyEmail = require("./src/routes/verifyEmail");
-const finishOnboarding = require("./src/routes/finishOnboarding");
-const createProfileCheckUsername = require("./src/routes/createProfileCheckUsername");
-const dashboardRoutes = require("./src/routes/dashboardRoutes");
-const usersProfileRoute = require("./src/routes/usersProfileRoute");
-const usersProfileData = require("./src/routes/usersProfileData");
-const getPersonalLibrary = require("./src/routes/getPersonalLibrary");
-const storyDetails = require("./src/routes/storyDetails");
-const userDataRoutes = require("./src/routes/userData");
-const queueRoutesNew = require("./src/routes/queueRoutesNew");
-const searchUserRoute = require("./src/routes/searchUser");
-const playersQueue = require("./src/routes/playersQueue");
-const gameStatus = require("./src/routes/gameStatus");
-const playerReady = require("./src/routes/playerReady");
-const gameRoute = require("./src/routes/gameRoute");
-const gameRouteData = require("./src/routes/gameData");
-const gamesRouteData = require("./src/routes/gamesData");
-const saveChapterChangeTurn = require("./src/routes/saveChapterChangeTurn");
-const getChapters = require("./src/routes/getChapters");
-const verifyLogIn = require("./src/routes/verifyLogIn");
-const logout = require("./src/routes/logout");
-const deleteAccount = require("./src/routes/deleteAccount");
-const updateAvatar = require("./src/services/updateAvatar");
+const authRoute = require("./src/routes/auth");
+const gameRoute = require("./src/routes/game");
+const libraryRoute = require("./src/routes/library");
+const onboardingRoute = require("./src/routes/onboarding");
+const profileRoute = require("./src/routes/profile");
+const searchRoute = require("./src/routes/search");
 
-app.use(logout);
-app.use(waitingListRoute);
-app.use(verifyLogIn);
-app.use(registerRoutes);
-app.use(loginRoutes);
-app.use(googleLogin);
-app.use(verifyEmail);
-app.use(finishOnboarding);
-app.use(createProfileCheckUsername);
-app.use(dashboardRoutes);
-app.use(usersProfileRoute);
-app.use(getPersonalLibrary);
-app.use(storyDetails);
-app.use(userDataRoutes);
-app.use(usersProfileData);
-app.use(searchUserRoute);
-app.use(queueRoutesNew);
-app.use(gameStatus);
-app.use(playerReady);
-app.use(gameRoute);
-app.use(saveChapterChangeTurn);
-app.use(getChapters);
-app.use(gameRouteData);
-app.use(gamesRouteData);
-app.use(playersQueue);
-app.use(updateAvatar);
-app.use(deleteAccount);
+app.use("/auth", authRoute);
+app.use("/game", gameRoute);
+app.use("/library", libraryRoute);
+app.use("/onboarding", onboardingRoute);
+app.use("/profile", profileRoute);
+app.use("/search", searchRoute);
 
 server.listen(port, "0.0.0.0", (err) => {
     if (err) {

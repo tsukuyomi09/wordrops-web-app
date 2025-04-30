@@ -16,7 +16,7 @@ document.getElementById("search-input").addEventListener("input", () => {
 async function searchUsers(query) {
     try {
         const response = await fetch(
-            `/search-users?username=${encodeURIComponent(query)}`
+            `/search/search-user?username=${encodeURIComponent(query)}`
         );
         const users = await response.json();
 
@@ -97,7 +97,7 @@ async function logout() {
         buttonSound();
         sessionStorage.clear();
 
-        const response = await fetch("/logout", {
+        const response = await fetch("/auth/logout", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

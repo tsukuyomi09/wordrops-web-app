@@ -8,8 +8,6 @@ async function handlePlayersMap(game) {
         return;
     }
 
-    const isRanked = game.gameType === "ranked";
-
     game.players.forEach((player) => {
         const playerId = player.user_id;
         console.log(`Checking player ${playerId}`);
@@ -17,19 +15,10 @@ async function handlePlayersMap(game) {
         const playerData = playersMap.get(playerId);
 
         if (playerData && playerData.games[game.gameId]) {
-            if (isRanked) {
-                // Se il gioco è ranked, cambia lo stato in "waiting_score"
-                playerData.games[game.gameId].status = "waiting_score";
-                console.log(
-                    `🎮 Partita ${game.gameId} dello user ${playerId} è ora in stato "waiting_score"`
-                );
-            } else {
-                // Se il gioco è normal, rimuovi la partita
-                delete playerData.games[game.gameId];
-                console.log(
-                    `Partita ${game.gameId} rimossa dalla playersMap per l'utente ${playerId}`
-                );
-            }
+            delete playerData.games[game.gameId];
+            console.log(
+                `Partita ${game.gameId} rimossa dalla playersMap per l'utente ${playerId}`
+            );
 
             // Se non ci sono più partite, rimuovi anche il giocatore
             if (Object.keys(playerData.games).length === 0) {

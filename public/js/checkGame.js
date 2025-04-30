@@ -3,9 +3,9 @@ let game_id;
 const user_id = Number(localStorage.getItem("user_id"));
 let unreadMessages = {};
 
-window.onload = function initialize() {
+document.addEventListener("DOMContentLoaded", function () {
     fetchUserData();
-};
+});
 
 async function fetchUserData() {
     try {
@@ -15,7 +15,7 @@ async function fetchUserData() {
         console.log("Game ID from URL:", urlGameId);
 
         // Fetch per ottenere lo stato dell'utente
-        const response = await fetch("/userData");
+        const response = await fetch("/profile/user-data");
         if (!response.ok)
             throw new Error("Errore nel recupero dei dati utente");
 
@@ -40,7 +40,7 @@ async function initializeGame(game_id) {
 
     try {
         // Fetch per ottenere lo stato del gioco
-        const response = await fetch(`/game-status/${game_id}`);
+        const response = await fetch(`/game/game-status/${game_id}`);
         if (!response.ok)
             throw new Error("Errore nel recupero dello stato del gioco");
 
@@ -62,34 +62,25 @@ async function initializeGame(game_id) {
 
 async function fetchGameData(game_id) {
     try {
-        const response = await fetch(`/game-data/${game_id}`);
+        const response = await fetch(`/game/game-data/${game_id}`);
         if (!response.ok)
             throw new Error("Errore nel recupero dei dati del gioco");
 
         const data = await response.json();
         console.log("Dati gioco:", data);
         console.log(`questo lo status del game: ${data.status}`);
-
-        if (data.status === "awaiting_scores") {
-            // Se lo status è "awaiting_scores", esegui un'altra logica
-            console.log("Dati gioco ricevuti:", data);
-
-            console.log("Il gioco è in attesa dei punteggi.");
-            // Puoi aggiungere un altro comportamento qui, per esempio, mostrare una notifica che aspetta i punteggi
-            openScoreModal(data.chapters); // Apri il modale con i capitoli
-        }
         console.log(`lo status del game é in_game`);
         // Se lo status è "in_game", esegui tutto ciò che c'è
+        console.log("data:", JSON.stringify(data, null, 2));
+
         updateCurrentPlayerDisplay(data.currentPlayer);
         updateTurnOrderDisplay(data.turnOrder);
         handleEditorAccess(
             data.currentPlayer,
             localStorage.getItem("username")
         );
-        foxAnimation();
 
-        // Fetch per i capitoli del gioco
-        fetchGameChapters(game_id);
+        updateChaptersDisplay(data.chapters);
     } catch (error) {
         console.error("Errore durante il recupero dei dati del gioco:", error);
     }
@@ -121,18 +112,6 @@ function openScoreModal(chapters) {
     // Mostra il modale
     modal.classList.remove("hidden");
     modal.classList.add("flex");
-}
-
-async function fetchGameChapters(game_id) {
-    try {
-        const response = await fetch(`/games/${game_id}/chapters`);
-        if (!response.ok) throw new Error("Errore nel recupero dei capitoli");
-
-        const chaptersData = await response.json();
-        updateChaptersDisplay(chaptersData);
-    } catch (error) {
-        console.error("Errore nel recupero dei capitoli:", error);
-    }
 }
 
 function initializeSocket(game_id) {
@@ -218,6 +197,7 @@ function initializeSocket(game_id) {
             updateChaptersDisplay([newChapter]);
 
             const currentUser = localStorage.getItem("username");
+
             handleEditorAccess(data.nextPlayer, currentUser);
             updateCurrentPlayerDisplay(data.nextPlayer);
 
@@ -298,11 +278,6 @@ function initializeSocket(game_id) {
             console.log("unreadMessages:", unreadMessages);
         });
 
-        socket.on("awaiting_scores", (data) => {
-            console.log("Awaiting scores event. Opening modal...");
-            openScoreModal(data.chapters); // Apri il modale con i capitoli
-        });
-
         socket.on("gameUpdate", (data) => {
             try {
                 updateCountdownDisplay(data.formatted);
@@ -342,17 +317,15 @@ function showGameCanceledPopup(message) {
     `;
 
     document.body.appendChild(overlay);
+}
 
-    document
-        .getElementById("backToDashboardBtn")
-        .addEventListener("click", function () {
-            const username = localStorage.getItem("username");
-            if (username) {
-                window.location.href = `/dashboard/${username}`;
-            } else {
-                alert("Errore: nome utente non trovato.");
-            }
-        });
+function dashboardButton() {
+    const username = localStorage.getItem("username");
+    if (username) {
+        window.location.href = `/dashboard/${username}`;
+    } else {
+        alert("Errore: nome utente non trovato.");
+    }
 }
 
 //chat messages
@@ -485,7 +458,7 @@ function buttonStartGame() {
     document.getElementById("popup-start-countdown").classList.add("hidden");
     document.getElementById("popup-start-countdown").classList.remove("flex");
 
-    fetch(`/game/${game_id}/player-ready`, {
+    fetch(`/game/player-ready/${game_id}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -546,7 +519,8 @@ function updateCountdownDisplay(formattedTime) {
 }
 
 function updateCurrentPlayerDisplay(currentPlayer) {
-    const currentTurnDisplay = document.getElementById("current-turn");
+    console.log(`current avatar: ${currentPlayer.avatar}`);
+    currentTurnDisplay = document.getElementById("current-turn");
     if (currentTurnDisplay && currentPlayer) {
         const avatarSrc = getAvatarSrc(currentPlayer.avatar);
 
@@ -580,7 +554,7 @@ function updateCurrentPlayerDisplay(currentPlayer) {
     }
 }
 
-function updateTurnOrderDisplay(turnOrder, currentPlayer) {
+function updateTurnOrderDisplay(turnOrder) {
     const turnOrderDisplay = document.getElementById("turn-order");
 
     if (turnOrderDisplay) {
@@ -638,7 +612,7 @@ function getChapter() {
 function saveChapterChangeTurn(data) {
     const gameId = window.location.pathname.split("/")[2];
 
-    fetch(`/saveChapterChangeTurn/${gameId}`, {
+    fetch(`/game/save-chapter-change-turn/${gameId}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -750,9 +724,6 @@ function getChapterFromLocal() {
 getChapterFromLocal();
 
 function handleEditorAccess(currentPlayer, currentUser) {
-    console.log(`current player: ${currentPlayer.username}`);
-    console.log(`current currentUser: ${currentUser}`);
-
     const sendChapterButton = document.getElementById("send-chapter-button");
     if (!sendChapterButton) {
         console.error("Pulsante 'send-chapter-button' non trovato.");
@@ -819,40 +790,6 @@ function updateChaptersDisplay(chaptersData) {
             effect: "cards",
             grabCursor: true,
         });
-    }
-}
-
-function foxAnimation() {
-    console.log("fox animation started");
-
-    const currentPlayer = JSON.parse(sessionStorage.getItem("currentPlayer"));
-    const currentPlayerUsername = currentPlayer ? currentPlayer.username : null;
-
-    const ownUsername = localStorage.getItem("username");
-
-    // Verifica se i dati sono disponibili
-    if (!currentPlayerUsername || !ownUsername) {
-        console.error("Errore: dati utente mancanti");
-        return;
-    }
-
-    // Elementi del DOM
-    const foxAnimationsBox = document.getElementById("fox-animations");
-    const writingFox = document.getElementById("writing-fox");
-    const writingText = document.getElementById("writing-text");
-    const thinkingFox = document.getElementById("thinking-fox");
-    const thinkingText = document.getElementById("thinking-text");
-
-    // Nascondi tutte le animazioni prima di applicare la logica
-    foxAnimationsBox.classList.add("hidden");
-    writingFox.classList.add("hidden");
-    thinkingFox.classList.add("hidden");
-
-    // Confronta i nomi utente
-    if (currentPlayerUsername !== ownUsername) {
-        foxAnimationsBox.classList.remove("hidden");
-        thinkingFox.classList.remove("hidden");
-        thinkingText.textContent = `${currentPlayerUsername} sta pensando...`;
     }
 }
 
