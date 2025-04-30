@@ -516,8 +516,11 @@ async function fetchdashboardData() {
         const status = data.status;
         const games = data.games;
         const maxGamesReached = data.maxGamesReached;
-        console.log(`games: ${JSON.stringify(games, null, 2)}`);
-        console.log(`Max games reached: ${maxGamesReached}`);
+        const gameNotifications = data.gameNotifications;
+        console.log(
+            "Game Notifications:",
+            JSON.stringify(gameNotifications, null, 2)
+        );
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket(); // Assicurati che initSocket sia una funzione asincrona

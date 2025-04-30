@@ -1,6 +1,6 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
-const { saveRankedNotification } = require("../utils/saveRankedNotification");
+const { saveRankedNotification } = require("../utils/handleRankedNotification");
 
 const { client } = require("../database/db");
 

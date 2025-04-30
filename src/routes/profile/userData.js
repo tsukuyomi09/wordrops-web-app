@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const checkAuth = require("../../middlewares/checkAuthToken");
 const checkUserStatus = require("../../middlewares/checkUserStatus");
+const { notificationMap } = require("../../services/notificationMap");
 
 router.get("/", checkAuth, checkUserStatus, async (req, res) => {
     try {
@@ -12,12 +13,15 @@ router.get("/", checkAuth, checkUserStatus, async (req, res) => {
             return res.status(404).json({ error: "Username non trovato" });
         }
 
+        const gameNotifications = notificationMap.get(user_id);
+
         res.status(200).json({
             user_id,
             username,
             games: userGames,
             status: userStatus,
             maxGamesReached,
+            gameNotifications,
         });
     } catch (err) {
         console.error("Errore durante il recupero dello username:", err);

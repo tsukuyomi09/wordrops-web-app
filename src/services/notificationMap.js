@@ -8,16 +8,6 @@ class NotificationMap {
             this.map.set(user_id, new Map());
         }
         this.map.get(user_id).set(gameId, { points, comment });
-        console.log(
-            "NotificationMap Dopo aggiunta:",
-            JSON.stringify(
-                [...this.map].map(([key, value]) => {
-                    return [key, [...value]];
-                }),
-                null,
-                2
-            )
-        );
     }
 
     remove(gameId, user_id) {
@@ -46,7 +36,11 @@ class NotificationMap {
     }
 
     get(user_id) {
-        return this.map.has(user_id) ? this.map.get(user_id) : null;
+        if (!this.map.has(user_id)) return [];
+        return [...this.map.get(user_id)].map(([gameId, data]) => ({
+            gameId,
+            ...data,
+        }));
     }
 }
 

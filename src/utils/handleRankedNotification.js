@@ -25,12 +25,13 @@ async function saveRankedNotification(chapters, databaseGameId) {
     );
 }
 
-async function removeNotification(user_id, gameId) {
+async function removeRankedNotification(user_id, game_id) {
     try {
         await client.query(
             `DELETE FROM notifications WHERE user_id = $1 AND game_id = $2`,
-            [user_id, gameId]
+            [user_id, game_id]
         );
+        notificationMap.remove(game_id, user_id);
     } catch (error) {
         console.error(
             "Errore durante la rimozione della notifica dal DB",
@@ -41,5 +42,5 @@ async function removeNotification(user_id, gameId) {
 
 module.exports = {
     saveRankedNotification,
-    removeNotification,
+    removeRankedNotification,
 };
