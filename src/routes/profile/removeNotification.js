@@ -12,9 +12,9 @@ router.delete("/", checkAuth, async (req, res) => {
 
     try {
         await removeRankedNotification(user_id, game_id);
-        res.status(200).send("Notification removed successfully");
+        res.status(200).json({ message: "Notification removed successfully" });
     } catch (error) {
-        res.status(500).send("Error removing notification");
+        res.status(500).json({ message: "Error removing notification" });
     }
 });
 
