@@ -10,6 +10,9 @@ const cookieParser = require("cookie-parser");
 const { preGameQueue } = require("./src/routes/game/gameQueue");
 const { activeGames } = require("./src/services/gameManager");
 const { client } = require("./src/database/db");
+const {
+    loadNotificationsIntoMap,
+} = require("./src/services/notificationLoader");
 
 const app = express();
 app.get("/status", (req, res) => {
@@ -19,8 +22,6 @@ const server = http.createServer(app);
 const io = initSocket(server);
 
 const port = process.env.PORT || 3000;
-
-connectDB();
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -361,13 +362,23 @@ app.use("/onboarding", onboardingRoute);
 app.use("/profile", profileRoute);
 app.use("/search", searchRoute);
 
-server.listen(port, "0.0.0.0", (err) => {
-    if (err) {
-        console.error("Failed to start server:", err);
-        return;
+(async () => {
+    try {
+        await connectDB(); // Assicurati che il DB sia connesso
+        await loadNotificationsIntoMap(); // Carica le notifiche
+
+        server.listen(port, "0.0.0.0", (err) => {
+            if (err) {
+                console.error("Failed to start server:", err);
+                return;
+            }
+            console.log(`Server is running on port ${port}`);
+        });
+    } catch (err) {
+        console.error("Failed during startup:", err);
+        process.exit(1);
     }
-    console.log(`Server is running on port ${port}`);
-});
+})();
 
 process.on("SIGTERM", () => {
     console.log("Received SIGTERM. Shutting down gracefully...");
