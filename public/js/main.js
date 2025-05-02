@@ -517,10 +517,7 @@ async function fetchdashboardData() {
         const games = data.games;
         const maxGamesReached = data.maxGamesReached;
         const gameNotifications = data.gameNotifications;
-        console.log(
-            "Game Notifications:",
-            JSON.stringify(gameNotifications, null, 2)
-        );
+        showScoreNotificationsSequential(gameNotifications);
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket(); // Assicurati che initSocket sia una funzione asincrona
@@ -594,6 +591,124 @@ async function fetchdashboardData() {
             error.response ? error.response.status : "nessuna risposta"
         );
     }
+}
+
+function showScoreNotificationsSequential(gameNotifications) {
+    console.log("partita showScoreNotificationsSequential");
+    let index = 0;
+
+    function showNext() {
+        if (index >= gameNotifications.length) return;
+
+        const notification = gameNotifications[index];
+        const scorePopup = document.createElement("div");
+        scorePopup.classList.add(
+            "popup-newscore-notification",
+            "fixed",
+            "inset-0",
+            "flex",
+            "items-center",
+            "justify-center",
+            "z-50",
+            "bg-black/40"
+        );
+
+        const lottieContainer = document.createElement("div");
+        lottieContainer.classList.add(
+            "absolute",
+            "top-1/2",
+            "left-1/2",
+            "transform",
+            "-translate-x-1/2",
+            "-translate-y-1/2",
+            "w-[80vw]",
+            "h-[80vh]",
+            "z-1" // valore ragionevole per il z-index
+        );
+        scorePopup.appendChild(lottieContainer);
+
+        // Inizializza Lottie (assicurati che la libreria Lottie sia già inclusa nel progetto)
+        const animation = lottie.loadAnimation({
+            container: lottieContainer,
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "/animations/new-score-animation.json", // Percorso dell'animazione Lottie
+        });
+
+        setTimeout(() => {
+            const popupContent = document.createElement("div");
+            popupContent.classList.add(
+                "bg-white",
+                "border",
+                "relative",
+                "border-gray-300",
+                "shadow-xl",
+                "rounded-2xl",
+                "max-w-[24em]",
+                "flex",
+                "flex-col",
+                "opacity-0",
+                "transition-opacity",
+                "duration-300",
+                "z-2"
+            );
+
+            popupContent.innerHTML = `
+                <div class="bg-white border relative border-gray-300 shadow-xl rounded-2xl max-w-[24em] flex flex-col  ">
+                    <img src="/images/trophy-image.png" alt="Trophy" class="absolute -top-12 -left-12 transform -rotate-24 object-contain w-24 h-24" />
+        
+                    <div class=" py-6 bg-teal-600 rounded-2xl">
+                        <h2 class="text-lg font-semibold text-center text-white ">Nuovo punteggio ricevuto!</h2>
+                    </div>
+
+                    <div class="px-6 pb-12 pt-12 relative w-full h-auto">
+                        <p class=" text-gray-500 text-center mb-12 font-semibold">
+                            <span class="${
+                                notification.points > 0
+                                    ? "text-green-600  text-6xl"
+                                    : notification.points < 0
+                                    ? "text-red-600 text-6xl"
+                                    : "text-gray-600  text-6xl"
+                            }">
+                                ${notification.points}
+                            </span>
+                        </p>
+                        <p class="text-gray-800 text-xl mb-6 italic ">${`"${notification.comment}"`}</p>
+
+                        
+                    </div>
+                    <div class="px-6 py-6">
+                        <button 
+                            data-game-id="${notification.gameId}" 
+                            class="bg-blue-600 cursor-pointer hover:bg-blue-700 px-6 py-2  text-white text-lg font-semibold py-2 px-5 rounded-md"
+                        >
+                            OK
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            scorePopup.appendChild(popupContent);
+
+            requestAnimationFrame(() => {
+                popupContent.classList.add("opacity-100");
+            });
+
+            scorePopup
+                .querySelector("button")
+                .addEventListener("click", async (e) => {
+                    const gameId = e.target.getAttribute("data-game-id");
+                    // await deleteNotification(gameId);
+                    scorePopup.remove();
+                    index++;
+                    showNext(); // mostra il prossimo dopo il click
+                });
+        }, 600);
+        document.body.appendChild(scorePopup);
+    }
+
+    showNext(); // inizia la sequenza
 }
 
 function displayItems(username) {
