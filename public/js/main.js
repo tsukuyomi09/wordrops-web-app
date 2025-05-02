@@ -96,7 +96,7 @@ window.addEventListener("load", () => {
 });
 
 window.onpopstate = function (event) {
-    fetch("/gamequeueNew", {
+    fetch("/game/game-queue", {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -461,7 +461,7 @@ function fetchAvatarData(username) {
         updateAvatarImage(avatar);
     } else {
         // Altrimenti, fai la fetch per ottenere l'avatar dal server
-        fetch("/avatar", {
+        fetch("/profile/avatar", {
             method: "GET", // Metodo GET per ottenere l'avatar
             headers: {
                 "Content-Type": "application/json",
@@ -499,7 +499,7 @@ let username;
 
 async function fetchdashboardData() {
     try {
-        const response = await fetch("/userData", {
+        const response = await fetch("/profile/user-data", {
             method: "GET", // Metodo GET per ottenere gli item
             headers: {
                 "Content-Type": "application/json",
@@ -516,9 +516,11 @@ async function fetchdashboardData() {
         const status = data.status;
         const games = data.games;
         const maxGamesReached = data.maxGamesReached;
-        console.log(`games: ${JSON.stringify(games, null, 2)}`);
-        console.log(`Max games reached: ${maxGamesReached}`);
-        const statusContainer = document.getElementById("status-div");
+        const gameNotifications = data.gameNotifications;
+        console.log(
+            "Game Notifications:",
+            JSON.stringify(gameNotifications, null, 2)
+        );
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket(); // Assicurati che initSocket sia una funzione asincrona
@@ -532,10 +534,6 @@ async function fetchdashboardData() {
             Object.entries(games).forEach(([gameId, gameData], index) => {
                 // Assicurati di non superare il massimo di 5 contenitori
                 if (index >= 5) return;
-
-                if (gameData.status === "waiting_score") {
-                    return; // Salta la creazione del pulsante e passa al gioco successivo
-                }
 
                 const isRanked = gameData.gameType === "ranked";
 
@@ -625,8 +623,9 @@ async function joinQueue({ gameType, gameSpeed }) {
             const usernameForAvatar = localStorage.getItem("username");
             const avatarKey = `avatar_${usernameForAvatar}`;
             const avatarForGame = localStorage.getItem(avatarKey);
+            console.log(`avatar main: ${avatarForGame}`);
 
-            const response = await fetch("/gamequeueNew", {
+            const response = await fetch("/game/game-queue", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -664,7 +663,7 @@ function abandonQueue() {
         console.log("Nessun socket da chiudere.");
     }
 
-    fetch("/gamequeueNew", {
+    fetch("/game/game-queue", {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -738,7 +737,7 @@ avatars.forEach((avatar) => {
 selectButton.addEventListener("click", () => {
     buttonSound();
     if (selectedAvatar) {
-        fetch("/avatar", {
+        fetch("/profile/avatar", {
             method: "POST",
             body: JSON.stringify({ avatar: selectedAvatar }), // Passiamo l'avatar selezionato
             headers: {
@@ -795,7 +794,7 @@ function closeOverlay() {
 closeButton.addEventListener("click", () => {
     buttonSound();
     if (selectedAvatar) {
-        fetch("/avatar", {
+        fetch("/profile/avatar", {
             method: "POST",
             body: JSON.stringify({ avatar: selectedAvatar }), // Passiamo l'avatar selezionato
             headers: {
@@ -846,7 +845,7 @@ async function confirmDeleteAccount() {
         return;
     }
 
-    const res = await fetch("/delete-account", {
+    const res = await fetch("/profile/delete-account", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

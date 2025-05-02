@@ -26,9 +26,9 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 30000; // slow game (30 seconds)
+        let countdownDuration = 3000000; // slow game (30 seconds)
         if (gameSpeed === "fast") {
-            countdownDuration = 3000; // fast game (15 seconds)
+            countdownDuration = 3000000; // fast game (15 seconds)
         }
 
         // Aggiungiamo il gioco alla mappa dei giochi attivi sul server

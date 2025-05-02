@@ -1,6 +1,6 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
-const { saveAndEmitNotification } = require("../utils/saveAndEmitNotification");
+const { saveRankedNotification } = require("../utils/handleRankedNotification");
 
 const { client } = require("../database/db");
 
@@ -74,7 +74,7 @@ async function saveGame(game) {
             })
         );
         if (isRanked) {
-            await saveAndEmitNotification(game, databaseGameId);
+            await saveRankedNotification(game.chapters, databaseGameId);
         }
         console.log("Game and chapters saved successfully!");
         return true;

@@ -1,6 +1,6 @@
 async function fetchCompletedGames() {
     try {
-        const response = await fetch("/personalLibrary");
+        const response = await fetch("/library/dashboard-own-stories");
         const data = await response.json();
 
         if (response.ok) {
@@ -135,7 +135,9 @@ function closeBookOverlay() {
 // get all the story details
 async function fetchStoryDetails(storyId) {
     try {
-        const response = await fetch(`/storyDetails/${storyId}`);
+        const response = await fetch(
+            `/library/dashboard-story-details/${storyId}`
+        );
         const data = await response.json();
 
         if (!response.ok) {

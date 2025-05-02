@@ -3,7 +3,7 @@ async function registerUser() {
     const userPassword = document.getElementById("password").value;
 
     try {
-        const response = await fetch("/register", {
+        const response = await fetch("/auth/register", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -36,7 +36,7 @@ async function loginUser() {
     const userPassword = document.getElementById("password").value;
 
     try {
-        const response = await fetch("/login", {
+        const response = await fetch("/auth/login", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -78,7 +78,7 @@ async function loginUser() {
 // google sign in
 
 function handleCredentialResponse(response) {
-    fetch("/google-login", {
+    fetch("/auth/google-login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

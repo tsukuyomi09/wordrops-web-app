@@ -101,7 +101,7 @@ document
         const waitingListAge = document.getElementById("age_range").value;
 
         try {
-            const response = await fetch("/waiting-list", {
+            const response = await fetch("/onboarding/waiting-list", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
