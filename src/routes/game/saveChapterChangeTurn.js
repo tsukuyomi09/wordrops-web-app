@@ -10,22 +10,15 @@ router.post("/:gameId", checkAuth, async (req, res) => {
     const user_id = req.user_id;
     const username = req.username;
     const { gameId } = req.params;
-    const { title, content, currentUser } = req.body; // Dati inviati dal client
-
-    console.log("== saveChapterChangeTurn ==");
-    console.log("user_id:", user_id);
-    console.log("username:", username);
-    console.log("currentUser (from client):", currentUser);
+    const { title, content, currentUser } = req.body;
 
     if (username !== currentUser) {
-        console.log("❌ currentUser mismatch");
         res.status(403).json({ message: "Utente non autorizzato." });
         return;
     }
 
     const game = activeGames.get(gameId);
     if (!game) {
-        console.log("❌ Partita non trovata con ID:", gameId);
         res.status(404).json({ message: "Partita non trovata." });
         return;
     }
@@ -33,13 +26,7 @@ router.post("/:gameId", checkAuth, async (req, res) => {
     const turnIndex = game.turnIndex;
     const currentTurnPlayer = game.turnOrder[turnIndex];
 
-    console.log("Game ID:", gameId);
-    console.log("Turn Index:", turnIndex);
-    console.log("Current Turn Player:", currentTurnPlayer);
-    console.log("Full Turn Order:", game.turnOrder);
-
     if (!currentTurnPlayer) {
-        console.log("❌ Nessun giocatore trovato al turno corrente");
         res.status(500).json({
             message: "Errore nel recupero del turno corrente.",
         });
@@ -47,7 +34,6 @@ router.post("/:gameId", checkAuth, async (req, res) => {
     }
 
     if (currentTurnPlayer.username !== currentUser) {
-        console.log("currentTurnPlayer mismatch");
         res.status(403).json({
             message: "Non è il turno di questo giocatore.",
         });
@@ -60,7 +46,7 @@ router.post("/:gameId", checkAuth, async (req, res) => {
         author: username,
         user_id: user_id,
         isValid: true,
-        timestamp: Date.now(), // o new Date().toISOString()
+        timestamp: Date.now(),
     };
 
     game.chapters.push(newChapter);
@@ -70,7 +56,6 @@ router.post("/:gameId", checkAuth, async (req, res) => {
             handleGameCompletion(game, gameId, req.io);
             const saveSuccess = await saveGame(game);
             req.io.to(gameId).disconnectSockets(true);
-            console.log("Socket disconnessi dopo gameCompleted.");
             if (!saveSuccess) {
                 return res
                     .status(500)
@@ -81,7 +66,10 @@ router.post("/:gameId", checkAuth, async (req, res) => {
                 message: "Gioco completato e giocatori notificati.",
             });
         } catch (err) {
-            console.log(`error: ${err}`);
+            return res.status(500).json({
+                message:
+                    "Si è verificato un errore durante la gestione del gioco.",
+            });
         }
     }
 
@@ -91,14 +79,13 @@ router.post("/:gameId", checkAuth, async (req, res) => {
     });
 
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
-    const nextPlayer = game.turnOrder[game.turnIndex];
 
     startCountdown(gameId);
 
     req.io.to(gameId).emit("nextChapterUpdate", {
         gameId: gameId,
-        chapter: newChapter, // Capitolo appena aggiunto
-        nextPlayer: game.turnOrder[game.turnIndex], // Prossimo giocatore (intero oggetto)
+        chapter: newChapter,
+        nextPlayer: game.turnOrder[game.turnIndex],
         previousAuthor: username,
     });
 

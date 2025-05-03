@@ -15,14 +15,12 @@ function closeBetaForm() {
 }
 
 registerButton.addEventListener("mouseover", function () {
-    registerButton.textContent = "Presto disponibile"; // Cambia il testo su hover
+    registerButton.textContent = "Presto disponibile";
 });
 
 registerButton.addEventListener("mouseout", function () {
-    registerButton.textContent = "REGISTRATI"; // Torna al testo originale quando il mouse esce
+    registerButton.textContent = "REGISTRATI";
 });
-
-// text animation
 
 const revealElements = document.querySelectorAll(".reveal-on-scroll");
 
@@ -39,8 +37,6 @@ const revealOnScroll = () => {
 
 window.addEventListener("scroll", revealOnScroll);
 revealOnScroll();
-
-// numbers animation
 
 const number1 = document.getElementById("number-1");
 const number4 = document.getElementById("number-4");
@@ -63,28 +59,21 @@ const observer = new IntersectionObserver(
 observer.observe(number1);
 observer.observe(number4);
 
-// game mode  animation
-
 const revealRightElement = document.getElementById("top-container");
 const revealLeftElement = document.getElementById("bottom-container");
 
-// Creiamo un osservatore con un nome diverso per evitare conflitti
 const observerReveal = new IntersectionObserver(
     (entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                // Se l'elemento è visibile, aggiungi la classe per farlo rivelare
                 entry.target.classList.add("reveal-visible");
-
-                // Fermiamo l'osservazione per evitare che venga eseguito più volte
                 observer.unobserve(entry.target);
             }
         });
     },
     { threshold: 0.2 }
-); // Considera l'elemento come visibile quando almeno il 50% è visibile
+);
 
-// Osserviamo entrambi i div
 observerReveal.observe(revealRightElement);
 observerReveal.observe(revealLeftElement);
 

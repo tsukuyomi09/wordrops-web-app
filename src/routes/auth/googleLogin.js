@@ -9,27 +9,22 @@ const clientGoogle = new OAuth2Client(
     "706006966723-3qafmigciao7oo5vguvhks4353i6cvhq.apps.googleusercontent.com"
 );
 
-// Route per gestire la verifica del token
 router.post("/", async (req, res) => {
-    const { idToken } = req.body; // Ottieni il token dal corpo della richiesta
+    const { idToken } = req.body;
 
     try {
-        // Verifica il token e ottieni i dati dell'utente
         const payload = await verifyGoogleToken(idToken);
         const { sub, name, given_name, family_name, email, picture, locale } =
             payload;
 
-        // Controlla se l'utente esiste già nel database
         let user = await findUserByGoogleId(sub);
 
         if (user) {
-            // Se l'utente esiste, generiamo i token
             const { accessToken, refreshToken } = generateTokens(
                 user.user_id,
                 user.username
             );
 
-            // Imposta i cookie per i token
             setAuthCookies(res, accessToken, refreshToken);
 
             return res.json({
@@ -67,10 +62,9 @@ const verifyGoogleToken = async (idToken) => {
             "706006966723-3qafmigciao7oo5vguvhks4353i6cvhq.apps.googleusercontent.com",
     });
 
-    return ticket.getPayload(); // Restituisce i dati dell'utente
+    return ticket.getPayload();
 };
 
-// Funzione per trovare un utente nel database usando l'email
 const findUserByGoogleId = async (googleId) => {
     const result = await client.query(
         "SELECT * FROM users WHERE google_id = $1",
@@ -95,11 +89,11 @@ const generateTokens = (userId, username) => {
 
     const secretKey = process.env.ACCESS_TOKEN_SECRET;
     const accessToken = jwt.sign(payload, secretKey, {
-        expiresIn: "15m", // 15 minuti
+        expiresIn: "15m",
     });
 
     const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "15d", // 15 giorni
+        expiresIn: "15d",
     });
 
     return { accessToken, refreshToken };
@@ -109,14 +103,14 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
     const isProduction = process.env.NODE_ENV === "production";
     res.cookie("accesstoken", accessToken, {
         httpOnly: true,
-        maxAge: 15 * 60 * 1000, // 15 minuti
+        maxAge: 15 * 60 * 1000,
         secure: isProduction,
         sameSite: "Strict",
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        maxAge: 15 * 24 * 3600 * 1000, // 15 giorni
+        maxAge: 15 * 24 * 3600 * 1000,
         secure: isProduction,
         sameSite: "Strict",
     });

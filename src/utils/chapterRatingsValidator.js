@@ -1,11 +1,8 @@
 function validateArrayFormat(ratings, numberOfChapters) {
-    console.log("Ratings ricevuti:", ratings);
-    console.log("Numero dei capitoli:", numberOfChapters);
     if (!Array.isArray(ratings)) {
         throw new Error("I punteggi devono essere un array.");
     }
     if (ratings.length !== numberOfChapters) {
-        console.log();
         throw new Error(
             "Il numero di punteggi deve corrispondere al numero dei capitoli."
         );

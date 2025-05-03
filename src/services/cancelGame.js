@@ -2,7 +2,6 @@ const { client } = require("../database/db");
 
 async function cancelGameAndSave(game) {
     if (!game) {
-        console.log(`[cancelGame] Partita non trovata.`);
         return;
     }
 
@@ -43,13 +42,11 @@ async function cancelGameAndSave(game) {
                 );
             })
         );
-
-        console.log(`[cancelGame] Partita annullata, salvata e notificata.`);
     } catch (err) {
-        console.error(
-            `[cancelGame] Errore durante la cancellazione della partita:`,
-            err
-        );
+        return {
+            message:
+                "Si è verificato un errore durante la cancellazione del gioco.",
+        };
     }
 }
 

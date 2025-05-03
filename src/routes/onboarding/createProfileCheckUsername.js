@@ -4,7 +4,6 @@ const { client } = require("../../database/db");
 
 router.get("/", async (req, res) => {
     const { username } = req.query;
-    console.log(`arrivata richiesta username`);
 
     if (!username) {
         return res

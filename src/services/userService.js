@@ -1,8 +1,6 @@
 const { client } = require("../database/db");
 
 async function getUserByEmail(email) {
-    console.log(`email da utilizzare funzione getUserByEmail: ${email}`);
-
     const query =
         "SELECT user_id, password, username, avatar, email, verified FROM users WHERE email = $1";
     const result = await client.query(query, [email]);

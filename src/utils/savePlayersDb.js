@@ -13,7 +13,6 @@ async function savePlayersDb(game) {
                 );
             })
         );
-        console.log("[savePlayersDb] Giocatori salvati con successo.");
     } catch (error) {
         console.log(
             "[savePlayersDb] Errore durante il salvataggio dei giocatori:",

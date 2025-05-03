@@ -23,7 +23,6 @@ async function saveGame(game) {
                 metadata.chapterRatings,
                 game.chapters
             );
-            console.log("Chapters with ratings:", game.chapters);
         }
 
         const finishedAt = new Date();
@@ -44,7 +43,6 @@ async function saveGame(game) {
         );
         const databaseGameId = result.rows[0].id;
 
-        // 2️⃣ Salviamo tutti i capitoli nella tabella games_chapters
         await Promise.all(
             game.chapters.map((chapter, index) => {
                 const chapterValues = [
@@ -76,7 +74,6 @@ async function saveGame(game) {
         if (isRanked) {
             await saveRankedNotification(game.chapters, databaseGameId);
         }
-        console.log("Game and chapters saved successfully!");
         return true;
     } catch (err) {
         console.error("Error saving game and chapters:", err);

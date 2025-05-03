@@ -110,14 +110,13 @@ Testo: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
     try {
         const parsedResponse = JSON.parse(raw);
 
-        // Convertiamo gli ID in numeri prima di restituirli
         const genres = parsedResponse.map((id) => parseInt(id, 10));
 
         if (
             Array.isArray(genres) &&
             genres.every((id) => Number.isInteger(id) && id >= 1 && id <= 10)
         ) {
-            return genres; // Restituisce l'array dei generi validi
+            return genres;
         } else {
             throw new Error(
                 "La risposta contiene ID non validi o formattazione errata."

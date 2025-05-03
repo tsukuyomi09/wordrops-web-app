@@ -13,11 +13,9 @@ router.post("/", async (req, res) => {
 
     try {
         const user = await getUserByEmail(userEmail);
-        // await verifyPassword(user.password, userPassword);
-
-        console.log(`email da utilizzare: ${user.email}`);
-        console.log(`is verified? ${user.verified}`);
-
+        if (process.env.NODE_ENV === "production") {
+            await verifyPassword(user.password, userPassword);
+        }
         if (user.verified !== true) {
             return res.status(401).json({
                 error: "unverified_email",
@@ -65,7 +63,7 @@ router.post("/", async (req, res) => {
 
         res.status(200).json({
             success: true,
-            username: user.username, // ritorniamo lo username se esiste
+            username: user.username,
         });
     } catch (err) {
         console.error("Errore durante il login:", err);

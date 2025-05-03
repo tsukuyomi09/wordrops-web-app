@@ -6,8 +6,6 @@ const { handleGameCompletion } = require("../utils/handleGameCompletion");
 const { activeGames } = require("./gameManager");
 
 function startCountdown(gameId) {
-    console.log(`Funzione arrivata in start countdown`);
-
     const io = getSocket();
     const game = activeGames.get(gameId);
     if (!game) {
@@ -18,8 +16,6 @@ function startCountdown(gameId) {
     const now = Date.now();
     game.countdownStart = now;
     game.countdownEnd = now + game.countdownDuration;
-    console.log(`Tempo di inizio countdown: ${now}`);
-    console.log(`Tempo di fine countdown: ${game.countdownEnd}`);
 
     if (game.countdownInterval) {
         clearInterval(game.countdownInterval);
@@ -27,7 +23,6 @@ function startCountdown(gameId) {
 
     game.countdownInterval = setInterval(async () => {
         const remainingTime = game.countdownEnd - Date.now();
-        console.log(`Tempo rimanente: ${remainingTime} ms`);
         if (remainingTime <= 0) {
             await handleCountdownExpiration(io, game, gameId, startCountdown);
         } else {
@@ -56,7 +51,6 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
     game.countdownInterval = null;
 
     const currentPlayer = game.turnOrder[game.turnIndex];
-    console.log(`Tempo scaduto per il turno di ${currentPlayer.username}`);
 
     const emptyChapter = {
         title: "null",
@@ -72,8 +66,6 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
     const nullChapters = game.chapters.filter(
         (ch) => ch.content === "null" || ch.content === null
     );
-    console.log(`Capitoli vuoti o nulli:`, nullChapters.length);
-    console.log(`nullChapters: ${nullChapters}`);
 
     if (nullChapters.length >= 2) {
         await new Promise((resolve, reject) => {
@@ -82,7 +74,6 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
                     reason: "La partita è stata annullata: troppi capitoli nulli.",
                     gameId,
                 });
-                // Risolviamo la promessa quando l'emit è stato eseguito
                 resolve();
             } catch (error) {
                 reject(error);
@@ -92,7 +83,6 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
         handleGameCompletion(game, gameId, io);
         await cancelGameAndSave(game);
         io.to(gameId).disconnectSockets(true);
-        console.log("Socket disconnessi dopo gameCompleted.");
         return { canceled: true };
     }
 
@@ -119,9 +109,6 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
 }
 
 async function checkAndCompleteGame(io, game, gameId) {
-    console.log(`Five games reached`);
-    console.log(`Games chapters = ${game.chapters.length}`);
-
     try {
         handleGameCompletion(game, gameId, io);
         const saveSuccess = await saveGame(game);

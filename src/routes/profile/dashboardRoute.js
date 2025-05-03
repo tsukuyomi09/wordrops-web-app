@@ -7,11 +7,6 @@ const checkUserGameStatus = require("../../services/checkUserGameStatus");
 
 router.get("/:username", checkAuth, checkUserGameStatus, async (req, res) => {
     const { username } = req.params;
-    console.log("Username dal parametro URL:", username);
-    console.log(
-        "Username nel req (dovrebbe essere impostato da checkAuth):",
-        req.username
-    );
 
     try {
         if (username !== req.username) {
@@ -31,7 +26,9 @@ router.get("/:username", checkAuth, checkUserGameStatus, async (req, res) => {
         );
     } catch (err) {
         console.error("Errore nel recupero dei dati dell'utente:", err);
-        res.status(500).send("Errore nel server");
+        res.status(500).json({
+            message: "Errore interno del server. Riprova più tardi.",
+        });
     }
 });
 

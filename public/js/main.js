@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         on: {
             slideChangeTransitionEnd: function () {
-                // Titoli
                 document.querySelectorAll(".slide-title").forEach((el, idx) => {
                     if (idx === mainSwiper.realIndex) {
                         el.classList.add("opacity-100");
@@ -18,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 });
 
-                // Immagini
                 document.querySelectorAll(".slide-image").forEach((el, idx) => {
                     if (idx === mainSwiper.realIndex) {
                         el.classList.add("opacity-10");
@@ -29,8 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         },
     });
-
-    // Imposta lo stato iniziale
     document
         .querySelectorAll(".slide-title")
         [mainSwiper.realIndex].classList.add("opacity-100");
@@ -58,22 +54,21 @@ function showLoadingAnimation() {
 }
 
 const bookAnimation = lottie.loadAnimation({
-    container: document.getElementById("lottie-book"), // Dove inserire l'animazione
+    container: document.getElementById("lottie-book"),
     renderer: "svg",
-    loop: false, // Non loop
-    autoplay: false, // Non parte automaticamente
-    path: "/images/new-book-anime.json", // Percorso al tuo file JSON Lottie
+    loop: false,
+    autoplay: false,
+    path: "/images/new-book-anime.json",
 });
 
-// Partire con hover
 const lottieButton = document.getElementById("lottie-button");
 
 lottieButton.addEventListener("mouseenter", function () {
-    bookAnimation.play(); // Inizia animazione on hover
+    bookAnimation.play();
 });
 
 lottieButton.addEventListener("mouseleave", function () {
-    bookAnimation.stop(); // Ferma l'animazione quando il mouse esce
+    bookAnimation.stop();
 });
 
 function showAvatarTransition() {
@@ -121,7 +116,6 @@ window.onpopstate = function (event) {
         });
 };
 
-// Aggiungi uno stato iniziale
 history.pushState(null, null, location.href);
 
 const formInput = document.getElementById("p-input");
@@ -134,14 +128,11 @@ let countdownStarted = false;
 
 function initSocket() {
     return new Promise((resolve, reject) => {
-        console.log("Tentativo di connessione a /socket.io...");
-        socket = io(); // Prova prima con il percorso predefinito; // Connessione a /socket.io
+        socket = io();
 
-        // Quando il WebSocket è connesso
         socket.on("connect", () => {
-            console.log("Connesso a Socket.IO con ID:", socket.id); // Log con socket.id
             socketId = socket.id;
-            resolve(); // Risolvi la promessa
+            resolve();
         });
 
         socket.on("connect_error", (err) => {
@@ -150,17 +141,15 @@ function initSocket() {
         });
 
         socket.on("connect_timeout", () => {
-            console.log("Timeout di connessione.");
             reject("Timeout di connessione");
         });
 
-        // Listener per quando il gioco è pronto
         socket.on("in-queue", (message) => {
             waitingOverlay.classList.remove("hidden");
         });
 
         socket.on("game-ready", (message) => {
-            alert(message); // Mostra l'alert
+            alert(message);
         });
 
         socket.on("countdown", (seconds) => {
@@ -168,7 +157,7 @@ function initSocket() {
                 waitingOverlay.classList.add("hidden");
                 document.getElementById("countdown-overlay").style.display =
                     "flex";
-                countdownStarted = true; // Imposta il flag per evitare di farlo più volte
+                countdownStarted = true;
             }
             document.getElementById("countdown-seconds").innerText = seconds;
         });
@@ -179,7 +168,6 @@ function initSocket() {
 
         socket.on("receiveChatMessage", (messageData) => {
             const { game_id } = messageData;
-            console.log("New message for game:", game_id);
 
             const gameWrapper = document.querySelector(
                 `[data-game-id="${game_id}"]`
@@ -197,7 +185,6 @@ function initSocket() {
                 `[data-game-id="${game_id}"]`
             );
 
-            // Controlla se il wrapper per il gioco esiste
             if (gameWrapper) {
                 const chatNotificationDot = gameWrapper.querySelector(
                     ".chat-notification-dot"
@@ -205,24 +192,15 @@ function initSocket() {
 
                 if (chatNotificationDot) {
                     if (!allMessagesRead) {
-                        // Se ci sono messaggi non letti, rimuovi 'hidden' per visualizzare la notifica
                         chatNotificationDot.classList.remove("hidden");
-                        console.log(
-                            `Notifica di chat visibile per il gioco ${game_id}`
-                        );
                     } else {
-                        // Se tutti i messaggi sono letti, mantieni la notifica nascosta
                         chatNotificationDot.classList.add("hidden");
-                        console.log(
-                            `Notifica di chat nascosta per il gioco ${game_id}`
-                        );
                     }
                 }
             }
         });
 
         socket.on("chapterStatus", ({ game_id, hasUnreadChapter }) => {
-            console.log(`allChaptersRead = ${hasUnreadChapter}`);
             const gameWrapper = document.querySelector(
                 `[data-game-id="${game_id}"]`
             );
@@ -234,10 +212,8 @@ function initSocket() {
             if (!chapterNotificationDot) return;
 
             if (hasUnreadChapter) {
-                // Ci sono capitoli non letti, mostra il badge
                 chapterNotificationDot.classList.remove("hidden");
             } else {
-                // Tutto letto, nascondi il badge
                 chapterNotificationDot.classList.add("hidden");
             }
         });
@@ -247,12 +223,10 @@ function initSocket() {
                 `[data-game-id="${gameId}"]`
             );
             if (gameWrapper) {
-                // Trova l'icona di notifica per il nuovo capitolo
                 const chapterNotificationDot = gameWrapper.querySelector(
                     ".chapter-notification-dot"
                 );
                 if (chapterNotificationDot) {
-                    // Mostra la notifica per il capitolo
                     chapterNotificationDot.classList.remove("hidden");
                 }
             }
@@ -284,28 +258,25 @@ function initSocket() {
         });
 
         socket.on("gamequeue-cancelled", (message) => {
-            // Modifica la UI
-            document.getElementById("countdown-seconds").style.display = "none"; // Nascondi il countdown
+            document.getElementById("countdown-seconds").style.display = "none";
             document.getElementById("countdown").innerText = message;
-            document.getElementById("ready-btn").style.display = "none"; // Nascondi il pulsante "Sono pronto"
+            document.getElementById("ready-btn").style.display = "none";
 
-            // Dopo 2 secondi, nascondi l'overlay e ripristina la UI
             setTimeout(() => {
                 document
                     .getElementById("countdown-overlay")
                     .style.removeProperty("display");
                 document.getElementById("countdown-seconds").style.display =
-                    "block"; // Rendi visibile di nuovo il countdown
-                document.getElementById("ready-btn").style.display = "block"; // Mostra il pulsante "Sono pronto"
+                    "block";
+                document.getElementById("ready-btn").style.display = "block";
                 document.getElementById("countdown").innerText =
-                    "Partita trovata, Inizio in:"; // Ripristina il testo iniziale
+                    "Partita trovata, Inizio in:";
                 document.getElementById("ready-btn").classList.remove("hidden");
                 document.getElementById("pronto-text").classList.add("hidden");
-                // stopBackgroundMusic()
                 countdownStarted = false;
                 socket.disconnect();
                 socket = null;
-            }, 2000); // Aspetta 2 secondi prima di ripristinare la UI
+            }, 2000);
         });
 
         socket.on("game-start", (data) => {
@@ -344,12 +315,11 @@ function showNotification(message, icon) {
 
     container.append(notification);
 
-    // Fade-out + remove dopo 5 secondi
     setTimeout(() => {
         notification.firstElementChild.style.opacity = "0";
         setTimeout(() => {
             notification.remove();
-        }, 500); // attende che finisca il fade
+        }, 500);
     }, 5000);
 }
 
@@ -357,20 +327,19 @@ function readyToPlay() {
     document.getElementById("ready-btn").classList.add("hidden");
     document.getElementById("pronto-text").classList.remove("hidden");
     if (currentGameId) {
-        console.log(`current game di: ${currentGameId}`);
         socket.emit("playerReady", {
             gameId: currentGameId,
             userId: socket.id,
         });
     } else {
-        console.log("Non sei ancora stato assegnato a un gioco.");
+        return;
     }
 }
 
 const sound = document.getElementById("click-sound");
 function buttonSound() {
     if (sound) {
-        sound.currentTime = 0; // Resetta il suono per farlo partire sempre da capo
+        sound.currentTime = 0;
         sound.play();
     } else {
         console.error("Elemento audio non trovato!");
@@ -380,7 +349,7 @@ function buttonSound() {
 const selectSound = document.getElementById("select-sound");
 function avatarSelectSound() {
     if (selectSound) {
-        selectSound.currentTime = 0; // Resetta il suono per farlo partire sempre da capo
+        selectSound.currentTime = 0;
         selectSound.play();
     } else {
         console.error("Elemento audio non trovato!");
@@ -390,7 +359,7 @@ function avatarSelectSound() {
 const selectSoundNewGame = document.getElementById("select-sound-new-game");
 function newGameSound() {
     if (selectSoundNewGame) {
-        selectSoundNewGame.currentTime = 0; // Resetta il suono per farlo partire sempre da capo
+        selectSoundNewGame.currentTime = 0;
         selectSoundNewGame.play();
     } else {
         console.error("Elemento audio non trovato!");
@@ -399,28 +368,20 @@ function newGameSound() {
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let currentAudioSource = null;
-// Funzione per caricare il file audio e riprodurlo
 async function loadAndPlayAudio(filePath) {
     try {
-        // Carica il file audio
         const response = await fetch(filePath);
         const arrayBuffer = await response.arrayBuffer();
 
-        // Decodifica l'audio in un AudioBuffer
         const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
 
-        // Crea un AudioBufferSourceNode
         const source = audioCtx.createBufferSource();
         source.buffer = audioBuffer;
-        source.loop = true; // Configura il loop
+        source.loop = true;
 
-        // Collega il source al contesto audio
         source.connect(audioCtx.destination);
-
-        // Riproduci l'audio
         source.start();
 
-        // Salva il riferimento al nodo audio per fermarlo successivamente
         currentAudioSource = source;
     } catch (error) {
         console.error(
@@ -431,54 +392,38 @@ async function loadAndPlayAudio(filePath) {
 }
 
 async function startBackgroundMusic(filePath) {
-    // Verifica se c'è già un audio in riproduzione e lo ferma prima di iniziarne uno nuovo
     if (currentAudioSource) {
-        currentAudioSource.stop(); // Ferma la musica in corso
+        currentAudioSource.stop();
     }
 
     try {
-        // Carica e avvia la musica
-        await loadAndPlayAudio(filePath); // Usa la tua funzione loadAndPlayAudio
+        await loadAndPlayAudio(filePath);
     } catch (error) {
         console.error("Errore durante la riproduzione della musica:", error);
     }
 }
 
-function stopBackgroundMusic() {
-    if (currentAudioSource) {
-        currentAudioSource.stop(); // Ferma la riproduzione
-        currentAudioSource = null; // Resetta la variabile
-    } else {
-        console.log("Nessun audio in riproduzione.");
-    }
-}
-
 function fetchAvatarData(username) {
-    // Controlla se l'avatar è già salvato nel localStorage
     const avatar = localStorage.getItem(`avatar_${username}`);
     if (avatar) {
-        // Se l'avatar è già presente nel localStorage, usa direttamente l'immagine
         updateAvatarImage(avatar);
     } else {
-        // Altrimenti, fai la fetch per ottenere l'avatar dal server
         fetch("/profile/avatar", {
-            method: "GET", // Metodo GET per ottenere l'avatar
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include", // Include il cookie per l'autenticazione
+            credentials: "include",
         })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Errore nella rete");
                 }
-                return response.json(); // Ottieni i dati in formato JSON
+                return response.json();
             })
             .then((data) => {
                 const avatar = data.avatar;
-                console.log(`avatar ${avatar}`);
 
-                // Memorizza l'avatar nel localStorage per evitare future richieste
                 localStorage.setItem(`avatar_${username}`, avatar);
                 updateAvatarImage(avatar);
             })
@@ -488,11 +433,9 @@ function fetchAvatarData(username) {
     }
 }
 
-// Funzione per aggiornare l'immagine dell'avatar
 function updateAvatarImage(avatar) {
-    console.log(`avatar ${avatar}`);
     const avatarContainer = document.getElementById("main-avatar");
-    avatarContainer.src = `/images/avatars/${avatar}.png`; // Imposta il nuovo avatar
+    avatarContainer.src = `/images/avatars/${avatar}.png`;
 }
 
 let username;
@@ -500,7 +443,7 @@ let username;
 async function fetchdashboardData() {
     try {
         const response = await fetch("/profile/user-data", {
-            method: "GET", // Metodo GET per ottenere gli item
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -520,38 +463,24 @@ async function fetchdashboardData() {
         showScoreNotificationsSequential(gameNotifications);
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
-            await initSocket(); // Assicurati che initSocket sia una funzione asincrona
+            await initSocket();
 
             Object.keys(games).forEach((gameId) => {
-                console.log(`Gmae id to connect: ${gameId}`);
                 socket.emit("joinNewGame", { gameId, user_id });
             });
 
-            // Creazione di un pulsante per ogni gioco attivo
             Object.entries(games).forEach(([gameId, gameData], index) => {
-                // Assicurati di non superare il massimo di 5 contenitori
                 if (index >= 5) return;
-
                 const isRanked = gameData.gameType === "ranked";
-
-                console.log(gameData);
-                console.log("gameType:", gameData.gameType);
-
-                // Trova il contenitore corrispondente
                 const container = document.getElementById(`game-${index + 1}`);
 
                 if (container) {
-                    // Pulisci il contenitore precedente (se c'è)
                     container.innerHTML = "";
-
                     container.setAttribute("data-game-id", gameId);
-
-                    // Crea il wrapper per il gioco (contenitore principale)
                     const gameWrapper = document.createElement("div");
                     gameWrapper.className =
-                        "relative w-full h-full flex items-center justify-center"; // Questo assicura che i dot siano relativi al wrapper
+                        "relative w-full h-full flex items-center justify-center";
 
-                    // Crea il pulsante per il gioco
                     const button = document.createElement("button");
                     button.innerText = `Torna al game ${index + 1}`;
                     button.onclick = () => handleBackToGame(gameId);
@@ -566,17 +495,13 @@ async function fetchdashboardData() {
                     }
                 `;
 
-                    // Aggiungi notifiche (dot) dentro il wrapper
                     const notificationHtml = `
                         <div class="chat-notification-dot absolute -top-4 -right-4 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
                         <div class="chapter-notification-dot absolute -top-4 -left-4 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
                     `;
 
-                    // Aggiungi il contenuto al wrapper
                     gameWrapper.innerHTML = notificationHtml;
                     gameWrapper.appendChild(button);
-
-                    // Aggiungi il wrapper al contenitore principale
                     container.appendChild(gameWrapper);
                 }
             });
@@ -585,11 +510,7 @@ async function fetchdashboardData() {
         fetchAvatarData(username);
         displayItems(username);
     } catch (error) {
-        console.error("Errore durante il recupero degli elementi:", error);
-        console.log(
-            "Response status:",
-            error.response ? error.response.status : "nessuna risposta"
-        );
+        alert("Si è verificato un errore.");
     }
 }
 
@@ -620,7 +541,6 @@ async function joinQueue({ gameType, gameSpeed }) {
             const usernameForAvatar = localStorage.getItem("username");
             const avatarKey = `avatar_${usernameForAvatar}`;
             const avatarForGame = localStorage.getItem(avatarKey);
-            console.log(`avatar main: ${avatarForGame}`);
 
             const response = await fetch("/game/game-queue", {
                 method: "POST",
@@ -646,7 +566,7 @@ async function joinQueue({ gameType, gameSpeed }) {
             );
         }
     } else {
-        console.log("Impossibile ottenere il socketId.");
+        alert("Si è verificato un errore. Riprova più tardi.");
     }
 }
 
@@ -657,7 +577,7 @@ function abandonQueue() {
         socket.disconnect();
         socket = null;
     } else {
-        console.log("Nessun socket da chiudere.");
+        alert("Si è verificato un errore. Riprova più tardi.");
     }
 
     fetch("/game/game-queue", {
@@ -673,7 +593,6 @@ function abandonQueue() {
             }
             setTimeout(() => {
                 waitingOverlay.classList.add("hidden");
-                // stopBackgroundMusic();
             }, 1500);
 
             return response.json();
@@ -700,7 +619,6 @@ function handleBackToGame(firstGameId) {
     }
 }
 
-// Seleziona tutti gli avatar
 const avatars = document.querySelectorAll(".avatar");
 const mainAvatar = document.getElementById("main-avatar");
 const avatarContainer = document.getElementById("avatarContainer");
@@ -713,7 +631,6 @@ function openAvatarMenu() {
     document.getElementById("avatarContainer").classList.remove("hidden");
 }
 
-// Aggiungi l'evento click a ciascun avatar
 avatars.forEach((avatar) => {
     avatar.addEventListener("click", () => {
         avatarSelectSound();
@@ -736,14 +653,13 @@ selectButton.addEventListener("click", () => {
     if (selectedAvatar) {
         fetch("/profile/avatar", {
             method: "POST",
-            body: JSON.stringify({ avatar: selectedAvatar }), // Passiamo l'avatar selezionato
+            body: JSON.stringify({ avatar: selectedAvatar }),
             headers: {
                 "Content-Type": "application/json",
             },
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 localStorage.setItem(`avatar_${data.username}`, selectedAvatar);
                 closeMenu();
             })
@@ -753,7 +669,6 @@ selectButton.addEventListener("click", () => {
     }
 });
 
-// function to open select game overlay
 function openOverlay() {
     var overlay = document.getElementById("overlay-new-game");
     overlay.style.display = "flex";
@@ -763,8 +678,6 @@ function openOverlay() {
     }, 10);
     e;
 }
-
-// function change grayscale select game images
 
 const img1 = document.getElementById("img1");
 const img2 = document.getElementById("img2");
@@ -776,8 +689,6 @@ function toggleGrayscale(hovered, other) {
 
 img1.addEventListener("mouseenter", () => toggleGrayscale(img1, img2));
 img2.addEventListener("mouseenter", () => toggleGrayscale(img2, img1));
-
-// function to close select game overlay
 
 function closeOverlay() {
     var overlay = document.getElementById("overlay-new-game");
@@ -793,30 +704,28 @@ closeButton.addEventListener("click", () => {
     if (selectedAvatar) {
         fetch("/profile/avatar", {
             method: "POST",
-            body: JSON.stringify({ avatar: selectedAvatar }), // Passiamo l'avatar selezionato
+            body: JSON.stringify({ avatar: selectedAvatar }),
             headers: {
                 "Content-Type": "application/json",
             },
         })
             .then((response) => response.json())
-            .then((data) => {
-                // Gestisci la risposta (ad esempio, chiudi il menu o mostra un messaggio di successo)
+            .then(() => {
                 localStorage.setItem(`avatar_${username}`, selectedAvatar);
-                closeMenu(); // Chiudi il menu
+                closeMenu();
             })
             .catch((error) => {
                 console.error("Errore nella selezione dell'avatar:", error);
             });
     } else {
-        // Se non è stato selezionato nessun avatar, chiudi semplicemente il menu senza fare fetch
         closeMenu();
     }
 });
 
 function closeMenu() {
-    avatarContainer.classList.add("hidden"); // Nascondi il menu
-    selectedAvatar = null; // Resetta la selezione
-    selectButton.disabled = true; // Disabilita il bottone "Seleziona" di nuovo
+    avatarContainer.classList.add("hidden");
+    selectedAvatar = null;
+    selectButton.disabled = true;
 }
 
 function modalDeleteAccount() {
@@ -854,7 +763,7 @@ async function confirmDeleteAccount() {
 
     if (res.ok) {
         alert("Account cancellato. Verrai disconnesso.");
-        window.location.href = "/"; // o home page
+        window.location.href = "/";
     } else {
         alert(data.message || "Errore nella cancellazione.");
     }
@@ -863,7 +772,6 @@ async function confirmDeleteAccount() {
 ///////// POPUP NEW RANKED SCORE /////////////
 
 function showScoreNotificationsSequential(gameNotifications) {
-    console.log("partita showScoreNotificationsSequential");
     let index = 0;
 
     function showNext() {
@@ -892,17 +800,16 @@ function showScoreNotificationsSequential(gameNotifications) {
             "-translate-y-1/2",
             "w-[80vw]",
             "h-[80vh]",
-            "z-1" // valore ragionevole per il z-index
+            "z-1"
         );
         scorePopup.appendChild(lottieContainer);
 
-        // Inizializza Lottie (assicurati che la libreria Lottie sia già inclusa nel progetto)
         const animation = lottie.loadAnimation({
             container: lottieContainer,
             renderer: "svg",
             loop: true,
             autoplay: true,
-            path: "/animations/new-score-animation.json", // Percorso dell'animazione Lottie
+            path: "/animations/new-score-animation.json",
         });
 
         setTimeout(() => {
@@ -968,23 +875,16 @@ function showScoreNotificationsSequential(gameNotifications) {
                 .querySelector("button")
                 .addEventListener("click", async (e) => {
                     const game_id = e.target.getAttribute("data-game-id");
-                    console.log(
-                        "game_id tipo:",
-                        typeof game_id,
-                        "valore:",
-                        game_id
-                    );
-
                     await deleteNotification(Number(game_id));
                     scorePopup.remove();
                     index++;
-                    showNext(); // mostra il prossimo dopo il click
+                    showNext();
                 });
         }, 600);
         document.body.appendChild(scorePopup);
     }
 
-    showNext(); // inizia la sequenza
+    showNext();
 }
 
 function deleteNotification(game_id) {
@@ -993,14 +893,15 @@ function deleteNotification(game_id) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ game_id: game_id }),
+        body: JSON.stringify({ game_id }),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Notification removed:", data);
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Errore nella rimozione della notifica");
+            }
         })
-        .catch((error) => {
-            console.error("Error removing notification:", error);
+        .catch(() => {
+            alert("Qualcosa é andato storto");
         });
 }
 

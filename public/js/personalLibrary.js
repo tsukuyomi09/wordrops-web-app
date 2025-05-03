@@ -8,10 +8,10 @@ async function fetchCompletedGames() {
                 const containerToReveal = document.getElementById(
                     "stories-container-wrapper"
                 );
-                containerToReveal.classList.remove("hidden"); // Rende visibile il contenitore
-                renderCompletedGames(data.completedGames); // Se ci sono giochi, li renderizza
+                containerToReveal.classList.remove("hidden");
+                renderCompletedGames(data.completedGames);
             } else {
-                console.log("Non ci sono giochi completati.");
+                alert("Non ci sono giochi completati.");
             }
         } else {
             console.error(
@@ -24,13 +24,11 @@ async function fetchCompletedGames() {
     }
 }
 
-// Funzione per visualizzare i titoli sulla dashboard
 function renderCompletedGames(completedGames) {
     const container = document.getElementById("stories-container");
-    container.innerHTML = ""; // Resetta il contenuto prima di aggiungere i nuovi giochi
+    container.innerHTML = "";
 
     completedGames.forEach((game) => {
-        // Crea un div per ogni titolo di gioco completato
         const storyDiv = document.createElement("div");
         storyDiv.classList.add(
             "story",
@@ -48,7 +46,6 @@ function renderCompletedGames(completedGames) {
 
         storyDiv.setAttribute("data-game-id", game.id);
 
-        // Crea solo il titolo per la storia
         storyDiv.innerHTML = `
         <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
             <!-- Immagine del libro -->
@@ -61,16 +58,12 @@ function renderCompletedGames(completedGames) {
         </div>
             `;
 
-        // Aggiungi l'evento per il click sul titolo (anche se per ora non fa nulla)
         storyDiv.addEventListener("click", async () => {
             const gameId = storyDiv.getAttribute("data-game-id");
-            const storyDetails = await fetchStoryDetails(gameId); // Recupera i dettagli della storia
+            const storyDetails = await fetchStoryDetails(gameId);
 
             openBookOverlay(game.title, storyDetails);
-            console.log(`Hai cliccato su: ${game.title}`);
         });
-
-        // Aggiungi il div della storia alla dashboard
         container.appendChild(storyDiv);
     });
 }
@@ -83,11 +76,10 @@ function openBookOverlay(title, storyDetails) {
     const chaptersContainer = document.querySelector(
         ".book-chapters-container"
     );
-    titleElement.textContent = title; // Imposta il titolo del libro nell'overlay
+    titleElement.textContent = title;
     chaptersContainer.innerHTML = "";
 
     storyDetails.chapters.forEach((item) => {
-        // Crea il div per ogni capitolo
         const chapterDiv = document.createElement("div");
         chapterDiv.classList.add(
             "mt-4",
@@ -97,7 +89,6 @@ function openBookOverlay(title, storyDetails) {
             "gap-6"
         );
 
-        // Aggiungi il contenuto del capitolo
         chapterDiv.innerHTML = `
             <h3 class="text-2xl font-semibold" id="chapter-title">
                 Capitolo: ${item.title}
@@ -113,7 +104,6 @@ function openBookOverlay(title, storyDetails) {
             </p>
         `;
 
-        // Aggiungi il div del capitolo al contenitore principale
         chaptersContainer.appendChild(chapterDiv);
     });
 
@@ -126,13 +116,11 @@ function closeBookOverlay() {
     const overlay = document.getElementById("overlay-books");
     overlay.classList.add("hidden");
 
-    // Riabilita lo scroll dopo l'animazione (match `duration-500`)
     setTimeout(() => {
         document.body.style.overflow = "";
     }, 500);
 }
 
-// get all the story details
 async function fetchStoryDetails(storyId) {
     try {
         const response = await fetch(
@@ -153,5 +141,4 @@ async function fetchStoryDetails(storyId) {
     }
 }
 
-// Chiamata alla funzione per caricare i giochi completati al caricamento della pagina
 window.addEventListener("DOMContentLoaded", fetchCompletedGames);

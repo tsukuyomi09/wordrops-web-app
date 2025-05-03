@@ -10,23 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
 async function fetchUserData() {
     try {
         const urlPath = window.location.pathname;
-        const urlGameId = urlPath.split("/").pop(); // Ottiene l'ID del gioco dall'URL
-
-        console.log("Game ID from URL:", urlGameId);
-
-        // Fetch per ottenere lo stato dell'utente
+        const urlGameId = urlPath.split("/").pop();
         const response = await fetch("/profile/user-data");
         if (!response.ok)
             throw new Error("Errore nel recupero dei dati utente");
 
         const data = await response.json();
-        console.log("Dati utente:", data);
 
         if (data.status === "in_game" && data.games.hasOwnProperty(urlGameId)) {
             game_id = urlGameId;
             initializeGame(game_id);
         } else {
-            console.log("Non stai partecipando a questa partita");
             window.location.href = `/dashboard/${data.username}`;
         }
     } catch (error) {
@@ -36,10 +30,7 @@ async function fetchUserData() {
 
 async function initializeGame(game_id) {
     initializeSocket(game_id);
-    console.log("checkGameData in partenza");
-
     try {
-        // Fetch per ottenere lo stato del gioco
         const response = await fetch(`/game/game-status/${game_id}`);
         if (!response.ok)
             throw new Error("Errore nel recupero dello stato del gioco");
@@ -67,12 +58,6 @@ async function fetchGameData(game_id) {
             throw new Error("Errore nel recupero dei dati del gioco");
 
         const data = await response.json();
-        console.log("Dati gioco:", data);
-        console.log(`questo lo status del game: ${data.status}`);
-        console.log(`lo status del game é in_game`);
-        // Se lo status è "in_game", esegui tutto ciò che c'è
-        console.log("data:", JSON.stringify(data, null, 2));
-
         updateCurrentPlayerDisplay(data.currentPlayer);
         updateTurnOrderDisplay(data.turnOrder);
         handleEditorAccess(
@@ -95,21 +80,17 @@ function openScoreModal(chapters) {
         return;
     }
 
-    // Svuota il contenitore
     container.innerHTML = "";
 
-    // Crea le box per i capitoli
     chapters.forEach((chapter, index) => {
         const chapterBox = document.createElement("div");
         chapterBox.className =
             "p-3 border rounded-lg bg-gray-200 cursor-pointer hover:bg-gray-300 transition";
         chapterBox.textContent = `Capitolo ${index + 1}: ${chapter.title}`;
 
-        // Aggiunge il capitolo al contenitore
         container.appendChild(chapterBox);
     });
 
-    // Mostra il modale
     modal.classList.remove("hidden");
     modal.classList.add("flex");
 }
@@ -125,21 +106,17 @@ function initializeSocket(game_id) {
         socket = io();
 
         socket.on("game-ready-popup", () => {
-            console.log("Evento 'game-ready-popup' ricevuto"); // Debug per confermare la ricezione
-            showGameStartPopup(); // Mostra il popup
+            showGameStartPopup();
         });
 
         socket.on("gameCompleted", () => {
-            // Rimuove eventuale popup precedente
             const existingPopup = document.getElementById("change-turn-popup");
             if (existingPopup) {
                 existingPopup.remove();
             }
 
-            // Pulisce la sessione
             sessionStorage.clear();
 
-            // Mostra il popup
             const popup = document.getElementById("end-game-popup");
             const popupText = document.getElementById("end-game-text");
             const username = localStorage.getItem("username");
@@ -164,7 +141,6 @@ function initializeSocket(game_id) {
                 window.location.href = `/dashboard/${username}`;
             };
 
-            // Redirect automatico dopo 5 secondi
             setTimeout(() => {
                 window.location.href = `/dashboard/${username}`;
             }, 20000);
@@ -211,16 +187,13 @@ function initializeSocket(game_id) {
                 messageData;
 
             if (isChatOpen) {
-                console.log("message read:");
-
                 displayReceivedMessage(messageText, avatar, username);
                 socket.emit("chatRead", {
                     game_id: game_id,
-                    user_id: user_id, // o recuperalo dal contesto auth
+                    user_id: user_id,
                     readUntil: sentAt,
                 });
             } else {
-                // Se la chat non è aperta, salva il messaggio nell'oggetto unreadMessages
                 if (!unreadMessages[game_id]) {
                     unreadMessages[game_id] = [];
                 }
@@ -231,16 +204,12 @@ function initializeSocket(game_id) {
                     username,
                     sentAt,
                 });
-                console.log("message not read:");
-                console.log("unreadMessages:", unreadMessages);
 
-                // Mostra il simbolo di notifica
                 displayNotificationSymbol();
             }
         });
 
         socket.on("newChapterNotification", ({ timestamp, gameId }) => {
-            // Solo conferma lettura col timestamp
             socket.emit("chapterRead", {
                 game_id: gameId,
                 readUntil: timestamp,
@@ -250,21 +219,13 @@ function initializeSocket(game_id) {
 
         socket.on("chatStatus", ({ allMessagesRead, chat, game_id }) => {
             if (!allMessagesRead) {
-                // Condizione corretta per i messaggi non letti
-                console.log("Ci sono messaggi non letti.");
                 displayNotificationSymbol();
-            } else {
-                console.log("Tutti i messaggi sono stati letti.");
             }
 
-            console.log(`read status: ${allMessagesRead}`);
-
-            // Salva i messaggi nell'oggetto unreadMessages
             if (!unreadMessages[game_id]) {
-                unreadMessages[game_id] = []; // inizializza un array se non esiste già
+                unreadMessages[game_id] = [];
             }
 
-            // Salva tutti i messaggi ricevuti
             chat.forEach((message) => {
                 const { messageText, avatar, username, sentAt } = message;
                 unreadMessages[game_id].push({
@@ -274,8 +235,6 @@ function initializeSocket(game_id) {
                     sentAt,
                 });
             });
-
-            console.log("unreadMessages:", unreadMessages);
         });
 
         socket.on("gameUpdate", (data) => {
@@ -284,10 +243,6 @@ function initializeSocket(game_id) {
             } catch (error) {
                 console.error("Errore durante updateCountdownDisplay:", error);
             }
-        });
-
-        socket.on("playerJoined", (data) => {
-            console.log(`Messaggio ricevuto dal server: ${data.message}`);
         });
 
         socket.on("connect", () => {
@@ -328,23 +283,14 @@ function dashboardButton() {
     }
 }
 
-//chat messages
-
 let isChatOpen = false;
 
 const toggleChatButton = document.getElementById("toggleChatButton");
 const chatContainer = document.getElementById("chatContainer");
 
 toggleChatButton.addEventListener("click", () => {
-    console.log("clicked");
-    // Cambia lo stato della chat
     isChatOpen = !isChatOpen;
-    console.log("isChatOpen:", isChatOpen);
-
-    // Mostra o nasconde la chat in base allo stato
     if (isChatOpen) {
-        console.log("it is open:", isChatOpen);
-
         chatContainer.classList.add("chatVisible");
         chatContainer.classList.remove("chatNotVisible");
 
@@ -352,7 +298,6 @@ toggleChatButton.addEventListener("click", () => {
             document.getElementById("notificationSymbol");
         notificationSymbol.classList.add("hidden");
 
-        // Visualizza i messaggi non letti
         for (let game_id in unreadMessages) {
             const messages = unreadMessages[game_id];
 
@@ -366,40 +311,32 @@ toggleChatButton.addEventListener("click", () => {
             const lastMessage = messages[messages.length - 1];
             socket.emit("chatRead", {
                 game_id: game_id,
-                user_id: user_id, // o recuperalo dal contesto auth
+                user_id: user_id,
                 readUntil: lastMessage.sentAt,
             });
-            console.log(`chat read event sent`);
         }
-        unreadMessages = {}; // Resetta i messaggi non letti
-        console.log(`unreadMessages should be empty:`, unreadMessages);
+        unreadMessages = {};
     } else {
-        console.log("it is closed:", isChatOpen);
-
         chatContainer.classList.add("chatNotVisible");
         chatContainer.classList.remove("chatVisible");
     }
 });
 
 function displayNotificationSymbol() {
-    console.log("New message received! Show notification icon");
     const notificationSymbol = document.getElementById("notificationSymbol");
-    notificationSymbol.classList.remove("hidden"); // Rimuove la classe 'hidden' per mostrare il simbolo
+    notificationSymbol.classList.remove("hidden");
 }
 
 const sendMessageButton = document.getElementById("sendMessageButton");
 
 sendMessageButton.addEventListener("click", () => {
     if (!game_id) {
-        console.log("game_id non è stato ancora impostato!");
         return;
     }
     const messageInput = document.getElementById("messageInput");
     const messageText = messageInput.value.trim();
 
     if (!messageText || !user_id || !game_id) return;
-
-    console.log(`game_id prima dell'invio ${game_id}`);
 
     socket.emit("sendChatMessage", {
         game_id: game_id,
@@ -418,7 +355,7 @@ function logMessage(messageText) {
 
     const wrapper = document.createElement("div");
     wrapper.className =
-        "p-2 mb-2 rounded text-gray-700 flex items-start gap-2 justify-end"; // Aggiungi 'justify-end' per allineare a destra
+        "p-2 mb-2 rounded text-gray-700 flex items-start gap-2 justify-end";
     wrapper.innerHTML = `
 
     <div>
@@ -435,12 +372,10 @@ function logMessage(messageText) {
 function displayReceivedMessage(messageText, avatar, username) {
     const messageBox = document.getElementById("chatBox");
 
-    // Crea il wrapper per il messaggio
     const wrapper = document.createElement("div");
     wrapper.className =
         "p-2 mb-2 bg-gray-100 rounded text-gray-700 flex items-start gap-2";
 
-    // Utilizza innerHTML per creare il contenuto del messaggio
     wrapper.innerHTML = `
         <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-auto h-4 rounded-full" />
         <div>
@@ -463,22 +398,15 @@ function buttonStartGame() {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ game_id }), // Invia il gameId del gioco
+        body: JSON.stringify({ game_id }),
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log("Dati ricevuti dal server:", data); // Log per vedere cosa arriva dal server
-
             if (data.status === "in-progress") {
-                // Se il gioco è stato avviato, esegui altre azioni
                 sessionStorage.setItem("game_status", "in_progress");
-                console.log(
-                    "Stato del gioco aggiornato:",
-                    sessionStorage.getItem("game_status")
-                ); // Log per verificare lo stato nel sessionStorage
                 showGameStartPopup();
             } else {
-                console.log("Il gioco non è ancora pronto.");
+                return;
             }
         })
         .catch((error) =>
@@ -505,7 +433,6 @@ function showGameStartPopup() {
 
     setTimeout(() => {
         gameStartPopup.remove();
-        console.log("Popup rimosso"); // Debug per verificare se il popup viene rimosso
     }, 2000);
 }
 
@@ -514,12 +441,11 @@ function showGameStartPopup() {
 function updateCountdownDisplay(formattedTime) {
     const countdownDisplay = document.getElementById("countdown-display");
     if (countdownDisplay) {
-        countdownDisplay.textContent = formattedTime; // Aggiorna il testo con il tempo rimanente
+        countdownDisplay.textContent = formattedTime;
     }
 }
 
 function updateCurrentPlayerDisplay(currentPlayer) {
-    console.log(`current avatar: ${currentPlayer.avatar}`);
     currentTurnDisplay = document.getElementById("current-turn");
     if (currentTurnDisplay && currentPlayer) {
         const avatarSrc = getAvatarSrc(currentPlayer.avatar);
@@ -550,7 +476,7 @@ function updateCurrentPlayerDisplay(currentPlayer) {
         </div>
     `;
     } else if (currentTurnDisplay) {
-        currentTurnDisplay.textContent = `Turno corrente non trovato!`; // Messaggio di errore
+        currentTurnDisplay.textContent = `Turno corrente non trovato!`;
     }
 }
 
@@ -577,7 +503,6 @@ function updateTurnOrderDisplay(turnOrder) {
 }
 
 function getAvatarSrc(avatar) {
-    // Controlla se l'avatar è definito, altrimenti usa un avatar di default
     return avatar
         ? `/images/avatars/${avatar}.png`
         : "/images/avatars/default-avatar.png";
@@ -585,13 +510,11 @@ function getAvatarSrc(avatar) {
 
 function getChapter() {
     const title = document.getElementById("chapter-title").value.trim();
-    const editorContent = editor.getText().trim(); // Assumendo che Quill sia inizializzato come `quill`
+    const editorContent = editor.getText().trim();
     const currentUser = localStorage.getItem("username");
 
-    // Conta le parole nel contenuto dell'editor
     const wordCount = editorContent ? editorContent.split(/\s+/).length : 0;
 
-    // Verifica se il titolo è vuoto o ci sono meno di 100 parole
     if (!title) {
         alert("Il titolo è obbligatorio!");
         return;
@@ -626,7 +549,7 @@ function saveChapterChangeTurn(data) {
             return response.json();
         })
         .then((result) => {
-            document.getElementById("chapter-title").value = ""; // Reset del titolo
+            document.getElementById("chapter-title").value = "";
             clearDraft();
         })
         .catch((error) => {
@@ -642,11 +565,10 @@ const toolbarOptions = [
     [{ list: "ordered" }, { list: "bullet" }],
     [{ align: [] }],
     [{ header: "1" }, { header: "2" }],
-    [{ size: ["small", "medium", "large"] }], // Modifica le opzioni di size
+    [{ size: ["small", "medium", "large"] }],
     ["clean"],
 ];
 
-// Inizializza Quill
 editor = new Quill("#editor-container", {
     theme: "snow",
     modules: {
@@ -661,17 +583,13 @@ qlEditor.setAttribute("autocorrect", "off");
 qlEditor.setAttribute("autocapitalize", "off");
 qlEditor.setAttribute("autocomplete", "off");
 
-// Recuperiamo l'ID della partita dalla URL
-const gameIdQuill = window.location.pathname.split("/")[2]; // esempio per ottenere l'ID della partita dalla URL
+const gameIdQuill = window.location.pathname.split("/")[2];
 
-// Funzione per salvare il draft
 function salvaDraft() {
-    const contenuto = editor.root.innerHTML; // Otteniamo il contenuto dell'editor
-    localStorage.setItem("draft-" + gameIdQuill, contenuto); // Salviamo nel localStorage
-    console.log("Draft salvato per la partita " + gameIdQuill);
+    const contenuto = editor.root.innerHTML;
+    localStorage.setItem("draft-" + gameIdQuill, contenuto);
 }
 
-// Funzione debounce
 function debounce(callback, delay) {
     let timeoutId;
     return function (...args) {
@@ -682,26 +600,20 @@ function debounce(callback, delay) {
     };
 }
 
-// Creiamo la versione debounced della funzione salvaDraft
 const saveDraftDebounced = debounce(salvaDraft, 3000);
 
-// Ascoltiamo gli eventi text-change di Quill
 editor.on("text-change", () => {
     saveDraftDebounced();
 });
 
-// Carichiamo il draft al caricamento della pagina, se esiste
 const savedDraft = localStorage.getItem("draft-" + gameIdQuill);
 if (savedDraft) {
     editor.root.innerHTML = savedDraft; // Carica il contenuto nel Quill
-    console.log("Draft caricato per la partita " + gameIdQuill);
 }
 
-// Funzione per pulire il draft quando non serve più
 function clearDraft() {
-    localStorage.removeItem("draft-" + gameIdQuill); // Rimuove il draft
-    editor.root.innerHTML = ""; // Pulisce l'editor
-    console.log("Draft cancellato per la partita " + gameIdQuill);
+    localStorage.removeItem("draft-" + gameIdQuill);
+    editor.root.innerHTML = "";
 }
 
 // editor.root.addEventListener("paste", function (e) {
@@ -715,9 +627,9 @@ toolbar.classList.add("rounded", "mb-4", "text-2xl");
 let writingTimeout;
 
 function getChapterFromLocal() {
-    const savedContent = localStorage.getItem("chapterContent"); // Ottieni il contenuto salvato
+    const savedContent = localStorage.getItem("chapterContent");
     if (savedContent) {
-        editor.root.innerHTML = savedContent; // Carica il contenuto nell'editor
+        editor.root.innerHTML = savedContent;
     }
 }
 
@@ -731,11 +643,11 @@ function handleEditorAccess(currentPlayer, currentUser) {
     }
 
     if (currentPlayer.username === currentUser) {
-        editor.enable(true); // Abilita l'editor
-        sendChapterButton.classList.remove("hidden"); // Mostra il pulsante
+        editor.enable(true);
+        sendChapterButton.classList.remove("hidden");
     } else {
-        editor.enable(false); // Disabilita l'editor
-        sendChapterButton.classList.add("hidden"); // Nascondi il pulsante
+        editor.enable(false);
+        sendChapterButton.classList.add("hidden");
     }
 }
 
@@ -761,7 +673,6 @@ function updateChaptersDisplay(chaptersData) {
             "h-full"
         );
 
-        // Creazione della struttura per ogni capitolo
         slide.innerHTML = `
         <div class="flex flex-col w-full h-full md:gap-8 gap-4">
             <div class="flex flex-row gap-4">
@@ -798,7 +709,6 @@ function changeTurnShowPopup(author, nextPlayer) {
     if (existingPopup) {
         existingPopup.remove();
     }
-    // Crea un div che rappresenta il popup
     const popup = document.createElement("div");
     popup.id = "change-turn-popup";
     popup.classList.add(
@@ -810,7 +720,6 @@ function changeTurnShowPopup(author, nextPlayer) {
         "z-40"
     );
 
-    // Aggiungi il contenuto del popup
     popup.innerHTML = `
         <div class="bg-gray-200 p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
             <p class="text-lg font-semibold text-gray-800">
@@ -825,20 +734,17 @@ function changeTurnShowPopup(author, nextPlayer) {
         </div>
     `;
 
-    // Aggiungi il popup al body
     document.body.appendChild(popup);
 }
 
-// Funzione per chiudere il popup quando l'utente clicca su "OK"
 function closeChangeTurnPopup(button) {
-    const popupContainer = button.closest(".fixed"); // Trova il contenitore del popup
-    popupContainer.remove(); // Rimuovi il popup dal DOM
+    const popupContainer = button.closest(".fixed");
+    popupContainer.remove();
 }
 
-// Funzione per aprire il modal su mobile
 function openGameInfo() {
     const container = document.getElementById("game-info-container");
-    container.classList.remove("hidden"); // Rimuove la classe 'hidden' per mostrare il modal
+    container.classList.remove("hidden");
     container.classList.add(
         "fixed",
         "top-0",
@@ -851,10 +757,9 @@ function openGameInfo() {
     );
 }
 
-// Funzione per chiudere il modal su mobile
 function closeGameInfo() {
     const container = document.getElementById("game-info-container");
-    container.classList.add("hidden"); // Aggiunge la classe 'hidden' per nascondere il modal
+    container.classList.add("hidden");
     container.classList.remove(
         "fixed",
         "top-0",
@@ -871,7 +776,6 @@ function openBookOverlay() {
     const bookOverlay = document.getElementById("overlay-books");
     bookOverlay.classList.add("open");
 
-    // Riabilita lo scroll dopo l'animazione (match `duration-500`)
     setTimeout(() => {
         document.body.style.overflow = "";
     }, 500);
@@ -881,7 +785,6 @@ function closeBookOverlay() {
     const bookOverlay = document.getElementById("overlay-books");
     bookOverlay.classList.remove("open");
 
-    // Riabilita lo scroll dopo l'animazione (match `duration-500`)
     setTimeout(() => {
         document.body.style.overflow = "";
     }, 500);

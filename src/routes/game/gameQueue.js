@@ -7,22 +7,16 @@ gameQueues = {
     ranked: { slow: [], fast: [] },
     normal: { slow: [], fast: [] },
 };
-
 const playerQueuePosition = {};
-
 let preGameQueue = {};
 
-// add player to queue
 router.post("/", checkAuth, (req, res) => {
     const user_id = req.user_id;
     const username = req.username;
     const socketId = req.body.socketId;
     const avatar = req.body.avatarForGame;
-    console.log(`avatar gamequeue: ${avatar}`);
     const gameType = req.body.gameType;
     const gameSpeed = req.body.gameSpeed;
-
-    console.log(`players in queue on mode: ${gameType}`);
 
     if (!user_id) {
         return res.status(401).json({ error: "Utente non autenticato" });
@@ -35,7 +29,7 @@ router.post("/", checkAuth, (req, res) => {
     gameQueues[gameType][gameSpeed].push({
         user_id: user_id,
         username,
-        avatar, // Includi l'avatar
+        avatar,
         socketId,
         gameType,
         gameSpeed,
@@ -51,22 +45,19 @@ router.post("/", checkAuth, (req, res) => {
             socket.emit("in-queue", "In attesa di altri giocatori");
         }, 1000);
     } else {
-        console.log(
-            `Nessun socket trovato per ${username} con socketId ${socketId}`
-        );
+        res.status(500).json({
+            error: "Errore di connessione. Riprova più tardi.",
+        });
     }
 
-    // Controlla se ci sono 5 giocatori nella coda
     if (gameQueues[gameType][gameSpeed].length >= 5) {
-        const players = gameQueues[gameType][gameSpeed].splice(0, 5); // Rimuovi i primi 5 giocatori dalla coda
+        const players = gameQueues[gameType][gameSpeed].splice(0, 5);
         let gameId = `${gameType}_${gameSpeed}:${Date.now()}`;
         preGameQueue[gameId] = {
             gameType,
-            gameSpeed, // Salviamo la modalità
-            players, // I giocatori con la modalità già inclusa
+            gameSpeed,
+            players,
         };
-
-        console.log(preGameQueue);
 
         players.forEach((player) => {
             const socket = req.io.sockets.sockets.get(player.socketId);
@@ -81,14 +72,11 @@ router.post("/", checkAuth, (req, res) => {
         }, 1000);
     }
 
-    console.log(playerQueuePosition);
-
     return res.status(200).json({ message: "Utente aggiunto alla coda" });
 });
 
-// remove player from queue
 router.delete("/", checkAuth, async (req, res) => {
-    const user_id = req.user_id; // Ottieni l'ID dell'utente dalla sessione
+    const user_id = req.user_id;
 
     const player = playerQueuePosition[user_id];
 
@@ -104,7 +92,6 @@ router.delete("/", checkAuth, async (req, res) => {
     gameQueues[gameType][gameSpeed] = gameQueues[gameType][gameSpeed].filter(
         (player) => player.user_id !== user_id
     );
-    console.log(playerQueuePosition);
 
     req.socket.emit("queueAbandoned", {
         status: "idle",
@@ -120,12 +107,11 @@ async function startCountdownPreGame(io, gameId) {
     let countdown = 10;
 
     const preGameCountdownInterval = setInterval(async () => {
-        io.to(gameId).emit("countdown", countdown); // Invia il countdown corrente
+        io.to(gameId).emit("countdown", countdown);
 
         if (countdown <= 0) {
-            // Quando il countdown termina
-            clearInterval(preGameCountdownInterval); // Ferma il countdown
-            const game = preGameQueue[gameId]; // Recupera il gioco
+            clearInterval(preGameCountdownInterval);
+            const game = preGameQueue[gameId];
 
             if (game) {
                 const allReady = game.players.every((player) => player.pronto);
@@ -154,7 +140,7 @@ async function startCountdownPreGame(io, gameId) {
                     io.to(gameId).emit(
                         "gamequeue-cancelled",
                         "Non tutti i giocatori erano pronti, partita annullata"
-                    ); // Rimuovi la coda del gioco dal server
+                    );
                 }
             }
         } else {

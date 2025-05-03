@@ -66,7 +66,6 @@ showAvatarTransition();
 function dashboardButton() {
     const username = localStorage.getItem("username");
     if (username) {
-        // Fai il redirect alla dashboard dell'utente
         window.location.href = `/dashboard/${username}`;
     } else {
         alert("Impossibile recuperare l'username. Effettua il login.");
@@ -79,16 +78,12 @@ function toggleSearch() {
 }
 
 function toggleDropdown() {
-    console.log("fired");
     const menu = document.querySelector(".dropdown-menu");
-    console.log(menu);
     menu.classList.toggle("hidden");
 }
 
 function toggleDropdownMobile() {
-    console.log("fired");
     const menu = document.querySelector(".dropdown-menu-mobile");
-    console.log(menu);
     menu.classList.toggle("hidden");
 }
 
@@ -112,13 +107,11 @@ async function logout() {
     } catch (error) {
         console.error("Errore: Problema con il logout:", error);
     } finally {
-        // In ogni caso, rimuovi tutto e reindirizza
         localStorage.clear();
         window.location.href = "/register01";
     }
 }
 
-// Opzionale: chiude il menu se clicchi fuori
 window.addEventListener("click", function (e) {
     const button = document.querySelector("button[onclick='toggleDropdown()']");
     const menu = document.getElementById("dropdownMenu");

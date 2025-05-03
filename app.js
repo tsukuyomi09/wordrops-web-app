@@ -29,11 +29,7 @@ app.use(express.json());
 const chatReadMap = new Map();
 
 io.on("connection", (socket) => {
-    console.log("Nuovo client connesso:", socket.id);
-
-    socket.on("disconnect", (reason) => {
-        console.log("Disconnesso dal server per:", reason);
-    });
+    socket.on("disconnect", (reason) => {});
 
     socket.on("text-update-animation", ({ gameId, username }) => {
         io.in(gameId).emit("text-update-animation", {
@@ -43,41 +39,16 @@ io.on("connection", (socket) => {
 
     socket.on("playerReady", ({ gameId, userId }) => {
         try {
-            console.log("Messaggio ricevuto: playerReady");
-
-            // Verifica che gameId e userId siano presenti
             if (!gameId || !userId) {
-                console.error("gameId o userId mancante");
                 return;
             }
-
-            // Trova il gioco specificato
             const game = preGameQueue[gameId];
-            // console.log("Contenuto di game:", game);
-
-            if (!game) {
-                console.error(`Gioco con ID ${gameId} non trovato`);
-                return;
-            }
-
-            // Trova il giocatore specificato, confrontando con socketId
-            const player = game.players.find((p) => p.socketId === userId); // Cambiato da p.id a p.socketId
+            const player = game.players.find((p) => p.socketId === userId);
 
             if (!player) {
-                console.error(
-                    `Giocatore con socketId ${userId} non trovato nel gioco ${gameId}`
-                );
                 return;
             }
-
-            // Segna il giocatore come pronto
             player.pronto = true;
-            // console.log(
-            //     `Giocatore ${player.username} è pronto per il gioco ${gameId}`
-            // );
-
-            // Stampa lo stato aggiornato della preGameQueue
-            // console.log(preGameQueue);
         } catch (error) {
             console.error(
                 "Errore durante l'elaborazione dell'evento 'playerReady':",
@@ -88,22 +59,14 @@ io.on("connection", (socket) => {
 
     socket.on("sendChatMessage", (messageData) => {
         const { game_id, user_id, messageText } = messageData;
-        console.log(
-            `mage id: ${game_id} , user id: ${user_id} text: ${messageText}`
-        );
         const game = activeGames.get(game_id);
-        console.log("Turn order:", game.turnOrder);
 
         if (!game) return;
 
         const player = game.players.find((p) => {
-            console.log(
-                `Comparing user_id: ${user_id} with player user_id: ${p.user_id}`
-            );
-            return p.user_id === user_id; // Confronta con user_id
+            return p.user_id === user_id;
         });
 
-        console.log(`player: ${player}`);
         if (!player) return;
 
         const message = {
@@ -116,17 +79,14 @@ io.on("connection", (socket) => {
 
         // Salva il messaggio nel backend
         game.chat.push(message);
-        console.log("Chat aggiornata:", game.chat);
         let gameChatMap = chatReadMap.get(game_id);
         if (!gameChatMap) {
-            gameChatMap = new Map(); // Se non esiste ancora, creiamo una nuova mappa
+            gameChatMap = new Map();
             chatReadMap.set(game_id, gameChatMap);
         }
 
-        // Aggiungi o aggiorna il timestamp dell'utente nella mappa del gioco
         gameChatMap.set(user_id, message.sentAt);
 
-        // Emmetti il messaggio a tutti i client connessi alla stanza del gioco
         socket.to(game_id).emit("receiveChatMessage", {
             game_id: game_id,
             messageText: messageText,
@@ -140,16 +100,11 @@ io.on("connection", (socket) => {
         const { game_id, user_id, readUntil } = data;
 
         if (!chatReadMap.has(game_id)) {
-            // Se il gioco (chat) non è presente nella mappa, creiamo una nuova entry
             chatReadMap.set(game_id, new Map());
         }
 
         const gameChatMap = chatReadMap.get(game_id);
         gameChatMap.set(user_id, readUntil);
-
-        console.log(
-            `Updated read status for chat: ${game_id}, user: ${user_id}, readUntil: ${readUntil}`
-        );
     });
 
     socket.on("chapterRead", ({ game_id, user_id, readUntil }) => {
@@ -161,9 +116,6 @@ io.on("connection", (socket) => {
 
         if (!previous || readUntil > previous) {
             readMap.set(user_id, readUntil);
-            console.log(
-                `Utente ${user_id} ha letto fino al capitolo con timestamp ${readUntil}`
-            );
         }
     });
 
@@ -172,15 +124,12 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinNewGame", ({ gameId, user_id }) => {
-        console.log(`User ${user_id} is joining game ${gameId}`);
-
         socket.join(gameId);
 
         const game = activeGames.get(gameId);
 
         if (!game) {
-            console.error(`Game with ID ${gameId} not found.`);
-            return; // Interrompi l'esecuzione se il gioco non esiste
+            return;
         }
 
         const gameChatMap = chatReadMap.get(gameId);
@@ -205,23 +154,14 @@ io.on("connection", (socket) => {
         }
 
         if (game.chat.length > 0 && lastRead && lastMessage) {
-            console.log(
-                `Comparing last read (${new Date(
-                    lastRead
-                )}) with last message sentAt (${new Date(lastMessage.sentAt)})`
-            );
-
-            // Verifica se l'utente ha letto tutti i messaggi fino all'ultimo
             allMessagesRead =
                 new Date(lastRead) >= new Date(lastMessage.sentAt);
-            console.log(`All messages read: ${allMessagesRead}`);
         }
 
         if (game.chat.length === 0) {
-            allMessagesRead = true; // Non c'è nulla da leggere
+            allMessagesRead = true;
         }
 
-        // Invia la chat e lo stato di lettura al client
         socket.emit("chatStatus", {
             allMessagesRead,
             chat: game?.chat || [],
@@ -232,58 +172,30 @@ io.on("connection", (socket) => {
             game_id: gameId,
             hasUnreadChapter,
         });
-
-        io.in(gameId).emit("playerJoined", {
-            message: `A new player has joined the game ${gameId}`,
-            socketId: socket.id,
-        });
     });
 
     socket.on("updateChapterStatus", ({ game_id, user_id }) => {
         const game = activeGames.get(game_id);
 
-        // Verifica che il gioco esista
         if (game) {
-            // Ottieni l'ultimo capitolo del gioco
             const lastChapter = game?.chapters[game.chapters.length - 1];
             const lastChapterTimestamp = lastChapter
                 ? lastChapter.timestamp
                 : null;
-            console.log(
-                `Confronto dei timestamp per il gioco ${game_id}, utente ${user_id}:`
-            );
-            console.log(
-                `Timestamp dell'ultimo capitolo: ${new Date(
-                    lastChapterTimestamp
-                )}`
-            );
 
-            // Aggiorna il timestamp dell'ultimo capitolo letto per l'utente
             game.chapterReadMap.set(user_id, lastChapterTimestamp);
-            console.log(
-                `Aggiornato il capitolo letto per l'utente ${user_id} nel gioco ${game_id}`
-            );
         } else {
             console.error(`Gioco con ID ${game_id} non trovato.`);
         }
     });
 
     socket.on("disconnect", () => {
-        console.log(`Socket ${socket.id} disconnesso`);
-
-        // Trova il gioco in cui è presente il socket.id
-        for (const [gameId, game] of activeGames) {
+        for (const [game] of activeGames) {
             if (game.connections.includes(socket.id)) {
-                // Rimuovi il socket.id dalla lista connections
                 game.connections = game.connections.filter(
                     (conn) => conn !== socket.id
                 );
-                console.log(`Socket ${socket.id} rimosso dal gioco ${gameId}`);
-                console.log(
-                    `Connessioni aggiornate per il gioco ${gameId}:`,
-                    game.connections
-                );
-                break; // Una volta trovato e aggiornato, non serve continuare
+                break;
             }
         }
     });
@@ -364,8 +276,8 @@ app.use("/search", searchRoute);
 
 (async () => {
     try {
-        await connectDB(); // Assicurati che il DB sia connesso
-        await loadNotificationsIntoMap(); // Carica le notifiche
+        await connectDB();
+        await loadNotificationsIntoMap();
 
         server.listen(port, "0.0.0.0", (err) => {
             if (err) {
@@ -380,25 +292,6 @@ app.use("/search", searchRoute);
     }
 })();
 
-process.on("SIGTERM", () => {
-    console.log("Received SIGTERM. Shutting down gracefully...");
-
-    // Log della situazione prima della chiusura
-    console.log(
-        "Checking if any requests are pending or if the server is overloaded..."
-    );
-
-    // Chiusura del server
-    server.close(() => {
-        console.log("Server closed gracefully");
-    });
-
-    // Log per confermare la chiusura
-    console.log("Attempted to gracefully shut down the server.");
-});
-
-// Aggiungi un log in caso di errore non previsto durante il normale flusso del server
 server.on("error", (err) => {
     console.error("An unexpected error occurred:", err.message);
-    // Eventuali altre azioni di gestione degli errori
 });

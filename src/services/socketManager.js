@@ -1,12 +1,7 @@
 let ioInstance;
 
 function initSocket(server) {
-    ioInstance = require("socket.io")(server, {
-        cors: {
-            origin: "*", // Permette tutte le origini
-            methods: ["GET", "POST"],
-        },
-    });
+    ioInstance = require("socket.io")(server);
 
     ioInstance.on("connection", (socket) => {
         console.log("Client connesso:", socket.id);
