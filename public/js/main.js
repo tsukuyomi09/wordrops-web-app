@@ -1,38 +1,31 @@
 const user_id = Number(localStorage.getItem("user_id"));
 
 document.addEventListener("DOMContentLoaded", function () {
-    const mainSwiper = new Swiper(".swiper-container", {
+    new Swiper(".swiper-container", {
         loop: true,
         pagination: {
             el: ".swiper-pagination",
             clickable: true,
         },
         on: {
+            init: function () {
+                updateSlideStyles(this.realIndex);
+            },
             slideChangeTransitionEnd: function () {
-                document.querySelectorAll(".slide-title").forEach((el, idx) => {
-                    if (idx === mainSwiper.realIndex) {
-                        el.classList.add("opacity-100");
-                    } else {
-                        el.classList.remove("opacity-100");
-                    }
-                });
-
-                document.querySelectorAll(".slide-image").forEach((el, idx) => {
-                    if (idx === mainSwiper.realIndex) {
-                        el.classList.add("opacity-10");
-                    } else {
-                        el.classList.remove("opacity-10");
-                    }
-                });
+                updateSlideStyles(this.realIndex);
             },
         },
     });
-    document
-        .querySelectorAll(".slide-title")
-        [mainSwiper.realIndex].classList.add("opacity-100");
-    document
-        .querySelectorAll(".slide-image")
-        [mainSwiper.realIndex].classList.add("opacity-10");
+
+    function updateSlideStyles(index) {
+        document.querySelectorAll(".slide-title").forEach((el, idx) => {
+            el.classList.toggle("opacity-100", idx === index);
+        });
+
+        document.querySelectorAll(".slide-image").forEach((el, idx) => {
+            el.classList.toggle("opacity-10", idx === index);
+        });
+    }
 });
 
 function showLoadingAnimation() {
@@ -77,18 +70,6 @@ function showAvatarTransition() {
         avatarContainer.classList.add("show");
     }, 50);
 }
-
-window.addEventListener("load", () => {
-    const pagewrap = document.getElementById("pagewrap");
-
-    if (!sessionStorage.getItem("hasVisited")) {
-        showLoadingAnimation();
-        sessionStorage.setItem("hasVisited", "true");
-    } else {
-        pagewrap.classList.remove("hidden");
-    }
-    showAvatarTransition();
-});
 
 window.onpopstate = function (event) {
     fetch("/game/game-queue", {
@@ -336,73 +317,6 @@ function readyToPlay() {
     }
 }
 
-const sound = document.getElementById("click-sound");
-function buttonSound() {
-    if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-    } else {
-        console.error("Elemento audio non trovato!");
-    }
-}
-
-const selectSound = document.getElementById("select-sound");
-function avatarSelectSound() {
-    if (selectSound) {
-        selectSound.currentTime = 0;
-        selectSound.play();
-    } else {
-        console.error("Elemento audio non trovato!");
-    }
-}
-
-const selectSoundNewGame = document.getElementById("select-sound-new-game");
-function newGameSound() {
-    if (selectSoundNewGame) {
-        selectSoundNewGame.currentTime = 0;
-        selectSoundNewGame.play();
-    } else {
-        console.error("Elemento audio non trovato!");
-    }
-}
-
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let currentAudioSource = null;
-async function loadAndPlayAudio(filePath) {
-    try {
-        const response = await fetch(filePath);
-        const arrayBuffer = await response.arrayBuffer();
-
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-
-        const source = audioCtx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.loop = true;
-
-        source.connect(audioCtx.destination);
-        source.start();
-
-        currentAudioSource = source;
-    } catch (error) {
-        console.error(
-            "Errore durante il caricamento o la riproduzione dell'audio:",
-            error
-        );
-    }
-}
-
-async function startBackgroundMusic(filePath) {
-    if (currentAudioSource) {
-        currentAudioSource.stop();
-    }
-
-    try {
-        await loadAndPlayAudio(filePath);
-    } catch (error) {
-        console.error("Errore durante la riproduzione della musica:", error);
-    }
-}
-
 function fetchAvatarData(username) {
     const avatar = localStorage.getItem(`avatar_${username}`);
     if (avatar) {
@@ -531,7 +445,6 @@ async function joinQueue({ gameType, gameSpeed }) {
         return;
     }
 
-    newGameSound();
     closeOverlay();
 
     await initSocket();
@@ -571,25 +484,25 @@ async function joinQueue({ gameType, gameSpeed }) {
 }
 
 function abandonQueue() {
-    buttonSound();
-
-    if (socket) {
-        socket.disconnect();
-        socket = null;
-    } else {
-        alert("Si è verificato un errore. Riprova più tardi.");
-    }
-
     fetch("/game/game-queue", {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
         },
         credentials: "include",
+        body: JSON.stringify({
+            socketId,
+        }),
     })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            if (socket) {
+                socket.disconnect();
+                socket = null;
+            } else {
+                alert("Si è verificato un errore. Riprova più tardi.");
             }
             setTimeout(() => {
                 waitingOverlay.classList.add("hidden");
@@ -627,7 +540,6 @@ const closeButton = document.getElementById("close-avatar-menu");
 let selectedAvatar = null;
 
 function openAvatarMenu() {
-    buttonSound();
     document.getElementById("avatarContainer").classList.remove("hidden");
 }
 
@@ -649,7 +561,6 @@ avatars.forEach((avatar) => {
 });
 
 selectButton.addEventListener("click", () => {
-    buttonSound();
     if (selectedAvatar) {
         fetch("/profile/avatar", {
             method: "POST",
@@ -676,7 +587,6 @@ function openOverlay() {
         overlay.classList.remove("opacity-0", "translate-y-10");
         overlay.classList.add("opacity-100", "translate-y-0");
     }, 10);
-    e;
 }
 
 const img1 = document.getElementById("img1");
@@ -726,47 +636,6 @@ function closeMenu() {
     avatarContainer.classList.add("hidden");
     selectedAvatar = null;
     selectButton.disabled = true;
-}
-
-function modalDeleteAccount() {
-    const modal = document.getElementById("delete-modal");
-    const passwordInput = document.getElementById("confirm-password");
-
-    passwordInput.value = "";
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-}
-
-function closeDeleteModal() {
-    const modal = document.getElementById("delete-modal");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-}
-
-async function confirmDeleteAccount() {
-    const password = document.getElementById("confirm-password").value;
-
-    if (!password) {
-        alert("Inserisci la password per confermare.");
-        return;
-    }
-
-    const res = await fetch("/profile/delete-account", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-        alert("Account cancellato. Verrai disconnesso.");
-        window.location.href = "/";
-    } else {
-        alert(data.message || "Errore nella cancellazione.");
-    }
 }
 
 ///////// POPUP NEW RANKED SCORE /////////////

@@ -190,12 +190,14 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        for (const [game] of activeGames) {
+        // Trova il gioco in cui è presente il socket.id
+        for (const [gameId, game] of activeGames) {
             if (game.connections.includes(socket.id)) {
+                // Rimuovi il socket.id dalla lista connections
                 game.connections = game.connections.filter(
                     (conn) => conn !== socket.id
                 );
-                break;
+                break; // Una volta trovato e aggiornato, non serve continuare
             }
         }
     });

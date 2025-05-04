@@ -6,10 +6,9 @@ document.getElementById("search-input").addEventListener("input", () => {
     const query = document.getElementById("search-input").value;
 
     if (query.length >= 3) {
-        // Aspetta almeno 3 caratteri
-        debounceTimer = setTimeout(() => searchUsers(query), 300); // Attendi 300ms
+        debounceTimer = setTimeout(() => searchUsers(query), 300);
     } else {
-        document.getElementById("results").innerHTML = ""; // Svuota risultati
+        document.getElementById("results").innerHTML = "";
     }
 });
 
@@ -47,21 +46,12 @@ async function searchUsers(query) {
 }
 
 resultsDiv.addEventListener("click", (event) => {
-    const userElement = event.target.closest(".user"); // Trova l'elemento cliccato
+    const userElement = event.target.closest(".user");
     if (userElement) {
         const username = userElement.getAttribute("data-username");
         window.location.href = `/profile/${username}`;
     }
 });
-
-function showAvatarTransition() {
-    const avatarContainer = document.querySelector(".avatar-container");
-    setTimeout(() => {
-        avatarContainer.classList.add("show");
-    }, 50); // Ritardo per la transizione
-}
-
-showAvatarTransition();
 
 function dashboardButton() {
     const username = localStorage.getItem("username");
@@ -89,9 +79,6 @@ function toggleDropdownMobile() {
 
 async function logout() {
     try {
-        buttonSound();
-        sessionStorage.clear();
-
         const response = await fetch("/auth/logout", {
             method: "DELETE",
             headers: {
@@ -108,7 +95,7 @@ async function logout() {
         console.error("Errore: Problema con il logout:", error);
     } finally {
         localStorage.clear();
-        window.location.href = "/register01";
+        window.location.href = "/";
     }
 }
 
@@ -119,3 +106,44 @@ window.addEventListener("click", function (e) {
         menu.classList.add("hidden");
     }
 });
+
+function modalDeleteAccount() {
+    const modal = document.getElementById("delete-modal");
+    const passwordInput = document.getElementById("confirm-password");
+
+    passwordInput.value = "";
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById("delete-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+async function confirmDeleteAccount() {
+    const password = document.getElementById("confirm-password").value;
+
+    if (!password) {
+        alert("Inserisci la password per confermare.");
+        return;
+    }
+
+    const res = await fetch("/profile/delete-account", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert("Account cancellato. Verrai disconnesso.");
+        window.location.href = "/";
+    } else {
+        alert(data.message || "Errore nella cancellazione.");
+    }
+}
