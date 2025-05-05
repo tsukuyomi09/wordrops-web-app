@@ -14,10 +14,10 @@ router.post("/", async (req, res) => {
 
     try {
         const payload = await verifyGoogleToken(idToken);
-        const { sub, name, given_name, family_name, email, picture, locale } =
-            payload;
+        const { sub, email } = payload;
 
         let user = await findUserByGoogleId(sub);
+        console.log(`user sub ${sub}`);
 
         if (user) {
             const { accessToken, refreshToken } = generateTokens(
@@ -38,8 +38,16 @@ router.post("/", async (req, res) => {
                 },
             });
         } else {
+            const existingUserByEmail = await findUserByEmail(email);
+            if (existingUserByEmail) {
+                return res.status(409).json({
+                    success: false,
+                    error: "EMAIL_ALREADY_EXISTS",
+                    message:
+                        "Hai già un account registrato con questa email. Accedi con email e password.",
+                });
+            }
             user = await createUser(email, sub);
-
             return res.json({
                 success: true,
                 needsProfileCompletion: true,
@@ -51,6 +59,13 @@ router.post("/", async (req, res) => {
         res.status(400).json({ success: false, error: "Invalid token" });
     }
 });
+
+const findUserByEmail = async (email) => {
+    const result = await client.query("SELECT * FROM users WHERE email = $1", [
+        email,
+    ]);
+    return result.rowCount > 0 ? result.rows[0] : null;
+};
 
 const verifyGoogleToken = async (idToken) => {
     const clientGoogle = new OAuth2Client(
@@ -70,6 +85,7 @@ const findUserByGoogleId = async (googleId) => {
         "SELECT * FROM users WHERE google_id = $1",
         [googleId]
     );
+    console.log("Query result:", result.rows); // <-- qui
     return result.rowCount > 0 ? result.rows[0] : null;
 };
 

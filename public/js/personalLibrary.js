@@ -10,8 +10,6 @@ async function fetchCompletedGames() {
                 );
                 containerToReveal.classList.remove("hidden");
                 renderCompletedGames(data.completedGames);
-            } else {
-                alert("Non ci sono giochi completati.");
             }
         } else {
             console.error(

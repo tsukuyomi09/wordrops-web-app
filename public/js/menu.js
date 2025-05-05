@@ -109,9 +109,7 @@ window.addEventListener("click", function (e) {
 
 function modalDeleteAccount() {
     const modal = document.getElementById("delete-modal");
-    const passwordInput = document.getElementById("confirm-password");
 
-    passwordInput.value = "";
     modal.classList.remove("hidden");
     modal.classList.add("flex");
 }
@@ -123,19 +121,11 @@ function closeDeleteModal() {
 }
 
 async function confirmDeleteAccount() {
-    const password = document.getElementById("confirm-password").value;
-
-    if (!password) {
-        alert("Inserisci la password per confermare.");
-        return;
-    }
-
     const res = await fetch("/profile/delete-account", {
-        method: "POST",
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password }),
     });
 
     const data = await res.json();

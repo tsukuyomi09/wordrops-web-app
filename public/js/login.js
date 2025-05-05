@@ -93,7 +93,11 @@ function handleCredentialResponse(response) {
                     window.location.href = `/dashboard/${data.user.username}`;
                 }
             } else {
-                alert("Autenticazione fallita. Riprova.");
+                if (data.error === "EMAIL_ALREADY_EXISTS") {
+                    alert(data.message);
+                } else {
+                    alert("Autenticazione fallita. Riprova.");
+                }
             }
         })
         .catch(() => {
