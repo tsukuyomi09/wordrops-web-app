@@ -26,9 +26,9 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 3000000; // TO SET UP
+        let countdownDuration = 30000; // TO SET UP
         if (gameSpeed === "fast") {
-            countdownDuration = 3000000; // TO SET UP
+            countdownDuration = 30000; // TO SET UP
         }
 
         activeGames.set(newGameId, {
@@ -75,6 +75,8 @@ function addGameForPlayer(
     const playerData = playersMap.get(user_id);
     playerData.games[gameId] = { status, gameType, gameSpeed };
     playersMap.set(user_id, playerData);
+    console.log("[addGameForPlayer] Inserito o aggiornato:", user_id);
+    console.log("playersMap ora:", Object.fromEntries(playersMap));
 }
 
 function getActiveGames() {

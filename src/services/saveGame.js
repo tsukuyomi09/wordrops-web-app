@@ -1,6 +1,10 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
 const { saveRankedNotification } = require("../utils/handleRankedNotification");
+const {
+    PlayerStatistics,
+    playerStatsMap,
+} = require("../utils/playerStatistics");
 
 const { client } = require("../database/db");
 
@@ -62,6 +66,47 @@ async function saveGame(game) {
                 );
             })
         );
+
+        for (const chapter of game.chapters) {
+            if (!playerStatsMap.has(chapter.user_id)) {
+                const playerStats = new PlayerStatistics(chapter.user_id);
+                playerStatsMap.set(chapter.user_id, playerStats);
+            }
+            const stats = playerStatsMap.get(chapter.user_id);
+            const abandoned = !chapter.isValid;
+            const score = isRanked ? chapter.points : null;
+
+            stats.updateStats(
+                isRanked ? "ranked" : "classic",
+                abandoned,
+                score
+            );
+
+            await client.query(
+                `UPDATE user_statistics SET
+                    classic_played = $1,
+                    ranked_played = $2,
+                    stories_abandoned = $3,
+                    ranked_score = $4,
+                    perfect_performances = $5,
+                    worst_performances = $6
+                 WHERE user_id = $7`,
+                [
+                    stats.classic_played,
+                    stats.ranked_played,
+                    stats.stories_abandoned,
+                    stats.ranked_score,
+                    stats.perfect_performances,
+                    stats.worst_performances,
+                    chapter.user_id,
+                ]
+            );
+        }
+
+        console.log("Mappa statistiche giocatori:");
+        playerStatsMap.forEach((playerStats, user_id) => {
+            console.log(`UserId: ${user_id}, Statistiche: `, playerStats);
+        });
 
         await Promise.all(
             metadata.genres.map((genreId) => {

@@ -380,7 +380,7 @@
                             onclick="logout()"
                         >
                             <button
-                                class="w-full text-sm text-left text-red-600 hover:bg-red-100"
+                                class="w-full text-sm text-left text-red-600 hover:bg-red-100 cursor-pointer"
                             >
                                 logout
                             </button>
@@ -718,251 +718,208 @@
                                 Statistiche
                             </h2>
                             <div
-                                class="flex md:py-36 md:px-6 max-w-6xl h-full gap-6 justify-center items-center"
+                                class="flex md:py-36 md:px-6 max-w-6xl h-full w-full gap-6 justify-center items-center"
                             >
                                 <div
-                                    class="statistics-container mx-auto p-6 md:bg-white rounded-lg shadow-lg h-full md:h-auto overflow-y-auto md:overflow-y-hidden"
+                                    class="statistics-container mx-auto p-6 md:bg-white rounded-lg w-full shadow-lg md:min-w-[40vw] h-full md:h-auto overflow-y-auto md:overflow-y-hidden"
                                 >
                                     <div
-                                        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:min-h-[350px]"
+                                        class="grid grid-cols-2 sm:grid-cols-3 gap-6 h-full md:min-h-[350px]"
                                     >
                                         <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-blue-500 text-lg md:text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-book-open"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Storie Completate
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-yellow-500 text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Media Voti Storie
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-red-500 text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-trophy"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Ranking Attuale
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    #0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                            class="relative stat-card bg-white md:bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
                                         >
                                             <div
                                                 class="stat-icon absolute -top-2 -left-2 text-green-500 text-2xl mb-2"
                                             >
-                                                <i class="fas fa-medal"></i>
+                                                <i class="fas fa-gamepad"></i>
                                             </div>
                                             <div
                                                 class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
                                             >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
                                                 >
-                                                    Punteggio Medio Ranked
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
+                                                    <p
+                                                        id="partite-classiche"
+                                                        class="text-xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
                                                 >
-                                                    0
-                                                </p>
+                                                    <p
+                                                        class="text-[12px] font-bold text-white"
+                                                    >
+                                                        n° Partite Classiche
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                            class="relative stat-card bg-white md:bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-indigo-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-gamepad"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="partite-ranked"
+                                                        class="text-xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                >
+                                                    <p
+                                                        class="text-[12px] font-bold text-white"
+                                                    >
+                                                        n° Partite Ranked
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
                                         >
                                             <div
                                                 class="stat-icon absolute -top-2 -left-2 text-purple-500 text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-gamepad"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Normal Games Giocati
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-orange-500 text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-trophy"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Normal Games Vinti
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-teal-500 text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-gamepad"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Ranked Games Giocati
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-red-400 text-2xl mb-2"
-                                            >
-                                                <i class="fas fa-trophy"></i>
-                                            </div>
-                                            <div
-                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
-                                            >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
-                                                >
-                                                    Ranked Games Vinti
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
-                                                >
-                                                    0
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-                                        >
-                                            <div
-                                                class="stat-icon absolute -top-2 -left-2 text-yellow-600 text-2xl mb-2"
                                             >
                                                 <i class="fas fa-star"></i>
                                             </div>
                                             <div
                                                 class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
                                             >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
                                                 >
-                                                    Storie Votate
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
+                                                    <p
+                                                        id="miglior-performance"
+                                                        class="text-xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
                                                 >
-                                                    0
-                                                </p>
+                                                    <p
+                                                        class="text-[12px] font-bold text-white"
+                                                    >
+                                                        Miglior Performance
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-
                                         <div
-                                            class="relative stat-card bg-white md:bg-gray-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                            class="relative stat-card bg-white md:bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
                                         >
                                             <div
-                                                class="stat-icon absolute -top-2 -left-2 text-pink-500 text-2xl mb-2"
+                                                class="stat-icon absolute -top-2 -left-2 text-yellow-500 text-2xl mb-2"
                                             >
-                                                <i class="fas fa-comment"></i>
+                                                <i class="fas fa-trophy"></i>
                                             </div>
                                             <div
                                                 class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
                                             >
-                                                <p
-                                                    class="text-sm font-semibold text-gray-600"
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
                                                 >
-                                                    Storie Commentate
-                                                </p>
-                                                <p
-                                                    class="text-lg font-bold text-gray-800"
+                                                    <p
+                                                        id="punteggio-ranked"
+                                                        class="text-xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
                                                 >
-                                                    0
-                                                </p>
+                                                    <p
+                                                        class="text-[12px] font-bold text-white"
+                                                    >
+                                                        Punteggio Ranked
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-blue-500 text-lg md:text-2xl mb-2"
+                                            >
+                                                <i
+                                                    class="fas fa-skull-crossbones"
+                                                ></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="partite-pessime"
+                                                        class="text-xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                >
+                                                    <p
+                                                        class="text-[12px] font-bold text-white"
+                                                    >
+                                                        Partite Pessime
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-red-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-flag"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="abbandoni"
+                                                        class="text-xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                >
+                                                    <p
+                                                        class="text-[12px] font-bold text-white"
+                                                    >
+                                                        Abbandoni
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1213,6 +1170,7 @@
         <script src="/swiper/swiper-bundle.min.js"></script>
         <script src="/js/main.js" defer></script>
         <script src="/js/menu.js" defer></script>
+        <script src="/js/getUserStats.js" defer></script>
         <script src="/js/personalLibrary.js"></script>
 
         <audio

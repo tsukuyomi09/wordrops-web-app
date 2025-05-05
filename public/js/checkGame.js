@@ -265,7 +265,7 @@ function showGameCanceledPopup(message) {
         <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center animate-scaleIn">
             <h2 class="text-2xl font-bold mb-4 text-red-600">Partita Annullata</h2>
             <p class="text-gray-700 mb-6">${message}</p>
-            <button id="backToDashboardBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition">
+            <button id="backToDashboardBtn" onclick="dashboardButton()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition">
                 Torna alla Dashboard
             </button>
         </div>

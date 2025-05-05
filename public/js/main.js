@@ -545,7 +545,6 @@ function openAvatarMenu() {
 
 avatars.forEach((avatar) => {
     avatar.addEventListener("click", () => {
-        avatarSelectSound();
         avatars.forEach((item) => {
             item.classList.remove("bg-blue-600");
             item.classList.add("bg-blue-200");
@@ -610,7 +609,6 @@ function closeOverlay() {
 }
 
 closeButton.addEventListener("click", () => {
-    buttonSound();
     if (selectedAvatar) {
         fetch("/profile/avatar", {
             method: "POST",

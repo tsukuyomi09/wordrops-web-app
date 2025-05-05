@@ -19,7 +19,7 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         ? "https://wordrops.com"
         : "http://localhost:3000";
 
-    const verificationUrl = `${baseUrl}/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${baseUrl}/auth/verify-email?token=${verificationToken}`;
 
     const imagePath = path.join(
         __dirname,
