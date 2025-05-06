@@ -399,19 +399,19 @@ async function fetchdashboardData() {
                     button.innerText = `Torna al game ${index + 1}`;
                     button.onclick = () => handleBackToGame(gameId);
                     button.className = `
-                    w-full h-full text-center text-base sm:text-lg font-bold 
+                    w-full h-full text-center text-[12px] sm:text-md font-bold 
                     text-gray-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 
                     transition duration-300 ease-in-out p-2 cursor-pointer
                     ${
                         isRanked
-                            ? "border-4 border-yellow-400"
-                            : "bg-white border-white"
+                            ? "border-2 border-yellow-400"
+                            : "bg-white border-2 border-green-400"
                     }
                 `;
 
                     const notificationHtml = `
-                        <div class="chat-notification-dot absolute -top-4 -right-4 w-4 h-4 bg-red-500 rounded-full border-2 border-white hidden"></div>
-                        <div class="chapter-notification-dot absolute -top-4 -left-4 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white hidden"></div>
+                        <div class="chat-notification-dot absolute -top-4 -left-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white hidden"></div>
+                        <div class="chapter-notification-dot absolute -top-4 left-4 w-4 h-4 bg-orange-500 rounded-full border-2 border-white hidden"></div>
                     `;
 
                     gameWrapper.innerHTML = notificationHtml;

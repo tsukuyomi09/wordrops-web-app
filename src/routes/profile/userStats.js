@@ -19,7 +19,7 @@ router.get("/", checkAuth, async (req, res) => {
                     classic_played: 0,
                     ranked_played: 0,
                     stories_abandoned: 0,
-                    ranked_score: 0,
+                    ranked_score: 200,
                     perfect_performances: 0,
                     worst_performances: 0,
                 };
