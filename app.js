@@ -268,6 +268,7 @@ const libraryRoute = require("./src/routes/library");
 const onboardingRoute = require("./src/routes/onboarding");
 const profileRoute = require("./src/routes/profile");
 const searchRoute = require("./src/routes/search");
+const leaderboardRoute = require("./src/routes/leaderboard");
 
 app.use("/auth", authRoute);
 app.use("/game", gameRoute);
@@ -275,6 +276,7 @@ app.use("/library", libraryRoute);
 app.use("/onboarding", onboardingRoute);
 app.use("/profile", profileRoute);
 app.use("/search", searchRoute);
+app.use("/leaderboard", leaderboardRoute);
 
 (async () => {
     try {

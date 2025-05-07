@@ -3,7 +3,8 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                "custom-blue": "#0095AD", // Il tuo colore personalizzato
+                "custom-blue": "#0095AD",
+                "custom-light-bg": "#faf4f4", // Il tuo colore personalizzato
             },
         },
     },

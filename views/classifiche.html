@@ -1,81 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">    
-    <title>Wordrops Classifiche – La piattaforma per scrivere e collaborare in tempo reale</title>
-   <!-- Google Tag Manager -->
-   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-N6J3B7DJ');</script>
-    <!-- End Google Tag Manager -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <link href="/style/style.css" rel="stylesheet">
-    <link href="/style/output.css" rel="stylesheet" />
-    <script src="./js/checkAuth.js"></script>
-</head>
-<body class="blue-bg" >
-        <!-- Google Tag Manager (noscript) -->
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-            
-        <div class="page-wrap p-6 relative">
-        
-        <!-- menu container -->
-        <div id="menu-container" class="menu-wrapper w-full flex justify-center fixed left-0 right-0">
-            <div id="logout-button" class="icon-container icon absolute top-0 left-6 cursor-pointer p-2" onclick="logout()">
-                <img class="cursor-pointer" src="/images/icons/logout-icon.png" alt="logout Icon" class="w-6 h-6" />
-            </div>   
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
+        <title>
+            Wordrops Classifiche – La piattaforma per scrivere e collaborare in
+            tempo reale
+        </title>
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="/style/style.css" rel="stylesheet" />
+        <link href="/style/output.css" rel="stylesheet" />
+    </head>
+    <body
+        class="bg-white min-h-screen flex items-start justify-center text-white py-12"
+    >
+        <div
+            class="w-full max-w-5xl px-6 py-10"
+            style="background-color: #faf4f4"
+        >
+            <h1
+                class="text-4xl font-extrabold text-gray-800 text-center mb-10 tracking-tight"
+            >
+                🏆 Classifica Globale
+            </h1>
 
-            <div class="inline-flex justify-center relative items-center gap-6">
-                <div id="dashboard-icon" class="icon-container" onclick="dashboardButton()">
-                    <img src="/images/icons/icons8-casa-100.png" alt="Search Icon" class="w-6 h-6" />
-                </div>    
-                <a href="/classifiche">
-                    <div id="leaderboard-icon" class="icon-container">
-                        <img src="/images/icons/icons8-trofeo-48.png" alt="leaderboard Icon" class="w-6 h-6" />
-                    </div> 
-                </a>
-                <a href="/libreria">
-                    <div id="library-icon" class="icon-container">
-                        <img src="/images/icons/icons8-lettura-64.png" alt="library Icon" class="w-6 h-6" />
-                    </div>  
-                </a>
-                <div id="search-icon" class="icon-container" onclick="openSearch()">
-                    <img src="/images/icons/users-icon-menu.png" alt="Search Icon" class="w-6 h-6" />
-                </div>   
+            <div class="overflow-x-auto rounded-lg">
+                <table class="min-w-full text-sm text-gray-800">
+                    <thead class="text-xs uppercase">
+                        <tr>
+                            <th class="px-6 py-3 text-left w-[40%]">Rank</th>
+                            <th class="px-6 py-3 text-center w-[20%]">
+                                Giocatore
+                            </th>
+                            <th class="px-6 py-3 text-right w-[40%]">
+                                Punteggio
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Popolato da JS -->
+                    </tbody>
+                </table>
             </div>
-            <div id="user-search-wrapper" class="user-search-wrapper absolute top-0 right-6 opacity-0">
-                <div class="relative">
-                    <div id="close-button" onclick="closeSearch()" class="absolute bg-white p-2 rounded-full w-6 h-6 top-0 right-0 cursor-pointer transform translate-x-1/2 -translate-y-1/2" onclick="document.getElementById('friend-search-wrapper').classList.add('hidden')">
-                        <img src="/images/icons/x-icon.png" alt="close-search-user">
-                    </div>
-                    <div class="text-xs px-3 py-2 rounded bg-green-400 flex flex-col font-medium shadow-sm ">
-                        <form id="search-form" class="flex flex-col space-y-1">
-                            <input
-                                type="text"
-                                id="search-input"
-                                placeholder="Cerca un utente..."
-                                class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
-                            />
-                        </form>
-                    </div>
-                    <div class="results my-2" id="results"></div>
-                </div>
+
+            <div class="flex justify-between items-center mt-8">
+                <button
+                    id="prev"
+                    class="bg-gray-700 hover:bg-gray-600 text-white text-xl font-semibold py-2 px-4 rounded cursor-pointer disabled:opacity-40"
+                >
+                    ←
+                </button>
+                <span id="page-number" class="text-gray-800 font-medium"
+                    >Page 1</span
+                >
+                <button
+                    id="next"
+                    class="bg-gray-700 hover:bg-gray-600 text-white text-xl font-semibold py-2 px-4 rounded cursor-pointer"
+                >
+                    →
+                </button>
             </div>
         </div>
 
-        <!-- ui container -->
-        <div id="ui-container" class="mt-20">
-            <h1 class="text-white text-2xl font-bold text-center mb-40">Classifiche</h1>
-        </div>
-
-<script src="/js/menu.js" defer></script>
-</body>
+        <script src="/js/leaderboard.js" defer></script>
+    </body>
 </html>
