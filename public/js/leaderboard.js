@@ -1,11 +1,16 @@
 let page = 1;
 const limit = 20;
+const podium = document.getElementById("podium");
 
 async function fetchLeaderboard(page) {
     const response = await fetch(`/leaderboard/?page=${page}&limit=${limit}`);
     const data = await response.json();
     console.log(`data class: ${data}`);
-
+    if (page === 1) {
+        podium.classList.remove("hidden");
+    } else {
+        podium.classList.add("hidden");
+    }
     const leaderboardBody = document.getElementById("leaderboard-body");
     leaderboardBody.innerHTML = ""; // Clear the leaderboard list
 
