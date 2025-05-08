@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
     try {
         const result = await client.query(
-            `SELECT u.username, u.avatar, us.ranked_score
+            `SELECT u.username, u.avatar, us.ranked_score, us.ranked_played, us.classic_played
             FROM user_statistics us
             JOIN users u ON us.user_id = u.user_id
             ORDER BY us.ranked_score DESC
