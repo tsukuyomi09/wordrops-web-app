@@ -1,5 +1,8 @@
 let page = 1;
 const limit = 20;
+// document.addEventListener("DOMContentLoaded", function () {
+
+// });
 
 async function fetchLeaderboard(page) {
     const response = await fetch(`/leaderboard/?page=${page}&limit=${limit}`);
@@ -32,16 +35,16 @@ function updateTable(users) {
             index % 2 === 0 ? "bg-custom-light" : "bg-white";
 
         row.innerHTML = `
-        <td class="px-8 py-4 text-left font-semibold text-xl text-gray-800">${rank}</td>
+        <td class="px-8 py-4 text-left font-semibold text-lg text-gray-800">${rank}</td>
         <td class="px-12 py-4 ">
             <div class="flex justify-start items-center  gap-4">
-                <div class=" p-3 rounded-lg ${tableAvatarBgColor} h-18 w-18">
+                <div class=" p-2 rounded-lg ${tableAvatarBgColor} h-14 w-14">
                     <img src="/images/avatars/${user.avatar}.png" alt="${user.username}'s avatar"  class="w-full h-full object-contain" />
                 </div>
-                <span class="font-semibold text-xl text-gray-900">${user.username}</span>
+                <span class="font-semibold text-lg text-gray-900">${user.username}</span>
             </div>
         </td>
-        <td class="px-10 py-4 text-right font-semibold text-xl text-gray-800">${user.ranked_score}</td>
+        <td class="px-10 py-4 text-right font-semibold text-lg text-gray-800">${user.ranked_score}</td>
     `;
 
         leaderboardBody.appendChild(row);
@@ -69,16 +72,44 @@ function updatePodium(podiumUsers) {
     });
 }
 
-document.getElementById("prev").addEventListener("click", () => {
+function prevPage() {
     if (page > 1) {
         page--;
         fetchLeaderboard(page);
+        window.scrollTo(0, 0);
     }
-});
+}
 
-document.getElementById("next").addEventListener("click", () => {
+function nextPage() {
     page++;
     fetchLeaderboard(page);
-});
+    window.scrollTo(0, 0);
+}
 
 fetchLeaderboard(page);
+
+async function searchUser() {
+    const input = document.getElementById("search-input");
+    const username = input.value.trim();
+    if (!username) return;
+
+    try {
+        const response = await fetch("/leaderboard/search-user", {
+            method: "POST", // Usa POST
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username: username }),
+        });
+        const data = await response.json();
+
+        if (!res.ok) throw new Error(data.error || "Errore nella ricerca");
+
+        const rank = data.rank;
+        const targetPage = Math.ceil(rank / limit);
+        fetchLeaderboard(targetPage);
+    } catch (err) {
+        console.error(err);
+        alert("Utente non trovato o errore server.");
+    }
+}
