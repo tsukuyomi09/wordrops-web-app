@@ -28,7 +28,12 @@ function updateTable(users) {
     leaderboardBody.innerHTML = ""; // Clear the leaderboard list
 
     users.forEach((user, index) => {
-        const rank = (page - 1) * limit + index + 1; // <- FIX
+        let rank;
+        if (page === 1) {
+            rank = index + 4;
+        } else {
+            rank = (page - 1) * limit + index + 1;
+        }
         const row = document.createElement("tr");
         row.classList.add(index % 2 === 0 ? "bg-white" : "custom-light-bg");
         const tableAvatarBgColor =
