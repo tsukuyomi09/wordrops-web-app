@@ -43,7 +43,7 @@ function updateTable(users) {
         <td class="px-8 py-4 text-left font-semibold text-lg text-gray-800">${rank}</td>
         <td class="px-12 py-4 ">
             <div class="flex justify-start items-center  gap-4">
-                <div class=" p-2 rounded-lg ${tableAvatarBgColor} h-14 w-14">
+                <div class="rounded-lg overflow-hidden ${tableAvatarBgColor} h-10 w-10">
                     <img src="/images/avatars/${user.avatar}.png" alt="${user.username}'s avatar"  class="w-full h-full object-contain" />
                 </div>
                 <span class="font-semibold text-lg text-gray-900">${user.username}</span>
@@ -107,7 +107,7 @@ async function searchUser() {
             body: JSON.stringify({ username: username }),
         });
         if (response.ok) {
-            window.location.href = `/profile/${username}`;
+            window.location.href = `/profile-page/${username}`;
             return;
         }
 

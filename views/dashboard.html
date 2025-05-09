@@ -422,14 +422,17 @@
                         <!-- Avatar container -->
                         <div class="relative size-20 md:size-32">
                             <div
-                                class="w-full h-full p-2 rounded-full border-4 border-white bg-white shadow-md overflow-hidden flex justify-center items-center"
+                                class="size-20 md:size-32 rounded-lg bg-white shadow-md overflow-hidden flex justify-center items-center"
                             >
-                                <img id="main-avatar" class="w-auto h-full" />
+                                <img
+                                    id="main-avatar"
+                                    class="w-auto h-full object-cover"
+                                />
                             </div>
 
                             <!-- Icona cambio avatar -->
                             <div
-                                class="absolute bottom-0 right-0 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
+                                class="absolute -bottom-4 -right-4 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
                             >
                                 <img
                                     src="/images/icons/change-avatar-icon.png"
@@ -441,7 +444,7 @@
                         </div>
 
                         <!-- Username -->
-                        <div class="text-center">
+                        <div class="text-center mt-2 md:mt-4">
                             <h2
                                 id="username"
                                 class="text-gray-800 text-xl font-bold"
@@ -492,7 +495,7 @@
                     class="box-menu-hidden md:flex-1 h-full justify-center items-center"
                 >
                     <div
-                        class="border-2 border-purple-200 rounded-full p-2 flex flex-row gap-8 px-8 relative"
+                        class="border-4 border-custom-light rounded-full p-2 flex flex-row gap-8 px-8 relative"
                     >
                         <div class="relative">
                             <div
@@ -982,105 +985,107 @@
 
         <div
             id="avatarContainer"
-            class="hidden flex justify-center items-center p-50 fixed inset-0 bg-black/80 z-50"
+            class="flex justify-center hidden items-center fixed inset-0 bg-black/40 z-50"
         >
-            <div class="flex flex-col justify-center items-center h-screen">
+            <div
+                class="flex flex-col justify-center items-center h-screen gap-6"
+            >
                 <div
-                    class="grid grid-cols-4 relative grid-rows-3 gap-4 p-6 rounded shadow-lg"
+                    class="relative grid grid-cols-3 md:grid-cols-4 grid-rows-3 gap-2 md:gap-6 p-6 rounded bg-custom-light shadow-lg"
                 >
                     <button
                         id="close-avatar-menu"
-                        class="absolute cursor-pointer -top-2 -right-2 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center"
+                        class="absolute cursor-pointer border-1 border-gray-800 -top-2 -right-2 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center"
                     >
                         X
                     </button>
                     <div
-                        data-avatar="boa-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="scroll_sky_image"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/boa-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/scroll_sky_image.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="nami-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="agatha_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/nami-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/agatha_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="luffy-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="asimov_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/luffy-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/asimov_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="zoro-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="dante_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/zoro-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/dante_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="sanji-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="jane_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/sanji-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/jane_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="panda-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="king_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/panda-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/king_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="shanks-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="rowling_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/shanks-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/rowling_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="robin-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="shakespeare_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/robin-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/shakespeare_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
                     <div
-                        data-avatar="chopper-icon-chibi"
-                        class="avatar w-20 h-20 bg-blue-200 flex items-center justify-center rounded bg-opacity-50 p-2 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        data-avatar="tolkien_avatar_square"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
                     >
                         <img
-                            class="w-4/5 h-4/5 object-contain"
-                            src="/images/avatars/chopper-icon-chibi.png"
+                            class="w-full h-full object-cover"
+                            src="/images/avatars/tolkien_avatar_square.png"
                             alt="Avatar"
                         />
                     </div>
@@ -1088,7 +1093,6 @@
                 <button
                     id="select-avatar-button"
                     class="bg-blue-500 cursor-pointer text-white py-2 px-4 rounded"
-                    disabled
                 >
                     Seleziona
                 </button>

@@ -229,8 +229,8 @@ app.get("/register01", (req, res) => {
 app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
 });
-app.get("/profile/:username", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "profile.html"));
+app.get("/profile-page/:username", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "profile-page.html"));
 });
 app.get("/storie-community", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "storie-community.html"));

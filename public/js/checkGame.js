@@ -377,7 +377,7 @@ function displayReceivedMessage(messageText, avatar, username) {
         "p-2 mb-2 bg-gray-100 rounded text-gray-700 flex items-start gap-2";
 
     wrapper.innerHTML = `
-        <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-auto h-4 rounded-full" />
+        <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-4 h-4 rounded-lg" />
         <div>
             <div class="font-semibold text-sm text-gray-800">${
                 username || "Anonimo"
@@ -466,8 +466,8 @@ function updateCurrentPlayerDisplay(currentPlayer) {
                     ? `
             <div class="flex items-center gap-4">
             <p class=" text-2xl sm:text-xl font-semibold text-gray-800">${currentPlayer.username}</p>
-                <div class="p-2 border-2 border-teal-300 h-14 w-14 rounded-full shadow-2xl flex items-center justify-center relative">
-                    <img src="${avatarSrc}" alt="Avatar" class="w-auto h-full " />
+                <div class=" border-2 border-teal-300 h-14 w-14 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
+                    <img src="${avatarSrc}" alt="Avatar" class="w-full h-full " />
                 </div>
             </div>
             `
@@ -489,8 +489,8 @@ function updateTurnOrderDisplay(turnOrder) {
                 const avatarSrc = getAvatarSrc(player.avatar);
                 return `
             <div class="turn-order-item flex flex-col items-center justify-center gap-2">
-                <div class="p-2 h-12 w-12 flex flex-col items-center rounded-full bg-gray-100 shadow-2xl">
-                <img src="${avatarSrc}" alt="Avatar" class="w-auto h-full  mb-1" />
+                <div class=" h-12 w-12 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
+                    <img src="${avatarSrc}" alt="Avatar" class="w-full h-full" />
                 </div>
                 <span class="text-sm font-medium">${player.username}</span>
             </div>
