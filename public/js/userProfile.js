@@ -15,7 +15,7 @@ function getUserData() {
                 return response.json();
             })
             .then((data) => {
-                displayUserItems(data);
+                console.log(`Dati dell'utente arrivati${data}`);
             })
             .catch((error) => {
                 console.error(

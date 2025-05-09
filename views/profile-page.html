@@ -1,9 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
+        <title>
+            Wordrops Classifiche – La piattaforma per scrivere e collaborare in
+            tempo reale
+        </title>
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="/style/style.css" rel="stylesheet" />
+        <link href="/style/output.css" rel="stylesheet" />
     </head>
-    <body></body>
+    <body>
+        <div
+            class="page-wrapper flex flex-col justify-center items-center w-full"
+        >
+            <div
+                id="menu"
+                class="w-full z-10 fixed h-24 top-0 p-4 bg-custom-light"
+            >
+                <div
+                    class="flex justify-between w-full h-full items-center bg-custom-light"
+                >
+                    <div class="">
+                        <img
+                            src="/images/logo_wordrops_classic.svg"
+                            alt="Wordrops Logo"
+                            class="mx-auto w-20 lg:w-36"
+                        />
+                    </div>
+                    <div
+                        class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                    >
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
+                        >
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-trofeo-48.png"
+                                    alt="trophy Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    classifiche
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
+                        >
+                            <a
+                                onclick="dashboardButton()"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="leaderboard Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    dashboard
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
+                        >
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    libreria
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex flex-row gap-4">
+                        <button
+                            class="group w-32 cursor-pointer relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 font-medium text-white duration-500"
+                        >
+                            <div
+                                class="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                            >
+                                registrati
+                            </div>
+                            <div
+                                class="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
+                            >
+                                <svg
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 15 15"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                >
+                                    <path
+                                        d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                                        fill="currentColor"
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <button
+                            class="cursor-pointer w-32 relative h-12 overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2.5 text-gray-800 transition-all duration-300 hover:border-teal-500"
+                        >
+                            <span class="relative font-semibold">login</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/js/userProfile.js" defer></script>
+    </body>
 </html>
