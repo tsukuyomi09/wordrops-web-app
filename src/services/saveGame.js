@@ -31,13 +31,14 @@ async function saveGame(game) {
 
         const finishedAt = new Date();
         const result = await client.query(
-            `INSERT INTO games_completed (title, started_at, finished_at, game_type, game_speed, back_cover, publish, status)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            `INSERT INTO games_completed (title, started_at, finished_at, game_uuid, game_type, game_speed, back_cover, publish, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
              RETURNING id`,
             [
                 metadata.title,
                 game.startedAt,
                 finishedAt,
+                game.gameId,
                 game.gameType,
                 game.gameSpeed,
                 metadata.backCover,

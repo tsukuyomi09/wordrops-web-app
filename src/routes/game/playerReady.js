@@ -19,7 +19,7 @@ router.post("/:gameId", checkAuth, async (req, res) => {
         game.status = "in-progress";
         startCountdown(gameId);
         req.io.to(gameId).emit("game-ready-popup");
-        savePlayersDb(game);
+        savePlayersDb(game, gameId);
         return res.json({ status: "in-progress" });
     }
 
