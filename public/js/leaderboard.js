@@ -106,15 +106,19 @@ async function searchUser() {
             },
             body: JSON.stringify({ username: username }),
         });
-        const data = await response.json();
+        if (response.ok) {
+            window.location.href = `/profile/${username}`;
+            return;
+        }
 
-        if (!res.ok) throw new Error(data.error || "Errore nella ricerca");
-
-        const rank = data.rank;
-        const targetPage = Math.ceil(rank / limit);
-        fetchLeaderboard(targetPage);
+        throw new Error(data.error || "Errore nella ricerca");
     } catch (err) {
         console.error(err);
-        alert("Utente non trovato o errore server.");
+        const errorMessage = document.getElementById("error-message");
+        errorMessage.textContent = "L'utente non esiste";
+        errorMessage.classList.remove("hidden");
+        setTimeout(() => {
+            errorMessage.classList.add("hidden");
+        }, 2000);
     }
 }

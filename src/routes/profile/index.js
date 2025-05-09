@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+router.use("/profile", require("./profilePage"));
 router.use("/dashboard", require("./dashboardRoute"));
 router.use("/delete-account", require("./deleteAccount"));
 router.use("/avatar", require("./updateAvatar"));
