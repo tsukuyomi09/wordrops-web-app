@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function () {
+    getUserData();
+});
+
 function getUserData() {
     const username = window.location.pathname.split("/")[2];
     if (username) {
@@ -15,7 +19,11 @@ function getUserData() {
                 return response.json();
             })
             .then((data) => {
-                console.log(`Dati dell'utente arrivati${data}`);
+                console.log(
+                    "Dati dell'utente arrivati:",
+                    JSON.stringify(data, null, 2)
+                );
+                displayUserItems(data);
             })
             .catch((error) => {
                 console.error(
@@ -24,23 +32,31 @@ function getUserData() {
                 );
             });
     }
-
-    function displayUserItems(data) {
-        if (data) {
-            document.getElementById("username").textContent =
-                data.username || "Nome utente non disponibile";
-            document.getElementById(
-                "main-avatar"
-            ).src = `/images/avatars/${data.avatar}.png`;
-            document.getElementById("chapters-written").textContent =
-                data.capitoli_scritti || 0;
-            document.getElementById("user-score").textContent =
-                data.punteggio || 0;
-        }
-    }
 }
 
-getUserData();
+function displayUserItems(data) {
+    // Aggiorna le informazioni del profilo
+    document.getElementById("profile-username").innerText = data.username;
+    document.getElementById(
+        "profile-avatar"
+    ).src = `/images/avatars/${data.avatar}.png`;
+    console.log(`images/avatars/${data.avatar}.png`);
+    document.getElementById("profile-rank").innerText = data.rank;
+
+    // Aggiorna le statistiche
+    document.getElementById("partite-classiche").innerText =
+        data.stats.classic_played;
+    document.getElementById("partite-ranked").innerText =
+        data.stats.ranked_played;
+    document.getElementById("miglior-performance").innerText =
+        data.stats.perfect_performances;
+    document.getElementById("punteggio-ranked").innerText =
+        data.stats.ranked_score;
+    document.getElementById("partite-pessime").innerText =
+        data.stats.worst_performances;
+    document.getElementById("abbandoni").innerText =
+        data.stats.stories_abandoned;
+}
 
 function showAvatarTransition() {
     const avatarContainer = document.querySelector(".avatar-container");

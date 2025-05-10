@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const { client } = require("../../database/db");
+const { playerStatsMap } = require("../../utils/playerStatistics");
 
 router.get("/:username", async (req, res) => {
     const { username } = req.params;
+    console.log("Richiesta ricevuta per l'utente:", username);
     console.log(username);
 
     try {
         const userCheck = await client.query(
-            `SELECT user_id FROM users WHERE username = $1`,
+            `SELECT user_id, avatar FROM users WHERE username = $1`,
             [username]
         );
 
@@ -16,34 +18,20 @@ router.get("/:username", async (req, res) => {
             return res.status(404).json({ error: "Utente non trovato" });
         }
 
-        const user_id = userCheck.rows[0].user_id;
+        const { user_id, avatar } = userCheck.rows[0];
 
-        const rank = await client.query(
-            `SELECT COUNT(*) + 1 AS rank
-             FROM user_statistics
-             WHERE ranked_score > (
-                 SELECT ranked_score FROM users u
-                 JOIN user_statistics us ON u.user_id = us.user_id
-                 WHERE u.user_id = $1
-             )`,
-            [user_id]
-        );
+        // Recupera le statistiche dell'utente dalla mappa in memoria
+        const stats = playerStatsMap.get(user_id);
 
-        const stats = await client.query(
-            `SELECT 
-                u.username,
-                u.avatar,
-                us.classic_played,
-                us.ranked_played,
-                us.stories_abandoned,
-                us.ranked_score,
-                us.perfect_performances,
-                us.worst_performances
-            FROM users u
-            JOIN user_statistics us ON u.user_id = us.user_id
-            WHERE u.user_id = $1`,
-            [user_id]
-        );
+        if (!stats) {
+            return res.status(404).json({ error: "Statistiche non trovate" });
+        }
+
+        const allStats = Array.from(playerStatsMap.values());
+
+        allStats.sort((a, b) => b.ranked_score - a.ranked_score);
+        const rank =
+            allStats.findIndex((player) => player.user_id === user_id) + 1;
 
         const userGames = await client.query(
             `SELECT 
@@ -59,14 +47,13 @@ router.get("/:username", async (req, res) => {
             [user_id]
         );
 
-        const rankRow = rank.rows[0];
-        const statsRow = stats.rows[0];
         const userGamesRow = userGames.rows[0];
-        console.log("userGames.rows.length", userGames.rows.length);
 
         res.json({
-            rank: rankRow.rank,
-            stats: statsRow,
+            username,
+            avatar,
+            rank,
+            stats,
             games: userGames.rows.length > 0 ? userGamesRow : [],
         });
     } catch (err) {

@@ -13,6 +13,7 @@ const { client } = require("./src/database/db");
 const {
     loadNotificationsIntoMap,
 } = require("./src/services/notificationLoader");
+const { loadPlayerStatsIntoMap } = require("./src/utils/usersStatsLoader");
 
 const app = express();
 app.get("/status", (req, res) => {
@@ -285,6 +286,7 @@ app.use("/leaderboard", leaderboardRoute);
     try {
         await connectDB();
         await loadNotificationsIntoMap();
+        await loadPlayerStatsIntoMap();
 
         server.listen(port, "0.0.0.0", (err) => {
             if (err) {

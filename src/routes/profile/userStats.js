@@ -6,7 +6,7 @@ const getPlayerStatsFromDB = require("../../utils/getPlayerStatsFromDB");
 
 router.get("/", checkAuth, async (req, res) => {
     const user_id = req.user_id;
-    ("in user stats");
+    console.log("In user stats");
 
     try {
         let playerStats = playerStatsMap.get(user_id);
@@ -26,6 +26,10 @@ router.get("/", checkAuth, async (req, res) => {
             }
             playerStatsMap.set(user_id, playerStats);
         }
+        console.log(
+            "Intera mappa delle statistiche degli utenti:",
+            Array.from(playerStatsMap.entries())
+        );
 
         return res.json(playerStats);
     } catch (err) {
