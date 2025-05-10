@@ -26,12 +26,11 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 3000000; // slow game (30 seconds)
+        let countdownDuration = 300000; // TO SET UP
         if (gameSpeed === "fast") {
-            countdownDuration = 3000000; // fast game (15 seconds)
+            countdownDuration = 300000; // TO SET UP
         }
 
-        // Aggiungiamo il gioco alla mappa dei giochi attivi sul server
         activeGames.set(newGameId, {
             gameId: newGameId,
             gameType: gameType,
@@ -54,15 +53,8 @@ async function createGameAndAssignPlayers(game) {
             startedAt: new Date(),
         });
 
-        console.log("Current activeGames map:", activeGames);
-        console.log("Turn Order after game creation:", turnOrder);
-
-        const currentPlayer = turnOrder[0];
-        console.log("Current Player:", currentPlayer);
-
         return { gameId: newGameId, turnOrder };
     } catch (err) {
-        console.error("Errore nella creazione del gioco:", err);
         throw err;
     }
 }
@@ -83,7 +75,8 @@ function addGameForPlayer(
     const playerData = playersMap.get(user_id);
     playerData.games[gameId] = { status, gameType, gameSpeed };
     playersMap.set(user_id, playerData);
-    console.log("📌 Stato attuale di playersMap:", playersMap);
+    console.log("[addGameForPlayer] Inserito o aggiornato:", user_id);
+    console.log("playersMap ora:", Object.fromEntries(playersMap));
 }
 
 function getActiveGames() {

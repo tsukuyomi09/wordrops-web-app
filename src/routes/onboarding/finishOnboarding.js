@@ -14,7 +14,6 @@ router.post("/:email", async (req, res) => {
     }
 
     try {
-        // Inserimento nel database
         const result = await client.query(
             `UPDATE users
              SET username = $1, avatar = $2, is_onboarding_complete = $3
@@ -59,10 +58,9 @@ router.post("/:email", async (req, res) => {
         res.status(201).json({
             message: "Onboarding completato con successo!",
             success: true,
-            username: updatedUsername, // ritorniamo lo username se esiste
+            username: updatedUsername,
         });
     } catch (error) {
-        // Gestione degli errori
         console.error("Errore nel database:", error);
         res.status(500).json({
             message:

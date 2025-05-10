@@ -11,7 +11,6 @@ router.get("/:gameId", checkAuth, async (req, res) => {
         return res.status(404).json({ error: "Gioco non trovato" });
     }
 
-    // Accedi correttamente all'array di giocatori
     const { players, turnOrder, turnIndex, status, chapters } = game;
 
     if (!Array.isArray(players)) {

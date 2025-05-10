@@ -13,22 +13,10 @@ class NotificationMap {
     remove(gameId, user_id) {
         const userNotifications = this.map.get(user_id);
         if (!userNotifications.has(gameId)) return;
-
         userNotifications.delete(gameId);
-
         if (userNotifications.size === 0) {
             this.map.delete(user_id);
         }
-        console.log(
-            "NotificationMap Dopo rimozione:",
-            JSON.stringify(
-                [...this.map].map(([key, value]) => {
-                    return [key, [...value]];
-                }),
-                null,
-                2
-            )
-        );
     }
 
     has(user_id) {

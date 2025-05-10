@@ -4,7 +4,10 @@ const { client } = require("../../database/db");
 const path = require("path");
 
 router.get("/", async (req, res) => {
+    console.log("Richiesta ricevuta per la verifica dell'email");
+
     const { token } = req.query;
+    console.log(`il token ${token}`);
 
     if (!token) {
         return res.status(400).json({ message: "Token mancante." });
@@ -17,21 +20,18 @@ router.get("/", async (req, res) => {
         );
 
         if (userResult.rowCount === 0) {
-            // Token non valido, ritorna la pagina di errore
             return res.sendFile(
-                path.join(__dirname, "../../views/verify-email-error.html")
+                path.join(__dirname, "../../../views/verify-email-error.html")
             );
         }
 
-        // Verifica del token riuscita, aggiorna l'utente
         await client.query(
             "UPDATE users SET verified = true, verification_token = NULL WHERE verification_token = $1",
             [token]
         );
 
-        // Ritorna la pagina di successo
         return res.sendFile(
-            path.join(__dirname, "../../views/verify-email-success.html")
+            path.join(__dirname, "../../../views/verify-email-success.html")
         );
     } catch (err) {
         console.error("Errore nella verifica:", err);

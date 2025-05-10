@@ -2,13 +2,11 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const path = require("path");
 
-// Funzione per inviare l'email
 const sendRegistrationEmail = async (userEmail, verificationToken) => {
-    // Configurazione del trasportatore per Zoho SMTP
     const transporter = nodemailer.createTransport({
-        host: "smtp.zoho.eu", // oppure smtp.zoho.com se non sei su EU
+        host: "smtp.zoho.eu",
         port: 465,
-        secure: true, // true per SSL
+        secure: true,
         auth: {
             user: "noreply@wordrops.com",
             pass: "JXfigN73LePZ",
@@ -17,14 +15,12 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
 
     const isProduction = process.env.NODE_ENV === "production";
 
-    // URL del sito di verifica, dipende dall'ambiente
     const baseUrl = isProduction
-        ? "https://wordrops.com" // Produzione
+        ? "https://wordrops.com"
         : "http://localhost:3000";
 
-    const verificationUrl = `${baseUrl}/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${baseUrl}/auth/verify-email?token=${verificationToken}`;
 
-    // Percorso dell'immagine sul server
     const imagePath = path.join(
         __dirname,
         "..",
@@ -34,16 +30,13 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         "logo_wordrops_classic_blue.png"
     );
 
-    // Opzioni per l'email
     const mailOptions = {
         from: '"Wordrops Team" <noreply@wordrops.com>',
         to: userEmail,
         subject: "🎉 Benvenuto su wordrops.com!",
 
-        // Fallback testuale
         text: `Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:\n\n${verificationUrl}\n\nQuesta è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.`,
 
-        // Quello che si vede realmente nella mail
         html: `
             <div style="font-family: sans-serif; color: #333;">
                 <img src="cid:wordropsLogo" alt="Wordrops" width="120" />
@@ -57,16 +50,14 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         attachments: [
             {
                 filename: "logo_wordrops_classic_blue.png",
-                path: imagePath, // Percorso dell’immagine
-                cid: "wordropsLogo", // Deve matchare con il src del <img>
+                path: imagePath,
+                cid: "wordropsLogo",
             },
         ],
     };
 
-    // Invia l'email
     try {
         await transporter.sendMail(mailOptions);
-        console.log("Email inviata con successo!");
     } catch (error) {
         console.error("Errore nell'invio dell'email:", error);
     }

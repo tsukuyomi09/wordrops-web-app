@@ -5,10 +5,9 @@ const checkAuth = require("../../middlewares/checkAuthToken");
 
 router.get("/:gameId", checkAuth, async (req, res) => {
     const { gameId } = req.params;
-    const game = activeGames.get(gameId); // Ottieni il gioco dalla mappa
+    const game = activeGames.get(gameId);
 
     if (game) {
-        // Restituisci solo lo stato del gioco
         res.json({
             status: game.status,
         });

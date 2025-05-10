@@ -7,13 +7,12 @@ async function savePlayersDb(game) {
                 const playerValues = [game.gameId, player.user_id, new Date()];
 
                 return client.query(
-                    `INSERT INTO game_players (game_id, user_id, joined_at)
+                    `INSERT INTO game_players (game_uuid, user_id, joined_at)
                      VALUES ($1, $2, $3)`,
                     playerValues
                 );
             })
         );
-        console.log("[savePlayersDb] Giocatori salvati con successo.");
     } catch (error) {
         console.log(
             "[savePlayersDb] Errore durante il salvataggio dei giocatori:",

@@ -23,11 +23,10 @@ async function registerUser() {
             }, 5000);
         } else {
             const errorData = await response.json();
-            alert(`Errore: ${errorData.message}`);
+            alert(errorData.message || "Registrazione fallita. Riprova.");
         }
-    } catch (error) {
-        console.error("Errore:", error);
-        alert("Si è verificato un errore durante la registrazione.");
+    } catch {
+        alert("Errore di rete. Riprova più tardi.");
     }
 }
 
@@ -45,7 +44,7 @@ async function loginUser() {
             body: JSON.stringify({ userEmail, userPassword }),
         });
 
-        const data = await response.json(); // Parsing della risposta JSON
+        const data = await response.json();
 
         if (response.ok) {
             if (data.redirectTo) {
@@ -63,15 +62,14 @@ async function loginUser() {
                 errorEl.classList.remove("opacity-0");
                 errorEl.classList.add("opacity-100");
 
-                // Nasconde con fade-out dopo 1.5s
                 setTimeout(() => {
                     errorEl.classList.remove("opacity-100");
                     errorEl.classList.add("opacity-0");
                 }, 1500);
             }
         }
-    } catch (error) {
-        console.error("Errore durante il login:", error);
+    } catch {
+        alert("Errore di rete. Riprova più tardi.");
     }
 }
 
@@ -87,19 +85,23 @@ function handleCredentialResponse(response) {
     })
         .then((res) => res.json())
         .then((data) => {
-            console.log("Risposta dal server:", data);
             if (data.success) {
                 if (data.needsProfileCompletion && data.redirectTo) {
                     window.location.href = data.redirectTo;
                 } else {
-                    // Reindirizza alla homepage o dashboard se ha già completato il profilo
                     localStorage.setItem("username", data.user.username);
                     window.location.href = `/dashboard/${data.user.username}`;
                 }
+            } else {
+                if (data.error === "EMAIL_ALREADY_EXISTS") {
+                    alert(data.message);
+                } else {
+                    alert("Autenticazione fallita. Riprova.");
+                }
             }
         })
-        .catch((error) => {
-            console.error("Errore durante l'invio del token al server:", error);
+        .catch(() => {
+            alert("Errore durante il login con Google. Riprova più tardi.");
         });
 }
 
@@ -116,6 +118,6 @@ window.onload = function () {
             size: "large",
         });
     } else {
-        console.error("Google API non caricato correttamente.");
+        alert("Errore nel caricamento di Google Login. Ricarica la pagina.");
     }
 };

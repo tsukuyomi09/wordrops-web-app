@@ -2,29 +2,14 @@ const express = require("express");
 const router = express.Router();
 const checkAuth = require("../../middlewares/checkAuthToken");
 const { client } = require("../../database/db");
-const { verifyPassword } = require("../../utils/authUtility");
 
-router.post("/profile/delete-account", checkAuth, async (req, res) => {
+router.delete("/", checkAuth, async (req, res) => {
     try {
         const user_id = req.user_id;
-        const { password } = req.body;
 
-        if (!user_id || !password) {
+        if (!user_id) {
             return res.status(400).json({ message: "Dati mancanti." });
         }
-
-        const result = await client.query(
-            "SELECT password FROM users WHERE user_id = $1",
-            [user_id]
-        );
-
-        if (result.rowCount === 0) {
-            return res.status(404).json({ message: "Utente non trovato." });
-        }
-
-        const storedHash = result.rows[0].password;
-
-        await verifyPassword(storedHash, password);
 
         await client.query("DELETE FROM users WHERE user_id = $1", [user_id]);
 

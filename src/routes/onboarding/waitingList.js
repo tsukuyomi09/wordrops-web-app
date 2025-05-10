@@ -12,7 +12,6 @@ router.post("/", async (req, res) => {
         waitingListAge,
     } = req.body;
 
-    // Controlla che tutti i campi siano presenti
     if (
         !waitingListName ||
         !waitingListEmail ||
@@ -24,7 +23,6 @@ router.post("/", async (req, res) => {
     }
 
     try {
-        // Inserimento dei dati nel database
         const query =
             "INSERT INTO waiting_list (name, email, preferences, gender, age_range, created_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *";
         const result = await client.query(query, [
@@ -35,10 +33,7 @@ router.post("/", async (req, res) => {
             waitingListAge,
         ]);
 
-        // Invia una mail di benvenuto
         sendWaitingListEmail(waitingListEmail, waitingListName);
-
-        // Risposta con i dati dell'utente registrato
         res.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);

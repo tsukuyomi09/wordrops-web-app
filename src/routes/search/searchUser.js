@@ -1,12 +1,10 @@
-// routes/users.js
 const express = require("express");
 const router = express.Router();
 const { client } = require("../../database/db");
 const checkAuth = require("../../middlewares/checkAuthToken");
 
-// Route per la ricerca utenti
 router.get("/", checkAuth, async (req, res) => {
-    const query = req.query.username?.toLowerCase(); // Ottieni il parametro 'username'
+    const query = req.query.username?.toLowerCase();
 
     if (!query || query.length < 3) {
         return res
@@ -17,14 +15,14 @@ router.get("/", checkAuth, async (req, res) => {
     try {
         const result = await client.query(
             "SELECT username, avatar FROM users WHERE username ILIKE $1 LIMIT 10",
-            [`%${query}%`] // La ricerca avviene per pattern '%query%'
+            [`%${query}%`]
         );
 
         if (result.rows.length === 0) {
-            return res.json([]); // Nessun utente trovato
+            return res.json([]);
         }
 
-        return res.json(result.rows); // Restituisce gli utenti trovati
+        return res.json(result.rows);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Errore durante la ricerca" });

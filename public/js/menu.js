@@ -6,10 +6,9 @@ document.getElementById("search-input").addEventListener("input", () => {
     const query = document.getElementById("search-input").value;
 
     if (query.length >= 3) {
-        // Aspetta almeno 3 caratteri
-        debounceTimer = setTimeout(() => searchUsers(query), 300); // Attendi 300ms
+        debounceTimer = setTimeout(() => searchUsers(query), 300);
     } else {
-        document.getElementById("results").innerHTML = ""; // Svuota risultati
+        document.getElementById("results").innerHTML = "";
     }
 });
 
@@ -47,26 +46,16 @@ async function searchUsers(query) {
 }
 
 resultsDiv.addEventListener("click", (event) => {
-    const userElement = event.target.closest(".user"); // Trova l'elemento cliccato
+    const userElement = event.target.closest(".user");
     if (userElement) {
         const username = userElement.getAttribute("data-username");
         window.location.href = `/profile/${username}`;
     }
 });
 
-function showAvatarTransition() {
-    const avatarContainer = document.querySelector(".avatar-container");
-    setTimeout(() => {
-        avatarContainer.classList.add("show");
-    }, 50); // Ritardo per la transizione
-}
-
-showAvatarTransition();
-
 function dashboardButton() {
     const username = localStorage.getItem("username");
     if (username) {
-        // Fai il redirect alla dashboard dell'utente
         window.location.href = `/dashboard/${username}`;
     } else {
         alert("Impossibile recuperare l'username. Effettua il login.");
@@ -79,24 +68,17 @@ function toggleSearch() {
 }
 
 function toggleDropdown() {
-    console.log("fired");
     const menu = document.querySelector(".dropdown-menu");
-    console.log(menu);
     menu.classList.toggle("hidden");
 }
 
 function toggleDropdownMobile() {
-    console.log("fired");
     const menu = document.querySelector(".dropdown-menu-mobile");
-    console.log(menu);
     menu.classList.toggle("hidden");
 }
 
 async function logout() {
     try {
-        buttonSound();
-        sessionStorage.clear();
-
         const response = await fetch("/auth/logout", {
             method: "DELETE",
             headers: {
@@ -112,13 +94,11 @@ async function logout() {
     } catch (error) {
         console.error("Errore: Problema con il logout:", error);
     } finally {
-        // In ogni caso, rimuovi tutto e reindirizza
         localStorage.clear();
-        window.location.href = "/register01";
+        window.location.href = "/";
     }
 }
 
-// Opzionale: chiude il menu se clicchi fuori
 window.addEventListener("click", function (e) {
     const button = document.querySelector("button[onclick='toggleDropdown()']");
     const menu = document.getElementById("dropdownMenu");
@@ -126,3 +106,34 @@ window.addEventListener("click", function (e) {
         menu.classList.add("hidden");
     }
 });
+
+function modalDeleteAccount() {
+    const modal = document.getElementById("delete-modal");
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById("delete-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+}
+
+async function confirmDeleteAccount() {
+    const res = await fetch("/profile/delete-account", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert("Account cancellato. Verrai disconnesso.");
+        window.location.href = "/";
+    } else {
+        alert(data.message || "Errore nella cancellazione.");
+    }
+}

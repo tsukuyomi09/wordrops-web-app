@@ -2,7 +2,7 @@ const usernameInput = document.getElementById("username");
 const confirmButton = document.getElementById("confirmButton");
 
 function checkUsername() {
-    const username = usernameInput.value; // Ottieni il valore dell'input
+    const username = usernameInput.value;
 
     const validUsernameRegex = /^[a-zA-Z0-9-_\.]+$/;
 
@@ -11,13 +11,13 @@ function checkUsername() {
         username.length < 4 ||
         username.length > 16
     ) {
-        confirmButton.disabled = true; // Disabilita il pulsante
+        confirmButton.disabled = true;
         confirmButton.classList.remove("bg-blue-600");
-        confirmButton.classList.add("bg-blue-400"); // Torna blu
+        confirmButton.classList.add("bg-blue-400");
     } else {
-        confirmButton.disabled = false; // Abilita il pulsante
+        confirmButton.disabled = false;
         confirmButton.classList.remove("bg-blue-400");
-        confirmButton.classList.add("bg-blue-600"); // Cambia colore in verde
+        confirmButton.classList.add("bg-blue-600");
     }
 }
 
@@ -30,7 +30,6 @@ async function checkUsernameAndProceed() {
         alert("Per favore, inserisci un username.");
         return;
     }
-
     try {
         const response = await fetch(
             `/onboarding/check-username?username=${encodeURIComponent(
@@ -39,67 +38,54 @@ async function checkUsernameAndProceed() {
         );
         const data = await response.json();
         usernameAvailable = data.available;
-
         if (usernameAvailable) {
-            goToStep2(username); // se tutto ok, passo al secondo step
+            goToStep2(username);
         } else {
             usernameErrorAnimation();
         }
-    } catch (error) {
-        console.error("Errore nella verifica dell'username:", error);
+    } catch {
         alert("Si è verificato un errore. Riprova più tardi.");
     }
 }
 
 function usernameErrorAnimation() {
     const errorEl = document.getElementById("username-error");
-    console.log(`parte la funzione`);
-
-    // Mostra con opacità al 100% con una transizione
     errorEl.classList.remove("opacity-0");
     errorEl.classList.add("opacity-100");
-
-    // Dopo 800ms torna a nascondere (300ms visibile + 500ms pausa)
     setTimeout(() => {
         errorEl.classList.remove("opacity-100");
         errorEl.classList.add("opacity-0");
     }, 2000);
 }
 
-// Step navigation
 function goToStep2(username) {
     if (username) {
-        // Fade-out di step1
         const step1 = document.getElementById("step1");
         step1.classList.remove("opacity-100");
         step1.classList.add("opacity-0");
 
-        // Dopo che il fade-out è completato (500ms), nascondi step1 e mostra step2
         setTimeout(() => {
-            step1.classList.add("hidden"); // Nasconde step1 completamente
+            step1.classList.add("hidden");
             const step2 = document.getElementById("step2");
-            step2.classList.remove("hidden"); // Mostra step2
+            step2.classList.remove("hidden");
 
-            // Fade-in di step2
             step2.classList.remove("opacity-0");
             step2.classList.add("opacity-100");
-        }, 1000); // Tempo per completare il fade-out di step1 (500ms)
+        }, 1000);
     } else {
-        alert("Per favore, inserisci un username.");
+        alert("Inserisci uno username.");
     }
 }
 
 function gobackToStep1() {
-    // Fade-out di step2
     const step2 = document.getElementById("step2");
     step2.classList.remove("opacity-100");
     step2.classList.add("opacity-0");
 
-    // Dopo che il fade-out è completato (500ms), nascondi step2 e mostra step1
     setTimeout(() => {
-        step2.classList.add("hidden"); // Nasconde step2 completamente
+        step2.classList.add("hidden");
         const step1 = document.getElementById("step1");
-        step1.classList.remove("hidden"); // Mostra step1
+        step1.classList.remove("hidden");
 
         const confirmButton = document.getElementById("confirm-profile");
         confirmButton.classList.add("hidden");
@@ -111,13 +97,12 @@ function gobackToStep1() {
 
         step1.classList.remove("opacity-0");
         step1.classList.add("opacity-100");
-    }, 500); // Tempo per completare il fade-out di step2 (500ms)
+    }, 500);
 }
 
-// Confirm profile and submit
 function confirmProfile() {
     const username = document.getElementById("username").value;
-    const avatarName = document.getElementById("selectedAvatar").value; // Recupera il nome dell'avatar
+    const avatarName = document.getElementById("selectedAvatar").value;
     if (username && avatarName) {
         finishOnboarding(username, avatarName);
     } else {
@@ -144,14 +129,11 @@ function selectAvatar(id) {
         const avatarName = clickedImg.getAttribute("data-name");
         const container = clickedImg.closest(".avatar");
         if (container) container.classList.add("selected-avatar");
-
-        // Trova il campo input nascosto e imposta il valore dell'avatar selezionato
         const selectedAvatarInput = document.getElementById("selectedAvatar");
         if (selectedAvatarInput) {
-            selectedAvatarInput.value = avatarName; // Imposta il nome dell'avatar nel campo nascosto
-            console.log(`Avatar selezionato: ${avatarName}`);
+            selectedAvatarInput.value = avatarName;
         } else {
-            console.error("Campo 'selectedAvatar' non trovato");
+            alert("Errore: campo 'selectedAvatar' non trovato.");
         }
     }
 }
@@ -171,17 +153,15 @@ async function finishOnboarding(username, avatarName) {
         if (response.ok) {
             const data = await response.json();
             localStorage.setItem("username", data.username);
-            console.log("Dati ricevuti dal server:", data);
             window.location.href = `/dashboard/${data.username}`;
         } else {
             const errorData = await response.json();
             alert(
                 "Errore durante il completamento dell'onboarding: " +
-                    errorData.message
+                    (errorData.message || "Riprova più tardi.")
             );
         }
-    } catch (error) {
-        console.error("Errore nella fetch:", error);
-        alert("Si è verificato un errore durante l'invio dei dati.");
+    } catch {
+        alert("Errore di rete durante l'invio dei dati. Riprova.");
     }
 }

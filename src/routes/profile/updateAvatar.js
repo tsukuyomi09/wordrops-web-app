@@ -34,7 +34,7 @@ router.post("/", checkAuth, async (req, res) => {
 });
 
 router.get("/", checkAuth, async (req, res) => {
-    const user_id = req.user_id; // Estratto dal JWT
+    const user_id = req.user_id;
 
     try {
         const result = await client.query(

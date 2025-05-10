@@ -2,13 +2,11 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 const path = require("path");
 
-// Funzione per inviare l'email
 const sendWaitingListEmail = async (userEmail, name) => {
-    // Configurazione del trasportatore per Zoho SMTP
     const transporter = nodemailer.createTransport({
-        host: "smtp.zoho.eu", // oppure smtp.zoho.com se non sei su EU
+        host: "smtp.zoho.eu",
         port: 465,
-        secure: true, // true per SSL
+        secure: true,
         auth: {
             user: "noreply@wordrops.com",
             pass: "JXfigN73LePZ",
@@ -16,13 +14,10 @@ const sendWaitingListEmail = async (userEmail, name) => {
     });
 
     const isProduction = process.env.NODE_ENV === "production";
-
-    // URL del sito di verifica, dipende dall'ambiente
     const baseUrl = isProduction
-        ? "https://wordrops.com" // Produzione
+        ? "https://wordrops.com"
         : "http://localhost:3000";
 
-    // Percorso dell'immagine sul server
     const imagePath = path.join(
         __dirname,
         "..",
@@ -32,7 +27,6 @@ const sendWaitingListEmail = async (userEmail, name) => {
         "logo_wordrops_classic_blue.png"
     );
 
-    // Opzioni per l'email
     const mailOptions = {
         from: '"Wordrops Team" <noreply@wordrops.com>',
         to: userEmail,
@@ -48,16 +42,14 @@ const sendWaitingListEmail = async (userEmail, name) => {
         attachments: [
             {
                 filename: "logo_wordrops_classic_blue.png",
-                path: imagePath, // Percorso dell'immagine sul server
-                cid: "wordropsLogo", // ID CID, deve corrispondere al src nell'HTML
+                path: imagePath,
+                cid: "wordropsLogo",
             },
         ],
     };
 
-    // Invia l'email
     try {
         await transporter.sendMail(mailOptions);
-        console.log("Email inviata con successo!");
     } catch (error) {
         console.error("Errore nell'invio dell'email:", error);
     }

@@ -13,7 +13,6 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
     const { userEmail, userPassword } = req.body;
 
-    // Controlla che tutti i campi siano presenti
     if (!userEmail || !userPassword) {
         return res
             .status(400)
@@ -22,7 +21,6 @@ router.post("/", async (req, res) => {
 
     let hashedPassword;
     try {
-        // Hash della password
         hashedPassword = await argon2.hash(userPassword, {
             type: argon2.argon2id,
             memoryCost: 19456,
@@ -38,9 +36,6 @@ router.post("/", async (req, res) => {
 
     try {
         const verificationToken = crypto.randomBytes(32).toString("hex");
-        console.log(`verific token ${verificationToken}`);
-
-        // Inserimento dei dati nel database
         const query =
             "INSERT INTO users (email, password, username, verification_token) VALUES ($1, $2, $3, $4) RETURNING *";
         const result = await client.query(query, [
@@ -50,10 +45,8 @@ router.post("/", async (req, res) => {
             verificationToken,
         ]);
 
-        // Invia una mail di benvenuto
         sendRegistrationEmail(userEmail, verificationToken);
 
-        // Risposta con i dati dell'utente registrato
         res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error("Errore durante l'inserimento nel database", err);

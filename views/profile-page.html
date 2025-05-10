@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
+        <title>
+            Wordrops Classifiche – La piattaforma per scrivere e collaborare in
+            tempo reale
+        </title>
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="/style/style.css" rel="stylesheet" />
+        <link href="/style/output.css" rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
+                height="0"
+                width="0"
+                style="display: none; visibility: hidden"
+            ></iframe
+        ></noscript>
+        <img
+            src="/images/library_bg.png"
+            class="fixed inset-0 w-full h-full object-cover"
+            alt=""
+        />
+        <div
+            class="page-wrapper z-10 flex flex-col justify-center items-center w-full"
+        >
+            <div
+                id="menu"
+                class="w-full z-50 fixed h-24 top-0 p-4 bg-custom-light"
+            >
+                <div class="flex justify-between w-full h-full items-center">
+                    <div class="">
+                        <img
+                            src="/images/logo_wordrops_classic.svg"
+                            alt="Wordrops Logo"
+                            class="mx-auto w-20 lg:w-36"
+                        />
+                    </div>
+                    <div
+                        class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                    >
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
+                        >
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-trofeo-48.png"
+                                    alt="trophy Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    classifiche
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
+                        >
+                            <a
+                                onclick="dashboardButton()"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="leaderboard Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    dashboard
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
+                        >
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    libreria
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex flex-row gap-4">
+                        <button
+                            class="group w-32 cursor-pointer relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 font-medium text-white duration-500"
+                        >
+                            <div
+                                class="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                            >
+                                registrati
+                            </div>
+                            <div
+                                class="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
+                            >
+                                <svg
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 15 15"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                >
+                                    <path
+                                        d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                                        fill="currentColor"
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <button
+                            class="cursor-pointer w-32 relative h-12 overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2.5 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                        >
+                            <span class="relative font-semibold">login</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col gap-6 z-10 w-full justify-start pb-24 items-center mt-52"
+            >
+                <div
+                    class="w-full max-w-6xl bg-custom-light rounded-lg px-6 py-10"
+                >
+                    <div
+                        class="w-full max-w-6xl px-6 py-4 flex flex-col gap-24"
+                    >
+                        <div class="rounded-lg w-full">
+                            <div class="flex justify-left">
+                                <div class="flex items-center space-x-6">
+                                    <!-- Avatar -->
+                                    <div class="relative">
+                                        <div
+                                            class="w-8 h-8 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-4 -right-4 cursor-pointer"
+                                        >
+                                            <img
+                                                src="/images/icons/follow_user_icon.png"
+                                                alt="follow icon"
+                                            />
+                                        </div>
+                                        <div
+                                            class="w-48 h-48 border-2 rounded-lg overflow-hidden"
+                                        >
+                                            <img
+                                                id="profile-avatar"
+                                                src=""
+                                                alt="Avatar"
+                                                class="w-full h-full object-contain"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- Username + Stats -->
+                                    <div
+                                        class="flex flex-col text-left h-full justify-between"
+                                    >
+                                        <span
+                                            id="profile-username"
+                                            class="text-4xl font-semibold text-gray-800"
+                                        ></span>
+                                        <div
+                                            class="text-xl flex gap-2 flex items-baseline font-semibold text-gray-800"
+                                        >
+                                            <div>Rank:</div>
+                                            <span
+                                                id="profile-rank"
+                                                class="text-2xl"
+                                            >
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            id="stats-content"
+                            class="w-full flex flex-col gap-4"
+                        >
+                            <h2 class="text-2xl text-gray-800 font-semibold">
+                                Stats
+                            </h2>
+                            <div
+                                class="flex max-w-6xl h-full w-full gap-6 justify-center items-center"
+                            >
+                                <div
+                                    class="statistics-container mx-auto p-6 md:bg-white rounded-lg w-full md:min-w-[40vw] h-full md:h-auto overflow-y-auto md:overflow-y-hidden"
+                                >
+                                    <div
+                                        class="grid grid-cols-2 sm:grid-cols-3 gap-6 h-full md:min-h-[350px]"
+                                    >
+                                        <div
+                                            class="relative stat-card bg-white md:bg-custom-light rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-green-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-gamepad"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="partite-classiche"
+                                                        class="text-3xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
+                                                >
+                                                    <p
+                                                        class="text-sm font-bold text-white"
+                                                    >
+                                                        Partite Classiche
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-custom-light rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-indigo-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-gamepad"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="partite-ranked"
+                                                        class="text-3xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
+                                                >
+                                                    <p
+                                                        class="text-sm font-bold text-white"
+                                                    >
+                                                        Partite Ranked
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="relative stat-card bg-white md:bg-custom-light rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-purple-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="miglior-performance"
+                                                        class="text-3xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
+                                                >
+                                                    <p
+                                                        class="text-sm font-bold text-white"
+                                                    >
+                                                        Miglior Performance
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="relative stat-card bg-white md:bg-custom-light rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-yellow-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-trophy"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="punteggio-ranked"
+                                                        class="text-3xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
+                                                >
+                                                    <p
+                                                        class="text-sm font-bold text-white"
+                                                    >
+                                                        Punteggio Ranked
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="relative stat-card bg-white md:bg-custom-light rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-blue-500 text-lg md:text-2xl mb-2"
+                                            >
+                                                <i
+                                                    class="fas fa-skull-crossbones"
+                                                ></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="partite-pessime"
+                                                        class="text-3xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
+                                                >
+                                                    <p
+                                                        class="text-sm font-bold text-white"
+                                                    >
+                                                        Partite Pessime
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="relative stat-card bg-white md:bg-custom-light rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
+                                        >
+                                            <div
+                                                class="stat-icon absolute -top-2 -left-2 text-red-500 text-2xl mb-2"
+                                            >
+                                                <i class="fas fa-flag"></i>
+                                            </div>
+                                            <div
+                                                class="stat-info text-center h-full w-full flex flex-col justify-center items-center"
+                                            >
+                                                <div
+                                                    class="h-full flex justify-center p-6 items-center"
+                                                >
+                                                    <p
+                                                        id="abbandoni"
+                                                        class="text-3xl font-bold text-gray-800"
+                                                    >
+                                                        0
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
+                                                >
+                                                    <p
+                                                        class="text-sm font-bold text-white"
+                                                    >
+                                                        Abbandoni
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            id="games-content"
+                            class="flex w-full min-h-[450px] flex-col gap-6"
+                        >
+                            <h2 class="text-2xl text-gray-800 font-semibold">
+                                Libri
+                            </h2>
+                            <div
+                                id="no-books-container"
+                                class="flex justify-center bg-white items-center flex-grow"
+                            >
+                                <h2 class="text-2xl italic text-gray-400">
+                                    Ancora Nessun Libro Scritto
+                                </h2>
+                            </div>
+                            <div
+                                class="grid p-8 hidden rounded-lg bg-white grid-cols-1 md:grid-cols-2 gap-16 flex-grow"
+                                id="books-grid"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/js/userProfile.js" defer></script>
+    </body>
+</html>

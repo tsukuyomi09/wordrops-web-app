@@ -38,7 +38,7 @@ async function generateTitleAndBlurb(chaptersToElaborate) {
             },
             {
                 role: "user",
-                content: `Genera un JSON valido e preciso con il titolo:title e la quarta di copertina:backCover (massimo 100 parole), in questo formato: 
+                content: `Genera un JSON valido e preciso con il titolo:title e la quarta di copertina:backCover (range di 25-35 perole), in questo formato: 
                 {
                     "title": "Titolo del libro",
                     "backCover": "Descrizione del libro"
@@ -110,14 +110,13 @@ Testo: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
     try {
         const parsedResponse = JSON.parse(raw);
 
-        // Convertiamo gli ID in numeri prima di restituirli
         const genres = parsedResponse.map((id) => parseInt(id, 10));
 
         if (
             Array.isArray(genres) &&
             genres.every((id) => Number.isInteger(id) && id >= 1 && id <= 10)
         ) {
-            return genres; // Restituisce l'array dei generi validi
+            return genres;
         } else {
             throw new Error(
                 "La risposta contiene ID non validi o formattazione errata."
