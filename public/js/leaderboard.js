@@ -1,8 +1,8 @@
 let page = 1;
 const limit = 20;
-// document.addEventListener("DOMContentLoaded", function () {
-
-// });
+document.addEventListener("DOMContentLoaded", function () {
+    fetchLeaderboard(page);
+});
 
 async function fetchLeaderboard(page) {
     const response = await fetch(`/leaderboard/?page=${page}&limit=${limit}`);
@@ -21,6 +21,7 @@ async function fetchLeaderboard(page) {
 
     document.getElementById("page-number").textContent = `Page ${page}`;
     document.getElementById("prev").disabled = page === 1;
+    document.getElementById("next").disabled = !data.hasNextPage;
 }
 
 function updateTable(users) {
@@ -90,8 +91,6 @@ function nextPage() {
     fetchLeaderboard(page);
     window.scrollTo(0, 0);
 }
-
-fetchLeaderboard(page);
 
 async function searchUser() {
     const input = document.getElementById("search-input");

@@ -14,10 +14,13 @@ router.get("/", async (req, res) => {
             JOIN users u ON us.user_id = u.user_id
             ORDER BY us.ranked_score DESC
             LIMIT $1 OFFSET $2`,
-            [limit, offset]
+            [limit + 1, offset]
         );
 
-        res.json({ users: result.rows });
+        const hasNextPage = result.rows.length > limit;
+        const users = result.rows.slice(0, limit);
+
+        res.json({ users, hasNextPage });
     } catch (err) {
         console.error("Errore nella leaderboard:", err);
         res.status(500).json({ error: "Errore interno del server" });

@@ -62,14 +62,12 @@ router.get("/:username", async (req, res) => {
         const rankRow = rank.rows[0];
         const statsRow = stats.rows[0];
         const userGamesRow = userGames.rows[0];
-
-        console.log(rankRow, statsRow, userGamesRow);
         console.log("userGames.rows.length", userGames.rows.length);
 
         res.json({
             rank: rankRow.rank,
             stats: statsRow,
-            games: userGames.rows.length > 0 ? userGames.rows : [],
+            games: userGames.rows.length > 0 ? userGamesRow : [],
         });
     } catch (err) {
         console.error(err);
