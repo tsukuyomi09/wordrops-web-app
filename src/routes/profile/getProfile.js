@@ -37,7 +37,9 @@ router.get("/:username", async (req, res) => {
             `SELECT 
                 gc.title,
                 gc.game_type,
-                gc.game_speed
+                gc.game_speed,
+                gc.finished_at,
+                gc.back_cover
             FROM game_players gp
             JOIN games_completed gc ON gp.game_uuid = gc.game_uuid
             WHERE gp.user_id = $1
@@ -47,14 +49,12 @@ router.get("/:username", async (req, res) => {
             [user_id]
         );
 
-        const userGamesRow = userGames.rows[0];
-
         res.json({
             username,
             avatar,
             rank,
             stats,
-            games: userGames.rows.length > 0 ? userGamesRow : [],
+            games: Array.isArray(userGames.rows) ? userGames.rows : [],
         });
     } catch (err) {
         console.error(err);

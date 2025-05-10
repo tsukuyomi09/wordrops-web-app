@@ -467,74 +467,23 @@
                         </div>
                         <div
                             id="games-content"
-                            class="flex w-full min-h-[350px] flex-col gap-6"
+                            class="flex w-full min-h-[450px] flex-col gap-6"
                         >
                             <h2 class="text-2xl text-gray-800 font-semibold">
                                 Libri
                             </h2>
                             <div
-                                class="flex hidden justify-center bg-white items-center flex-grow ]"
+                                id="no-books-container"
+                                class="flex justify-center bg-white items-center flex-grow"
                             >
-                                <h2
-                                    class="text-4xl italic text-gray-400 hidden"
-                                >
+                                <h2 class="text-2xl italic text-gray-400">
                                     Ancora Nessun Libro Scritto
                                 </h2>
                             </div>
                             <div
-                                class="grid p-8 rounded-lg bg-white grid-cols-1 md:grid-cols-2 gap-16 flex-grow"
-                                id="book-grid"
-                            >
-                                <div
-                                    class="h-full w-full py-4 rounded-lg border-2 px-6 border-custom-light relative flex flex-col gap-6"
-                                >
-                                    <img
-                                        src="/images/book-icon.png"
-                                        class="absolute w-10 -top-4 -left-4"
-                                        alt=""
-                                    />
-                                    <div
-                                        id="book-date"
-                                        class="text-right text-sm text-gray-600"
-                                    >
-                                        04-07-2025
-                                    </div>
-                                    <div
-                                        id="book-main"
-                                        class="flex flex-col cursor-pointer gap-4"
-                                    >
-                                        <h3
-                                            class="text-2xl italic font-semibold"
-                                        >
-                                            "Il fragore del tempo"
-                                        </h3>
-                                        <div id="book-genre" class="flex gap-4">
-                                            <span>fantasy</span>
-                                            <span>drammatico</span>
-                                        </div>
-                                        <div>
-                                            <p id="book-description">
-                                                Quando le epoche iniziano a
-                                                collassare l'una sull'altra, e i
-                                                giorni si riscrivono mentre
-                                                accadono, Aelion scopre di poter
-                                                sentire ciò che nessun altro
-                                                percepisce: il fragore del
-                                                tempo. Un rombo profondo,
-                                                antico, che annuncia la fine.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <img
-                                            id="book-add-favourite"
-                                            src="/images/icons/add_to_favourite_icon.png"
-                                            class="w-6 h-6 cursor-pointer"
-                                            alt=""
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                                class="grid p-8 hidden rounded-lg bg-white grid-cols-1 md:grid-cols-2 gap-16 flex-grow"
+                                id="books-grid"
+                            ></div>
                         </div>
                     </div>
                 </div>

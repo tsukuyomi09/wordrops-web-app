@@ -38,7 +38,7 @@ async function generateTitleAndBlurb(chaptersToElaborate) {
             },
             {
                 role: "user",
-                content: `Genera un JSON valido e preciso con il titolo:title e la quarta di copertina:backCover (massimo 100 parole), in questo formato: 
+                content: `Genera un JSON valido e preciso con il titolo:title e la quarta di copertina:backCover (range di 25-35 perole), in questo formato: 
                 {
                     "title": "Titolo del libro",
                     "backCover": "Descrizione del libro"
