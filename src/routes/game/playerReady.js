@@ -7,16 +7,18 @@ const checkAuth = require("../../middlewares/checkAuthToken");
 
 router.post("/:gameId", checkAuth, async (req, res) => {
     const { gameId } = req.params;
+    const user_id = req.user_id;
 
     const game = activeGames.get(gameId);
     if (!game) {
         return res.status(404).json({ error: "Gioco non trovato" });
     }
 
-    game.readyPlayersCount = (game.readyPlayersCount || 0) + 1;
+    game.readyPlayersCount.add(user_id);
 
-    if (game.readyPlayersCount === 5) {
+    if (game.readyPlayersCount.size === 5) {
         game.status = "in-progress";
+        game.readyPlayersCount.clear();
         startCountdown(gameId);
         req.io.to(gameId).emit("game-ready-popup");
         savePlayersDb(game, gameId);

@@ -37,12 +37,13 @@ async function initializeGame(game_id) {
 
         const data = await response.json();
         if (data.status === "to-start") {
-            document
-                .getElementById("popup-start-countdown")
-                .classList.remove("hidden");
-            document
-                .getElementById("popup-start-countdown")
-                .classList.add("flex");
+            const popup = document.getElementById("popup-start-countdown");
+            popup.classList.remove("hidden");
+            popup.classList.add("flex");
+
+            if (data.alreadyReady) {
+                waitingSpinning();
+            }
         }
     } catch (error) {
         console.error("Errore nel recupero dello stato del gioco:", error);
@@ -389,9 +390,14 @@ function displayReceivedMessage(messageText, avatar, username) {
     messageBox.scrollTop = messageBox.scrollHeight;
 }
 
+function waitingSpinning() {
+    document.getElementById("box-confirm-ready").classList.add("hidden");
+    document.getElementById("waiting-gif").classList.remove("hidden");
+}
+
 function buttonStartGame() {
-    document.getElementById("popup-start-countdown").classList.add("hidden");
-    document.getElementById("popup-start-countdown").classList.remove("flex");
+    document.getElementById("box-confirm-ready").classList.add("hidden");
+    document.getElementById("waiting-gif").classList.remove("hidden");
 
     fetch(`/game/player-ready/${game_id}`, {
         method: "POST",
@@ -415,6 +421,8 @@ function buttonStartGame() {
 }
 
 function showGameStartPopup() {
+    document.getElementById("popup-start-countdown").classList.add("hidden");
+    document.getElementById("popup-start-countdown").classList.remove("flex");
     const gameStartPopup = document.createElement("div");
     gameStartPopup.classList.add(
         "fixed",

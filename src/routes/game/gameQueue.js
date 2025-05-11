@@ -82,7 +82,7 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
         gameType,
         gameSpeed,
         timestamp: Date.now(),
-        pronto: null,
+        pronto: true,
     };
 
     const queue = gameQueues[gameType][gameSpeed];

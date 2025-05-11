@@ -10,6 +10,7 @@ router.get("/:gameId", checkAuth, async (req, res) => {
     if (game) {
         res.json({
             status: game.status,
+            alreadyReady: game.readyPlayersCount.has(req.user_id),
         });
     } else {
         res.status(404).json({ error: "Gioco non trovato" });

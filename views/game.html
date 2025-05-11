@@ -133,9 +133,20 @@
         <div class="flex flex-col md:flex-row md:p-4 gap-4 h-screen relative">
             <div
                 id="popup-start-countdown"
-                class="hidden fixed inset-0 bg-gray-800 bg-opacity-80 items-center justify-center z-40"
+                class="hidden fixed inset-0 p-12 bg-black/60 items-center justify-center z-40"
             >
+                <div id="waiting-gif" class="mb-4 hidden">
+                    <img
+                        src="/images/gifs/queue-spinner.gif"
+                        alt="Waiting Gif"
+                        class="w-32 h-32"
+                    />
+                    <h3 class="text-white font-semibold text-2xl">
+                        In attesa degli altri giocatori
+                    </h3>
+                </div>
                 <div
+                    id="box-confirm-ready"
                     class="bg-white rounded-lg shadow-lg p-6 max-w-lg text-center"
                 >
                     <h2 class="text-2xl font-bold mb-4 text-gray-800">

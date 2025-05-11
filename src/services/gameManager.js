@@ -42,7 +42,7 @@ async function createGameAndAssignPlayers(game) {
             chapterReadMap: new Map(),
             status: "to-start",
             turnOrder: turnOrder,
-            readyPlayersCount: 0,
+            readyPlayersCount: new Set(),
             chat: [],
             turnIndex: 0,
             connections: [],

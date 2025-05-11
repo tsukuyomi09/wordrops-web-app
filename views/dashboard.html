@@ -1095,7 +1095,7 @@
             <!-- queue overlay -->
             <div
                 id="waiting-overlay"
-                class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center hidden"
+                class="fixed inset-0 bg-black/80 flex items-center justify-center hidden"
             >
                 <div class="flex flex-col items-center">
                     <div id="waiting-text" class="text-white text-2xl mb-4">
@@ -1113,7 +1113,7 @@
                         onclick="abandonQueue()"
                         class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
                     >
-                        Abbandona
+                        esci dalla coda
                     </button>
                 </div>
             </div>
@@ -1121,15 +1121,13 @@
             <!-- preQueue overlay -->
             <div
                 id="countdown-overlay"
-                class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-10 hidden"
+                class="fixed inset-0 bg-black/80 flex items-center justify-center z-10 hidden"
             >
                 <div
                     id="game-ready-container"
                     class="flex flex-col items-center hidden"
                 >
-                    <h2 class="text-red-600 text-2xl font-bold">
-                        TUTTI PRONTI
-                    </h2>
+                    <h2 class="text-white text-4xl font-bold">Si Inizia!</h2>
                 </div>
                 <div
                     id="countdown-seconds-container"
@@ -1140,23 +1138,8 @@
                     </div>
                     <h2
                         id="countdown-seconds"
-                        class="text-red-600 text-9xl font-bold"
-                    >
-                        10
-                    </h2>
-                    <button
-                        id="ready-btn"
-                        onclick="readyToPlay()"
-                        class="mt-20 px-6 py-3 bg-blue-500 text-white font-semibold text-lg rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    >
-                        SEI PRONTO?
-                    </button>
-                    <h2
-                        id="pronto-text"
-                        class="hidden text-red-400 mt-20 text-2xl font-bold"
-                    >
-                        PRONTO
-                    </h2>
+                        class="text-red-500 text-9xl font-bold"
+                    ></h2>
                 </div>
             </div>
         </div>
