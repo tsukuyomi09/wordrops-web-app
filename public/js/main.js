@@ -733,7 +733,7 @@ function showScoreNotificationsSequential(gameNotifications) {
                                 </span>
                             </p>
                         </div>
-                        <p class="text-gray-800 text-xl mb-6 italic ">${`"${notification.comment}"`}</p>
+                        <p class="text-gray-800 text-md md:text-xl mb-6 italic ">${`"${notification.comment}"`}</p>
 
                         
                         <div class="">

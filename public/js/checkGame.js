@@ -660,16 +660,18 @@ function handleEditorAccess(currentPlayer, currentUser) {
 }
 
 function updateChaptersDisplay(chaptersData) {
-    const swiperWrapper = document.querySelector(".book-chapters-container");
-
+    const bookSwiperWrapper = document.querySelector(
+        ".book-chapters-container"
+    );
+    let count = bookSwiperWrapper.querySelectorAll(".swiper-slide").length;
     const placeholder = document.querySelector(".placeholder-title");
 
-    chaptersData.forEach((chapter, index) => {
+    chaptersData.forEach((chapter) => {
         if (placeholder) {
             placeholder.remove();
         }
-        const slide = document.createElement("div");
-        slide.classList.add(
+        const bookSlide = document.createElement("div");
+        bookSlide.classList.add(
             "swiper-slide",
             "bg-gray-50",
             "shadow-md",
@@ -681,11 +683,11 @@ function updateChaptersDisplay(chaptersData) {
             "h-full"
         );
 
-        slide.innerHTML = `
+        bookSlide.innerHTML = `
         <div class="flex flex-col w-full h-full md:gap-8 gap-4">
             <div class="flex flex-row gap-4">
                 <div class="text-gray-600 font-bold text-lg">
-                    Capitolo ${index + 1}
+                    Capitolo ${count + 1}
                 </div>
                 <div class="text-gray-600 text-lg">
                     <em>Autore:</em> ${chapter.author}
@@ -700,7 +702,8 @@ function updateChaptersDisplay(chaptersData) {
             </div>
         </div>
     `;
-        swiperWrapper.appendChild(slide);
+        bookSwiperWrapper.appendChild(bookSlide);
+        count++;
     });
     if (window.swiper) {
         window.swiper.update();
@@ -725,7 +728,8 @@ function changeTurnShowPopup(author, nextPlayer) {
         "flex",
         "items-center",
         "justify-center",
-        "z-40"
+        "z-40",
+        "p-12"
     );
 
     popup.innerHTML = `
