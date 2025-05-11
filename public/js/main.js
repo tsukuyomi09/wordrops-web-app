@@ -654,7 +654,8 @@ function showScoreNotificationsSequential(gameNotifications) {
             "items-center",
             "justify-center",
             "z-50",
-            "bg-black/40"
+            "bg-black/40",
+            "p-12"
         );
 
         const lottieContainer = document.createElement("div");
@@ -699,35 +700,37 @@ function showScoreNotificationsSequential(gameNotifications) {
 
             popupContent.innerHTML = `
                 <div class="bg-white border relative border-gray-300 shadow-xl rounded-2xl max-w-[24em] flex flex-col  ">
-                    <img src="/images/trophy-image.png" alt="Trophy" class="absolute -top-12 -left-12 transform -rotate-24 object-contain w-24 h-24" />
+                    <img src="/images/trophy-image.png" alt="Trophy" class="absolute -top-6 -left-6 md:-top-12 md:-left-12  transform -rotate-24 object-contain size-18 md:size-24 " />
         
-                    <div class=" py-6 bg-teal-600 rounded-2xl">
-                        <h2 class="text-lg font-semibold text-center text-white ">Nuovo punteggio ricevuto!</h2>
+                    <div class=" py-6 bg-gray-200 rounded-2xl">
+                        <h2 class="text-md lg:text-lg font-semibold text-center text-gray-800 ">Nuovo punteggio!</h2>
                     </div>
 
-                    <div class="px-6 pb-12 pt-12 relative w-full h-auto">
-                        <p class=" text-gray-500 text-center mb-12 font-semibold">
-                            <span class="${
-                                notification.points > 0
-                                    ? "text-green-600  text-6xl"
-                                    : notification.points < 0
-                                    ? "text-red-600 text-6xl"
-                                    : "text-gray-600  text-6xl"
-                            }">
-                                ${notification.points}
-                            </span>
-                        </p>
+                    <div class="p-4 flex flex-col relative w-full h-auto">
+                        <div class=" flex flex-grow justify-center items-center">
+                            <p class=" text-gray-500 py-6 font-semibold">
+                                <span class="${
+                                    notification.points > 0
+                                        ? "text-green-600 text-4xl  md:text-6xl"
+                                        : notification.points < 0
+                                        ? "text-red-600 text-4xl  md:text-6xl"
+                                        : "text-gray-600  text-4xl  md:text-6xl"
+                                }">
+                                    ${notification.points}
+                                </span>
+                            </p>
+                        </div>
                         <p class="text-gray-800 text-xl mb-6 italic ">${`"${notification.comment}"`}</p>
 
                         
-                    </div>
-                    <div class="px-6 py-6">
-                        <button 
-                            data-game-id="${notification.gameId}" 
-                            class="bg-blue-600 cursor-pointer hover:bg-blue-700 px-6 py-2  text-white text-lg font-semibold py-2 px-5 rounded-md"
-                        >
-                            OK
-                        </button>
+                        <div class="">
+                            <button 
+                                data-game-id="${notification.gameId}" 
+                                class="bg-custom-blue cursor-pointer  px-6 py-2 w-full  text-white text-lg font-semibold rounded-md"
+                            >
+                                OK
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -747,7 +750,7 @@ function showScoreNotificationsSequential(gameNotifications) {
                     index++;
                     showNext();
                 });
-        }, 600);
+        }, 2000);
         document.body.appendChild(scorePopup);
     }
 
