@@ -223,6 +223,12 @@
             class="fixed inset-0 z-50 flex bg-black/75 flex flex-col md:flex-row transform translate-y-10 transition-all duration-500"
             style="display: none"
         >
+            <div
+                id="game-limit-reached"
+                class="absolute hidden left-1/2 -translate-x-1/2 top-10 text-xl bg-red-200 text-gray-800 font-semibold rounded-2xl py-4 px-6"
+            >
+                Hai giá 5 partite attive
+            </div>
             <button
                 onclick="closeOverlay()"
                 class="absolute cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 z-50 -translate-y-1/2 bg-red-600 text-white font-bold w-12 h-12 lg:w-16 lg:h-16 text-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"

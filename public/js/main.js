@@ -396,10 +396,10 @@ async function fetchdashboardData() {
                         "relative w-full h-full flex items-center justify-center";
 
                     const button = document.createElement("button");
-                    button.innerText = `Torna al game ${index + 1}`;
+                    button.innerText = `Libro ${index + 1}`;
                     button.onclick = () => handleBackToGame(gameId);
                     button.className = `
-                    w-full h-full text-center text-[12px] sm:text-md font-bold 
+                    w-full h-full text-center text-sm md:text-md lg:text-xl sm:text-md font-bold 
                     text-gray-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 
                     transition duration-300 ease-in-out p-2 cursor-pointer
                     ${
@@ -445,8 +445,6 @@ async function joinQueue({ gameType, gameSpeed }) {
         return;
     }
 
-    closeOverlay();
-
     await initSocket();
 
     if (socketId) {
@@ -470,7 +468,12 @@ async function joinQueue({ gameType, gameSpeed }) {
             });
 
             if (!response.ok) {
-                throw new Error(`Errore HTTP: ${response.status}`);
+                const { error } = await response.json();
+                if (error === "Max games limit reached") {
+                    showGameLimitMessage();
+                    return;
+                }
+                throw new Error(error || "Errore HTTP");
             }
         } catch (error) {
             console.error(
@@ -481,6 +484,16 @@ async function joinQueue({ gameType, gameSpeed }) {
     } else {
         alert("Si è verificato un errore. Riprova più tardi.");
     }
+    closeOverlay();
+}
+
+function showGameLimitMessage() {
+    const game_limit_box = document.getElementById("game-limit-reached");
+    game_limit_box.classList.remove("hidden");
+
+    setTimeout(() => {
+        game_limit_box.classList.add("hidden");
+    }, 2000);
 }
 
 function abandonQueue() {

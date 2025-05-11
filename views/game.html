@@ -95,16 +95,25 @@
                 >
                     Il Libro é Ancora Vuoto
                 </div>
-                <div class="flex flex-row justify-between items-center w-full">
+                <div
+                    class="flex flex-row justify-between items-center w-full px-2"
+                >
                     <button
                         onclick="closeBookOverlay()"
-                        class="cursor-pointer text-white bg-teal-500 font-bold px-4 py-2 rounded flex items-center justify-center shadow-lg hover:bg-teal-600 transition duration-300"
+                        class="cursor-pointer z-50 font-semibold text-gray-800 rounded flex items-center justify-center transition duration-300"
                     >
-                        ESCI
+                        <img
+                            class="size-6 md:size-8 mr-2"
+                            src="/images/icons/back_arrow.png"
+                            alt=""
+                        />
+                        esci
                     </button>
                     <div class="flex flex-row gap-2 items-center">
                         <span>⬅️</span>
-                        <div class="text-sm">scorri laterale</div>
+                        <div class="text-sm font-semibold text-gray-800">
+                            scorri laterale
+                        </div>
                         <span>➡️</span>
                     </div>
                 </div>
@@ -191,10 +200,10 @@
             >
                 <div
                     id="leaderboard-icon"
-                    class="w-full flex flex-row justify-between items-center"
+                    class="w-full flex flex-row justify-between p-2 items-center"
                 >
                     <a
-                        class="button-container flex h-12 w-12 rounded-full border-2 border-custom-blue flex-col justify-center items-center cursor-pointer"
+                        class="button-container flex h-12 w-12 rounded-full border-2 p-2 border-custom-blue flex-col justify-center items-center cursor-pointer"
                         onclick="dashboardButton()"
                     >
                         <div>
@@ -205,16 +214,31 @@
                             />
                         </div>
                     </a>
-                    <button
-                        class="md:hidden px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
-                        onclick="openGameInfo()"
+                    <div
+                        class="flex flex-row justify-center items-center gap-4"
                     >
-                        Game Info
-                    </button>
+                        <button
+                            class="md:hidden px-4 py-2 bg-custom-blue text-white rounded"
+                            onclick="openGameInfo()"
+                        >
+                            Game Info
+                        </button>
+                        <div
+                            class="flex md:hidden h-12 w-12 flex-col justify-center items-center font-semibold p-1 rounded-full border border-custom-blue"
+                        >
+                            <img
+                                class="h-full w-auto"
+                                onclick="openBookOverlay()"
+                                src="/images/game_book_image.svg"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+
                     <div class="chat-icon-container relative">
                         <button
                             id="toggleChatButton"
-                            class="bg-blue-500 z-50 h-12 w-12 text-white rounded-full shadow-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 cursor-pointer focus:ring-blue-500"
+                            class="bg-custom-blue z-50 h-12 w-12 text-white rounded-full shadow-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 cursor-pointer"
                         >
                             💬
                             <div
@@ -222,16 +246,6 @@
                                 class="absolute top-0 left-0 w-3 h-3 bg-red-500 rounded-full hidden"
                             ></div>
                         </button>
-                    </div>
-                    <div
-                        class="flex md:hidden h-12 w-12 flex-col justify-center items-center font-semibold p-1 rounded-full border border-cyan-400"
-                    >
-                        <img
-                            class="h-full w-auto"
-                            onclick="openBookOverlay()"
-                            src="/images/game_book_image.svg"
-                            alt=""
-                        />
                     </div>
                 </div>
 
