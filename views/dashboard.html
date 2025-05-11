@@ -225,9 +225,9 @@
         >
             <div
                 id="game-limit-reached"
-                class="absolute hidden left-1/2 -translate-x-1/2 top-10 text-xl bg-red-200 text-gray-800 font-semibold rounded-2xl py-4 px-6"
+                class="absolute hidden z-50 left-1/2 -translate-x-1/2 top-2 text-sm lg:text-xl bg-red-200 text-gray-800 font-semibold md:rounded-2xl py-4 px-6"
             >
-                Hai giá 5 partite attive
+                troppe partite
             </div>
             <button
                 onclick="closeOverlay()"
@@ -244,7 +244,7 @@
                     <button
                         id="new-game-button-normal-fast"
                         onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
-                        class="py-4 px-10 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        class="py-3 px-6 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         CORTA
                         <div
@@ -263,7 +263,7 @@
                     <button
                         id="new-game-button-normal-slow"
                         onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
-                        class="py-4 px-10 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        class="py-3 px-6 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         LUNGA
                         <div
@@ -287,7 +287,7 @@
                     <button
                         id="new-game-button-ranked-fast"
                         onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
-                        class="py-4 px-10 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        class="py-3 px-6 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         CORTA
                         <div
@@ -306,7 +306,7 @@
                     <button
                         id="new-game-button-ranked-slow"
                         onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
-                        class="py-4 px-10 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        class="py-3 px-6 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                     >
                         LUNGA
                         <div
