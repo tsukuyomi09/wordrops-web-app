@@ -1534,6 +1534,9 @@
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
+  .text-\[8px\] {
+    font-size: 8px;
+  }
   .text-\[10px\] {
     font-size: 10px;
   }
@@ -1576,6 +1579,9 @@
   }
   .whitespace-nowrap {
     white-space: nowrap;
+  }
+  .text-\[px\] {
+    color: px;
   }
   .text-amber-300 {
     color: var(--color-amber-300);
