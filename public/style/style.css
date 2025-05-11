@@ -64,8 +64,9 @@ font-family: 'Consolas', 'Courier New', monospace;
 }
 
 #editor-container {
-  overflow-y: auto;       /* Scroll verticale solo se necessario */
-  border-radius: 8px;     /* Optional: angoli arrotondati */
+  overflow-y: auto;      
+  border-radius: 8px; 
+  border: 1px solid #d1d5db ;
 }
 
 .ql-editor {

@@ -130,7 +130,9 @@
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row md:p-4 gap-4 h-screen relative">
+        <div
+            class="flex flex-col md:flex-row md:p-4 gap-4 h-screen relative md:bg-custom-light"
+        >
             <div
                 id="popup-start-countdown"
                 class="hidden fixed inset-0 p-12 bg-black/60 items-center justify-center z-40"
@@ -210,63 +212,74 @@
             </div>
             <!-- Left Box -->
             <div
-                class="md:w-[25%] w-full p-2 h-[10%] md:h-auto flex flex-col md:relative justify-between"
+                class="md:w-[25%] w-full h-[10%] md:h-auto flex flex-col md:relative justify-between"
             >
                 <div
                     id="leaderboard-icon"
-                    class="w-full flex flex-row justify-between p-2 items-center"
+                    class="w-full flex flex-row justify-between items-center gap-1"
                 >
-                    <a
-                        class="button-container flex h-12 w-12 rounded-full border-2 p-2 border-custom-blue flex-col justify-center items-center cursor-pointer"
-                        onclick="dashboardButton()"
-                    >
-                        <div>
-                            <img
-                                src="/images/icons/icons8-casa-100.png"
-                                alt="Search Icon"
-                                class="icon-image"
-                            />
-                        </div>
-                    </a>
                     <div
-                        class="flex flex-row justify-center items-center gap-4"
+                        class="w-1/4 flex justify-center items-center p-2 bg-custom-light"
+                    >
+                        <a
+                            class="button-container flex h-12 w-12 p-2 flex-col justify-center items-center cursor-pointer"
+                            onclick="dashboardButton()"
+                        >
+                            <div>
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="Search Icon"
+                                    class="icon-image"
+                                />
+                            </div>
+                        </a>
+                    </div>
+                    <div
+                        class="w-1/4 h-full md:hidden flex justify-center items-center bg-custom-light"
                     >
                         <button
-                            class="md:hidden px-4 py-2 bg-custom-blue text-white rounded"
+                            class="w-full flex-1 px-4 text-gray-800 text-sm font-semibold"
                             onclick="openGameInfo()"
                         >
-                            Game Info
+                            GAME INFO
                         </button>
-                        <div
-                            class="flex md:hidden h-12 w-12 flex-col justify-center items-center font-semibold p-1 rounded-full border border-custom-blue"
-                        >
+                    </div>
+                    <div
+                        class="w-1/4 h-full md:hidden flex justify-center items-center bg-custom-light"
+                    >
+                        <div class="w-auto flex justify-left items-start">
                             <img
-                                class="h-full w-auto"
                                 onclick="openBookOverlay()"
-                                src="/images/game_book_image.svg"
-                                alt=""
+                                src="/images/book-icon.png"
+                                alt="Icona Libro"
+                                class="size-10 md:size-26 lg:size-36 rounded"
                             />
                         </div>
                     </div>
-
-                    <div class="chat-icon-container relative">
-                        <button
-                            id="toggleChatButton"
-                            class="bg-custom-blue z-50 h-12 w-12 text-white rounded-full shadow-lg text-lg hover:bg-blue-600 focus:outline-none focus:ring-2 cursor-pointer"
+                    <div
+                        id="toggleChatButton"
+                        class="w-1/4 cursor-pointer flex justify-center h-full items-center bg-custom-light"
+                    >
+                        <div
+                            class="chat-icon-container relative button-container"
                         >
-                            💬
                             <div
                                 id="notificationSymbol"
                                 class="absolute top-0 left-0 w-3 h-3 bg-red-500 rounded-full hidden"
                             ></div>
-                        </button>
+                            <img
+                                src="/images/icons/chat_bubble.svg"
+                                class="size-8"
+                                alt="chat bubble"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <!-- Contenuto dinamico condiviso -->
                 <div
                     id="game-info-container"
-                    class="hidden bg-white z-20 md:block md:relative w-full h-full flex flex-col justify-center p-4 items-center"
+                    class="hidden z-20 md:block md:relative w-full h-full flex flex-col justify-center p-4 items-center"
                 >
                     <!-- Pulsante chiusura modal (solo mobile) -->
                     <button
@@ -277,38 +290,39 @@
                     </button>
 
                     <!-- CONTENUTO DINAMICO QUI -->
-                    <div class="text-gray-800 h-full">
+                    <div class="text-gray-800 h-full sm:w-3/4 md:w-full">
                         <div
                             id="gameUI-update"
-                            class="flex flex-col gap-8 items-center justify-center py-8"
+                            class="flex flex-col gap-8 items-center w-full justify-center py-8"
                         >
-                            <div
-                                class="countdown-container flex flex-row items-center justify-center w-full"
-                            >
+                            <div class="flex flex-row w-full">
                                 <div
-                                    class="p-2 h-14 w-14 flex justify-center items-center"
-                                >
-                                    <img
-                                        src="/images/icons/hourglass-svgrepo-com.svg"
-                                        alt="countdown hourglass icon"
-                                        class="h-full w-auto"
-                                    />
-                                </div>
+                                    id="current-turn"
+                                    class="text-lg w-full font-semibold text-right"
+                                ></div>
                                 <div
-                                    id="countdown-display"
-                                    class="flex text-2xl font-semibold text-gray-800"
+                                    class="countdown-container flex flex-row items-center justify-center w-full"
                                 >
                                     <div
-                                        id="countdown-text"
-                                        class="font-bold"
-                                    ></div>
+                                        class="p-2 h-14 w-14 flex justify-center items-center"
+                                    >
+                                        <img
+                                            src="/images/icons/hourglass-svgrepo-com.svg"
+                                            alt="countdown hourglass icon"
+                                            class="h-full w-auto"
+                                        />
+                                    </div>
+                                    <div
+                                        id="countdown-display"
+                                        class="flex text-2xl font-semibold text-gray-800"
+                                    >
+                                        <div
+                                            id="countdown-text"
+                                            class="font-bold"
+                                        ></div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div
-                                id="current-turn"
-                                class="text-lg w-full font-semibold text-right"
-                            ></div>
                             <div class="flex flex-col w-full items-center">
                                 <div
                                     id="turn-order-wrapper"
@@ -323,12 +337,14 @@
                             <div
                                 class="flex flex-col justify-center items-center font-semibold"
                             >
-                                <div>
+                                <div
+                                    class="w-auto flex justify-left items-start"
+                                >
                                     <img
-                                        class="cursor-pointer hidden md:block h-48 w-48 transition duration-300 transform hover:scale-[1.03]"
                                         onclick="openBookOverlay()"
-                                        src="/images/game_book_image.svg"
-                                        alt=""
+                                        src="/images/book-icon.png"
+                                        alt="Icona Libro"
+                                        class="md:size-24 lg:size-30 cursor-pointer hidden md:block transition duration-300 transform hover:scale-[1.03]"
                                     />
                                 </div>
                             </div>
@@ -337,7 +353,7 @@
                 </div>
                 <div
                     id="chatContainer"
-                    class="absolute chatNotVisible w-full mt-[25%] top-0 md:top-auto md:bottom-0 right-0 left-0 z-40"
+                    class="h-50% chatNotVisible w-full top-0 md:top-auto right-0 left-0 z-40"
                 >
                     <div class="w-full bg-gray-600 p-4 rounded-lg shadow-lg">
                         <!-- Area messaggi -->
@@ -368,7 +384,7 @@
             </div>
 
             <!-- Right Box -->
-            <div class="md:w-[75%] w-full h-[90%] md:h-auto relative">
+            <div class="md:w-[75%] w-full h-[90%] md:h-auto relative bg-white">
                 <div
                     class="h-full flex flex-col gap-4 p-4 md:p-12 shadow-xl contenitore"
                 >

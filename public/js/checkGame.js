@@ -460,21 +460,17 @@ function updateCurrentPlayerDisplay(currentPlayer) {
 
         const currentUser = localStorage.getItem("username");
         const isMyTurn = currentPlayer.username === currentUser;
-        const turnText = isMyTurn
-            ? "Turno corrente: É il tuo turno"
-            : `Turno corrente:`;
+        const turnText = isMyTurn ? "il tuo turno" : ``;
 
         currentTurnDisplay.innerHTML = `
-        <div class="flex items-center gap-4 bg-white px-4 py-3 rounded-xl shadow border border-gray-200">
-            <div class="text-2xl sm:text-xl font-semibold text-gray-800 whitespace-nowrap">
-                ${turnText}
-            </div>
+        <div class="flex items-center justify-center gap-4 bg-gradient-to-r from-blue-400 to-purple-500  px-4 py-3 rounded-xl shadow">
+        <div class="lg:text-3xl md:text-2xl sm:text-x font-semibold text-white whitespace-nowrap"> ${turnText} </div>
             ${
                 !isMyTurn
                     ? `
             <div class="flex items-center gap-4">
-            <p class=" text-2xl sm:text-xl font-semibold text-gray-800">${currentPlayer.username}</p>
-                <div class=" border-2 border-teal-300 h-14 w-14 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
+            <p class=" lg:text-3xl md:text-2xl sm:text-xl font-semibold text-white">${currentPlayer.username}</p>
+                <div class="size-14 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
                     <img src="${avatarSrc}" alt="Avatar" class="w-full h-full " />
                 </div>
             </div>
@@ -496,8 +492,8 @@ function updateTurnOrderDisplay(turnOrder) {
             .map((player, index) => {
                 const avatarSrc = getAvatarSrc(player.avatar);
                 return `
-            <div class="turn-order-item flex flex-col items-center justify-center gap-2">
-                <div class=" h-12 w-12 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
+            <div class="turn-order-item flex flex-col items-center justify-center">
+                <div class=" size-12 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
                     <img src="${avatarSrc}" alt="Avatar" class="w-full h-full" />
                 </div>
                 <span class="text-sm font-medium">${player.username}</span>
