@@ -20,6 +20,15 @@ router.post("/", async (req, res) => {
         console.log(`user sub ${sub}`);
 
         if (user) {
+            if (!user.is_onboarding_complete) {
+                return res.json({
+                    success: true,
+                    needsProfileCompletion: true,
+                    redirectTo: `/completa-profilo/${encodeURIComponent(
+                        user.email
+                    )}`,
+                });
+            }
             const { accessToken, refreshToken } = generateTokens(
                 user.user_id,
                 user.username
@@ -39,7 +48,23 @@ router.post("/", async (req, res) => {
             });
         } else {
             const existingUserByEmail = await findUserByEmail(email);
+            console.log(`user: ${existingUserByEmail}`);
             if (existingUserByEmail) {
+                // Caso: utente Google che non ha ancora completato il profilo
+                if (
+                    existingUserByEmail.google_id === sub &&
+                    !existingUserByEmail.is_onboarding_complete
+                ) {
+                    return res.json({
+                        success: true,
+                        needsProfileCompletion: true,
+                        redirectTo: `/completa-profilo/${encodeURIComponent(
+                            email
+                        )}`,
+                    });
+                }
+
+                // Caso: email già usata per registrazione normale o Google con profilo completo
                 return res.status(409).json({
                     success: false,
                     error: "EMAIL_ALREADY_EXISTS",

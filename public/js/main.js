@@ -379,44 +379,52 @@ async function fetchdashboardData() {
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket();
 
+            // Unisci tutti i giochi nel socket
             Object.keys(games).forEach((gameId) => {
                 socket.emit("joinNewGame", { gameId, user_id });
             });
 
+            // Cicla tra i giochi e costruisci il markup
             Object.entries(games).forEach(([gameId, gameData], index) => {
                 if (index >= 5) return;
+
                 const isRanked = gameData.gameType === "ranked";
                 const container = document.getElementById(`game-${index + 1}`);
 
                 if (container) {
-                    container.innerHTML = "";
+                    container.innerHTML = ""; // Svuota il contenitore esistente
                     container.setAttribute("data-game-id", gameId);
-                    const gameWrapper = document.createElement("div");
-                    gameWrapper.className =
-                        "relative w-full h-full flex items-center justify-center";
 
-                    const button = document.createElement("button");
-                    button.innerText = `Libro ${index + 1}`;
-                    button.onclick = () => handleBackToGame(gameId);
-                    button.className = `
-                    w-full h-full text-center text-sm md:text-md lg:text-xl sm:text-md font-bold 
-                    text-gray-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 
-                    transition duration-300 ease-in-out p-2 cursor-pointer
-                    ${
-                        isRanked
-                            ? "border-2 border-yellow-400"
-                            : "bg-white border-2 border-green-400"
-                    }
-                `;
+                    // Usa il template literal per creare tutto l'HTML
+                    const gameHTML = `
+                <div class="relative w-full h-full flex flex-col items-center justify-center">
+ 
+                    <button 
+                        onclick="handleBackToGame('${gameId}')" 
+                        class="w-full h-full flex flex-col relative justify-center p-2 md:gap-2 items-center text-sm md:text-md lg:text-xl sm:text-md font-bold 
+                               text-gray-800 rounded-xl shadow-md hover:shadow-lg hover:scale-105 
+                               transition duration-300 ease-in-out cursor-pointer 
+                               ${
+                                   isRanked
+                                       ? "border-2 border-yellow-400"
+                                       : "bg-white border-2 border-green-400"
+                               }">
+                                <div class="w-full h-full flex justify-center items-center">
+                                    <img src="/images/book-icon.png" alt="Libro ${
+                                        index + 1
+                                    }" class="w-2/3  object-contain" />
+                               </div>
+                               <div>
+                                    Libro ${index + 1}
+                               </div>
+                    </button>
+                    <div class="chat-notification-dot absolute -top-4 -left-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white hidden"></div>
+                    <div class="chapter-notification-dot absolute -top-4 left-4 w-4 h-4 bg-orange-500 rounded-full border-2 border-white hidden"></div>
+                </div>
+            `;
 
-                    const notificationHtml = `
-                        <div class="chat-notification-dot absolute -top-4 -left-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white hidden"></div>
-                        <div class="chapter-notification-dot absolute -top-4 left-4 w-4 h-4 bg-orange-500 rounded-full border-2 border-white hidden"></div>
-                    `;
-
-                    gameWrapper.innerHTML = notificationHtml;
-                    gameWrapper.appendChild(button);
-                    container.appendChild(gameWrapper);
+                    // Aggiungi l'HTML al container
+                    container.innerHTML = gameHTML;
                 }
             });
         }
@@ -545,34 +553,59 @@ function handleBackToGame(firstGameId) {
     }
 }
 
+function toggleGrayscale(hovered, other) {
+    hovered.style.filter = "grayscale(0%)";
+    other.style.filter = "grayscale(60%)";
+}
+
+function openOverlay() {
+    var overlay = document.getElementById("overlay-new-game");
+    overlay.style.display = "flex";
+    setTimeout(() => {
+        overlay.classList.remove("opacity-0", "translate-y-10");
+        overlay.classList.add("opacity-100", "translate-y-0");
+    }, 10);
+}
+
+function closeOverlay() {
+    var overlay = document.getElementById("overlay-new-game");
+    overlay.classList.remove("opacity-100", "translate-y-0");
+    overlay.classList.add("opacity-0", "translate-y-10");
+    setTimeout(() => {
+        overlay.style.display = "none";
+    }, 500);
+}
+
 const avatars = document.querySelectorAll(".avatar");
 const mainAvatar = document.getElementById("main-avatar");
-const avatarContainer = document.getElementById("avatarContainer");
-const selectButton = document.getElementById("select-avatar-button");
-const closeButton = document.getElementById("close-avatar-menu");
+const avatarsModalContainer = document.getElementById(
+    "avatars-modal-container"
+);
 let selectedAvatar = null;
 
 function openAvatarMenu() {
-    document.getElementById("avatarContainer").classList.remove("hidden");
+    document
+        .getElementById("avatars-modal-container")
+        .classList.remove("hidden");
 }
 
 avatars.forEach((avatar) => {
     avatar.addEventListener("click", () => {
         avatars.forEach((item) => {
-            item.classList.remove("bg-blue-600");
-            item.classList.add("bg-blue-200");
+            item.classList.remove("border-4");
+            item.classList.remove("border-custom-blue");
         });
 
-        avatar.classList.remove("bg-blue-200");
-        avatar.classList.add("bg-blue-600");
+        avatar.classList.add("border-custom-blue");
+        avatar.classList.add("border-4");
         selectedAvatar = avatar.getAttribute("data-avatar");
         const selectedAvatarImg = avatar.querySelector("img").src;
         mainAvatar.src = selectedAvatarImg;
-        selectButton.disabled = false;
     });
 });
 
-selectButton.addEventListener("click", () => {
+function closeAvatarMenu() {
+    console.log("click first");
     if (selectedAvatar) {
         fetch("/profile/avatar", {
             method: "POST",
@@ -589,64 +622,19 @@ selectButton.addEventListener("click", () => {
             .catch((error) => {
                 console.error("Errore nella selezione dell'avatar:", error);
             });
-    }
-});
-
-function openOverlay() {
-    var overlay = document.getElementById("overlay-new-game");
-    overlay.style.display = "flex";
-    setTimeout(() => {
-        overlay.classList.remove("opacity-0", "translate-y-10");
-        overlay.classList.add("opacity-100", "translate-y-0");
-    }, 10);
-}
-
-const img1 = document.getElementById("img1");
-const img2 = document.getElementById("img2");
-
-function toggleGrayscale(hovered, other) {
-    hovered.style.filter = "grayscale(0%)";
-    other.style.filter = "grayscale(60%)";
-}
-
-img1.addEventListener("mouseenter", () => toggleGrayscale(img1, img2));
-img2.addEventListener("mouseenter", () => toggleGrayscale(img2, img1));
-
-function closeOverlay() {
-    var overlay = document.getElementById("overlay-new-game");
-    overlay.classList.remove("opacity-100", "translate-y-0");
-    overlay.classList.add("opacity-0", "translate-y-10");
-    setTimeout(() => {
-        overlay.style.display = "none";
-    }, 500);
-}
-
-closeButton.addEventListener("click", () => {
-    if (selectedAvatar) {
-        fetch("/profile/avatar", {
-            method: "POST",
-            body: JSON.stringify({ avatar: selectedAvatar }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then(() => {
-                localStorage.setItem(`avatar_${username}`, selectedAvatar);
-                closeMenu();
-            })
-            .catch((error) => {
-                console.error("Errore nella selezione dell'avatar:", error);
-            });
     } else {
+        console.log("before closeMenu()");
         closeMenu();
     }
-});
+}
 
 function closeMenu() {
-    avatarContainer.classList.add("hidden");
+    console.log("inside close menu");
+    const avatarsModalContainer = document.getElementById(
+        "avatars-modal-container"
+    );
+    avatarsModalContainer.classList.add("hidden");
     selectedAvatar = null;
-    selectButton.disabled = true;
 }
 
 ///////// POPUP NEW RANKED SCORE /////////////
@@ -789,3 +777,35 @@ function deleteNotification(game_id) {
 }
 
 ///////// POPUP NEW RANKED SCORE /////////////
+
+///////// PROFILE SEARCH ///////////////////
+
+async function searchUser() {
+    const input = document.getElementById("search-input");
+    const username = input.value.trim();
+    if (!username) return;
+
+    try {
+        const response = await fetch("/leaderboard/search-user", {
+            method: "POST", // Usa POST
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username: username }),
+        });
+        if (response.ok) {
+            window.location.href = `/profile-page/${username}`;
+            return;
+        }
+
+        throw new Error(data.error || "Errore nella ricerca");
+    } catch (err) {
+        console.error(err);
+        const errorMessage = document.getElementById("error-message");
+        errorMessage.textContent = "L'utente non esiste";
+        errorMessage.classList.remove("hidden");
+        setTimeout(() => {
+            errorMessage.classList.add("hidden");
+        }, 2000);
+    }
+}

@@ -28,10 +28,6 @@ async function getPlayerStatsFromDB(user_id) {
 
         return playerStats;
     } catch (err) {
-        console.error(
-            `[getPlayerStatsFromDB] Errore DB per user ${user_id}:`,
-            err
-        );
         throw err;
     }
 }

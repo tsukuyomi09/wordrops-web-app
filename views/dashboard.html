@@ -102,19 +102,17 @@
                         <img
                             src="/images/book-icon.png"
                             alt="Icona Libro"
-                            class="size-14 md:size-26 lg:size-36 rounded shadow-md"
+                            class="size-14 md:size-26 lg:size-36"
                         />
                     </div>
 
                     <!-- Dettagli libro -->
-                    <div class="w-2/3 flex flex-col">
+                    <div id="book-details" class="w-2/3 flex flex-col">
                         <!-- Titolo -->
                         <h2
                             class="text-2xl lg:text-6xl font-bold"
                             id="book-title"
-                        >
-                            Titolo del Libro
-                        </h2>
+                        ></h2>
 
                         <!-- Rating -->
                         <div class="flex items-center gap-2 mt-2">
@@ -128,54 +126,20 @@
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">Autori:</h3>
                             <div class="flex gap-4 mt-2">
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="w-12 h-12 bg-gray-300 rounded-full"
-                                    ></div>
-                                    <span class="text-sm mt-1">Utente1</span>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="w-12 h-12 bg-gray-300 rounded-full"
-                                    ></div>
-                                    <span class="text-sm mt-1">Utente2</span>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="w-12 h-12 bg-gray-300 rounded-full"
-                                    ></div>
-                                    <span class="text-sm mt-1">Utente3</span>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="w-12 h-12 bg-gray-300 rounded-full"
-                                    ></div>
-                                    <span class="text-sm mt-1">Utente4</span>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="w-12 h-12 bg-gray-300 rounded-full"
-                                    ></div>
-                                    <span class="text-sm mt-1">Utente5</span>
-                                </div>
+                                <div
+                                    id="authors-container"
+                                    class="flex items-center gap-4"
+                                ></div>
                             </div>
                         </div>
 
                         <!-- Genere -->
-                        <div class="mt-4">
-                            <h3 class="text-lg font-semibold">Genere:</h3>
-                            <p id="book-genre" class="text-gray-700">
-                                Fantasy, Avventura
-                            </p>
-                        </div>
+                        <div id="book-genre" class="mt-4"></div>
 
                         <!-- Descrizione -->
                         <div class="mt-4">
                             <h3 class="text-lg font-semibold">Descrizione:</h3>
-                            <p id="book-summary" class="text-gray-700">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit.
-                            </p>
+                            <p id="book-summary" class="text-gray-700"></p>
                         </div>
                     </div>
                 </div>
@@ -321,15 +285,15 @@
 
         <div class="h-[35%] flex flex-col w-full">
             <!-- BOX_MENU (top center on mobile, right on desktop) -->
-            <div class="w-full px-1 md:px-6 bg-custom-light">
+            <div class="w-full md:px-6 bg-custom-light">
                 <div
-                    class="md:rounded-full p-2 gap-2 flex flex-row justify-between items-center relative"
+                    class="p-2 md:p-4 gap-2 flex flex-row justify-between items-center relative"
                 >
                     <div class="">
                         <img
                             src="/images/logo_wordrops_classic.svg"
                             alt="Wordrops Logo"
-                            class="mx-auto w-18 lg:w-30 hidden md:block"
+                            class="w-18 lg:w-30 hidden md:block"
                         />
                     </div>
                     <div
@@ -337,7 +301,7 @@
                     >
                         <a
                             href="/classifiche"
-                            class="button-container flex flex-col size-10 justify-center items-center rounded-lg py-1 border-2 border-gray-200"
+                            class="button-container flex flex-col size-10 md:size-12 justify-center items-center rounded-lg border-2 border-gray-200"
                         >
                             <img
                                 src="/images/icons/icons8-trofeo-48.png"
@@ -348,12 +312,12 @@
 
                         <a
                             href="/storie-community"
-                            class="button-container flex flex-col size-10 justify-center items-center rounded-lg py-1 border-2 border-gray-200"
+                            class="button-container flex flex-col size-10 md:size-12 justify-center items-center rounded-lg border-2 border-gray-200"
                         >
                             <img
                                 src="/images/icons/library-icon.png"
                                 alt="library Icon"
-                                class="icon-image size-8"
+                                class="icon-image object-fit"
                             />
                         </a>
                     </div>
@@ -443,10 +407,10 @@
                 >
                     <!-- Avatar e nome utente -->
                     <div
-                        class="flex flex-row items-center justify-center relative gap-2 md:gap-6"
+                        class="flex flex-col md:flex-row items-center justify-center relative md:gap-6"
                     >
                         <!-- Avatar container -->
-                        <div class="relative size-16 md:size-32">
+                        <div class="relative size-16 md:size-[6vw]">
                             <div
                                 class="rounded-lg bg-white shadow-md overflow-hidden flex justify-center items-center"
                             >
@@ -458,7 +422,7 @@
 
                             <!-- Icona cambio avatar -->
                             <div
-                                class="absolute -bottom-4 -right-4 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
+                                class="absolute -top-4 -right-4 size-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
                             >
                                 <img
                                     src="/images/icons/change-avatar-icon.png"
@@ -470,10 +434,10 @@
                         </div>
 
                         <!-- Username -->
-                        <div class="text-center h-full">
+                        <div class="text-center h-full flex items-end">
                             <h2
                                 id="username"
-                                class="text-gray-800 text-xl md:text-3xl font-bold"
+                                class="text-gray-800 text-lg md:text-3xl font-bold"
                             ></h2>
                         </div>
                     </div>
@@ -489,14 +453,9 @@
                         id="lottie-button"
                     >
                         <img
-                            src="/images/pen.png"
-                            alt=""
-                            class="absolute w-6 lg:w-12 right-0 -top-4"
-                        />
-                        <img
                             src="/images/book_new_game.png"
                             alt=""
-                            class="object-cover w-16 lg:w-32"
+                            class="object-cover w-16 lg:w-[6vw]"
                         />
                         <div>
                             <h2
@@ -629,7 +588,7 @@
                             <h2
                                 class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Following
+                                Amici
                             </h2>
                         </div>
                     </div>
@@ -680,12 +639,12 @@
                                                     </p>
                                                 </div>
                                                 <div
-                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
                                                 >
                                                     <p
-                                                        class="text-[12px] font-bold text-white"
+                                                        class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        n° Partite Classiche
+                                                        Classiche
                                                     </p>
                                                 </div>
                                             </div>
@@ -713,12 +672,12 @@
                                                     </p>
                                                 </div>
                                                 <div
-                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
                                                 >
                                                     <p
-                                                        class="text-[12px] font-bold text-white"
+                                                        class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        n° Partite Ranked
+                                                        Classificata
                                                     </p>
                                                 </div>
                                             </div>
@@ -745,10 +704,10 @@
                                                     </p>
                                                 </div>
                                                 <div
-                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
                                                 >
                                                     <p
-                                                        class="text-[12px] font-bold text-white"
+                                                        class="text-[12px] md:text-lg font-bold text-white"
                                                     >
                                                         Miglior Performance
                                                     </p>
@@ -777,12 +736,12 @@
                                                     </p>
                                                 </div>
                                                 <div
-                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
                                                 >
                                                     <p
-                                                        class="text-[12px] font-bold text-white"
+                                                        class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Punteggio Ranked
+                                                        Punteggio
                                                     </p>
                                                 </div>
                                             </div>
@@ -811,10 +770,10 @@
                                                     </p>
                                                 </div>
                                                 <div
-                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
                                                 >
                                                     <p
-                                                        class="text-[12px] font-bold text-white"
+                                                        class="text-[12px] md:text-lg font-bold text-white"
                                                     >
                                                         Partite Pessime
                                                     </p>
@@ -844,10 +803,10 @@
                                                     </p>
                                                 </div>
                                                 <div
-                                                    class="h-auto p-2 flex justify-center items-center w-full bg-teal-500"
+                                                    class="h-auto p-2 flex justify-center items-center w-full bg-custom-blue"
                                                 >
                                                     <p
-                                                        class="text-[12px] font-bold text-white"
+                                                        class="text-[12px] md:text-lg font-bold text-white"
                                                     >
                                                         Abbandoni
                                                     </p>
@@ -913,7 +872,7 @@
         </div>
 
         <div
-            id="avatarContainer"
+            id="avatars-modal-container"
             class="flex justify-center hidden items-center fixed inset-0 bg-black/40 z-50"
         >
             <div
@@ -923,6 +882,7 @@
                     class="relative grid grid-cols-3 md:grid-cols-4 grid-rows-3 gap-2 md:gap-6 p-6 rounded bg-custom-light shadow-lg"
                 >
                     <button
+                        onclick="closeAvatarMenu()"
                         id="close-avatar-menu"
                         class="absolute cursor-pointer border-1 border-gray-800 -top-2 -right-2 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center"
                     >
@@ -930,7 +890,7 @@
                     </button>
                     <div
                         data-avatar="scroll_sky_image"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -940,7 +900,7 @@
                     </div>
                     <div
                         data-avatar="agatha_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -950,7 +910,7 @@
                     </div>
                     <div
                         data-avatar="asimov_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -960,7 +920,7 @@
                     </div>
                     <div
                         data-avatar="dante_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -970,7 +930,7 @@
                     </div>
                     <div
                         data-avatar="jane_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -980,7 +940,7 @@
                     </div>
                     <div
                         data-avatar="king_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -990,7 +950,7 @@
                     </div>
                     <div
                         data-avatar="rowling_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -1000,7 +960,7 @@
                     </div>
                     <div
                         data-avatar="shakespeare_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -1010,7 +970,7 @@
                     </div>
                     <div
                         data-avatar="tolkien_avatar_square"
-                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 border-2 border-transparent hover:border-red-500 cursor-pointer"
+                        class="avatar size-[20vw] md:size-26 lg:size-32 rounded-lg overflow-hidden flex items-center justify-center rounded bg-opacity-50 hover:border-2 hover:border-red-500 cursor-pointer"
                     >
                         <img
                             class="w-full h-full object-cover"
@@ -1020,7 +980,7 @@
                     </div>
                 </div>
                 <button
-                    id="select-avatar-button"
+                    onclick="closeAvatarMenu()"
                     class="bg-blue-500 cursor-pointer text-white py-2 px-4 rounded"
                 >
                     Seleziona
