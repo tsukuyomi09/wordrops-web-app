@@ -26,9 +26,9 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 300000; // TO SET UP
+        let countdownDuration = 3000000; // TO SET UP
         if (gameSpeed === "fast") {
-            countdownDuration = 300000; // TO SET UP
+            countdownDuration = 3000000; // TO SET UP
         }
 
         activeGames.set(newGameId, {
@@ -42,7 +42,7 @@ async function createGameAndAssignPlayers(game) {
             chapterReadMap: new Map(),
             status: "to-start",
             turnOrder: turnOrder,
-            readyPlayersCount: 0,
+            readyPlayersCount: new Set(),
             chat: [],
             turnIndex: 0,
             connections: [],

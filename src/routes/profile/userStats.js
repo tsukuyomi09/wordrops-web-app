@@ -26,10 +26,6 @@ router.get("/", checkAuth, async (req, res) => {
             }
             playerStatsMap.set(user_id, playerStats);
         }
-        console.log(
-            "Intera mappa delle statistiche degli utenti:",
-            Array.from(playerStatsMap.entries())
-        );
 
         return res.json(playerStats);
     } catch (err) {

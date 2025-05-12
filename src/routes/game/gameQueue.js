@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { createGameAndAssignPlayers } = require("../../services/gameManager");
 const checkAuth = require("../../middlewares/checkAuthToken");
+const checkUserStatus = require("../../middlewares/checkUserStatus");
 
 class Queue {
     constructor() {
@@ -50,10 +51,16 @@ const gameQueues = {
 const playerQueuePosition = {};
 let preGameQueue = {};
 
-router.post("/", checkAuth, (req, res) => {
+router.post("/", checkAuth, checkUserStatus, (req, res) => {
     const { socketId, avatarForGame: avatar, gameType, gameSpeed } = req.body;
-    const { user_id, username } = req;
+    const { user_id, username, maxGamesReached } = req;
     const socket = req.io.sockets.sockets.get(socketId);
+
+    if (maxGamesReached) {
+        return res.status(403).json({
+            error: "Max games limit reached",
+        });
+    }
 
     if (!user_id || playerQueuePosition[user_id] || !socket) {
         return res
@@ -75,7 +82,7 @@ router.post("/", checkAuth, (req, res) => {
         gameType,
         gameSpeed,
         timestamp: Date.now(),
-        pronto: null,
+        pronto: true,
     };
 
     const queue = gameQueues[gameType][gameSpeed];

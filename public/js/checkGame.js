@@ -37,12 +37,13 @@ async function initializeGame(game_id) {
 
         const data = await response.json();
         if (data.status === "to-start") {
-            document
-                .getElementById("popup-start-countdown")
-                .classList.remove("hidden");
-            document
-                .getElementById("popup-start-countdown")
-                .classList.add("flex");
+            const popup = document.getElementById("popup-start-countdown");
+            popup.classList.remove("hidden");
+            popup.classList.add("flex");
+
+            if (data.alreadyReady) {
+                waitingSpinning();
+            }
         }
     } catch (error) {
         console.error("Errore nel recupero dello stato del gioco:", error);
@@ -389,9 +390,14 @@ function displayReceivedMessage(messageText, avatar, username) {
     messageBox.scrollTop = messageBox.scrollHeight;
 }
 
+function waitingSpinning() {
+    document.getElementById("box-confirm-ready").classList.add("hidden");
+    document.getElementById("waiting-gif").classList.remove("hidden");
+}
+
 function buttonStartGame() {
-    document.getElementById("popup-start-countdown").classList.add("hidden");
-    document.getElementById("popup-start-countdown").classList.remove("flex");
+    document.getElementById("box-confirm-ready").classList.add("hidden");
+    document.getElementById("waiting-gif").classList.remove("hidden");
 
     fetch(`/game/player-ready/${game_id}`, {
         method: "POST",
@@ -415,6 +421,8 @@ function buttonStartGame() {
 }
 
 function showGameStartPopup() {
+    document.getElementById("popup-start-countdown").classList.add("hidden");
+    document.getElementById("popup-start-countdown").classList.remove("flex");
     const gameStartPopup = document.createElement("div");
     gameStartPopup.classList.add(
         "fixed",
@@ -452,21 +460,17 @@ function updateCurrentPlayerDisplay(currentPlayer) {
 
         const currentUser = localStorage.getItem("username");
         const isMyTurn = currentPlayer.username === currentUser;
-        const turnText = isMyTurn
-            ? "Turno corrente: É il tuo turno"
-            : `Turno corrente:`;
+        const turnText = isMyTurn ? "il tuo turno" : ``;
 
         currentTurnDisplay.innerHTML = `
-        <div class="flex items-center gap-4 bg-white px-4 py-3 rounded-xl shadow border border-gray-200">
-            <div class="text-2xl sm:text-xl font-semibold text-gray-800 whitespace-nowrap">
-                ${turnText}
-            </div>
+        <div class="flex items-center justify-center gap-4 bg-gradient-to-r from-blue-400 to-purple-500  px-4 py-3 rounded-xl shadow">
+        <div class="lg:text-3xl md:text-2xl sm:text-x font-semibold text-white whitespace-nowrap"> ${turnText} </div>
             ${
                 !isMyTurn
                     ? `
             <div class="flex items-center gap-4">
-            <p class=" text-2xl sm:text-xl font-semibold text-gray-800">${currentPlayer.username}</p>
-                <div class=" border-2 border-teal-300 h-14 w-14 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
+            <p class=" lg:text-3xl md:text-2xl sm:text-xl font-semibold text-white">${currentPlayer.username}</p>
+                <div class="size-14 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
                     <img src="${avatarSrc}" alt="Avatar" class="w-full h-full " />
                 </div>
             </div>
@@ -488,8 +492,8 @@ function updateTurnOrderDisplay(turnOrder) {
             .map((player, index) => {
                 const avatarSrc = getAvatarSrc(player.avatar);
                 return `
-            <div class="turn-order-item flex flex-col items-center justify-center gap-2">
-                <div class=" h-12 w-12 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
+            <div class="turn-order-item flex flex-col items-center justify-center">
+                <div class=" size-12 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
                     <img src="${avatarSrc}" alt="Avatar" class="w-full h-full" />
                 </div>
                 <span class="text-sm font-medium">${player.username}</span>
@@ -652,16 +656,18 @@ function handleEditorAccess(currentPlayer, currentUser) {
 }
 
 function updateChaptersDisplay(chaptersData) {
-    const swiperWrapper = document.querySelector(".book-chapters-container");
-
+    const bookSwiperWrapper = document.querySelector(
+        ".book-chapters-container"
+    );
+    let count = bookSwiperWrapper.querySelectorAll(".swiper-slide").length;
     const placeholder = document.querySelector(".placeholder-title");
 
-    chaptersData.forEach((chapter, index) => {
+    chaptersData.forEach((chapter) => {
         if (placeholder) {
             placeholder.remove();
         }
-        const slide = document.createElement("div");
-        slide.classList.add(
+        const bookSlide = document.createElement("div");
+        bookSlide.classList.add(
             "swiper-slide",
             "bg-gray-50",
             "shadow-md",
@@ -673,11 +679,11 @@ function updateChaptersDisplay(chaptersData) {
             "h-full"
         );
 
-        slide.innerHTML = `
+        bookSlide.innerHTML = `
         <div class="flex flex-col w-full h-full md:gap-8 gap-4">
             <div class="flex flex-row gap-4">
                 <div class="text-gray-600 font-bold text-lg">
-                    Capitolo ${index + 1}
+                    Capitolo ${count + 1}
                 </div>
                 <div class="text-gray-600 text-lg">
                     <em>Autore:</em> ${chapter.author}
@@ -692,7 +698,8 @@ function updateChaptersDisplay(chaptersData) {
             </div>
         </div>
     `;
-        swiperWrapper.appendChild(slide);
+        bookSwiperWrapper.appendChild(bookSlide);
+        count++;
     });
     if (window.swiper) {
         window.swiper.update();
@@ -717,7 +724,8 @@ function changeTurnShowPopup(author, nextPlayer) {
         "flex",
         "items-center",
         "justify-center",
-        "z-40"
+        "z-40",
+        "p-12"
     );
 
     popup.innerHTML = `

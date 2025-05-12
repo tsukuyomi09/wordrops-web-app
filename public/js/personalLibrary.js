@@ -60,7 +60,7 @@ function renderCompletedGames(completedGames) {
             const gameId = storyDiv.getAttribute("data-game-id");
             const storyDetails = await fetchStoryDetails(gameId);
 
-            openBookOverlay(game.title, storyDetails);
+            openBookOverlay(game, storyDetails);
         });
         container.appendChild(storyDiv);
     });
@@ -68,16 +68,20 @@ function renderCompletedGames(completedGames) {
 
 // Funzione per aprire l'overlay
 
-function openBookOverlay(title, storyDetails) {
-    var overlay = document.getElementById("overlay-books");
-    var titleElement = document.getElementById("book-title");
+function openBookOverlay(book, storyDetails) {
+    const overlay = document.getElementById("overlay-books");
+    const bookTitle = document.getElementById("book-title");
+    const authorsContainer = document.getElementById("authors-container");
+    // const bookGenresContainer = document.getElementById("book-genre");
+    const bookDescription = document.getElementById("book-summary");
+
     const chaptersContainer = document.querySelector(
         ".book-chapters-container"
     );
-    titleElement.textContent = title;
     chaptersContainer.innerHTML = "";
-
+    authorsContainer.innerHTML = ""; // itera sugli autori, poi mettilo dentro bookDetails
     storyDetails.chapters.forEach((item) => {
+        const authorDiv = document.createElement("div");
         const chapterDiv = document.createElement("div");
         chapterDiv.classList.add(
             "mt-4",
@@ -86,6 +90,7 @@ function openBookOverlay(title, storyDetails) {
             "flex-col",
             "gap-6"
         );
+        authorDiv.classList.add("flex", "flex-col", "items-center");
 
         chapterDiv.innerHTML = `
             <h3 class="text-2xl font-semibold" id="chapter-title">
@@ -104,11 +109,28 @@ function openBookOverlay(title, storyDetails) {
             </p>
         `;
 
+        authorDiv.innerHTML = `
+            <div class="w-12 h-12 rounded-lg overflow-hidden">
+                <img src="/images/avatars/${item.avatar}.png" class="w-full h-full object-cover"/>
+            </div>
+            <span class="text-sm font-semibold mt-1">${item.username}</span>
+        `;
+
         chaptersContainer.appendChild(chapterDiv);
+        authorsContainer.appendChild(authorDiv);
     });
 
-    overlay.classList.remove("hidden");
+    // book.genres.forEach((genre) => {
+    //     const bookGenre = document.createElement("p");
+    //     bookGenre.textContent = genre;
+    //     bookGenre.classList.add("text-gray-00");
+    //     bookGenresContainer.appendChild(bookGenre);
+    // });
 
+    bookTitle.innerHTML = book.title;
+    bookDescription.innerHTML = book.back_cover;
+
+    overlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
 
@@ -127,6 +149,7 @@ async function fetchStoryDetails(storyId) {
             `/library/dashboard-story-details/${storyId}`
         );
         const data = await response.json();
+        console.log(`book details:\n${JSON.stringify(data, null, 2)}`);
 
         if (!response.ok) {
             throw new Error(

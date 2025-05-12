@@ -64,8 +64,9 @@ font-family: 'Consolas', 'Courier New', monospace;
 }
 
 #editor-container {
-  overflow-y: auto;       /* Scroll verticale solo se necessario */
-  border-radius: 8px;     /* Optional: angoli arrotondati */
+  overflow-y: auto;      
+  border-radius: 8px; 
+  border: 1px solid #d1d5db ;
 }
 
 .ql-editor {
@@ -289,20 +290,22 @@ font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .swiper-pagination-bullet:nth-child(2) {
-  background-image: url('/images/icons/stats-medal.png') !important;
-}
-
-.swiper-pagination-bullet:nth-child(3) {
   background-image: url('/images/icons/icons8-lettura-64.png') !important;
 }
 
-.swiper-pagination-bullet:nth-child(4) {
+.swiper-pagination-bullet:nth-child(3) {
   background-image: url('/images/icons/book-icon.png') !important; 
 }
 
-.swiper-pagination-bullet:nth-child(5) {
+.swiper-pagination-bullet:nth-child(4) {
   background-image: url('/images/icons/fire-icon.png') !important;
 }
+
+.swiper-pagination-bullet:nth-child(5) {
+  background-image: url('/images/icons/stats-medal.png') !important;
+}
+
+
 
 
 .scrollbar-hidden::-webkit-scrollbar {
@@ -324,31 +327,7 @@ font-family: 'Consolas', 'Courier New', monospace;
 }
 
 
-#lottie-button {
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-}
 
-#lottie-button:hover {
-  transform: scale(1.05);
-}
-
-#lottie-book {
-  width: 100%;
-  height: 100%;
-}
-
-@media (max-width: 768px) {
-  #lottie-book {
-    width: 150px !important;
-    height: 150px !important;
-    transform: scale(1.2); /* più piccolo */
-  }
-}
 
 #overlay-books.open {
   opacity: 1;
