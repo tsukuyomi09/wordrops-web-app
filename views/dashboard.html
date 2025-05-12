@@ -321,243 +321,91 @@
 
         <div class="h-[35%] flex flex-col w-full">
             <!-- BOX_MENU (top center on mobile, right on desktop) -->
-            <div
-                class="w-full md:h-full md:hidden px-6"
-                style="
-                    background-color: #faf4f4;
-                    border-bottom-left-radius: 2rem;
-                    border-bottom-right-radius: 2rem;
-                "
-            >
+            <div class="w-full px-1 md:px-6 bg-custom-light">
                 <div
-                    class="md:rounded-full p-2 flex flex-row justify-center items-center gap-6 px-8 relative"
+                    class="md:rounded-full p-2 gap-2 flex flex-row justify-between items-center relative"
                 >
-                    <a
-                        href="/classifiche"
-                        class="button-container flex flex-col justify-center items-center"
-                    >
+                    <div class="">
                         <img
-                            src="/images/icons/icons8-trofeo-48.png"
-                            alt="leaderboard Icon"
-                            class="icon-image size-10"
-                        />
-                    </a>
-
-                    <a
-                        href="/storie-community"
-                        class="button-container flex flex-col justify-center items-center"
-                    >
-                        <img
-                            src="/images/icons/library-icon.png"
-                            alt="library Icon"
-                            class="icon-image size-10"
-                        />
-                    </a>
-                    <button
-                        onclick="toggleDropdownMobile()"
-                        class="p-2 absolute right-0 rounded-md border-2 border-white focus:outline-none"
-                    >
-                        <!-- Hamburger Icon with SVG image -->
-                        <img
-                            src="/images/icons/hamburger-menu-50.png"
-                            alt="Hamburger Menu"
-                            class="size-4 md:size-6 cursor-pointer"
-                        />
-                    </button>
-                    <div
-                        class="hidden dropdown-menu-mobile absolute top-16 right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-                    >
-                        <div
-                            class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
-                            onclick="logout()"
-                        >
-                            <button
-                                class="w-full text-sm text-left text-red-600 hover:bg-red-100 cursor-pointer"
-                            >
-                                logout
-                            </button>
-                            <div class="w-6 h-6">
-                                <img
-                                    class="cursor-pointer"
-                                    src="/images/icons/logout-icon.png"
-                                    alt="logout Icon"
-                                />
-                            </div>
-                        </div>
-                        <div
-                            class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
-                            onclick="modalDeleteAccount()"
-                        >
-                            <button
-                                id="delete-account-btn"
-                                class="w-full pointer-events-none text-sm text-left text-red-600 hover:bg-red-100"
-                            >
-                                Cancella Account
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Middle row -->
-            <div
-                class="flex flex-row w-full h-full md:flex-1 md:justify-between"
-            >
-                <!-- BOX_USER (left on mobile and desktop) -->
-                <div
-                    class="w-1/2 md:flex-1 h-full relative flex flex-col justify-center items-center"
-                >
-                    <!-- Avatar e nome utente -->
-                    <div
-                        class="flex flex-col items-center justify-center relative"
-                    >
-                        <!-- Avatar container -->
-                        <div class="relative size-20 md:size-32">
-                            <div
-                                class="size-20 md:size-32 rounded-lg bg-white shadow-md overflow-hidden flex justify-center items-center"
-                            >
-                                <img
-                                    id="main-avatar"
-                                    class="w-auto h-full object-cover"
-                                />
-                            </div>
-
-                            <!-- Icona cambio avatar -->
-                            <div
-                                class="absolute -bottom-4 -right-4 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
-                            >
-                                <img
-                                    src="/images/icons/change-avatar-icon.png"
-                                    alt="Change Avatar"
-                                    class="size-5"
-                                    onclick="openAvatarMenu()"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- Username -->
-                        <div class="text-center mt-2 md:mt-4">
-                            <h2
-                                id="username"
-                                class="text-gray-800 text-xl font-bold"
-                            ></h2>
-                        </div>
-
-                        <!-- Status -->
-                        <div
-                            id="status-div"
-                            class="flex items-center hidden justify-center space-x-2 mt-2"
-                        >
-                            <span class="text-sm font-semibold"
-                                >Sei in game</span
-                            >
-                            <span
-                                id="game-status-indicator"
-                                class="w-2 h-2 rounded-full bg-green-500"
-                            ></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BOX_LIBRO (right on mobile, center on desktop) -->
-                <div
-                    class="w-1/2 md:flex-1 h-full flex flex-col justify-center items-center"
-                >
-                    <div
-                        onclick="openOverlay()"
-                        class="relative size-16 md:size-42 mb-2"
-                        id="lottie-button"
-                    >
-                        <div id="lottie-book"></div>
-                        <img
-                            src="/images/pen.png"
-                            alt=""
-                            class="absolute w-6 md:w-8 lg:w-12 right-0 top-0"
+                            src="/images/logo_wordrops_classic.svg"
+                            alt="Wordrops Logo"
+                            class="mx-auto w-18 lg:w-30 hidden md:block"
                         />
                     </div>
-                    <h2
-                        class="my-title text-lg md:text-xl lg:text-2xl text-gray-800"
-                    >
-                        Nuova Storia
-                    </h2>
-                </div>
-
-                <!-- BOX_MENU (hidden on mobile, shown right on desktop) -->
-                <div
-                    class="box-menu-hidden md:flex-1 h-full justify-center items-center"
-                >
                     <div
-                        class="border-4 border-custom-light rounded-full p-2 flex flex-row gap-8 px-8 relative"
+                        class="flex justify-center items-center mr-auto gap-2 md:gap-4 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
                     >
-                        <div class="relative">
-                            <div
-                                class="text-xs px-3 py-2 rounded flex flex-col font-medium shadow-sm"
-                            >
-                                <form
-                                    id="search-form"
-                                    class="flex flex-col space-y-1"
-                                >
-                                    <input
-                                        type="text"
-                                        id="search-input"
-                                        placeholder="Cerca un utente..."
-                                        class="px-2 py-1 rounded border border-gray-300 focus:outline-none focus:border-blue-500 transition duration-200"
-                                    />
-                                </form>
-                            </div>
-                            <div
-                                class="absolute left-0 right-0 mt-2 text-sm rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
-                                id="results"
-                            ></div>
-                        </div>
                         <a
                             href="/classifiche"
-                            class="button-container flex flex-col justify-center items-center"
+                            class="button-container flex flex-col size-10 justify-center items-center rounded-lg py-1 border-2 border-gray-200"
                         >
                             <img
                                 src="/images/icons/icons8-trofeo-48.png"
                                 alt="leaderboard Icon"
-                                class="icon-image size-6"
+                                class="icon-image size-8"
                             />
-                            <div class="text-sm font-semibold text-gray-800">
-                                classifiche
-                            </div>
                         </a>
 
                         <a
                             href="/storie-community"
-                            class="button-container flex flex-col justify-center items-center"
+                            class="button-container flex flex-col size-10 justify-center items-center rounded-lg py-1 border-2 border-gray-200"
                         >
                             <img
                                 src="/images/icons/library-icon.png"
                                 alt="library Icon"
-                                class="icon-image size-6"
+                                class="icon-image size-8"
                             />
-                            <div class="text-sm font-semibold text-gray-800">
-                                libreria
-                            </div>
                         </a>
+                    </div>
+                    <div
+                        class="flex justify-center items-center gap-2 md:gap-4"
+                    >
+                        <div class="relative">
+                            <div class="flex flex-col relative">
+                                <div class="flex items-center gap-4 relative">
+                                    <input
+                                        id="search-input"
+                                        type="text"
+                                        placeholder="cerca utente"
+                                        class="border-2 size-10 border-gray-200 px-4 py-1 md:py-2 text-gray-800 rounded-lg w-full"
+                                    />
+                                    <button
+                                        onclick="searchUser()"
+                                        class="absolute right-0 bg-custom-light h-full cursor-pointer border-2 border-gray-200 rounded-lg"
+                                    >
+                                        <img
+                                            class="size-8 p-2"
+                                            src="/images/icons/search-interface-symbol.png"
+                                            alt="Cerca"
+                                        />
+                                    </button>
+                                </div>
+                                <div
+                                    id="error-message"
+                                    class="text-red-600 absolute -bottom-6 right-0 text-sm"
+                                ></div>
+                            </div>
+                        </div>
                         <button
-                            onclick="toggleDropdown()"
-                            class="p-2 rounded-md focus:outline-none"
+                            onclick="toggleDropdownMobile()"
+                            class="p-2 rounded-md border-2 size-10 border-gray-200 focus:outline-none"
                         >
                             <!-- Hamburger Icon with SVG image -->
                             <img
                                 src="/images/icons/hamburger-menu-50.png"
                                 alt="Hamburger Menu"
-                                class="w-6 h-6 cursor-pointer"
+                                class="size-5 md:size-6 cursor-pointer"
                             />
                         </button>
                         <div
-                            id="dropdownMenu"
-                            class="dropdown-menu hidden absolute top-16 right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                            class="hidden dropdown-menu-mobile absolute top-16 right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50"
                         >
                             <div
                                 class="flex justify-between items-center px-4 py-2 text-red-600 hover:bg-red-100 w-full cursor-pointer"
                                 onclick="logout()"
                             >
                                 <button
-                                    class="w-full text-sm text-left text-red-600 hover:bg-red-100"
+                                    class="w-full text-sm text-left text-red-600 hover:bg-red-100 cursor-pointer"
                                 >
                                     logout
                                 </button>
@@ -580,6 +428,82 @@
                                     Cancella Account
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle row -->
+            <div
+                class="flex flex-row w-full h-full md:flex-1 md:justify-between"
+            >
+                <!-- BOX_USER (left on mobile and desktop) -->
+                <div
+                    class="w-1/2 md:flex-1 h-full relative flex flex-col justify-center items-center"
+                >
+                    <!-- Avatar e nome utente -->
+                    <div
+                        class="flex flex-row items-center justify-center relative gap-2 md:gap-6"
+                    >
+                        <!-- Avatar container -->
+                        <div class="relative size-16 md:size-32">
+                            <div
+                                class="rounded-lg bg-white shadow-md overflow-hidden flex justify-center items-center"
+                            >
+                                <img
+                                    id="main-avatar"
+                                    class="w-auto h-full object-cover"
+                                />
+                            </div>
+
+                            <!-- Icona cambio avatar -->
+                            <div
+                                class="absolute -bottom-4 -right-4 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md cursor-pointer"
+                            >
+                                <img
+                                    src="/images/icons/change-avatar-icon.png"
+                                    alt="Change Avatar"
+                                    class="size-5"
+                                    onclick="openAvatarMenu()"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="text-center h-full">
+                            <h2
+                                id="username"
+                                class="text-gray-800 text-xl md:text-3xl font-bold"
+                            ></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOX_LIBRO (right on mobile, center on desktop) -->
+                <div
+                    class="w-1/2 md:flex-1 h-full flex flex-col justify-center items-center"
+                >
+                    <div
+                        onclick="openOverlay()"
+                        class="relative cursor-pointer flex flex-col justify-center items-center"
+                        id="lottie-button"
+                    >
+                        <img
+                            src="/images/pen.png"
+                            alt=""
+                            class="absolute w-6 lg:w-12 right-0 -top-4"
+                        />
+                        <img
+                            src="/images/book_new_game.png"
+                            alt=""
+                            class="object-cover w-16 lg:w-32"
+                        />
+                        <div>
+                            <h2
+                                class="my-title text-center text-lg md:text-xl lg:text-2xl text-gray-800"
+                            >
+                                Nuova Storia
+                            </h2>
                         </div>
                     </div>
                 </div>
