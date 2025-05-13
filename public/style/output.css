@@ -2718,6 +2718,11 @@
       padding-block: calc(var(--spacing) * 40);
     }
   }
+  .md\:py-42 {
+    @media (width >= 48rem) {
+      padding-block: calc(var(--spacing) * 42);
+    }
+  }
   .md\:py-48 {
     @media (width >= 48rem) {
       padding-block: calc(var(--spacing) * 48);

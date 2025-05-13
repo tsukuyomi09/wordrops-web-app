@@ -110,7 +110,7 @@ async function saveGame(game) {
         });
 
         await Promise.all(
-            metadata.genres.map((genreId) => {
+            metadata.genres.map((Id) => {
                 return client.query(
                     `INSERT INTO game_genres (game_id, genre_id) VALUES ($1, $2)`,
                     [databaseGameId, genreId]

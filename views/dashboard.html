@@ -95,7 +95,7 @@
             >
                 <!-- Prima parte: Immagine e informazioni libro -->
                 <div
-                    class="flex flex-col gap-4 md:flex-row md:gap-12 p-4 border-2 border-gray-200 rounded-lg"
+                    class="flex flex-col gap-4 md:flex-row md:gap-12 px-4 py-10 bg-custom-light rounded-lg shadow-lg"
                 >
                     <!-- Immagine del libro -->
                     <div class="w-auto flex justify-left items-start">
@@ -107,25 +107,27 @@
                     </div>
 
                     <!-- Dettagli libro -->
-                    <div id="book-details" class="w-2/3 flex flex-col">
+                    <div id="book-details" class="w-2/3 flex flex-col gap-6">
                         <!-- Titolo -->
                         <h2
-                            class="text-2xl lg:text-6xl font-bold"
+                            class="text-xl lg:text-4xl italic font-semibold"
                             id="book-title"
                         ></h2>
 
                         <!-- Rating -->
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-lg font-semibold">Rating:</span>
+                        <div class="flex items-center gap-2">
                             <div id="book-rating" class="flex gap-1">
-                                ⭐⭐⭐⭐⭐
+                                <i class="fa-regular fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
+                                <i class="fa-regular fa-star"></i
+                                ><i class="fa-regular fa-star"></i>
+                                <i class="fa-regular fa-star"></i>
                             </div>
                         </div>
 
                         <!-- Autori -->
-                        <div class="mt-4">
-                            <h3 class="text-lg font-semibold">Autori:</h3>
-                            <div class="flex gap-4 mt-2">
+                        <div>
+                            <div class="flex gap-4">
                                 <div
                                     id="authors-container"
                                     class="flex items-center gap-4"
@@ -134,10 +136,21 @@
                         </div>
 
                         <!-- Genere -->
-                        <div id="book-genre" class="mt-4"></div>
+                        <div id="book-genre" class="flex flex-row gap-4"></div>
+
+                        <div class="flex gap-4">
+                            <span
+                                id="game-type"
+                                class="px-4 py-1 bg-amber-400 text-gray-800 rounded-lg font-mono"
+                            ></span>
+                            <span
+                                id="game-speed"
+                                class="px-4 py-1 bg-green-600 text-gray-800 rounded-lg font-mono"
+                            ></span>
+                        </div>
 
                         <!-- Descrizione -->
-                        <div class="mt-4">
+                        <div class="">
                             <h3 class="text-lg font-semibold">Descrizione:</h3>
                             <p id="book-summary" class="text-gray-700"></p>
                         </div>
