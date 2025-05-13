@@ -794,7 +794,7 @@ async function searchUser() {
             body: JSON.stringify({ username: username }),
         });
         if (response.ok) {
-            window.location.href = `/profile-page/${username}`;
+            window.open(`/profile-page/${username}`, "_blank");
             return;
         }
 

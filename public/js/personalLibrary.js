@@ -9,28 +9,25 @@ async function fetchCompletedGames() {
                     "stories-container-wrapper"
                 );
                 containerToReveal.classList.remove("hidden");
-                console.log(
-                    "Completed Games JSON:",
-                    JSON.stringify(data.completedGames, null, 2)
-                );
+
                 renderCompletedGames(data.completedGames);
             }
         } else {
-            console.error(
+            console.log(
                 "Errore nel recupero dei giochi completati:",
                 data.message
             );
         }
     } catch (err) {
-        console.error("Errore di rete:", err);
+        console.log("Errore di rete:", err);
     }
 }
 
-function renderCompletedGames(completedGames) {
+function renderCompletedGames(books) {
     const container = document.getElementById("stories-container");
     container.innerHTML = "";
 
-    completedGames.forEach((game) => {
+    books.forEach((book) => {
         const storyDiv = document.createElement("div");
         storyDiv.classList.add(
             "story",
@@ -46,7 +43,7 @@ function renderCompletedGames(completedGames) {
             "ease-in-out"
         );
 
-        storyDiv.setAttribute("data-game-id", game.id);
+        storyDiv.setAttribute("data-game-id", book.id);
 
         storyDiv.innerHTML = `
         <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
@@ -56,7 +53,7 @@ function renderCompletedGames(completedGames) {
             </div>
 
             <!-- Titolo sotto, allineato a sinistra -->
-            <h3 class="story-title text-sm md:text-lg  font-semibold text-left italic"> ${game.title}</h3>
+            <h3 class="story-title text-sm md:text-lg  font-semibold text-left italic"> ${book.title}</h3>
         </div>
             `;
 
@@ -64,7 +61,7 @@ function renderCompletedGames(completedGames) {
             const gameId = storyDiv.getAttribute("data-game-id");
             const storyDetails = await fetchStoryDetails(gameId);
 
-            openBookOverlay(game, storyDetails);
+            openBookOverlay(book, storyDetails);
         });
         container.appendChild(storyDiv);
     });
@@ -202,7 +199,7 @@ async function fetchStoryDetails(storyId) {
 
         return data;
     } catch (err) {
-        console.error("Errore di rete:", err);
+        console.log("Errore di rete:", err);
         throw err;
     }
 }

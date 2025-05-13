@@ -18,7 +18,6 @@ router.get("/", checkAuth, async (req, res) => {
              LIMIT 10`,
             [user_id]
         );
-        console.log("Completed games:", rows);
         // Restituisce solo i titoli delle storie
         res.json({ completedGames: rows });
     } catch (err) {
