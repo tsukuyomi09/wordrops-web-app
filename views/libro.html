@@ -51,300 +51,354 @@
         ></script>
     </head>
     <body>
-        <div class="page-wrapper w-full max-w-6xl min-h-screen"></div>
-        <div
-            id="mobile-menu-left-desktop"
-            class="fixed w-full bottom-0 md:bottom-[50%] bg-custom-light left-0 z-50 overflow-visible"
-        >
-            <div class="relative w-full py-2 flex justify-between items-center">
-                <div class="inline-block flex-1">
-                    <button
-                        id="btnAutori"
-                        class="flex flex-row items-center justify-center w-full text-md font-semibold text-gray-800"
-                        onclick="authorsDropup()"
-                    >
-                        autori
-                    </button>
+        <div class="page-wrapper w-full max-w-6xl min-h-screen flex">
+            <div class="container-title-top"></div>
+            <div class="big-container-chap-social-content">
+                <!--central main container -->
+                <div class="central-main-container"></div>
 
-                    <!-- dropdown authors -->
+                <!-- container social menu -->
+                <div
+                    class="fixed top-1/2 left-0 bg-custom-light rounded-lg transform -translate-y-1/2 flex flex-col items-center z-50 px-2 py-6 gap-8"
+                >
+                    <a
+                        href="https://facebook.com"
+                        target="_blank"
+                        class="social-button"
+                    >
+                        <img
+                            src="/images/icons/facebook.png"
+                            alt="Facebook"
+                            class="size-8 object-cover transition-transform duration-300 hover:scale-110"
+                        />
+                    </a>
+                    <a
+                        href="https://twitter.com"
+                        target="_blank"
+                        class="social-button"
+                    >
+                        <img
+                            src="/images/icons/instagram.png"
+                            alt="Twitter"
+                            class="size-8 object-cover transition-transform duration-300 hover:scale-110"
+                        />
+                    </a>
+                    <a
+                        href="https://instagram.com"
+                        target="_blank"
+                        class="social-button"
+                    >
+                        <img
+                            src="/images/icons/twitter.png"
+                            alt="Instagram"
+                            class="size-8 object-cover transition-transform duration-300 hover:scale-110"
+                        />
+                    </a>
+                </div>
+
+                <!-- container-left-menu-mobile-bottom -->
+                <div
+                    id="mobile-menu-left-desktop"
+                    class="fixed w-full bottom-0 md:bottom-[50%] bg-custom-light left-0 z-50 overflow-visible"
+                >
                     <div
-                        id="dropupAutori"
-                        class="absolute hidden bottom-full left-0 w-full bg-custom-light border-b border-white rounded z-50"
+                        class="relative w-full py-2 flex justify-between items-center"
                     >
-                        <div class="grid grid-cols-3 gap-8 p-8">
-                            <div
-                                class="flex flex-col items-center justify-center"
+                        <div class="inline-block flex-1">
+                            <button
+                                id="btnAutori"
+                                class="flex flex-row items-center justify-center w-full text-md font-semibold text-gray-800"
+                                onclick="authorsDropup()"
                             >
-                                <!-- Avatar -->
-                                <div class="relative">
-                                    <div
-                                        class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
-                                    >
-                                        <img
-                                            src="/images/icons/follow_user_icon.png"
-                                            alt="follow icon"
-                                        />
-                                    </div>
-                                    <div
-                                        class="size-12 rounded-lg overflow-hidden"
-                                    >
-                                        <img
-                                            id="profile-avatar"
-                                            src="/images/avatars/king_avatar_square.png"
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                </div>
+                                autori
+                            </button>
 
-                                <!-- Username + Stats -->
-                                <div
-                                    class="flex flex-col text-left h-full justify-between"
-                                >
-                                    <span
-                                        id="profile-username"
-                                        class="text-sm font-semibold text-gray-800"
-                                        >username</span
+                            <!-- dropdown authors -->
+                            <div
+                                id="dropupAutori"
+                                class="absolute hidden bottom-full left-0 w-full bg-custom-light border-b border-white rounded z-50"
+                            >
+                                <div class="grid grid-cols-3 gap-8 p-8">
+                                    <div
+                                        class="flex flex-col items-center justify-center"
                                     >
+                                        <!-- Avatar -->
+                                        <div class="relative">
+                                            <div
+                                                class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
+                                            >
+                                                <img
+                                                    src="/images/icons/follow_user_icon.png"
+                                                    alt="follow icon"
+                                                />
+                                            </div>
+                                            <div
+                                                class="size-12 rounded-lg overflow-hidden"
+                                            >
+                                                <img
+                                                    id="profile-avatar"
+                                                    src="/images/avatars/king_avatar_square.png"
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- Username + Stats -->
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between"
+                                        >
+                                            <span
+                                                id="profile-username"
+                                                class="text-sm font-semibold text-gray-800"
+                                                >username</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex flex-col items-center justify-center"
+                                    >
+                                        <!-- Avatar -->
+                                        <div class="relative">
+                                            <div
+                                                class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
+                                            >
+                                                <img
+                                                    src="/images/icons/follow_user_icon.png"
+                                                    alt="follow icon"
+                                                />
+                                            </div>
+                                            <div
+                                                class="size-12 rounded-lg overflow-hidden"
+                                            >
+                                                <img
+                                                    id="profile-avatar"
+                                                    src="/images/avatars/jane_avatar_square.png"
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- Username + Stats -->
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between"
+                                        >
+                                            <span
+                                                id="profile-username"
+                                                class="text-sm font-semibold text-gray-800"
+                                                >username</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex flex-col items-center justify-center"
+                                    >
+                                        <!-- Avatar -->
+                                        <div class="relative">
+                                            <div
+                                                class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
+                                            >
+                                                <img
+                                                    src="/images/icons/follow_user_icon.png"
+                                                    alt="follow icon"
+                                                />
+                                            </div>
+                                            <div
+                                                class="size-12 rounded-lg overflow-hidden"
+                                            >
+                                                <img
+                                                    id="profile-avatar"
+                                                    src="/images/avatars/asimov_avatar_square.png"
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- Username + Stats -->
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between"
+                                        >
+                                            <span
+                                                id="profile-username"
+                                                class="text-sm font-semibold text-gray-800"
+                                                >username</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex flex-col items-center justify-center"
+                                    >
+                                        <!-- Avatar -->
+                                        <div class="relative">
+                                            <div
+                                                class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
+                                            >
+                                                <img
+                                                    src="/images/icons/follow_user_icon.png"
+                                                    alt="follow icon"
+                                                />
+                                            </div>
+                                            <div
+                                                class="size-12 rounded-lg overflow-hidden"
+                                            >
+                                                <img
+                                                    id="profile-avatar"
+                                                    src="/images/avatars/tolkien_avatar_square.png"
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- Username + Stats -->
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between"
+                                        >
+                                            <span
+                                                id="profile-username"
+                                                class="text-sm font-semibold text-gray-800"
+                                                >username</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex flex-col items-center justify-center"
+                                    >
+                                        <!-- Avatar -->
+                                        <div class="relative">
+                                            <div
+                                                class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
+                                            >
+                                                <img
+                                                    src="/images/icons/follow_user_icon.png"
+                                                    alt="follow icon"
+                                                />
+                                            </div>
+                                            <div
+                                                class="size-12 rounded-lg overflow-hidden"
+                                            >
+                                                <img
+                                                    id="profile-avatar"
+                                                    src="/images/avatars/agatha_avatar_square.png"
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- Username + Stats -->
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between"
+                                        >
+                                            <span
+                                                id="profile-username"
+                                                class="text-sm font-semibold text-gray-800"
+                                                >username</span
+                                            >
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div
-                                class="flex flex-col items-center justify-center"
+                        <div class="flex flex-row gap-6">
+                            <!-- Commenta -->
+                            <button
+                                class="flex flex-col items-center text-xs text-gray-700"
                             >
-                                <!-- Avatar -->
-                                <div class="relative">
-                                    <div
-                                        class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
-                                    >
-                                        <img
-                                            src="/images/icons/follow_user_icon.png"
-                                            alt="follow icon"
-                                        />
-                                    </div>
-                                    <div
-                                        class="size-12 rounded-lg overflow-hidden"
-                                    >
-                                        <img
-                                            id="profile-avatar"
-                                            src="/images/avatars/jane_avatar_square.png"
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                </div>
+                                <img
+                                    src="/images/icons/chat.png"
+                                    class="size-8"
+                                />
+                                <span class="hidden md:block">Commenta</span>
+                            </button>
 
-                                <!-- Username + Stats -->
-                                <div
-                                    class="flex flex-col text-left h-full justify-between"
-                                >
-                                    <span
-                                        id="profile-username"
-                                        class="text-sm font-semibold text-gray-800"
-                                        >username</span
-                                    >
-                                </div>
-                            </div>
-
-                            <div
-                                class="flex flex-col items-center justify-center"
+                            <!-- Preferiti -->
+                            <button
+                                class="flex flex-col items-center text-xs text-gray-700"
                             >
-                                <!-- Avatar -->
-                                <div class="relative">
-                                    <div
-                                        class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
-                                    >
-                                        <img
-                                            src="/images/icons/follow_user_icon.png"
-                                            alt="follow icon"
-                                        />
-                                    </div>
-                                    <div
-                                        class="size-12 rounded-lg overflow-hidden"
-                                    >
-                                        <img
-                                            id="profile-avatar"
-                                            src="/images/avatars/asimov_avatar_square.png"
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                </div>
+                                <img
+                                    src="/images/icons/add_to_favourite_icon.png"
+                                    class="size-8"
+                                />
+                                <span class="hidden md:block">Preferiti</span>
+                            </button>
 
-                                <!-- Username + Stats -->
-                                <div
-                                    class="flex flex-col text-left h-full justify-between"
-                                >
-                                    <span
-                                        id="profile-username"
-                                        class="text-sm font-semibold text-gray-800"
-                                        >username</span
-                                    >
-                                </div>
-                            </div>
-
-                            <div
-                                class="flex flex-col items-center justify-center"
+                            <!-- Vota -->
+                            <button
+                                class="flex flex-col items-center text-xs text-gray-700"
                             >
-                                <!-- Avatar -->
-                                <div class="relative">
-                                    <div
-                                        class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
-                                    >
-                                        <img
-                                            src="/images/icons/follow_user_icon.png"
-                                            alt="follow icon"
-                                        />
-                                    </div>
-                                    <div
-                                        class="size-12 rounded-lg overflow-hidden"
-                                    >
-                                        <img
-                                            id="profile-avatar"
-                                            src="/images/avatars/tolkien_avatar_square.png"
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                </div>
+                                <img
+                                    src="/images/icons/star.png"
+                                    class="size-8"
+                                />
+                                <span class="hidden md:block">Vota</span>
+                            </button>
+                        </div>
 
-                                <!-- Username + Stats -->
-                                <div
-                                    class="flex flex-col text-left h-full justify-between"
-                                >
-                                    <span
-                                        id="profile-username"
-                                        class="text-sm font-semibold text-gray-800"
-                                        >username</span
-                                    >
-                                </div>
-                            </div>
-
-                            <div
-                                class="flex flex-col items-center justify-center"
+                        <!-- Capitoli (Dropup) -->
+                        <div class="inline-block flex-1">
+                            <button
+                                id="btnCapitoli"
+                                class="flex flex-row items-center justify-center w-full text-md font-semibold text-gray-800"
+                                onclick="chaptersDropup()"
                             >
-                                <!-- Avatar -->
-                                <div class="relative">
-                                    <div
-                                        class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
-                                    >
-                                        <img
-                                            src="/images/icons/follow_user_icon.png"
-                                            alt="follow icon"
-                                        />
-                                    </div>
-                                    <div
-                                        class="size-12 rounded-lg overflow-hidden"
-                                    >
-                                        <img
-                                            id="profile-avatar"
-                                            src="/images/avatars/agatha_avatar_square.png"
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                </div>
-
-                                <!-- Username + Stats -->
-                                <div
-                                    class="flex flex-col text-left h-full justify-between"
-                                >
-                                    <span
-                                        id="profile-username"
-                                        class="text-sm font-semibold text-gray-800"
-                                        >username</span
-                                    >
-                                </div>
+                                capitoli
+                            </button>
+                            <div
+                                id="dropupCapitoli"
+                                class="absolute hidden bottom-full left-0 w-full bg-custom-light border-b border-white z-50"
+                            >
+                                <!-- Contenuto capitoli -->
+                                <ul class="text-sm text-center">
+                                    <li class="border-t border-white">
+                                        <a
+                                            href="#"
+                                            class="block text-md font-semibold py-3"
+                                            >La Tempesta di Fuoco</a
+                                        >
+                                    </li>
+                                    <li class="border-t border-white">
+                                        <a
+                                            href="#"
+                                            class="block text-md font-semibold py-3"
+                                            >L’Ombra del Drago</a
+                                        >
+                                    </li>
+                                    <li class="border-t border-white">
+                                        <a
+                                            href="#"
+                                            class="block text-md font-semibold py-3"
+                                            >Il Sigillo di Luce</a
+                                        >
+                                    </li>
+                                    <li class="border-t border-white">
+                                        <a
+                                            href="#"
+                                            class="block text-md font-semibold py-3"
+                                            >La Luce nel Buio</a
+                                        >
+                                    </li>
+                                    <li class="border-t border-white">
+                                        <a
+                                            href="#"
+                                            class="block text-md font-semibold py-3"
+                                            >Il Risveglio del Drago</a
+                                        >
+                                    </li>
+                                    <!-- Altri... -->
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="flex flex-row gap-6">
-                    <!-- Commenta -->
-                    <button
-                        class="flex flex-col items-center text-xs text-gray-700"
-                    >
-                        <img src="/images/icons/chat.png" class="size-8" />
-                        <span class="hidden md:block">Commenta</span>
-                    </button>
-
-                    <!-- Preferiti -->
-                    <button
-                        class="flex flex-col items-center text-xs text-gray-700"
-                    >
-                        <img
-                            src="/images/icons/add_to_favourite_icon.png"
-                            class="size-8"
-                        />
-                        <span class="hidden md:block">Preferiti</span>
-                    </button>
-
-                    <!-- Vota -->
-                    <button
-                        class="flex flex-col items-center text-xs text-gray-700"
-                    >
-                        <img src="/images/icons/star.png" class="size-8" />
-                        <span class="hidden md:block">Vota</span>
-                    </button>
-                </div>
-
-                <!-- Capitoli (Dropup) -->
-                <div class="inline-block flex-1">
-                    <button
-                        id="btnCapitoli"
-                        class="flex flex-row items-center justify-center w-full text-md font-semibold text-gray-800"
-                        onclick="chaptersDropup()"
-                    >
-                        capitoli
-                    </button>
-                    <div
-                        id="dropupCapitoli"
-                        class="absolute hidden bottom-full left-0 w-full bg-custom-light border-b border-white z-50"
-                    >
-                        <!-- Contenuto capitoli -->
-                        <ul class="text-sm text-center">
-                            <li class="border-t border-white">
-                                <a
-                                    href="#"
-                                    class="block text-md font-semibold py-3"
-                                    >La Tempesta di Fuoco</a
-                                >
-                            </li>
-                            <li class="border-t border-white">
-                                <a
-                                    href="#"
-                                    class="block text-md font-semibold py-3"
-                                    >L’Ombra del Drago</a
-                                >
-                            </li>
-                            <li class="border-t border-white">
-                                <a
-                                    href="#"
-                                    class="block text-md font-semibold py-3"
-                                    >Il Sigillo di Luce</a
-                                >
-                            </li>
-                            <li class="border-t border-white">
-                                <a
-                                    href="#"
-                                    class="block text-md font-semibold py-3"
-                                    >La Luce nel Buio</a
-                                >
-                            </li>
-                            <li class="border-t border-white">
-                                <a
-                                    href="#"
-                                    class="block text-md font-semibold py-3"
-                                    >Il Risveglio del Drago</a
-                                >
-                            </li>
-                            <!-- Altri... -->
-                        </ul>
-                    </div>
-                </div>
             </div>
-            <!-- Autori (Dropup) -->
         </div>
         <script src="/js/storyPage.js" defer></script>
     </body>
