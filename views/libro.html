@@ -60,16 +60,16 @@
                 <div class="inline-block flex-1">
                     <button
                         id="btnAutori"
-                        class="flex flex-row items-center justify-center w-full text-sm font-semibold text-gray-800"
-                        onclick="toggleDropup()"
+                        class="flex flex-row items-center justify-center w-full text-md font-semibold text-gray-800"
+                        onclick="authorsDropup()"
                     >
-                        autori ↑
+                        autori
                     </button>
 
                     <!-- dropdown authors -->
                     <div
                         id="dropupAutori"
-                        class="absolute bottom-full left-0 w-full bg-custom-light border-b border-white rounded z-50"
+                        class="absolute hidden bottom-full left-0 w-full bg-custom-light border-b border-white rounded z-50"
                     >
                         <div class="grid grid-cols-3 gap-8 p-8">
                             <div
@@ -293,9 +293,10 @@
                 <div class="inline-block flex-1">
                     <button
                         id="btnCapitoli"
-                        class="flex flex-row items-center justify-center w-full text-sm font-semibold text-gray-800"
+                        class="flex flex-row items-center justify-center w-full text-md font-semibold text-gray-800"
+                        onclick="chaptersDropup()"
                     >
-                        capitoli ↑
+                        capitoli
                     </button>
                     <div
                         id="dropupCapitoli"
