@@ -236,6 +236,9 @@ app.get("/profile-page/:username", (req, res) => {
 app.get("/storie-community", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "storie-community.html"));
 });
+app.get("/libro", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "libro.html"));
+});
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
 });
