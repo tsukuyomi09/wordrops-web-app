@@ -141,7 +141,6 @@ function openBookOverlay(book, storyDetails) {
         bookGenre.classList.add(
             "text-gray-00",
             "px-4",
-            "py-",
             "border-1",
             "border-gray-200",
             "rounded-lg"
