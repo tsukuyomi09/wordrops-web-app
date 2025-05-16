@@ -8,6 +8,9 @@ const { initSocket } = require("./src/services/socketManager");
 const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
 const { preGameQueue } = require("./src/routes/game/gameQueue");
+const { storiaHandler } = require("./src/handlers/storiaHandler");
+const { sitemapGenerator } = require("./src/services/sitemapGenerator");
+
 const { activeGames } = require("./src/services/gameManager");
 const { client } = require("./src/database/db");
 const {
@@ -25,6 +28,8 @@ const io = initSocket(server);
 const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 const chatReadMap = new Map();
@@ -236,9 +241,8 @@ app.get("/profile-page/:username", (req, res) => {
 app.get("/storie-community", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "storie-community.html"));
 });
-app.get("/libro", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "libro.html"));
-});
+app.get("/storia/:id_slug", storiaHandler);
+
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
 });
@@ -265,13 +269,16 @@ app.get("/completa-profilo/:email", (req, res) => {
         }
     );
 });
-app.get("/sitemap.xml", (req, res) => {
-    res.sendFile(path.join(__dirname, "sitemap.xml"));
+app.get("/404", (req, res) => {
+    console.log("Route 404 chiamata");
+    res.sendFile(path.join(__dirname, "views", "404.html"));
 });
+app.get("/sitemap.xml", sitemapGenerator);
 
 const authRoute = require("./src/routes/auth");
 const gameRoute = require("./src/routes/game");
 const libraryRoute = require("./src/routes/library");
+const storyRoute = require("./src/routes/story");
 const onboardingRoute = require("./src/routes/onboarding");
 const profileRoute = require("./src/routes/profile");
 const searchRoute = require("./src/routes/search");
@@ -280,6 +287,7 @@ const leaderboardRoute = require("./src/routes/leaderboard");
 app.use("/auth", authRoute);
 app.use("/game", gameRoute);
 app.use("/library", libraryRoute);
+app.use("/story", storyRoute);
 app.use("/onboarding", onboardingRoute);
 app.use("/profile", profileRoute);
 app.use("/search", searchRoute);
