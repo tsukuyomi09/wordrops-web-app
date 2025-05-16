@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= slug %> - Storia wordrops</title>
+        <link rel="canonical" href="/storia/<%= id %>-<%= slug %>" />
+
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="/style/output.css" rel="stylesheet" />
+        <link href="/style/style.css" rel="stylesheet" />
+
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+    </head>
+    <body>
+        <div class="page-wrapper flex flex-col justify-center items-center">
+            <div
+                id="menu"
+                class="w-full z-10 sticky top-0 h-24 top-0 p-4 bg-custom-light"
+            >
+                <div class="flex justify-between w-full h-full items-center">
+                    <div class="">
+                        <img
+                            src="/images/logo_wordrops_classic.svg"
+                            alt="Wordrops Logo"
+                            class="mx-auto w-20 lg:w-36"
+                        />
+                    </div>
+                    <div
+                        class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                    >
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
+                        >
+                            <a
+                                onclick="dashboardButton()"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="leaderboard Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    dashboard
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
+                        >
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    libreria
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex flex-row gap-4">
+                        <button
+                            class="group w-32 cursor-pointer relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 font-medium text-white duration-500"
+                        >
+                            <div
+                                class="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                            >
+                                registrati
+                            </div>
+                            <div
+                                class="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
+                            >
+                                <svg
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 15 15"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                >
+                                    <path
+                                        d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                                        fill="currentColor"
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <button
+                            class="cursor-pointer w-32 relative h-12 overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2.5 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                        >
+                            <span class="relative font-semibold">login</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="content-wrapper w-full md:px-8 max-w-[1600px] flex flex-col px-10"
+            >
+                <div
+                    class="container-title-top px-4 border-b border-custom-light flex flex-col md:flex-row justify-center items-center w-full py-4 md:pb-12 md:pt-8"
+                >
+                    <div
+                        class="genre-container flex flex-col justify-center items-center md:items-start md:w-1/5 w-full h-full md:gap-4 gap-2"
+                    >
+                        <div class="flex gap-4">
+                            <span
+                                id="game-type"
+                                class="px-2 py-1 text-[10px] flex justify-center items-center bg-amber-400 text-gray-800 rounded-lg font-mono"
+                                >classificata</span
+                            >
+                            <span
+                                id="game-speed"
+                                class="px-2 py-1 text-[10px] flex justify-center items-center bg-green-600 text-gray-800 rounded-lg font-mono"
+                                >lunga</span
+                            >
+                        </div>
+                        <div id="book-genre" class="flex flex-row gap-4">
+                            <p
+                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
+                            >
+                                avventura
+                            </p>
+                            <p
+                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
+                            >
+                                drammatico
+                            </p>
+                            <p
+                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
+                            >
+                                sy-fy
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="title-container md:w-3/5 w-5/5 h-full px-6 gap-4 flex flex-col items-center"
+                    >
+                        <p class="text-xs">13/05/2025</p>
+                        <h1
+                            id="book-title"
+                            class="book-title text-balance font-semibold italic text-xl md:text-2xl text-center"
+                        >
+                            <%= book_title %>
+                        </h1>
+                    </div>
+                    <div
+                        class="score-container md:w-1/5 w-full h-full bg-green-100"
+                    ></div>
+                </div>
+                <div
+                    class="big-container-chap-social-content flex flex-row items-start w-full justify-center md:pt-16"
+                >
+                    <!-- container-left-menu-mobile-bottom -->
+                    <div
+                        id="mobile-menu-left-desktop"
+                        class="fixed bottom-0 left-0 w-full z-50 md:static md:sticky md:top-30"
+                    >
+                        <div
+                            class="relative bg-custom-light md:bg-transparent md:w-full py-2 md:py-0 md:gap-6 flex md:grid md:grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] justify-between items-center"
+                        >
+                            <div class="inline-block flex-1 md:order-1 md:px-4">
+                                <button
+                                    id="btnAutori"
+                                    class="flex flex-row items-center md:hidden justify-center w-full text-md font-semibold text-gray-800"
+                                    onclick="authorsDropup()"
+                                >
+                                    autori
+                                </button>
+
+                                <!-- dropdown authors -->
+                                <div
+                                    id="dropupAutori"
+                                    class="absolute md:static hidden md:block bottom-full left-0 w-full bg-custom-light md:bg-transparent border-b border-white rounded z-50"
+                                >
+                                    <div
+                                        class="grid grid-cols-3 md:grid-cols-2 md:gap-x-12 gap-y-8 p-8 md:p-0"
+                                    >
+                                        <% authors.forEach(author => { %>
+
+                                        <div class="flex flex-col">
+                                            <!-- Avatar -->
+                                            <a
+                                                href="/profile-page/<%= author.username %>"
+                                                target="_blank"
+                                                class="relative flex-col items-center justify-center"
+                                            >
+                                                <div
+                                                    class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
+                                                >
+                                                    <img
+                                                        src="/images/icons/follow_user_icon.png"
+                                                        alt="follow icon"
+                                                    />
+                                                </div>
+
+                                                <div
+                                                    class="md:size-16 size-12 rounded-lg overflow-hidden"
+                                                >
+                                                    <img
+                                                        id="profile-avatar"
+                                                        src="/images/avatars/<%= author.avatar %>.png"
+                                                        alt="Avatar"
+                                                        class="w-full h-full object-contain"
+                                                    />
+                                                </div>
+                                                <!-- Username + Stats -->
+                                                <div
+                                                    class="flex flex-col text-left justify-between"
+                                                >
+                                                    <span
+                                                        id="profile-username"
+                                                        class="text-sm font-semibold text-gray-800 text-center"
+                                                        ><%= author.username
+                                                        %></span
+                                                    >
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- colored menu  -->
+
+                            <div
+                                class="flex flex-row md:flex-col md:px-4 justify-center md:justify-start items-center md:items-start gap-6 md:h-full"
+                            >
+                                <div
+                                    class="flex flex-row md:flex md:flex-col gap-6"
+                                >
+                                    <!-- Commenta -->
+                                    <button
+                                        class="flex flex-col items-center text-xs md:gap-1 text-gray-700"
+                                    >
+                                        <img
+                                            src="/images/icons/chat.png"
+                                            class="size-7 cursor-pointer transition-transform duration-300 hover:scale-110"
+                                        />
+                                        <span class="hidden md:block"
+                                            >Commenta</span
+                                        >
+                                    </button>
+
+                                    <!-- Preferiti -->
+                                    <button
+                                        class="flex flex-col items-center text-xs md:gap-1 text-gray-700"
+                                    >
+                                        <img
+                                            src="/images/icons/add_to_favourite_icon.png"
+                                            class="size-7 cursor-pointer transition-transform duration-300 hover:scale-110"
+                                        />
+                                        <span class="hidden md:block"
+                                            >Preferiti</span
+                                        >
+                                    </button>
+
+                                    <!-- Vota -->
+                                    <button
+                                        class="flex flex-col items-center text-xs md:gap-1 text-gray-700"
+                                    >
+                                        <img
+                                            src="/images/icons/star.png"
+                                            class="size-7 cursor-pointer transition-transform duration-300 hover:scale-110"
+                                        />
+                                        <span class="hidden md:block"
+                                            >Vota</span
+                                        >
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- chapters (Dropup) -->
+                            <div
+                                class="inline-block md:relative flex-1 md:col-span-2 md:col-start-1 md:col-end-3 md:row-start-1 md:w-full items-start"
+                            >
+                                <button
+                                    id="btnCapitoli"
+                                    class="cursor-pointer flex flex-row bg-custom-light items-center justify-center md:justify-start w-full text-md font-semibold text-gray-800 md:p-4"
+                                    onclick="chaptersDropup()"
+                                >
+                                    <div>capitoli</div>
+                                    <span
+                                        class="w-full hidden md:block flex justify-end md:ml-4"
+                                        ><img
+                                            src="/images/icons/down_down.png"
+                                            class="size-5"
+                                            alt=""
+                                    /></span>
+                                </button>
+                                <div
+                                    id="dropupCapitoli"
+                                    class="absolute hidden bottom-full md:top-full left-0 w-full border-b border-white z-50"
+                                >
+                                    <!-- Contenuto capitoli -->
+                                    <ul
+                                        class="text-sm text-center bg-custom-light"
+                                    >
+                                        <li class="border-t border-white">
+                                            <a
+                                                href="#"
+                                                class="block text-md font-semibold py-3"
+                                                >La Tempesta di Fuoco</a
+                                            >
+                                        </li>
+                                        <li class="border-t border-white">
+                                            <a
+                                                href="#"
+                                                class="block text-md font-semibold py-3"
+                                                >L’Ombra del Drago</a
+                                            >
+                                        </li>
+                                        <li class="border-t border-white">
+                                            <a
+                                                href="#"
+                                                class="block text-md font-semibold py-3"
+                                                >Il Sigillo di Luce</a
+                                            >
+                                        </li>
+                                        <li class="border-t border-white">
+                                            <a
+                                                href="#"
+                                                class="block text-md font-semibold py-3"
+                                                >La Luce nel Buio</a
+                                            >
+                                        </li>
+                                        <li class="border-t border-white">
+                                            <a
+                                                href="#"
+                                                class="block text-md font-semibold py-3"
+                                                >Il Risveglio del Drago</a
+                                            >
+                                        </li>
+                                        <!-- Altri... -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--central main container -->
+                    <div class="central-main-container max-w-[800px]">
+                        <div
+                            class="chapter md:px-24 flex flex-col items-start gap-6"
+                        >
+                            <div class="chapter-author">
+                                <div
+                                    class="flex flex-col items-center justify-center"
+                                >
+                                    <!-- Avatar -->
+                                    <div class="relative">
+                                        <div
+                                            class="size-10 rounded-lg overflow-hidden"
+                                        >
+                                            <img
+                                                id="profile-avatar"
+                                                src="/images/avatars/king_avatar_square.png"
+                                                alt="Avatar"
+                                                class="w-full h-full object-contain"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <!-- Username + Stats -->
+                                    <div
+                                        class="flex flex-col text-left h-full justify-between"
+                                    >
+                                        <span
+                                            id="profile-username"
+                                            class="text-sm font-semibold text-gray-800"
+                                            >username</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="font-semibold text-lg italic">
+                                La Tempesta di Fuoco
+                            </h4>
+                            <p class="leading-[2.25] text-lg">
+                                Era una notte come tante a Lumevel, un villaggio
+                                che si distendeva lungo la riva di un lago
+                                cristallino, sotto l’ombra di montagne nere e
+                                maestose. La luna, pallida e distante,
+                                illuminava i tetti di paglia delle case di
+                                legno, e il vento soffiava leggero, portando con
+                                sé il profumo del mare lontano. Ma quella notte,
+                                qualcosa nell'aria era diverso. Un fremito
+                                sibilante percorreva il cielo, come un presagio
+                                di catastrofe. Ariane, una giovane donna dai
+                                capelli argentati e gli occhi blu come il
+                                ghiaccio, stava passeggiando lungo il bordo del
+                                lago, la sua figura solitaria contrapposta alla
+                                distesa calma delle acque. La sua mente era in
+                                tumulto. Non riusciva a liberarsi da un sogno
+                                che l’aveva tormentata per settimane. Un sogno
+                                ricorrente, in cui una gigantesca creatura, metà
+                                uomo e metà drago, sorgeva dal lago e scuoteva
+                                il cielo con un urlo straziante, mentre il
+                                villaggio veniva inghiottito dalle fiamme. “E se
+                                fosse vero?” si chiese, guardando il riflesso
+                                del suo volto nell’acqua. Era sempre stata una
+                                ragazza pragmatica, ma qualcosa in quella
+                                visione le dava una sensazione di angoscia che
+                                non riusciva a scrollarsi di dosso. Una voce
+                                dentro di lei, quasi impercettibile, le
+                                sussurrava che il sogno non era solo un sogno,
+                                ma un avvertimento. D’improvviso, il cielo sopra
+                                di lei si oscurò. Non una nuvola, ma un'ombra
+                                densa, come se la stessa notte stesse scivolando
+                                via. Un rumore sordo ruppe il silenzio, seguito
+                                da un tremore che fece vacillare le pietre del
+                                sentiero. Ariane si voltò di scatto, gli occhi
+                                spalancati. Il vento divenne più forte, ma
+                                questa volta non era fresco e salato. C’era
+                                qualcosa di bruciante in esso, come se l'aria
+                                stessa fosse stata accesa dal fuoco. Nel cuore
+                                della notte, una luce intensa esplose nel cielo.
+                                Una palla infuocata, come un sole che sorgeva
+                                all’improvviso, si abbatté sopra il lago con una
+                                forza devastante. Ariane urlò, ma la sua voce fu
+                                inghiottita dal fragore. Le acque del lago si
+                                sollevarono come onde giganti, schizzando in
+                                ogni direzione. Le case del villaggio
+                                cominciarono a tremare, e una luce rossastra
+                                cominciò a tingere il cielo, come se una forza
+                                antica e terribile stesse emergendo dalle
+                                profondità della terra. Ariane cadde a terra, il
+                                viso bagnato dalle lacrime e dalla polvere,
+                                incapace di distogliere lo sguardo dalla luce
+                                che cresceva e si avvicinava sempre di più. La
+                                tempesta di fuoco stava arrivando. E con essa,
+                                la creatura del sogno, che ora non sembrava più
+                                così lontana dalla realtà. "Devo fermarlo,"
+                                mormorò tra sé, sentendo una determinazione
+                                nuova formarsi nel suo cuore. Senza pensarci
+                                troppo, si alzò in piedi e cominciò a correre,
+                                spinta da una forza che non comprendeva del
+                                tutto. Non sapeva cosa stesse per accadere, né
+                                come avrebbe fatto a fermare ciò che stava per
+                                distruggere tutto, ma sapeva una cosa: non
+                                sarebbe stata una spettatrice. Non avrebbe
+                                permesso che Lumevel, il suo villaggio, venisse
+                                consumato dal fuoco. Mentre correva verso la
+                                piazza centrale, il cielo divenne un tumulto di
+                                colori, e il vento accecante soffiò a raffiche,
+                                sferzandole il viso. Ariane raggiunse il centro
+                                del villaggio in tempo per vedere le prime
+                                fiamme divampare, illuminate da un bagliore
+                                infernale che rifletteva nei suoi occhi pieni di
+                                paura e determinazione. Da lontano, scorse una
+                                figura che si stagliava contro la luce: un uomo
+                                alto, avvolto in un mantello nero che sembrava
+                                sfidare la luce stessa. Il suo viso era celato,
+                                ma la sua presenza emanava potere e oscurità. Il
+                                cuore di Ariane batté più forte. “Tu... chi
+                                sei?” gridò, la voce spezzata dalla paura.
+                                L’uomo alzò lentamente la testa, e i suoi occhi
+                                di fuoco incontrarono quelli di Ariane. Un
+                                sorriso malefico le attraversò il volto, e il
+                                suo sussurro giunse come un’eco lontana: “Il tuo
+                                destino è già scritto, Ariane. Non puoi fermare
+                                ciò che è già in movimento.” Il cielo si fece
+                                più scuro, e Ariane sentì una scossa profonda
+                                nelle sue ossa. Il mondo stava cambiando. E lei,
+                                senza saperlo, era al centro di quel
+                                cambiamento.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- container social menu -->
+                    <div
+                        class="fixed w- md:w-auto bg-custom-light md:static md:sticky md:top-30 md:bg-transparent md:w-full rounded-lg top-1/4 left-0 transform w-translate-y-1/2 flex flex-col md:items-start z-50 px-2 py-6 gap-8"
+                    >
+                        <div
+                            class="flex flex-col justify-center items-center gap-6"
+                        >
+                            <div class="hidden md:block">condividi</div>
+                            <a
+                                href="https://facebook.com"
+                                target="_blank"
+                                class="social-button"
+                            >
+                                <img
+                                    src="/images/icons/facebook.png"
+                                    alt="Facebook"
+                                    class="size-5 object-cover transition-transform duration-300 hover:scale-110"
+                                />
+                            </a>
+                            <a
+                                href="https://twitter.com"
+                                target="_blank"
+                                class="social-button"
+                            >
+                                <img
+                                    src="/images/icons/twitter.png"
+                                    alt="Twitter"
+                                    class="size-5 object-cover transition-transform duration-300 hover:scale-110"
+                                />
+                            </a>
+                            <a
+                                href="https://instagram.com"
+                                target="_blank"
+                                class="social-button"
+                            >
+                                <img
+                                    src="/images/icons/instagram.png"
+                                    alt="Instagram"
+                                    class="size-5 object-cover transition-transform duration-300 hover:scale-110"
+                                />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/js/storyPage.js" defer></script>
+    </body>
+</html>

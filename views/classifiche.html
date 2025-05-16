@@ -66,27 +66,44 @@
                     <div
                         class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                     >
-                        <a
-                            href="/classifiche"
-                            class="button-container flex flex-col p-2 md:px-8 md:py-2 justify-center items-center rounded-lg border-2 border-gray-200"
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
                         >
-                            <img
-                                src="/images/icons/icons8-trofeo-48.png"
-                                alt="leaderboard Icon"
-                                class="icon-image size-8"
-                            />
-                        </a>
-
-                        <a
-                            href="/storie-community"
-                            class="button-container flex flex-col p-2 md:px-8 md:py-2 justify-center items-center rounded-lg py-1 border-2 border-gray-200"
+                            <a
+                                onclick="dashboardButton()"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="leaderboard Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    dashboard
+                                </div>
+                            </a>
+                        </div>
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
                         >
-                            <img
-                                src="/images/icons/library-icon.png"
-                                alt="library Icon"
-                                class="icon-image size-8"
-                            />
-                        </a>
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    libreria
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     <div class="flex flex-row gap-4">
                         <button

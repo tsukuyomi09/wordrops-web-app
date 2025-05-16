@@ -9,24 +9,25 @@ async function fetchCompletedGames() {
                     "stories-container-wrapper"
                 );
                 containerToReveal.classList.remove("hidden");
+
                 renderCompletedGames(data.completedGames);
             }
         } else {
-            console.error(
+            console.log(
                 "Errore nel recupero dei giochi completati:",
                 data.message
             );
         }
     } catch (err) {
-        console.error("Errore di rete:", err);
+        console.log("Errore di rete:", err);
     }
 }
 
-function renderCompletedGames(completedGames) {
+function renderCompletedGames(books) {
     const container = document.getElementById("stories-container");
     container.innerHTML = "";
 
-    completedGames.forEach((game) => {
+    books.forEach((book) => {
         const storyDiv = document.createElement("div");
         storyDiv.classList.add(
             "story",
@@ -42,7 +43,7 @@ function renderCompletedGames(completedGames) {
             "ease-in-out"
         );
 
-        storyDiv.setAttribute("data-game-id", game.id);
+        storyDiv.setAttribute("data-game-id", book.id);
 
         storyDiv.innerHTML = `
         <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
@@ -52,7 +53,7 @@ function renderCompletedGames(completedGames) {
             </div>
 
             <!-- Titolo sotto, allineato a sinistra -->
-            <h3 class="story-title text-sm md:text-lg  font-semibold text-left italic"> ${game.title}</h3>
+            <h3 class="story-title text-sm md:text-lg  font-semibold text-left italic"> ${book.title}</h3>
         </div>
             `;
 
@@ -60,7 +61,7 @@ function renderCompletedGames(completedGames) {
             const gameId = storyDiv.getAttribute("data-game-id");
             const storyDetails = await fetchStoryDetails(gameId);
 
-            openBookOverlay(game, storyDetails);
+            openBookOverlay(book, storyDetails);
         });
         container.appendChild(storyDiv);
     });
@@ -72,36 +73,48 @@ function openBookOverlay(book, storyDetails) {
     const overlay = document.getElementById("overlay-books");
     const bookTitle = document.getElementById("book-title");
     const authorsContainer = document.getElementById("authors-container");
-    // const bookGenresContainer = document.getElementById("book-genre");
+    const bookGenresContainer = document.getElementById("book-genre");
     const bookDescription = document.getElementById("book-summary");
+    const gameType = document.getElementById("game-type");
+    const gameSpeed = document.getElementById("game-speed");
 
     const chaptersContainer = document.querySelector(
         ".book-chapters-container"
     );
     chaptersContainer.innerHTML = "";
     authorsContainer.innerHTML = ""; // itera sugli autori, poi mettilo dentro bookDetails
-    storyDetails.chapters.forEach((item) => {
+    bookGenresContainer.innerHTML = "";
+    gameType.innerHTML = "";
+    gameSpeed.innerHTML = "";
+
+    storyDetails.chapters.forEach((item, index) => {
         const authorDiv = document.createElement("div");
         const chapterDiv = document.createElement("div");
         chapterDiv.classList.add(
-            "mt-4",
             "book-chapters",
             "flex",
             "flex-col",
-            "gap-6"
+            "gap-6",
+            "py-8"
         );
         authorDiv.classList.add("flex", "flex-col", "items-center");
 
         chapterDiv.innerHTML = `
             <h3 class="text-2xl font-semibold" id="chapter-title">
-                Capitolo: ${item.title}
+                Capitolo ${index + 1}: ${item.title}
             </h3>
             <div class="flex items-center mt-2">
-                <a href="/profile/${item.username}" class="flex items-center">
-                    <div class="h-8 w-8 rounded-lg overflow-hidden mr-2">
-                        <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-full h-full object-contain" />
+                <a href="/profile-page/${
+                    item.username
+                }" target="_blank" class="flex items-center">
+                    <div class="size-10 rounded-lg overflow-hidden mr-2">
+                        <img src="/images/avatars/${
+                            item.avatar
+                        }.png" alt="Autore" class="w-full h-full object-contain" />
                     </div>
-                    <span class="text-mg md:text-lg text-blue-600 hover:underline">${item.username}</span>
+                    <span class="text-mg md:text-lg font-semibold ">${
+                        item.username
+                    }</span>
                 </a>
             </div>
             <p class="text-gray-700 text-lg leading-relaxed md:text-2xl mt-2" id="chapter-text">
@@ -110,8 +123,10 @@ function openBookOverlay(book, storyDetails) {
         `;
 
         authorDiv.innerHTML = `
-            <div class="w-12 h-12 rounded-lg overflow-hidden">
-                <img src="/images/avatars/${item.avatar}.png" class="w-full h-full object-cover"/>
+            <div class="size-12 rounded-lg overflow-hidden">
+                <a href="/profile-page/${item.username}" target="_blank" class="flex items-center">
+                    <img src="/images/avatars/${item.avatar}.png" class="w-full h-full object-cover"/>
+                </a>
             </div>
             <span class="text-sm font-semibold mt-1">${item.username}</span>
         `;
@@ -120,15 +135,23 @@ function openBookOverlay(book, storyDetails) {
         authorsContainer.appendChild(authorDiv);
     });
 
-    // book.genres.forEach((genre) => {
-    //     const bookGenre = document.createElement("p");
-    //     bookGenre.textContent = genre;
-    //     bookGenre.classList.add("text-gray-00");
-    //     bookGenresContainer.appendChild(bookGenre);
-    // });
+    storyDetails.genres.forEach((genre) => {
+        const bookGenre = document.createElement("p");
+        bookGenre.textContent = genre;
+        bookGenre.classList.add(
+            "text-gray-00",
+            "px-4",
+            "border-1",
+            "border-gray-200",
+            "rounded-lg"
+        );
+        bookGenresContainer.appendChild(bookGenre);
+    });
 
-    bookTitle.innerHTML = book.title;
+    bookTitle.innerHTML = `"${book.title}"`;
     bookDescription.innerHTML = book.back_cover;
+    gameType.innerHTML = `${translateGameType(book.game_type)}`;
+    gameSpeed.innerHTML = `${translateGameSpeed(book.game_speed)}`;
 
     overlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
@@ -141,6 +164,22 @@ function closeBookOverlay() {
     setTimeout(() => {
         document.body.style.overflow = "";
     }, 500);
+}
+
+function translateGameType(type) {
+    const types = {
+        ranked: "classificata",
+        normal: "classica",
+    };
+    return types[type] || type;
+}
+
+function translateGameSpeed(speed) {
+    const speeds = {
+        slow: "lunga",
+        fast: "corta",
+    };
+    return speeds[speed] || speed;
 }
 
 async function fetchStoryDetails(storyId) {
@@ -159,7 +198,7 @@ async function fetchStoryDetails(storyId) {
 
         return data;
     } catch (err) {
-        console.error("Errore di rete:", err);
+        console.log("Errore di rete:", err);
         throw err;
     }
 }

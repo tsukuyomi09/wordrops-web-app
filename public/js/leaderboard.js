@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchLeaderboard(page);
 });
 
+function dashboardButton() {
+    const username = localStorage.getItem("username");
+    if (username) {
+        window.location.href = `/dashboard/${username}`;
+    } else {
+        alert("Errore: nome utente non trovato.");
+    }
+}
+
 async function fetchLeaderboard(page) {
     const response = await fetch(`/leaderboard/?page=${page}&limit=${limit}`);
     const data = await response.json();

@@ -30,7 +30,17 @@ router.get("/:game_id", checkAuth, async (req, res) => {
             }
             chaptersWithAuthors.push(chapter);
         }
-        res.json({ chapters: chaptersWithAuthors });
+
+        const genreQuery = await client.query(
+            `SELECT g.name
+            FROM game_genres gg
+            JOIN genres g ON g.id = gg.genre_id
+             WHERE gg.game_id = $1`,
+            [game_id]
+        );
+
+        const genres = genreQuery.rows.map((row) => row.name);
+        res.json({ genres, chapters: chaptersWithAuthors });
     } catch (err) {
         console.error("Errore nel recupero dei capitoli:", err);
         res.status(500).json({

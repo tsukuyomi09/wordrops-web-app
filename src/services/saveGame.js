@@ -104,16 +104,11 @@ async function saveGame(game) {
             );
         }
 
-        console.log("Mappa statistiche giocatori:");
-        playerStatsMap.forEach((playerStats, user_id) => {
-            console.log(`UserId: ${user_id}, Statistiche: `, playerStats);
-        });
-
         await Promise.all(
-            metadata.genres.map((genreId) => {
+            metadata.genres.map((Id) => {
                 return client.query(
                     `INSERT INTO game_genres (game_id, genre_id) VALUES ($1, $2)`,
-                    [databaseGameId, genreId]
+                    [databaseGameId, Id]
                 );
             })
         );

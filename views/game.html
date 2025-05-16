@@ -219,7 +219,7 @@
                     class="w-full flex flex-row justify-between items-center gap-1"
                 >
                     <div
-                        class="w-1/4 flex justify-center items-center p-2 bg-custom-light"
+                        class="w-1/4 md:w-auto flex justify-center items-center p-2 bg-custom-light"
                     >
                         <a
                             class="button-container flex h-12 w-12 p-2 flex-col justify-center items-center cursor-pointer"
@@ -258,10 +258,10 @@
                     </div>
                     <div
                         id="toggleChatButton"
-                        class="w-1/4 cursor-pointer flex justify-center h-full items-center bg-custom-light"
+                        class="w-1/4 md:w-auto cursor-pointer p-2 flex justify-center h-full items-center bg-custom-light"
                     >
                         <div
-                            class="chat-icon-container relative button-container"
+                            class="chat-icon-container relative button-container p-2"
                         >
                             <div
                                 id="notificationSymbol"
@@ -295,11 +295,7 @@
                             id="gameUI-update"
                             class="flex flex-col gap-8 items-center w-full justify-center py-8"
                         >
-                            <div class="flex flex-row w-full">
-                                <div
-                                    id="current-turn"
-                                    class="text-lg w-full font-semibold text-right"
-                                ></div>
+                            <div class="flex flex-col w-full gap-4">
                                 <div
                                     class="countdown-container flex flex-row items-center justify-center w-full"
                                 >
@@ -322,6 +318,10 @@
                                         ></div>
                                     </div>
                                 </div>
+                                <div
+                                    id="current-turn"
+                                    class="text-lg w-full font-semibold text-right"
+                                ></div>
                             </div>
                             <div class="flex flex-col w-full items-center">
                                 <div

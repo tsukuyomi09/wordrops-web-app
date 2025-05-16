@@ -2,6 +2,15 @@ document.addEventListener("DOMContentLoaded", function () {
     getUserData();
 });
 
+function dashboardButton() {
+    const username = localStorage.getItem("username");
+    if (username) {
+        window.location.href = `/dashboard/${username}`;
+    } else {
+        alert("Errore: nome utente non trovato.");
+    }
+}
+
 function getUserData() {
     const username = window.location.pathname.split("/")[2];
     if (username) {
