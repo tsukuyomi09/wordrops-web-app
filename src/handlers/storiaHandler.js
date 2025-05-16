@@ -7,7 +7,7 @@ async function storiaHandler(req, res) {
     const id = parseInt(id_slug.split("-")[0]);
     try {
         const gameResult = await client.query(
-            "SELECT id, title FROM games_completed WHERE id = $1",
+            "SELECT id, title, game_type, game_speed, finished_at FROM games_completed WHERE id = $1",
             [id]
         );
 
@@ -30,28 +30,42 @@ async function storiaHandler(req, res) {
             [id]
         );
 
+        const genreQuery = await client.query(
+            `SELECT g.name
+            FROM game_genres gg
+            JOIN genres g ON g.id = gg.genre_id
+             WHERE gg.game_id = $1`,
+            [id]
+        );
+
         const chapters = chaptersResult.rows;
+        const genres = genreQuery.rows.map((row) => row.name);
 
         const authors = chapters.map((chapter) => ({
             username: chapter.username,
             avatar: chapter.avatar,
         }));
-
         console.log(`autori: ${authors}`);
 
-        console.log(chapters.rows);
+        console.log(chapters);
 
         if (gameResult.rows.length > 0) {
-            const { id, title } = gameResult.rows[0];
+            const { id, title, finished_at, game_type, game_speed } =
+                gameResult.rows[0];
             const slugTitle = generateSlug(title);
             console.log(slugTitle);
 
             // Qui usi res.render e passi i dati a EJS
             res.render("storia", {
+                game_type: translateGameType(game_type),
+                game_speed: translateGameSpeed(game_speed),
                 book_title: title,
                 slug: slugTitle,
                 id: id,
                 authors: authors,
+                finished_at: finished_at,
+                chapters: chapters,
+                genres: genres,
             });
         } else {
             res.status(404).sendFile(
@@ -60,7 +74,9 @@ async function storiaHandler(req, res) {
         }
     } catch (error) {
         console.error("Errore durante la query:", error);
-        res.status(500).send("C'è stato un errore interno del server");
+        res.status(500).sendFile(
+            path.join(__dirname, "../../views", "404.html")
+        );
     }
 }
 
@@ -69,6 +85,22 @@ function generateSlug(title) {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
+}
+
+function translateGameType(type) {
+    const types = {
+        ranked: "classificata",
+        normal: "classica",
+    };
+    return types[type] || type;
+}
+
+function translateGameSpeed(speed) {
+    const speeds = {
+        slow: "lunga",
+        fast: "corta",
+    };
+    return speeds[speed] || speed;
 }
 
 module.exports = { storiaHandler };

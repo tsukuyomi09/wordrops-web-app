@@ -52,7 +52,10 @@
         ></script>
     </head>
     <body>
-        <div class="page-wrapper flex flex-col justify-center items-center">
+        <div
+            id="page-wrapper"
+            class="page-wrapper flex flex-col justify-center items-center"
+        >
             <div
                 id="menu"
                 class="w-full z-10 sticky top-0 h-24 top-0 p-4 bg-custom-light"
@@ -156,40 +159,35 @@
                         <div class="flex gap-4">
                             <span
                                 id="game-type"
-                                class="px-2 py-1 text-[10px] flex justify-center items-center bg-amber-400 text-gray-800 rounded-lg font-mono"
-                                >classificata</span
+                                class="px-2 py-1 text-[10px] md:text-[14px] flex justify-center items-center bg-amber-400 text-gray-800 rounded-lg font-mono"
+                                ><%= game_type %></span
                             >
                             <span
                                 id="game-speed"
-                                class="px-2 py-1 text-[10px] flex justify-center items-center bg-green-600 text-gray-800 rounded-lg font-mono"
-                                >lunga</span
+                                class="px-2 py-1 text-[10px] md:text-[14px] flex justify-center items-center bg-green-600 text-gray-800 rounded-lg font-mono"
+                                ><%= game_speed %></span
                             >
                         </div>
                         <div id="book-genre" class="flex flex-row gap-4">
+                            <% genres.forEach(genre => { %>
                             <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
+                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2 text-[10px] md:text-[14px]"
                             >
-                                avventura
+                                <%= genre %>
                             </p>
-                            <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
-                            >
-                                drammatico
-                            </p>
-                            <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
-                            >
-                                sy-fy
-                            </p>
+                            <% }); %>
                         </div>
                     </div>
                     <div
                         class="title-container md:w-3/5 w-5/5 h-full px-6 gap-4 flex flex-col items-center"
                     >
-                        <p class="text-xs">13/05/2025</p>
+                        <p class="text-xs">
+                            <%= new
+                            Date(finished_at).toLocaleDateString('it-IT') %>
+                        </p>
                         <h1
                             id="book-title"
-                            class="book-title text-balance font-semibold italic text-xl md:text-2xl text-center"
+                            class="book-title text-balance font-semibold italic text-xl md:text-4xl text-center"
                         >
                             <%= book_title %>
                         </h1>
@@ -233,7 +231,7 @@
                                             <a
                                                 href="/profile-page/<%= author.username %>"
                                                 target="_blank"
-                                                class="relative flex-col items-center justify-center"
+                                                class="button-container relative flex-col items-center justify-center"
                                             >
                                                 <div
                                                     class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
@@ -347,42 +345,17 @@
                                     <ul
                                         class="text-sm text-center bg-custom-light"
                                     >
+                                        <% chapters.forEach((chapter, index) =>
+                                        { %>
                                         <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >La Tempesta di Fuoco</a
+                                            <button
+                                                data-index="<%= index %>"
+                                                class="button-container chapter-btn block cursor-pointer w-full text-md text-center font-semibold py-3"
                                             >
+                                                <%= chapter.title %>
+                                            </button>
                                         </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >L’Ombra del Drago</a
-                                            >
-                                        </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >Il Sigillo di Luce</a
-                                            >
-                                        </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >La Luce nel Buio</a
-                                            >
-                                        </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >Il Risveglio del Drago</a
-                                            >
-                                        </li>
-                                        <!-- Altri... -->
+                                        <% }) %>
                                     </ul>
                                 </div>
                             </div>
@@ -390,13 +363,13 @@
                     </div>
 
                     <!--central main container -->
-                    <div class="central-main-container max-w-[800px]">
+                    <div id="central-main-container" class="max-w-[800px]">
                         <div
                             class="chapter md:px-24 flex flex-col items-start gap-6"
                         >
                             <div class="chapter-author">
                                 <div
-                                    class="flex flex-col items-center justify-center"
+                                    class="flex flex-col items-start justify-start"
                                 >
                                     <!-- Avatar -->
                                     <div class="relative">
@@ -404,7 +377,7 @@
                                             class="size-10 rounded-lg overflow-hidden"
                                         >
                                             <img
-                                                id="profile-avatar"
+                                                id="chapter-avatar"
                                                 src="/images/avatars/king_avatar_square.png"
                                                 alt="Avatar"
                                                 class="w-full h-full object-contain"
@@ -417,17 +390,23 @@
                                         class="flex flex-col text-left h-full justify-between"
                                     >
                                         <span
-                                            id="profile-username"
+                                            id="chapter-username"
                                             class="text-sm font-semibold text-gray-800"
                                             >username</span
                                         >
                                     </div>
                                 </div>
                             </div>
-                            <h4 class="font-semibold text-lg italic">
+                            <h4
+                                id="chapter-title"
+                                class="font-semibold text-lg italic"
+                            >
                                 La Tempesta di Fuoco
                             </h4>
-                            <p class="leading-[2.25] text-lg">
+                            <p
+                                id="chapter-content"
+                                class="leading-[2.25] text-lg"
+                            >
                                 Era una notte come tante a Lumevel, un villaggio
                                 che si distendeva lungo la riva di un lago
                                 cristallino, sotto l’ombra di montagne nere e
@@ -565,6 +544,10 @@
                 </div>
             </div>
         </div>
+        <script>
+            // chapters for dropdown //
+            const chapters = <%- JSON.stringify(chapters) %>;
+        </script>
         <script src="/js/storyPage.js" defer></script>
     </body>
 </html>
