@@ -52,10 +52,13 @@
         ></script>
     </head>
     <body>
-        <div class="page-wrapper flex flex-col justify-center items-center">
+        <div
+            id="page-wrapper"
+            class="page-wrapper flex flex-col justify-center items-center"
+        >
             <div
                 id="menu"
-                class="w-full z-10 sticky top-0 h-24 top-0 p-4 bg-custom-light"
+                class="w-full z-50 sticky h-24 top-0 p-4 bg-custom-light"
             >
                 <div class="flex justify-between w-full h-full items-center">
                     <div class="">
@@ -68,6 +71,25 @@
                     <div
                         class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                     >
+                        <div
+                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
+                        >
+                            <a
+                                href="/classifiche"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-trofeo-48.png"
+                                    alt="trophy Icon"
+                                    class="icon-image size-6"
+                                />
+                                <div
+                                    class="text-sm font-semibold text-gray-800"
+                                >
+                                    classifiche
+                                </div>
+                            </a>
+                        </div>
                         <div
                             class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
                         >
@@ -156,40 +178,35 @@
                         <div class="flex gap-4">
                             <span
                                 id="game-type"
-                                class="px-2 py-1 text-[10px] flex justify-center items-center bg-amber-400 text-gray-800 rounded-lg font-mono"
-                                >classificata</span
+                                class="px-2 py-1 text-[10px] md:text-[14px] flex justify-center items-center bg-amber-400 text-gray-800 rounded-lg font-mono"
+                                ><%= game_type %></span
                             >
                             <span
                                 id="game-speed"
-                                class="px-2 py-1 text-[10px] flex justify-center items-center bg-green-600 text-gray-800 rounded-lg font-mono"
-                                >lunga</span
+                                class="px-2 py-1 text-[10px] md:text-[14px] flex justify-center items-center bg-green-600 text-gray-800 rounded-lg font-mono"
+                                ><%= game_speed %></span
                             >
                         </div>
                         <div id="book-genre" class="flex flex-row gap-4">
+                            <% genres.forEach(genre => { %>
                             <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
+                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2 text-[10px] md:text-[14px]"
                             >
-                                avventura
+                                <%= genre %>
                             </p>
-                            <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
-                            >
-                                drammatico
-                            </p>
-                            <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2"
-                            >
-                                sy-fy
-                            </p>
+                            <% }); %>
                         </div>
                     </div>
                     <div
                         class="title-container md:w-3/5 w-5/5 h-full px-6 gap-4 flex flex-col items-center"
                     >
-                        <p class="text-xs">13/05/2025</p>
+                        <p class="text-xs">
+                            <%= new
+                            Date(finished_at).toLocaleDateString('it-IT') %>
+                        </p>
                         <h1
                             id="book-title"
-                            class="book-title text-balance font-semibold italic text-xl md:text-2xl text-center"
+                            class="book-title text-balance font-semibold italic text-xl md:text-4xl text-center"
                         >
                             <%= book_title %>
                         </h1>
@@ -233,7 +250,7 @@
                                             <a
                                                 href="/profile-page/<%= author.username %>"
                                                 target="_blank"
-                                                class="relative flex-col items-center justify-center"
+                                                class="button-container relative flex-col items-center justify-center"
                                             >
                                                 <div
                                                     class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
@@ -347,42 +364,17 @@
                                     <ul
                                         class="text-sm text-center bg-custom-light"
                                     >
+                                        <% chapters.forEach((chapter, index) =>
+                                        { %>
                                         <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >La Tempesta di Fuoco</a
+                                            <button
+                                                data-index="<%= index %>"
+                                                class="button-container chapter-btn block cursor-pointer w-full text-md text-center font-semibold py-3"
                                             >
+                                                <%= chapter.title %>
+                                            </button>
                                         </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >L’Ombra del Drago</a
-                                            >
-                                        </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >Il Sigillo di Luce</a
-                                            >
-                                        </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >La Luce nel Buio</a
-                                            >
-                                        </li>
-                                        <li class="border-t border-white">
-                                            <a
-                                                href="#"
-                                                class="block text-md font-semibold py-3"
-                                                >Il Risveglio del Drago</a
-                                            >
-                                        </li>
-                                        <!-- Altri... -->
+                                        <% }) %>
                                     </ul>
                                 </div>
                             </div>
@@ -390,13 +382,13 @@
                     </div>
 
                     <!--central main container -->
-                    <div class="central-main-container max-w-[800px]">
+                    <div id="central-main-container" class="max-w-[800px]">
                         <div
                             class="chapter md:px-24 flex flex-col items-start gap-6"
                         >
                             <div class="chapter-author">
                                 <div
-                                    class="flex flex-col items-center justify-center"
+                                    class="flex flex-col items-start justify-start gap-"
                                 >
                                     <!-- Avatar -->
                                     <div class="relative">
@@ -404,8 +396,8 @@
                                             class="size-10 rounded-lg overflow-hidden"
                                         >
                                             <img
-                                                id="profile-avatar"
-                                                src="/images/avatars/king_avatar_square.png"
+                                                id="chapter-avatar"
+                                                src="/images/avatars/<%= chapters[0].avatar %>.png"
                                                 alt="Avatar"
                                                 class="w-full h-full object-contain"
                                             />
@@ -417,104 +409,24 @@
                                         class="flex flex-col text-left h-full justify-between"
                                     >
                                         <span
-                                            id="profile-username"
+                                            id="chapter-username"
                                             class="text-sm font-semibold text-gray-800"
-                                            >username</span
+                                            ><%= chapters[0].username %></span
                                         >
                                     </div>
                                 </div>
                             </div>
-                            <h4 class="font-semibold text-lg italic">
-                                La Tempesta di Fuoco
+                            <h4
+                                id="chapter-title"
+                                class="font-semibold text-lg italic"
+                            >
+                                <%= chapters[0].title %>
                             </h4>
-                            <p class="leading-[2.25] text-lg">
-                                Era una notte come tante a Lumevel, un villaggio
-                                che si distendeva lungo la riva di un lago
-                                cristallino, sotto l’ombra di montagne nere e
-                                maestose. La luna, pallida e distante,
-                                illuminava i tetti di paglia delle case di
-                                legno, e il vento soffiava leggero, portando con
-                                sé il profumo del mare lontano. Ma quella notte,
-                                qualcosa nell'aria era diverso. Un fremito
-                                sibilante percorreva il cielo, come un presagio
-                                di catastrofe. Ariane, una giovane donna dai
-                                capelli argentati e gli occhi blu come il
-                                ghiaccio, stava passeggiando lungo il bordo del
-                                lago, la sua figura solitaria contrapposta alla
-                                distesa calma delle acque. La sua mente era in
-                                tumulto. Non riusciva a liberarsi da un sogno
-                                che l’aveva tormentata per settimane. Un sogno
-                                ricorrente, in cui una gigantesca creatura, metà
-                                uomo e metà drago, sorgeva dal lago e scuoteva
-                                il cielo con un urlo straziante, mentre il
-                                villaggio veniva inghiottito dalle fiamme. “E se
-                                fosse vero?” si chiese, guardando il riflesso
-                                del suo volto nell’acqua. Era sempre stata una
-                                ragazza pragmatica, ma qualcosa in quella
-                                visione le dava una sensazione di angoscia che
-                                non riusciva a scrollarsi di dosso. Una voce
-                                dentro di lei, quasi impercettibile, le
-                                sussurrava che il sogno non era solo un sogno,
-                                ma un avvertimento. D’improvviso, il cielo sopra
-                                di lei si oscurò. Non una nuvola, ma un'ombra
-                                densa, come se la stessa notte stesse scivolando
-                                via. Un rumore sordo ruppe il silenzio, seguito
-                                da un tremore che fece vacillare le pietre del
-                                sentiero. Ariane si voltò di scatto, gli occhi
-                                spalancati. Il vento divenne più forte, ma
-                                questa volta non era fresco e salato. C’era
-                                qualcosa di bruciante in esso, come se l'aria
-                                stessa fosse stata accesa dal fuoco. Nel cuore
-                                della notte, una luce intensa esplose nel cielo.
-                                Una palla infuocata, come un sole che sorgeva
-                                all’improvviso, si abbatté sopra il lago con una
-                                forza devastante. Ariane urlò, ma la sua voce fu
-                                inghiottita dal fragore. Le acque del lago si
-                                sollevarono come onde giganti, schizzando in
-                                ogni direzione. Le case del villaggio
-                                cominciarono a tremare, e una luce rossastra
-                                cominciò a tingere il cielo, come se una forza
-                                antica e terribile stesse emergendo dalle
-                                profondità della terra. Ariane cadde a terra, il
-                                viso bagnato dalle lacrime e dalla polvere,
-                                incapace di distogliere lo sguardo dalla luce
-                                che cresceva e si avvicinava sempre di più. La
-                                tempesta di fuoco stava arrivando. E con essa,
-                                la creatura del sogno, che ora non sembrava più
-                                così lontana dalla realtà. "Devo fermarlo,"
-                                mormorò tra sé, sentendo una determinazione
-                                nuova formarsi nel suo cuore. Senza pensarci
-                                troppo, si alzò in piedi e cominciò a correre,
-                                spinta da una forza che non comprendeva del
-                                tutto. Non sapeva cosa stesse per accadere, né
-                                come avrebbe fatto a fermare ciò che stava per
-                                distruggere tutto, ma sapeva una cosa: non
-                                sarebbe stata una spettatrice. Non avrebbe
-                                permesso che Lumevel, il suo villaggio, venisse
-                                consumato dal fuoco. Mentre correva verso la
-                                piazza centrale, il cielo divenne un tumulto di
-                                colori, e il vento accecante soffiò a raffiche,
-                                sferzandole il viso. Ariane raggiunse il centro
-                                del villaggio in tempo per vedere le prime
-                                fiamme divampare, illuminate da un bagliore
-                                infernale che rifletteva nei suoi occhi pieni di
-                                paura e determinazione. Da lontano, scorse una
-                                figura che si stagliava contro la luce: un uomo
-                                alto, avvolto in un mantello nero che sembrava
-                                sfidare la luce stessa. Il suo viso era celato,
-                                ma la sua presenza emanava potere e oscurità. Il
-                                cuore di Ariane batté più forte. “Tu... chi
-                                sei?” gridò, la voce spezzata dalla paura.
-                                L’uomo alzò lentamente la testa, e i suoi occhi
-                                di fuoco incontrarono quelli di Ariane. Un
-                                sorriso malefico le attraversò il volto, e il
-                                suo sussurro giunse come un’eco lontana: “Il tuo
-                                destino è già scritto, Ariane. Non puoi fermare
-                                ciò che è già in movimento.” Il cielo si fece
-                                più scuro, e Ariane sentì una scossa profonda
-                                nelle sue ossa. Il mondo stava cambiando. E lei,
-                                senza saperlo, era al centro di quel
-                                cambiamento.
+                            <p
+                                id="chapter-content"
+                                class="leading-[2.25] text-lg"
+                            >
+                                <%= chapters[0].content %>
                             </p>
                         </div>
                     </div>
@@ -565,6 +477,10 @@
                 </div>
             </div>
         </div>
+        <script>
+            // chapters for dropdown //
+            const chapters = <%- JSON.stringify(chapters) %>;
+        </script>
         <script src="/js/storyPage.js" defer></script>
     </body>
 </html>

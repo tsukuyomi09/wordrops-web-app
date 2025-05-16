@@ -50,3 +50,27 @@ function chaptersDropup() {
 }
 
 /// MENU TOGGLE CHAPTERS AND AUTHORS ///
+
+/// change chapter dropdown ///
+
+const wrapperContainer = document.getElementById("page-wrapper");
+
+document.querySelectorAll(".chapter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+        const idx = button.dataset.index;
+        console.log(idx);
+        const chapter = chapters[idx];
+
+        document.getElementById("chapter-title").textContent = chapter.title;
+        document.getElementById("chapter-content").textContent =
+            chapter.content;
+        document.getElementById("chapter-username").textContent =
+            chapter.username;
+        document.getElementById(
+            "chapter-avatar"
+        ).src = `/images/avatars/${chapter.avatar}.png`;
+
+        dropCapitoli.classList.add("hidden");
+        wrapperContainer.scrollIntoView({ behavior: "smooth" });
+    });
+});

@@ -28,11 +28,6 @@ function getUserData() {
                 return response.json();
             })
             .then((data) => {
-                console.log(
-                    "Dati dell'utente arrivati:",
-                    JSON.stringify(data, null, 2)
-                );
-                console.log(`lunghezza = ${data.games.length}`);
                 displayUserItems(data);
                 if (data.games.length > 0) {
                     console.log("entrato nella fuzione");
