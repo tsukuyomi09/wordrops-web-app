@@ -53,7 +53,7 @@ function chaptersDropup() {
 
 /// change chapter dropdown ///
 
-const wrapperContainer = document.getElementById("page-wrapper");
+const wrapperContainer = document.getElementById("content-wrapper");
 
 document.querySelectorAll(".chapter-btn").forEach((button) => {
     button.addEventListener("click", () => {
@@ -74,3 +74,12 @@ document.querySelectorAll(".chapter-btn").forEach((button) => {
         wrapperContainer.scrollIntoView({ behavior: "smooth" });
     });
 });
+
+function dashboardButton() {
+    const username = localStorage.getItem("username");
+    if (username) {
+        window.location.href = `/dashboard/${username}`;
+    } else {
+        alert("Errore: nome utente non trovato.");
+    }
+}

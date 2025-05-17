@@ -69,90 +69,27 @@
             id="page-wrapper"
             class="page-wrapper flex flex-col justify-center items-center"
         >
-            <div
-                id="menu"
-                class="w-full z-50 sticky h-24 top-0 p-4 bg-custom-light"
-            >
-                <div class="flex justify-between w-full h-full items-center">
+            <div id="menu" class="w-full z-50 sticky top-0">
+                <div
+                    class="flex flex-col justify-between w-full h-full items-center"
+                >
                     <div class="">
                         <img
                             src="/images/logo_wordrops_classic.svg"
                             alt="Wordrops Logo"
-                            class="mx-auto w-20 lg:w-36"
+                            class="mx-auto lg:w-36 hidden md:block"
                         />
                     </div>
                     <div
-                        class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        class="flex flex-row items-center justify-between w-full gap-6 bg-custom-light p-4"
                     >
-                        <div
-                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
-                        >
-                            <a
-                                href="/classifiche"
-                                class="button-container flex flex-col justify-center items-center"
-                            >
-                                <img
-                                    src="/images/icons/icons8-trofeo-48.png"
-                                    alt="trophy Icon"
-                                    class="icon-image size-6"
-                                />
-                                <div
-                                    class="text-sm font-semibold text-gray-800"
-                                >
-                                    classifiche
-                                </div>
-                            </a>
-                        </div>
-                        <div
-                            class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
-                        >
-                            <a
-                                onclick="dashboardButton()"
-                                class="button-container flex flex-col justify-center items-center"
-                            >
-                                <img
-                                    src="/images/icons/icons8-casa-100.png"
-                                    alt="leaderboard Icon"
-                                    class="icon-image size-6"
-                                />
-                                <div
-                                    class="text-sm font-semibold text-gray-800"
-                                >
-                                    dashboard
-                                </div>
-                            </a>
-                        </div>
-                        <div
-                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
-                        >
-                            <a
-                                href="/storie-community"
-                                class="button-container flex flex-col justify-center items-center"
-                            >
-                                <img
-                                    src="/images/icons/library-icon.png"
-                                    alt="library Icon"
-                                    class="icon-image size-6"
-                                />
-                                <div
-                                    class="text-sm font-semibold text-gray-800"
-                                >
-                                    libreria
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="flex flex-row gap-4">
                         <button
-                            class="group w-32 cursor-pointer relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 font-medium text-white duration-500"
+                            class="group px-5 py-2.5 flex-1 cursor-pointer relative items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 font-medium text-white duration-500"
                         >
+                            registrati
+
                             <div
-                                class="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0"
-                            >
-                                registrati
-                            </div>
-                            <div
-                                class="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
+                                class="translate-x-[150%] absolute opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
                             >
                                 <svg
                                     width="15"
@@ -171,19 +108,83 @@
                                 </svg>
                             </div>
                         </button>
+                        <div class="flex-1">
+                            <img
+                                src="/images/wordrops_logo_animal.png"
+                                alt="Wordrops Logo"
+                                class="w-[20vw] md:hidden"
+                            />
+                        </div>
                         <button
-                            class="cursor-pointer w-32 relative h-12 overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2.5 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                            class="cursor-pointer flex-1 relative overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2.5 text-gray-800 transition-all duration-300 hover:border-custom-blue"
                         >
                             <span class="relative font-semibold">login</span>
                         </button>
                     </div>
+
+                    <div
+                        class="flex flex-row gap-4 md:block py-2 bg-white w-full flex justify-center border-b border-custom-light"
+                    >
+                        <div class="">
+                            <a
+                                href="/classifiche"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-trofeo-48.png"
+                                    alt="trophy Icon"
+                                    class="icon-image size-5"
+                                />
+                                <div
+                                    class="text-xs font-semibold text-gray-800"
+                                >
+                                    classifiche
+                                </div>
+                            </a>
+                        </div>
+                        <div class="">
+                            <a
+                                onclick="dashboardButton()"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="leaderboard Icon"
+                                    class="icon-image size-5"
+                                />
+                                <div
+                                    class="text-xs font-semibold text-gray-800"
+                                >
+                                    dashboard
+                                </div>
+                            </a>
+                        </div>
+                        <div class="">
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="icon-image size-5"
+                                />
+                                <div
+                                    class="text-xs font-semibold text-gray-800"
+                                >
+                                    libreria
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div
+                id="content-wrapper"
                 class="content-wrapper w-full md:px-8 max-w-[1600px] flex flex-col px-10"
             >
                 <div
-                    class="container-title-top px-4 border-b border-custom-light flex flex-col md:flex-row justify-center items-center w-full py-4 md:pb-12 md:pt-8"
+                    class="container-title-top px-4 gap-4 border-b border-custom-light flex flex-col md:flex-row justify-center items-center w-full py-8 md:pb-12 md:pt-8"
                 >
                     <div
                         class="genre-container flex flex-col justify-center items-center md:items-start md:w-1/5 w-full h-full md:gap-4 gap-2"
@@ -203,7 +204,7 @@
                         <div id="book-genre" class="flex flex-row gap-4">
                             <% genres.forEach(genre => { %>
                             <p
-                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2 text-[10px] md:text-[14px]"
+                                class="border-1 border-gray-200 rounded-lg text-gray-00 px-2 py-1 text-[10px] md:text-[14px]"
                             >
                                 <%= genre %>
                             </p>
@@ -211,7 +212,7 @@
                         </div>
                     </div>
                     <div
-                        class="title-container md:w-3/5 w-5/5 h-full px-6 gap-4 flex flex-col items-center"
+                        class="title-container md:w-3/5 w-5/5 h-full px-6 gap-2 flex flex-col order-first items-center"
                     >
                         <p class="text-xs">
                             <%= new
@@ -219,7 +220,7 @@
                         </p>
                         <h1
                             id="book-title"
-                            class="book-title text-balance font-semibold italic text-xl md:text-4xl text-center"
+                            class="book-title text-balance font-semibold italic text-3xl md:text-4xl text-center"
                         >
                             <%= book_title %>
                         </h1>
@@ -229,7 +230,7 @@
                     ></div>
                 </div>
                 <div
-                    class="big-container-chap-social-content flex flex-row items-start w-full justify-center md:pt-16"
+                    class="big-container-chap-social-content flex flex-row items-start w-full justify-center md:pt-16 py-8 px-2"
                 >
                     <!-- container-left-menu-mobile-bottom -->
                     <div
@@ -258,12 +259,14 @@
                                     >
                                         <% authors.forEach(author => { %>
 
-                                        <div class="flex flex-col">
+                                        <div
+                                            class="flex flex-col justify-center items-center"
+                                        >
                                             <!-- Avatar -->
                                             <a
                                                 href="/profile-page/<%= author.username %>"
                                                 target="_blank"
-                                                class="button-container relative flex-col items-center justify-center"
+                                                class="button-container relative"
                                             >
                                                 <div
                                                     class="size-7 absolute p-1 flex justify-center items-center rounded-full border-1 border-gray-400 bg-white -top-3 -right-3 cursor-pointer"
@@ -285,17 +288,17 @@
                                                     />
                                                 </div>
                                                 <!-- Username + Stats -->
-                                                <div
-                                                    class="flex flex-col text-left justify-between"
-                                                >
-                                                    <span
-                                                        id="profile-username"
-                                                        class="text-sm font-semibold text-gray-800 text-center"
-                                                        ><%= author.username
-                                                        %></span
-                                                    >
-                                                </div>
                                             </a>
+                                            <div
+                                                class="flex flex-col text-left justify-between"
+                                            >
+                                                <span
+                                                    id="profile-username"
+                                                    class="text-sm font-semibold text-gray-800 text-center"
+                                                    ><%= author.username
+                                                    %></span
+                                                >
+                                            </div>
                                         </div>
                                         <% }); %>
                                     </div>
@@ -437,7 +440,7 @@
                             </h4>
                             <p
                                 id="chapter-content"
-                                class="leading-[2.25] text-lg"
+                                class="leading-[2.50] text-md"
                             >
                                 <%= chapters[0].content %>
                             </p>
@@ -461,7 +464,7 @@
                                 <img
                                     src="/images/icons/facebook.png"
                                     alt="Facebook"
-                                    class="size-5 object-cover transition-transform duration-300 hover:scale-110"
+                                    class="size-5 md:size-8 object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </a>
                             <a
@@ -473,7 +476,7 @@
                                 <img
                                     src="/images/icons/twitter.png"
                                     alt="Twitter"
-                                    class="size-5 object-cover transition-transform duration-300 hover:scale-110"
+                                    class="size-5 md:size-8 object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </a>
                             <a
@@ -485,7 +488,7 @@
                                 <img
                                     src="/images/icons/whatsapp.png"
                                     alt="WhatsApp"
-                                    class="size-5 object-cover transition-transform duration-300 hover:scale-110"
+                                    class="size-5 md:size-8 object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </a>
                         </div>
