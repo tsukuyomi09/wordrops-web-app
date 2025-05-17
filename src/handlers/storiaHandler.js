@@ -73,6 +73,7 @@ async function storiaHandler(req, res) {
                 chapters: chapters,
                 genres: genres,
                 back_cover: back_cover,
+                story_url: `https://wordrops.com/storia/${id}-${slugTitle}`,
             });
         } else {
             res.status(404).sendFile(

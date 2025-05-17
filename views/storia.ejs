@@ -3,15 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><%= slug %> - Storia wordrops</title>
+        <title><%= book_title %> - Storia wordrops</title>
         <meta
             name="description"
             content="<%= back_cover || 'Leggi una nuova storia collaborativa su Wordrops, creata in tempo reale da più autori.' %>"
         />
-        <link
-            rel="canonical"
-            href="https://wordrops.com/storia/<%= id %>-<%= slug %>"
-        />
+        <link rel="canonical" href="<%= story_url %>" />
 
         <link
             rel="icon"
@@ -49,10 +46,7 @@
             property="og:image"
             content="https://wordrops.com/images/open-book-image-social.png"
         />
-        <meta
-            property="og:url"
-            content="https://wordrops.com/storia/<%= id %>-<%= slug %>"
-        />
+        <meta property="og:url" content="<%= story_url %>" />
         <meta property="og:type" content="website" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -499,6 +493,12 @@
         <script>
             // chapters for dropdown //
             const chapters = <%- JSON.stringify(chapters) %>;
+        </script>
+        <script>
+            const slugUrl = "<%= story_url %>";
+            if (window.location.href !== slugUrl) {
+                window.history.replaceState(null, null, slugUrl);
+            }
         </script>
         <script src="/js/storyPage.js" defer></script>
     </body>
