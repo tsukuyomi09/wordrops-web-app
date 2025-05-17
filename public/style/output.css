@@ -486,6 +486,9 @@
   .mt-40 {
     margin-top: calc(var(--spacing) * 40);
   }
+  .mt-42 {
+    margin-top: calc(var(--spacing) * 42);
+  }
   .mt-52 {
     margin-top: calc(var(--spacing) * 52);
   }
@@ -1367,6 +1370,9 @@
   }
   .p-14 {
     padding: calc(var(--spacing) * 14);
+  }
+  .p-24 {
+    padding: calc(var(--spacing) * 24);
   }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
