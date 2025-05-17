@@ -7,7 +7,7 @@ async function storiaHandler(req, res) {
     const id = parseInt(id_slug.split("-")[0]);
     try {
         const gameResult = await client.query(
-            "SELECT id, title, game_type, game_speed, finished_at FROM games_completed WHERE id = $1",
+            "SELECT id, title, game_type, game_speed, back_cover, finished_at FROM games_completed WHERE id = $1",
             [id]
         );
 
@@ -50,8 +50,14 @@ async function storiaHandler(req, res) {
         console.log(chapters);
 
         if (gameResult.rows.length > 0) {
-            const { id, title, finished_at, game_type, game_speed } =
-                gameResult.rows[0];
+            const {
+                id,
+                title,
+                finished_at,
+                game_type,
+                game_speed,
+                back_cover,
+            } = gameResult.rows[0];
             const slugTitle = generateSlug(title);
             console.log(slugTitle);
 
@@ -66,6 +72,7 @@ async function storiaHandler(req, res) {
                 finished_at: finished_at,
                 chapters: chapters,
                 genres: genres,
+                back_cover: back_cover,
             });
         } else {
             res.status(404).sendFile(
