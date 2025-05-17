@@ -453,8 +453,9 @@
                         >
                             <div class="hidden md:block">condividi</div>
                             <a
-                                href="https://facebook.com"
+                                href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(story_url) %>"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 class="social-button"
                             >
                                 <img
@@ -464,8 +465,9 @@
                                 />
                             </a>
                             <a
-                                href="https://twitter.com"
+                                href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(story_url) %>&text=<%= encodeURIComponent(book_title) %>"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 class="social-button"
                             >
                                 <img
@@ -475,13 +477,14 @@
                                 />
                             </a>
                             <a
-                                href="https://whatsapp.com"
+                                href="https://api.whatsapp.com/send?text=<%= encodeURIComponent(story_url) %>"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 class="social-button"
                             >
                                 <img
                                     src="/images/icons/whatsapp.png"
-                                    alt="Instagram"
+                                    alt="WhatsApp"
                                     class="size-5 object-cover transition-transform duration-300 hover:scale-110"
                                 />
                             </a>
