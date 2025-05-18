@@ -70,7 +70,7 @@
             class="page-wrapper flex flex-col justify-center items-center"
         >
             <div
-                id="voteModal"
+                id="vote-modal"
                 onclick="closeVoteModal()"
                 class="fixed inset-0 bg-black/40 flex justify-center items-center z-50 hidden"
             >
@@ -78,19 +78,23 @@
                     onclick="event.stopPropagation()"
                     class="bg-white rounded-lg p-6 w-auto max-w-full flex flex-col gap-4 md:gap-6 z-60"
                 >
-                    <h3 class="text-lg text-center font-semibold mb-4">
+                    <h3
+                        id="book-vote-text"
+                        class="text-lg text-center font-semibold"
+                    >
                         Vota!
                     </h3>
+
                     <div
-                        id="starContainer"
+                        id="star-container"
                         class="flex justify-center gap-2 mb-4 cursor-pointer"
                     >
                         <!-- stelle dinamiche inserite da JS -->
                     </div>
                     <div class="flex justify-center gap-4">
                         <button
-                            onclick="confirmVote()"
-                            id="confirmVote"
+                            onclick="sendVote()"
+                            id="send-vote"
                             class="px-4 py-2 cursor-pointer bg-blue-600 text-sm text-white rounded hover:bg-blue-700"
                             disabled
                         >

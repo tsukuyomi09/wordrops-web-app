@@ -90,11 +90,9 @@ function dashboardButton() {
 
 /// score logic ///
 
-const voteBtn = document.querySelector("button.flex");
-const giveScoreModal = document.getElementById("voteModal");
-const starContainer = document.getElementById("starContainer");
-const cancelBtn = document.getElementById("cancelVote");
-const confirmBtn = document.getElementById("confirmVote");
+const giveScoreModal = document.getElementById("vote-modal");
+const starContainer = document.getElementById("star-container");
+const confirmBtn = document.getElementById("send-vote");
 
 let selectedRating = 0;
 
@@ -166,14 +164,6 @@ function setRating(index) {
     confirmBtn.disabled = false;
 }
 
-// Aggiorna visivamente le stelle
-function openVoteModal() {
-    selectedRating = 0;
-    confirmBtn.disabled = true;
-    createStars();
-    giveScoreModal.classList.remove("hidden");
-}
-
 // Apertura modal
 function openVoteModal() {
     selectedRating = 0;
@@ -185,10 +175,55 @@ function openVoteModal() {
 function closeVoteModal() {
     giveScoreModal.classList.add("hidden");
 }
-function confirmVote() {
-    giveScoreModal.classList.add("hidden");
-    console.log("Voto selezionato:", selectedRating);
-    // submit voto al server
+
+async function sendVote() {
+    console.log("send vote");
+    voteText = document.getElementById("book-vote-text");
+    const storyPath = window.location.pathname;
+    const story_id = parseInt(storyPath.split("/").pop().split("-")[0], 10);
+
+    if (isNaN(story_id)) {
+        console.error("❌ ID della storia non valido.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`/story/story-rate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                story_id,
+                story_vote: selectedRating,
+            }),
+        });
+
+        if (res.status === 401) {
+            timeoutPlusMessage("registrati per accedere");
+        }
+
+        if (!res.ok) {
+            throw new Error(data.message || "Errore sconosciuto");
+        }
+
+        const data = await res.json();
+
+        if (data.status === "unchanged") {
+            timeoutPlusMessage(data.message);
+        }
+
+        timeoutPlusMessage(data.message);
+    } catch (err) {
+        console.error("Errore durante l'invio del voto:", err.message);
+        // Eventuale feedback visivo per l'utente
+    }
 }
 
-voteBtn.onclick = openVoteModal;
+function timeoutPlusMessage(text) {
+    voteText = document.getElementById("book-vote-text");
+    voteText.innerText = text;
+    setTimeout(() => {
+        closeVoteModal();
+    }, 3000);
+}
