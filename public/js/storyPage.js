@@ -75,6 +75,8 @@ document.querySelectorAll(".chapter-btn").forEach((button) => {
     });
 });
 
+/// back to dashboard button ///
+
 function dashboardButton() {
     const username = localStorage.getItem("username");
     if (username) {
@@ -83,3 +85,110 @@ function dashboardButton() {
         alert("Errore: nome utente non trovato.");
     }
 }
+
+/// back to dashboard button ///
+
+/// score logic ///
+
+const voteBtn = document.querySelector("button.flex");
+const giveScoreModal = document.getElementById("voteModal");
+const starContainer = document.getElementById("starContainer");
+const cancelBtn = document.getElementById("cancelVote");
+const confirmBtn = document.getElementById("confirmVote");
+
+let selectedRating = 0;
+
+// Funzione per creare stelle dinamiche con eventi inline
+function createStars() {
+    starContainer.innerHTML = ""; // pulisci
+    for (let i = 1; i <= 5; i++) {
+        const starWrapper = document.createElement("div");
+        starWrapper.dataset.index = i;
+        starWrapper.className =
+            "cursor-pointer transition-transform duration-200 hover:scale-105  inline-block md:size-10 size-8";
+
+        // Inserisci qui il placeholder per l'SVG, sostituirai con il codice reale
+        starWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 83.947 79.762">
+        <path id="empty_star" d="M16383.426,1489.74c-3.51,0-11.145,21.87-14.229,23.87s-24.95,2.132-25.867,5.382,17.762,16.4,19.012,19.813-6.177,24.691-3.927,26.524,21.168-10.215,25.011-10.381,21.91,12.465,24.744,10.381-5.549-23.941-4.465-26.524,20.633-17.48,19.549-20.563-24.482-2.632-26.732-4.632S16386.934,1489.74,16383.426,1489.74Z" transform="translate(-16341.316 -1487.74)" fill="none" stroke="#0a0a0a" stroke-width="4"/>
+        </svg>`;
+
+        // Eventi inline onclick, onmouseover, onmouseout con funzioni globali (che devi definire)
+        starWrapper.setAttribute("onclick", `setRating(${i})`);
+        starWrapper.setAttribute("onmouseover", `highlightStars(${i})`);
+        starWrapper.setAttribute("onmouseout", `resetStars()`);
+
+        starContainer.appendChild(starWrapper);
+    }
+}
+
+// Hover dinamico
+function updateStars() {
+    const stars = starContainer.querySelectorAll("div");
+    stars.forEach((starDiv, i) => {
+        const idx = i + 1;
+
+        const path = starDiv.querySelector("path");
+        if (!path) return;
+
+        if (idx <= selectedRating) {
+            path.setAttribute("fill", "gold"); // stella piena
+        }
+    });
+}
+
+function highlightStars(index) {
+    const stars = starContainer.querySelectorAll("div");
+    stars.forEach((starDiv, i) => {
+        const idx = i + 1;
+
+        const path = starDiv.querySelector("path");
+        if (!path) return;
+
+        if (idx <= index) {
+            path.setAttribute("fill", "gold");
+            path.setAttribute("stroke", "gold");
+        } else {
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", "#0a0a0a");
+        }
+    });
+}
+
+// Reset dopo hover
+function resetStars() {
+    updateStars();
+}
+
+// Click per selezione voto
+function setRating(index) {
+    selectedRating = index;
+    updateStars();
+    confirmBtn.disabled = false;
+}
+
+// Aggiorna visivamente le stelle
+function openVoteModal() {
+    selectedRating = 0;
+    confirmBtn.disabled = true;
+    createStars();
+    giveScoreModal.classList.remove("hidden");
+}
+
+// Apertura modal
+function openVoteModal() {
+    selectedRating = 0;
+    confirmBtn.disabled = true;
+    createStars();
+    giveScoreModal.classList.remove("hidden");
+}
+
+function closeVoteModal() {
+    giveScoreModal.classList.add("hidden");
+}
+function confirmVote() {
+    giveScoreModal.classList.add("hidden");
+    console.log("Voto selezionato:", selectedRating);
+    // submit voto al server
+}
+
+voteBtn.onclick = openVoteModal;
