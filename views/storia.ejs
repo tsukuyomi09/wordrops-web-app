@@ -291,7 +291,7 @@
                 class="content-wrapper w-full md:px-8 max-w-[1600px] flex flex-col px-10"
             >
                 <div
-                    class="container-title-top px-4 gap-4 border-b border-custom-light flex flex-col md:flex-row justify-between items-center w-full py-8 md:pb-12 md:pt-8"
+                    class="container-title-top relative px-4 gap-4 border-b border-custom-light flex flex-col md:flex-row justify-between items-center w-full py-12 md:pb-12 md:pt-8"
                 >
                     <div
                         class="genre-container flex flex-col justify-center items-center md:items-start md:flex-1 w-full h-full md:gap-4 gap-2"
@@ -333,15 +333,17 @@
                         </h1>
                     </div>
 
-                    <div class="md:flex-1 md:flex w-full md:justify-end">
+                    <div
+                        class="absolute md:static top-0 right-0 translate-x-1/3 translate-y-1/3 md:translate-x-0 md:translate-y-0 w-auto md:flex-1 md:flex md:w-full md:justify-end md:static"
+                    >
                         <div
                             id="total-rating"
-                            class="p-3 ml-2 inline-block text-xl relative font-bold text-custom-blue bg-custom-light rounded-lg"
+                            class="p-2 md:p-3 ml-2 inline-block text-sm md:text-xl relative font-bold text-custom-blue bg-custom-light rounded-lg"
                         >
                             <img
                                 src="/images/icons/star.png"
                                 alt="star icon"
-                                class="absolute top-0 left-0 transform -translate-y-1/2 -translate-x-1/2 h-5"
+                                class="absolute top-0 left-0 transform -translate-y-1/2 -translate-x-1/2 h-3 md:h-5"
                             />
                             <span id="average-rating"
                                 ><%= average ? average.toFixed(1) : "?" %></span
@@ -475,21 +477,22 @@
                                                 class="size-7 cursor-pointe relativer transition-transform duration-300 hover:scale-110"
                                             />
 
-                                            <% if (userVote !== null && userVote
-                                            !== undefined) { %>
                                             <span
                                                 id="user-vote"
                                                 class="absolute inset-0 flex items-center justify-center text-[12px] font-bold text-gray-800"
                                             >
-                                                <%= userVote %>
+                                                <%= userVote !== null &&
+                                                userVote !== undefined ?
+                                                userVote : "" %>
                                             </span>
+                                        </div>
+                                        <div class="hidden md:block">
+                                            <% if (userVote) { %>
+                                            <p>tuo voto</p>
+                                            <% } else { %>
+                                            <p>Vota</p>
                                             <% } %>
                                         </div>
-                                        <% if (userVote) { %>
-                                        <p>tuo voto</p>
-                                        <% } else { %>
-                                        <p>Vota</p>
-                                        <% } %>
                                     </button>
                                 </div>
                             </div>
