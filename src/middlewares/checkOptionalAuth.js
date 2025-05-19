@@ -5,7 +5,6 @@ const checkOptionalAuth = async (req, res, next) => {
     const accesstoken = req.cookies.accesstoken;
     const refreshToken = req.cookies.refreshToken;
     const isProduction = process.env.NODE_ENV === "production";
-    console.log(accesstoken);
 
     if (accesstoken) {
         try {
@@ -14,6 +13,8 @@ const checkOptionalAuth = async (req, res, next) => {
                 process.env.ACCESS_TOKEN_SECRET
             );
             req.user_id = decoded.userId;
+            req.username = decoded.username;
+            req.isLoggedIn = true;
             return next();
         } catch (err) {
             // AccessToken non valido, proviamo con il refresh sotto
@@ -42,11 +43,14 @@ const checkOptionalAuth = async (req, res, next) => {
 
             req.user_id = decodedRefresh.userId;
             req.username = decodedRefresh.username;
+            req.isLoggedIn = true;
             return next();
         } catch (err) {}
     }
 
     req.user_id = null;
+    req.username = null;
+    req.isLoggedIn = false;
     next();
 };
 
