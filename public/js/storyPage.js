@@ -13,7 +13,7 @@ async function fetchStoryData() {
         }
 
         const data = await response.json();
-        console.log(data);
+
         displayStoryOnPage(data);
     } catch (error) {
         console.error("Errore nel recupero dei dati della storia", error);
@@ -87,6 +87,11 @@ function dashboardButton() {
 }
 
 /// back to dashboard button ///
+
+function openRegisterModal() {
+    const registerModal = document.getElementById("popup-register-user");
+    registerModal.classList.remove("hidden");
+}
 
 /// score logic ///
 
@@ -172,8 +177,9 @@ function openVoteModal() {
     giveScoreModal.classList.remove("hidden");
 }
 
-function closeVoteModal() {
-    giveScoreModal.classList.add("hidden");
+function closeModal(id) {
+    const modalToClose = document.getElementById(id);
+    modalToClose.classList.add("hidden");
 }
 
 async function sendVote() {
@@ -198,6 +204,7 @@ async function sendVote() {
                 story_vote: selectedRating,
             }),
         });
+        const data = await res.json();
 
         if (res.status === 401) {
             timeoutPlusMessage("registrati per accedere");
@@ -206,8 +213,6 @@ async function sendVote() {
         if (!res.ok) {
             throw new Error(data.message || "Errore sconosciuto");
         }
-
-        const data = await res.json();
 
         if (data.status === "unchanged") {
             timeoutPlusMessage(data.message);
@@ -225,5 +230,6 @@ function timeoutPlusMessage(text) {
     voteText.innerText = text;
     setTimeout(() => {
         closeVoteModal();
+        voteText.innerText = "Vota!";
     }, 3000);
 }

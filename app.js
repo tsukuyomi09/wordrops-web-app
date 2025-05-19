@@ -8,9 +8,9 @@ const { initSocket } = require("./src/services/socketManager");
 const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
 const { preGameQueue } = require("./src/routes/game/gameQueue");
+const checkOptionalAuth = require("./src/middlewares/checkOptionalAuth");
 const { storiaHandler } = require("./src/handlers/storiaHandler");
 const { sitemapGenerator } = require("./src/services/sitemapGenerator");
-
 const { activeGames } = require("./src/services/gameManager");
 const { client } = require("./src/database/db");
 const {
@@ -241,7 +241,7 @@ app.get("/profile-page/:username", (req, res) => {
 app.get("/storie-community", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "storie-community.html"));
 });
-app.get("/storia/:id_slug", storiaHandler);
+app.get("/storia/:id_slug", checkOptionalAuth, storiaHandler);
 
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));

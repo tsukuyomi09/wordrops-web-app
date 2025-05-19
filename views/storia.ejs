@@ -71,7 +71,7 @@
         >
             <div
                 id="vote-modal"
-                onclick="closeVoteModal()"
+                onclick="closeModal(`vote-modal`)"
                 class="fixed inset-0 bg-black/40 flex justify-center items-center z-50 hidden"
             >
                 <div
@@ -99,6 +99,68 @@
                             disabled
                         >
                             Conferma
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div
+                id="popup-register-user"
+                onclick="closeModal(`popup-register-user`)"
+                class="fixed inset-0 bg-black/40 flex justify-center items-center z-50 hidden"
+            >
+                <div
+                    class="bg-white relative rounded-lg p-6 w-auto max-w-full flex flex-col items-center gap-8 z-60"
+                >
+                    <div class="md:flex-none">
+                        <img
+                            src="/images/wordrops_logo_animal.png"
+                            alt="Wordrops Logo"
+                            class="w-16"
+                        />
+                    </div>
+
+                    <h3
+                        id="book-vote-text"
+                        class="text-lg text-center font-semibold"
+                    >
+                        Accedi ed entra nella community!
+                    </h3>
+
+                    <div class="flex flex-row w-full items-center gap-2">
+                        <button
+                            class="group flex-1 px-5 py-2.5 text-sm text-lg cursor-pointer relative items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white duration-500"
+                        >
+                            <div
+                                class="transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                            >
+                                registrati
+                            </div>
+
+                            <div
+                                class="absolute top-1/2 -translate-y-1/2 translate-x-[150%] opacity-0 transition group-hover:translate-x-[50%] group-hover:opacity-100"
+                            >
+                                <svg
+                                    width="15"
+                                    height="15"
+                                    viewBox="0 0 15 15"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                >
+                                    <path
+                                        d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                                        fill="currentColor"
+                                        fill-rule="evenodd"
+                                        clip-rule="evenodd"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </button>
+
+                        <button
+                            class="cursor-pointer flex-1 font-semibold text-sm text-lg relative overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                        >
+                            login
                         </button>
                     </div>
                 </div>
@@ -373,11 +435,12 @@
 
                                     <!-- Preferiti -->
                                     <button
-                                        class="flex flex-col items-center text-xs md:gap-1 text-gray-700"
+                                        class="button-container flex flex-col items-center text-xs md:gap-1 text-gray-700"
                                     >
                                         <img
+                                            src="<%= isLoggedIn ? '/images/icons/logged_add_to_favourite_icon.png' : '/images/icons/add_to_favourite_icon.png' %>"
                                             src="/images/icons/add_to_favourite_icon.png"
-                                            class="size-7 cursor-pointer transition-transform duration-300 hover:scale-110"
+                                            class="size-7 cursor-pointer"
                                         />
                                         <span class="hidden md:block"
                                             >Preferiti</span
@@ -385,17 +448,32 @@
                                     </button>
 
                                     <!-- Vota -->
-                                    <button
-                                        onclick="openVoteModal()"
-                                        class="flex flex-col items-center text-xs md:gap-1 text-gray-700"
-                                    >
-                                        <img
-                                            src="/images/icons/star.png"
-                                            class="size-7 cursor-pointer transition-transform duration-300 hover:scale-110"
-                                        />
-                                        <span class="hidden md:block"
-                                            >Vota</span
-                                        >
+                                    <button <% if (!isLoggedIn) { %>
+                                        onclick="openRegisterModal()" <% } else
+                                        { %> onclick="openVoteModal()" <% } %>
+                                        class="flex flex-col items-center
+                                        text-xs md:gap-1 text-gray-700
+                                        cursor-pointer button-container" >
+                                        <div class="relative">
+                                            <img
+                                                src="<%= isLoggedIn ? '/images/icons/star.png' : '/images/icons/empty_star.svg' %>"
+                                                class="size-7 cursor-pointe relativer transition-transform duration-300 hover:scale-110"
+                                            />
+
+                                            <% if (userVote !== null && userVote
+                                            !== undefined) { %>
+                                            <span
+                                                class="absolute inset-0 flex items-center justify-center text-[12px] font-bold text-gray-800"
+                                            >
+                                                <%= userVote %>
+                                            </span>
+                                            <% } %>
+                                        </div>
+                                        <% if (userVote) { %>
+                                        <p>tuo voto</p>
+                                        <% } else { %>
+                                        <p>Vota</p>
+                                        <% } %>
                                     </button>
                                 </div>
                             </div>

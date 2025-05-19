@@ -2,6 +2,10 @@ const path = require("path");
 const { client } = require("../database/db");
 
 async function storiaHandler(req, res) {
+    userVote = null;
+    const user_id = req.user_id;
+    console.log(`il user id= ${user_id}`);
+    const isLoggedIn = user_id;
     const id_slug = req.params.id_slug;
     console.log(id_slug);
     const id = parseInt(id_slug.split("-")[0]);
@@ -38,6 +42,16 @@ async function storiaHandler(req, res) {
             [id]
         );
 
+        if (isLoggedIn) {
+            const voteResult = await client.query(
+                `SELECT rating FROM story_ratings WHERE game_id = $1 AND user_id = $2`,
+                [id, user_id]
+            );
+            if (voteResult.rows.length > 0) {
+                userVote = voteResult.rows[0].rating;
+            }
+        }
+
         const chapters = chaptersResult.rows;
         const genres = genreQuery.rows.map((row) => row.name);
 
@@ -45,9 +59,6 @@ async function storiaHandler(req, res) {
             username: chapter.username,
             avatar: chapter.avatar,
         }));
-        console.log(`autori: ${authors}`);
-
-        console.log(chapters);
 
         if (gameResult.rows.length > 0) {
             const {
@@ -63,6 +74,8 @@ async function storiaHandler(req, res) {
 
             // Qui usi res.render e passi i dati a EJS
             res.render("storia", {
+                isLoggedIn,
+                userVote,
                 game_type: translateGameType(game_type),
                 game_speed: translateGameSpeed(game_speed),
                 book_title: title,
