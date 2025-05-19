@@ -335,6 +335,7 @@
 
                     <div class="md:flex-1 md:flex w-full md:justify-end">
                         <div
+                            id="total-rating"
                             class="p-3 ml-2 inline-block text-xl relative font-bold text-custom-blue bg-custom-light rounded-lg"
                         >
                             <img
@@ -342,7 +343,9 @@
                                 alt="star icon"
                                 class="absolute top-0 left-0 transform -translate-y-1/2 -translate-x-1/2 h-5"
                             />
-                            ?<span>/5</span>
+                            <span id="average-rating"
+                                ><%= average ? average.toFixed(1) : "?" %></span
+                            ><span>/5</span>
                         </div>
                     </div>
                 </div>
@@ -475,6 +478,7 @@
                                             <% if (userVote !== null && userVote
                                             !== undefined) { %>
                                             <span
+                                                id="user-vote"
                                                 class="absolute inset-0 flex items-center justify-center text-[12px] font-bold text-gray-800"
                                             >
                                                 <%= userVote %>

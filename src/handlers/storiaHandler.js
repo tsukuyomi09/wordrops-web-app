@@ -1,4 +1,6 @@
 const path = require("path");
+const getRatingAggregate = require("../services/getRatingAggregate");
+
 const { client } = require("../database/db");
 
 async function storiaHandler(req, res) {
@@ -40,6 +42,8 @@ async function storiaHandler(req, res) {
             [id]
         );
 
+        const { average, totalVotes } = await getRatingAggregate(id);
+
         if (isLoggedIn) {
             const voteResult = await client.query(
                 `SELECT rating FROM story_ratings WHERE game_id = $1 AND user_id = $2`,
@@ -75,6 +79,8 @@ async function storiaHandler(req, res) {
                 isLoggedIn,
                 user_id,
                 userVote,
+                average,
+                totalVotes,
                 game_type: translateGameType(game_type),
                 game_speed: translateGameSpeed(game_speed),
                 book_title: title,

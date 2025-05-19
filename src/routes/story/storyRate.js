@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { client } = require("../../database/db");
 const checkAuth = require("../../middlewares/checkAuthToken");
+const getRatingAggregate = require("../../services/getRatingAggregate");
 
 router.post("/", checkAuth, async (req, res) => {
     const { story_id, story_vote } = req.body;
@@ -77,19 +78,15 @@ async function saveVoteAndCalculateAverage(user_id, story_id, story_vote) {
                 [story_id, story_vote, 1]
             );
         }
-        const aggregate = await client.query(
-            `SELECT total_rating, total_votes FROM story_rating_aggregates WHERE game_id=$1`,
-            [story_id]
-        );
 
-        const newRatingAverage =
-            aggregate.rows[0].total_rating / aggregate.rows[0].total_votes;
+        const { average, totalVotes } = await getRatingAggregate(story_id);
 
         return {
             status: "updated",
             data: {
-                newRatingAverage,
-                total_votes: aggregate.rows[0].total_votes,
+                average,
+                totalVotes,
+                story_vote,
             },
             message: "Voto registrato con successo",
         };

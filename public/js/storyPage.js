@@ -219,6 +219,7 @@ async function sendVote() {
         }
 
         timeoutPlusMessage(data.message);
+        updateVoteDisplay(selectedRating, data.data.average);
     } catch (err) {
         console.error("Errore durante l'invio del voto:", err.message);
         // Eventuale feedback visivo per l'utente
@@ -229,7 +230,12 @@ function timeoutPlusMessage(text) {
     voteText = document.getElementById("book-vote-text");
     voteText.innerText = text;
     setTimeout(() => {
-        closeVoteModal();
+        closeModal("vote-modal");
         voteText.innerText = "Vota!";
-    }, 3000);
+    }, 2000);
+}
+
+function updateVoteDisplay(selectedRating, average) {
+    document.getElementById("user-vote").innerText = selectedRating;
+    document.getElementById("average-rating").innerText = average.toFixed(1);
 }
