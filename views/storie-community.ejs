@@ -247,6 +247,54 @@
                 </div>
             </div>
         </header>
+        <div class="filters-section"></div>
+        <div
+            class="flex flex-col gap-6 z-10 w-full justify-start pb-24 items-center mt-24"
+        >
+            <div class="w-full max-w-6xl rounded-lg px-6 py-10">
+                <div class="w-full max-w-6xl px-6 py-4 flex flex-col gap-24">
+                    <div
+                        id="games-content"
+                        class="flex w-full min-h-[450px] flex-col gap-6"
+                    >
+                        <% if (stories && stories.length > 0) { %> <%
+                        stories.forEach(story => { %>
+                        <a
+                            href="/storia/<%= story.id %>-<%= story.slug %>"
+                            style="text-decoration: none; color: inherit"
+                        >
+                            <div
+                                style="
+                                    display: flex;
+                                    gap: 1rem;
+                                    align-items: flex-start;
+                                    margin-bottom: 1.5rem;
+                                    cursor: pointer;
+                                "
+                            >
+                                <img
+                                    src="<%= story.cover_url || '/images/book_cover_placeholder.jpeg' %>"
+                                    alt="Copertina di <%= story.title %>"
+                                    style="
+                                        width: 120px;
+                                        height: 160px;
+                                        object-fit: cover;
+                                    "
+                                />
+                                <div>
+                                    <h3><%= story.title %></h3>
+                                    <h4><%= story.game_type %></h4>
+                                    <p><%= story.back_cover %></p>
+                                </div>
+                            </div>
+                        </a>
+                        <% }); %> <% } else { %>
+                        <p>Nessuna storia pubblicata al momento.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Statistiche Community (Above the Fold) -->
         <section class="mb-16 text-center py-12"></section>
