@@ -113,18 +113,19 @@ async function checkAndCompleteGame(io, game, gameId) {
         handleGameCompletion(game, gameId, io);
         const saveSuccess = await saveGame(game);
         if (!saveSuccess) {
-            return res.status(500).json({
+            io.to(gameId).emit("gameError", {
                 message: "Errore nel salvataggio del gioco.",
             });
+            // eventuale logica di recovery
+            return false;
         }
+        return true;
     } catch (err) {
-        console.error(
-            "Errore durante il processo di salvataggio del gioco:",
-            err
-        );
-        return res.status(500).json({
+        console.error("Errore durante il completamento:", err);
+        io.to(gameId).emit("gameError", {
             message: "Errore nel processo di completamento del gioco.",
         });
+        return false;
     }
 }
 

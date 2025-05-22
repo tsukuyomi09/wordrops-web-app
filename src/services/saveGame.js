@@ -1,4 +1,5 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
+const { generateImageWithOpenAI } = require("../utils/generateImageWithOpenAI");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
 const { saveRankedNotification } = require("../utils/handleRankedNotification");
 const {
@@ -22,6 +23,8 @@ async function saveGame(game) {
             game.gameType
         );
 
+        console.log(`prompt per immagine: ${metadata.imagePrompt}`);
+
         if (isRanked) {
             game.chapters = await calculateAndAssignRatings(
                 metadata.chapterRatings,
@@ -42,7 +45,7 @@ async function saveGame(game) {
                 game.gameType,
                 game.gameSpeed,
                 metadata.backCover,
-                "publish",
+                "waiting image",
                 "completed",
             ]
         );
@@ -115,6 +118,18 @@ async function saveGame(game) {
         if (isRanked) {
             await saveRankedNotification(game.chapters, databaseGameId);
         }
+
+        setImmediate(async () => {
+            try {
+                const imageUrl = await generateImageWithOpenAI(
+                    metadata.imagePrompt
+                );
+                console.log("Image generated and saved");
+            } catch (err) {
+                console.error("Error generating image:", err);
+            }
+        });
+
         return true;
     } catch (err) {
         console.error("Error saving game and chapters:", err);
