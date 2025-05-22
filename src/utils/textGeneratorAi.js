@@ -140,10 +140,10 @@ async function generateImagePrompt(chaptersToElaborate) {
             {
                 role: "system",
                 content: `
-                You are an assistant creating a detailed, vivid, and creative image prompt for DALL·E 3, suitable for a book cover illustration.  
-                Create a visually rich description including scene, environment, colors, mood, style, and symbolism inspired by the story below.  
-                Avoid content that could trigger safety filters, such as nudity, violence, children, real people or celebrities.  
-                Do not include any text inside the image.  
+                You are an assistant creating a concise and effective image prompt for an AI image generation model (gpt-image-1).
+                The prompt should be 1-3 sentences max, focused on clear visual elements: scene, environment, colors, mood, style.
+                Avoid narrative, character backstory, emotions, or abstract concepts.
+                Do not include names, text, or anything that could trigger safety filters (nudity, violence, children, real people, celebrities).
                 The prompt must be in English.
                 `,
             },

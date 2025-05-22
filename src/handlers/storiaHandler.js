@@ -13,7 +13,7 @@ async function storiaHandler(req, res) {
 
     try {
         const gameResult = await client.query(
-            "SELECT id, title, game_type, game_speed, back_cover, finished_at FROM games_completed WHERE id = $1",
+            "SELECT id, title, game_type, game_speed, back_cover, story_cover_url, finished_at FROM games_completed WHERE id = $1",
             [id]
         );
 

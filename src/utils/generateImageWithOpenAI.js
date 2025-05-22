@@ -1,27 +1,18 @@
 require("dotenv").config();
 const { Storage } = require("@google-cloud/storage");
-require("dotenv").config();
-
 const OpenAI = require("openai");
 const storage = new Storage({
     keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 });
 const bucketName = "wordrops-images";
-
-const { writeFile } = require("fs/promises");
 const sharp = require("sharp");
+const openai = new OpenAI();
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, // oppure lascia vuoto se usi `.env`
-});
-
-async function generateImageWithDalle() {
+async function generateImageWithOpenAI(game_id, game_title, imagePrompt) {
     try {
-        prompt =
-            "Two people running frantically across a snowy mountain landscape under bright daylight, chased by a massive, fierce yeti with shaggy white fur and glowing eyes. The scene captures intense motion, snow flying up, vivid blue sky, rugged icy cliffs, and dramatic expressions of fear and determination on the runners’ faces. Highly detailed, realistic style, cinematic lighting, dynamic composition.";
         const response = await openai.images.generate({
             model: "gpt-image-1",
-            prompt,
+            prompt: imagePrompt,
             n: 1,
             size: "1024x1024",
             quality: "low",
@@ -40,24 +31,19 @@ async function generateImageWithDalle() {
             .webp({ quality: 90 })
             .toBuffer();
 
-        await writeFile(`./test_${Date.now()}.webp`, compressedBuffer);
-
-        const filename = `image_${Date.now()}.webp`;
+        const safeTitle = game_title.replace(/[^a-zA-Z0-9-_]/g, "_");
+        const filename = `${game_id}-${safeTitle}-${Date.now()}.webp`;
         const file = bucket.file(filename);
-
         await file.save(compressedBuffer, {
             metadata: {
                 contentType: "image/webp",
             },
             validation: "md5",
         });
-        const publicUrl = `https://storage.googleapis.com/${bucketName}/${filename}`;
-        console.log("✅ Immagine caricata su GCS:", publicUrl);
+        return `https://storage.googleapis.com/${bucketName}/${filename}`;
     } catch (err) {
         console.error("❌ Errore nella generazione dell'immagine:", err);
     }
 }
 
-generateImageWithDalle();
-
-module.exports = { generateImageWithDalle };
+module.exports = { generateImageWithOpenAI };
