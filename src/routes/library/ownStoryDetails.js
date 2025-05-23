@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const checkAuth = require("../../middlewares/checkAuthToken");
 const { client } = require("../../database/db");
-const getRatingAggregate = require("../services/getRatingAggregate");
+const getRatingAggregate = require("../../services/getRatingAggregate");
 
 router.get("/:game_id", checkAuth, async (req, res) => {
     const { game_id } = req.params;
@@ -40,9 +40,10 @@ router.get("/:game_id", checkAuth, async (req, res) => {
             [game_id]
         );
 
-        const { average, totalVotes } = await getRatingAggregate(id);
+        const { average, totalVotes } = await getRatingAggregate(game_id);
 
         const genres = genreQuery.rows.map((row) => row.name);
+        console.log(genres, average, totalVotes);
         res.json({
             genres,
             chapters: chaptersWithAuthors,

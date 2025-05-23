@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { client } = require("../../database/db");
 const checkAuth = require("../../middlewares/checkAuthToken");
-const getRatingAggregate = require("../services/getRatingAggregate");
 
 router.get("/", checkAuth, async (req, res) => {
     const user_id = req.user_id;

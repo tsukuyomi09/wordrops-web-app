@@ -31,10 +31,7 @@ function renderCompletedGames(books) {
         const storyDiv = document.createElement("div");
         storyDiv.classList.add(
             "story",
-            "bg-white",
-            "bg-opacity-60",
             "p-2",
-            "rounded-lg",
             "text-center",
             "hover:bg-green-100",
             "cursor-pointer",
@@ -77,6 +74,7 @@ function openBookOverlay(book, storyDetails) {
     const authorsContainer = document.getElementById("authors-container");
     const bookGenresContainer = document.getElementById("book-genre");
     const bookDescription = document.getElementById("book-summary");
+    const bookRating = document.getElementById("average-rating");
     const gameType = document.getElementById("game-type");
     const gameSpeed = document.getElementById("game-speed");
 
@@ -143,6 +141,7 @@ function openBookOverlay(book, storyDetails) {
     bookDescription.innerHTML = book.back_cover;
     bookCover.src = book.cover_image_url;
 
+    bookRating.innerHTML = `${storyDetails.average}`;
     gameType.innerHTML = `${translateGameType(book.game_type)}`;
     gameSpeed.innerHTML = `${translateGameSpeed(book.game_speed)}`;
 

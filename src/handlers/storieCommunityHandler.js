@@ -10,7 +10,8 @@ async function storieCommunityHandler(req, res) {
                 back_cover,
                 game_type,
                 game_speed,
-                finished_at 
+                finished_at,
+                cover_image_url
             FROM
                 games_completed
             WHERE
