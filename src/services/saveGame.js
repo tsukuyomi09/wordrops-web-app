@@ -23,8 +23,6 @@ async function saveGame(game) {
             game.gameType
         );
 
-        console.log(`prompt per immagine: ${metadata.imagePrompt}`);
-
         if (isRanked) {
             game.chapters = await calculateAndAssignRatings(
                 metadata.chapterRatings,
@@ -121,18 +119,11 @@ async function saveGame(game) {
         }
 
         try {
-            console.log(
-                "Inizio generazione immagine per gameId:",
-                databaseGameId
-            );
-
             const imageUrl = await generateImageWithOpenAI(
                 databaseGameId,
                 metadata.title,
                 metadata.imagePrompt
             );
-
-            console.log("Immagine generata, imageUrl:", imageUrl);
 
             if (!imageUrl) {
                 console.error(
@@ -141,7 +132,6 @@ async function saveGame(game) {
                 return false;
             }
 
-            console.log("Eseguo UPDATE nel DB per gameId:", databaseGameId);
             const res = await client.query(
                 `UPDATE games_completed
                 SET cover_image_url  = $2, publish = 'publish', prompt_image = $3
@@ -149,20 +139,6 @@ async function saveGame(game) {
                 RETURNING cover_image_url , publish, prompt_image`,
                 [databaseGameId, imageUrl, metadata.imagePrompt]
             );
-
-            console.log("Risultato UPDATE:", res.rowCount, "righe aggiornate");
-            if (res.rowCount === 0) {
-                console.warn("Nessuna riga aggiornata per id:", databaseGameId);
-                return false;
-            }
-
-            console.log(
-                "Nuovo valore story_cover_url salvato:",
-                res.rows[0].cover_image_url
-            );
-            console.log("publish:", res.rows[0].publish);
-            console.log("prompt_image:", res.rows[0].prompt_image);
-            console.log("Image generated and saved correttamente");
 
             return true;
         } catch (err) {

@@ -49,7 +49,7 @@ function renderCompletedGames(books) {
         <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
             <!-- Immagine del libro -->
             <div class="size-8 md:size-10 lg:size-14">
-                <img src="/images/book-icon.png" alt="Icona Libro" class="w-full h-full object-cover rounded">
+                <img src="${book.cover_image_url}" alt="Icona Libro" class="w-full h-full object-cover rounded">
             </div>
 
             <!-- Titolo sotto, allineato a sinistra -->

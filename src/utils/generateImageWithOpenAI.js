@@ -1,12 +1,14 @@
 require("dotenv").config();
-const { Storage } = require("@google-cloud/storage");
 const OpenAI = require("openai");
-const storage = new Storage({
-    keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-});
-const bucketName = "wordrops-images";
+const cloudinary = require("cloudinary").v2;
 const sharp = require("sharp");
 const openai = new OpenAI();
+
+cloudinary.config({
+    cloud_name: "dtiofnrfn",
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 async function generateImageWithOpenAI(game_id, game_title, imagePrompt) {
     try {
@@ -21,8 +23,6 @@ async function generateImageWithOpenAI(game_id, game_title, imagePrompt) {
         const base64 = response.data[0].b64_json;
         const imageBuffer = Buffer.from(base64, "base64");
 
-        const bucket = storage.bucket(bucketName);
-
         const croppedBuffer = await sharp(imageBuffer)
             .resize(600, 900, { fit: "cover" }) // verticale
             .toBuffer();
@@ -31,16 +31,19 @@ async function generateImageWithOpenAI(game_id, game_title, imagePrompt) {
             .webp({ quality: 90 })
             .toBuffer();
 
+        const base64Optimized = compressedBuffer.toString("base64");
+        const dataUriOptimized = `data:image/webp;base64,${base64Optimized}`;
+
         const safeTitle = game_title.replace(/[^a-zA-Z0-9-_]/g, "_");
-        const filename = `${game_id}-${safeTitle}-${Date.now()}.webp`;
-        const file = bucket.file(filename);
-        await file.save(compressedBuffer, {
-            metadata: {
-                contentType: "image/webp",
-            },
-            validation: "md5",
+        const filename = `${game_id}-${safeTitle}-${Date.now()}`;
+        const results = await cloudinary.uploader.upload(dataUriOptimized, {
+            public_id: filename,
+            folder: "wordrops_cover_story",
+            resource_type: "image",
+            format: "webp",
         });
-        return `https://storage.googleapis.com/${bucketName}/${filename}`;
+
+        return results.secure_url;
     } catch (err) {
         console.error("❌ Errore nella generazione dell'immagine:", err);
     }
