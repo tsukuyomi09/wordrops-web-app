@@ -71,6 +71,8 @@ function renderCompletedGames(books) {
 
 function openBookOverlay(book, storyDetails) {
     const overlay = document.getElementById("overlay-books");
+    const bookCover = document.getElementById("book-cover");
+
     const bookTitle = document.getElementById("book-title");
     const authorsContainer = document.getElementById("authors-container");
     const bookGenresContainer = document.getElementById("book-genre");
@@ -90,45 +92,33 @@ function openBookOverlay(book, storyDetails) {
     storyDetails.chapters.forEach((item, index) => {
         const authorDiv = document.createElement("div");
         const chapterDiv = document.createElement("div");
-        chapterDiv.classList.add(
-            "book-chapters",
-            "flex",
-            "flex-col",
-            "gap-6",
-            "py-8"
-        );
+        chapterDiv.classList.add("book-chapters", "flex", "flex-col", "gap-6");
         authorDiv.classList.add("flex", "flex-col", "items-center");
 
         chapterDiv.innerHTML = `
-            <h3 class="text-2xl font-semibold" id="chapter-title">
-                Capitolo ${index + 1}: ${item.title}
+            <h3 class="text-xl font-semibold italic" id="chapter-title">
+                 ${item.title}
             </h3>
-            <div class="flex items-center mt-2">
-                <a href="/profile-page/${
-                    item.username
-                }" target="_blank" class="flex items-center">
+            <div class="flex items-center">
+                <a href="/profile-page/${item.username}" target="_blank" class="flex items-center">
                     <div class="size-10 rounded-lg overflow-hidden mr-2">
-                        <img src="/images/avatars/${
-                            item.avatar
-                        }.png" alt="Autore" class="w-full h-full object-contain" />
+                        <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-full h-full object-contain" />
                     </div>
-                    <span class="text-mg md:text-lg font-semibold ">${
-                        item.username
-                    }</span>
+                    <span class="text-mg md:text-lg font-semibold ">${item.username}</span>
                 </a>
             </div>
-            <p class="text-gray-700 text-lg leading-relaxed md:text-2xl mt-2" id="chapter-text">
+            <p class="text-gray-700 text-md leading-[2.5] md:text-lg mt-2" id="chapter-text">
                 ${item.content}
             </p>
         `;
 
         authorDiv.innerHTML = `
-            <div class="size-12 rounded-lg overflow-hidden">
+            <div class="size-8 rounded-lg overflow-hidden">
                 <a href="/profile-page/${item.username}" target="_blank" class="flex items-center">
                     <img src="/images/avatars/${item.avatar}.png" class="w-full h-full object-cover"/>
                 </a>
             </div>
-            <span class="text-sm font-semibold mt-1">${item.username}</span>
+            <span class="text-sm mt-1">${item.username}</span>
         `;
 
         chaptersContainer.appendChild(chapterDiv);
@@ -143,13 +133,16 @@ function openBookOverlay(book, storyDetails) {
             "px-4",
             "border-1",
             "border-gray-200",
-            "rounded-lg"
+            "rounded-lg",
+            "text-sm"
         );
         bookGenresContainer.appendChild(bookGenre);
     });
 
     bookTitle.innerHTML = `"${book.title}"`;
     bookDescription.innerHTML = book.back_cover;
+    bookCover.src = book.cover_image_url;
+
     gameType.innerHTML = `${translateGameType(book.game_type)}`;
     gameSpeed.innerHTML = `${translateGameSpeed(book.game_speed)}`;
 

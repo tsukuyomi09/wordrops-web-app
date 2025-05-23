@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { client } = require("../../database/db");
 const checkAuth = require("../../middlewares/checkAuthToken");
+const getRatingAggregate = require("../services/getRatingAggregate");
 
 router.get("/", checkAuth, async (req, res) => {
     const user_id = req.user_id;
@@ -17,6 +18,7 @@ router.get("/", checkAuth, async (req, res) => {
              LIMIT 10`,
             [user_id]
         );
+
         // Restituisce solo i titoli delle storie
         res.json({ completedGames: rows });
     } catch (err) {
