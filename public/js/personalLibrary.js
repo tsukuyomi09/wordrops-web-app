@@ -45,7 +45,7 @@ function renderCompletedGames(books) {
         storyDiv.innerHTML = `
         <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
             <!-- Immagine del libro -->
-            <div class="size-8 md:size-10 lg:size-14">
+            <div class="w-12 md:w-16 lg:w-20 aspect-[2/3]">
                 <img src="${book.cover_image_url}" alt="Icona Libro" class="w-full h-full object-cover rounded">
             </div>
 
@@ -68,7 +68,8 @@ function renderCompletedGames(books) {
 
 function openBookOverlay(book, storyDetails) {
     const overlay = document.getElementById("overlay-books");
-    const bookCover = document.getElementById("book-cover");
+    const bookCoverDesk = document.querySelector(".book-cover-desk");
+    const bookCoverMob = document.querySelector(".book-cover-mob");
 
     const bookTitle = document.getElementById("book-title");
     const authorsContainer = document.getElementById("authors-container");
@@ -139,7 +140,8 @@ function openBookOverlay(book, storyDetails) {
 
     bookTitle.innerHTML = `"${book.title}"`;
     bookDescription.innerHTML = book.back_cover;
-    bookCover.src = book.cover_image_url;
+    bookCoverDesk.src = book.cover_image_url;
+    bookCoverMob.src = book.cover_image_url;
 
     bookRating.innerHTML = `${storyDetails.average}`;
     gameType.innerHTML = `${translateGameType(book.game_type)}`;
