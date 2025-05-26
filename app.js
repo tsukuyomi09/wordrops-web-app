@@ -259,8 +259,8 @@ app.get("/privacy-policy", (req, res) => {
 app.get("/termini-e-condizioni", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "termini-e-condizioni.html"));
 });
-app.get("/register01", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "register01.html"));
+app.get("/register", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "register.html"));
 });
 app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));

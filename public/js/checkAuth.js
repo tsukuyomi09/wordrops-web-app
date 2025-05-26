@@ -2,19 +2,18 @@ async function checkSessionStatus() {
     try {
         const response = await fetch("/auth/check-session", {
             method: "GET",
-            credentials: "same-origin",
         });
 
         if (!response.ok) {
             console.log("Sessione non valida");
 
             const currentPath = window.location.pathname;
-            if (currentPath !== "/register01") {
+            if (currentPath !== "/register") {
                 window.location.href = "/";
             }
         } else {
             const currentPath = window.location.pathname;
-            if (currentPath === "/register01") {
+            if (currentPath === "/register") {
                 const username = localStorage.getItem("username");
                 window.location.href = `/dashboard/${username}`;
             }

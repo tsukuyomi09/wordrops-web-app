@@ -384,7 +384,6 @@ async function fetchdashboardData() {
             Object.keys(games).forEach((gameId) => {
                 socket.emit("joinNewGame", { gameId, user_id });
             });
-            console.log(`user id join game ${user_id}`);
 
             // Cicla tra i giochi e costruisci il markup
             Object.entries(games).forEach(([gameId, gameData], index) => {
