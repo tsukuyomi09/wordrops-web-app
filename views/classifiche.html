@@ -70,7 +70,8 @@
                     <div
                         class="flex flex-row items-center justify-between w-full md:w-auto gap-6 md:gap-2 bg-custom-light p-4 md:p-0"
                     >
-                        <button
+                        <a
+                            href="/register"
                             class="group px-5 py-2.5 md:flex-none text-sm text-lg cursor-pointer relative items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white duration-500"
                         >
                             <div
@@ -98,7 +99,7 @@
                                     ></path>
                                 </svg>
                             </div>
-                        </button>
+                        </a>
                         <div class="md:flex-none">
                             <a href="/">
                                 <img
@@ -108,11 +109,12 @@
                                 />
                             </a>
                         </div>
-                        <button
+                        <a
+                            href="/register"
                             class="cursor-pointer font-semibold text-sm text-lg relative overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2 text-gray-800 transition-all duration-300 hover:border-custom-blue"
                         >
                             login
-                        </button>
+                        </a>
                     </div>
 
                     <div
@@ -435,7 +437,7 @@
                     </div>
                 </div>
             </div>
-            <section class="md:py-12 py-6 px-4 relative">
+            <section class="md:py-12 py-6 px-4 relative w-full bg-red-50">
                 <footer class="text-gray-800 py-6">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -504,6 +506,70 @@
                     </div>
                 </footer>
             </section>
+        </div>
+        <div
+            id="popup-register-user"
+            onclick="closeModal(`popup-register-user`)"
+            class="fixed inset-0 bg-black/40 flex justify-center items-center z-50 hidden"
+        >
+            <div
+                class="bg-white relative rounded-lg p-6 w-auto max-w-full flex flex-col items-center gap-8 z-60"
+            >
+                <div class="md:flex-none">
+                    <img
+                        src="/images/wordrops_logo_animal.png"
+                        alt="Wordrops Logo"
+                        class="w-16"
+                    />
+                </div>
+
+                <h3
+                    id="book-vote-text"
+                    class="text-lg text-center text-gray-800 font-semibold"
+                >
+                    Accedi ed entra nella community!
+                </h3>
+
+                <div class="flex flex-row w-full items-center gap-2">
+                    <a
+                        href="/register"
+                        class="group flex-1 px-5 py-2.5 text-sm text-lg cursor-pointer text-center relative items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white duration-500"
+                    >
+                        <div
+                            class="transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                        >
+                            registrati
+                        </div>
+
+                        <div
+                            class="absolute top-1/2 -translate-y-1/2 translate-x-[150%] opacity-0 transition group-hover:translate-x-[50%] group-hover:opacity-100"
+                        >
+                            <svg
+                                width="15"
+                                height="15"
+                                viewBox="0 0 15 15"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                            >
+                                <path
+                                    d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                        </div>
+                    </a>
+
+                    <a
+                        href="/register"
+                        class="cursor-pointer text-center flex-1 font-semibold text-sm text-lg relative overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                    >
+                        login
+                    </a>
+                </div>
+            </div>
         </div>
 
         <script src="/js/leaderboard.js" defer></script>
