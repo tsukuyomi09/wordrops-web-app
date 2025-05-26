@@ -7,7 +7,7 @@ const http = require("http");
 const { initSocket } = require("./src/services/socketManager");
 const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
-const { preGameQueue } = require("./src/routes/game/gameQueue");
+// const { preGameQueue } = require("./src/routes/game/gameQueue");
 const checkOptionalAuth = require("./src/middlewares/checkOptionalAuth");
 const { storiaHandler } = require("./src/handlers/storiaHandler");
 const {
@@ -46,25 +46,25 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("playerReady", ({ gameId, userId }) => {
-        try {
-            if (!gameId || !userId) {
-                return;
-            }
-            const game = preGameQueue[gameId];
-            const player = game.players.find((p) => p.socketId === userId);
+    // socket.on("playerReady", ({ gameId, userId }) => {
+    //     try {
+    //         if (!gameId || !userId) {
+    //             return;
+    //         }
+    //         const game = preGameQueue[gameId];
+    //         const player = game.players.find((p) => p.socketId === userId);
 
-            if (!player) {
-                return;
-            }
-            player.pronto = true;
-        } catch (error) {
-            console.error(
-                "Errore durante l'elaborazione dell'evento 'playerReady':",
-                error
-            );
-        }
-    });
+    //         if (!player) {
+    //             return;
+    //         }
+    //         player.pronto = true;
+    //     } catch (error) {
+    //         console.error(
+    //             "Errore durante l'elaborazione dell'evento 'playerReady':",
+    //             error
+    //         );
+    //     }
+    // });
 
     socket.on("sendChatMessage", (messageData) => {
         const { game_id, user_id, messageText } = messageData;
@@ -113,7 +113,7 @@ io.on("connection", (socket) => {
         }
 
         const gameChatMap = chatReadMap.get(game_id);
-        gameChatMap.set(user_id, readUntil);
+        gameChatMap.set(user_id, new Date(readUntil));
     });
 
     socket.on("chapterRead", ({ game_id, user_id, readUntil }) => {
@@ -170,6 +170,33 @@ io.on("connection", (socket) => {
         if (game.chat.length === 0) {
             allMessagesRead = true;
         }
+
+        console.log("[DEBUG read status]", {
+            gameId,
+            user_id,
+            lastRead: lastRead ? lastRead.toISOString() : null,
+            lastMessageSentAt: lastMessage
+                ? new Date(lastMessage.sentAt).toISOString()
+                : null,
+            comparison:
+                lastRead && lastMessage
+                    ? lastRead >= new Date(lastMessage.sentAt)
+                    : "n/a",
+            gameChatLength: game.chat.length,
+        });
+
+        console.dir(
+            Array.from(chatReadMap.entries()).map(([gameId, userMap]) => ({
+                gameId,
+                userMap: Array.from(userMap.entries()).map(
+                    ([userId, timestamp]) => ({
+                        userId,
+                        timestamp,
+                    })
+                ),
+            })),
+            { depth: null }
+        );
 
         socket.emit("chatStatus", {
             allMessagesRead,
