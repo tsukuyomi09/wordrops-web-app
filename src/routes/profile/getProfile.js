@@ -35,11 +35,13 @@ router.get("/:username", async (req, res) => {
 
         const userGames = await client.query(
             `SELECT 
+                gc.id,
                 gc.title,
                 gc.game_type,
                 gc.game_speed,
                 gc.finished_at,
-                gc.back_cover
+                gc.back_cover,
+                gc.cover_image_url
             FROM game_players gp
             JOIN games_completed gc ON gp.game_uuid = gc.game_uuid
             WHERE gp.user_id = $1
@@ -54,12 +56,27 @@ router.get("/:username", async (req, res) => {
             avatar,
             rank,
             stats,
-            games: Array.isArray(userGames.rows) ? userGames.rows : [],
+            games: Array.isArray(userGames.rows)
+                ? userGames.rows.map((game) => ({
+                      ...game,
+                      slug: generateSlug(game.title),
+                  }))
+                : [],
         });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Errore server" });
     }
 });
+
+function generateSlug(title) {
+    return title
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .substring(0, 50);
+}
 
 module.exports = router;
