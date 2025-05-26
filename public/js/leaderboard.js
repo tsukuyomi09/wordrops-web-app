@@ -50,16 +50,16 @@ function updateTable(users) {
             index % 2 === 0 ? "bg-custom-light" : "bg-white";
 
         row.innerHTML = `
-        <td class="px-8 py-4 text-left font-semibold text-lg text-gray-800">${rank}</td>
-        <td class="px-12 py-4 ">
-            <div class="flex justify-start items-center  gap-4">
-                <div class="rounded-lg overflow-hidden ${tableAvatarBgColor} h-10 w-10">
+        <td class="px-4 md:px-8 py-4 text-left font-semibold text-xs md:text-lg text-gray-800">${rank}</td>
+        <td class="px-6 md:px-12 py-4 ">
+            <div class="flex justify-start items-center gap-2 md:gap-4">
+                <div class="rounded-md md:rounded-lg overflow-hidden ${tableAvatarBgColor} size-7 md:size-10 ">
                     <img src="/images/avatars/${user.avatar}.png" alt="${user.username}'s avatar"  class="w-full h-full object-contain" />
                 </div>
-                <span class="font-semibold text-lg text-gray-900">${user.username}</span>
+                <span class="font-semibold text-xs md:text-lg text-gray-900">${user.username}</span>
             </div>
         </td>
-        <td class="px-10 py-4 text-right font-semibold text-lg text-gray-800">${user.ranked_score}</td>
+        <td class="px-4 md:px-8 py-4 text-right font-semibold text-xs md:text-lg text-gray-800">${user.ranked_score}</td>
     `;
 
         leaderboardBody.appendChild(row);

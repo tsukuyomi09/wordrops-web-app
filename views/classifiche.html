@@ -173,11 +173,11 @@
                 </div>
             </div>
             <div
-                class="w-full py-12 bg-white max-w-6xl fixed z-10 top-24 flex flex-row justify-between items-center"
+                class="w-full py-6 md:py-12 bg-white max-w-6xl md:sticky z-10 top-24 md:top-21 flex flex-col gap-y-6 md:flex-row justify-between items-center"
             >
                 <div>
                     <h1
-                        class="text-4xl font-bold text-gray-800 text-center tracking-tight"
+                        class="text-xl md:text-4xl font-bold text-gray-800 text-center tracking-tight"
                     >
                         🏆 Classifica Globale
                     </h1>
@@ -209,51 +209,55 @@
             </div>
 
             <div
-                class="flex flex-col gap-6 w-full justify-start pb-24 items-center mt-52"
+                class="flex flex-col gap-6 w-full justify-start pb-24 items-center"
             >
                 <div
-                    class="w-full max-w-6xl px-6 py-10"
+                    class="w-full max-w-6xl px-2 md:px-6 py-10"
                     style="background-color: #faf4f4"
                 >
                     <div class="mb-8 hidden" id="podium">
                         <!-- Primo classificato -->
-                        <div class="bg-white rounded-lg py-12 mb-4 w-full">
-                            <div class="flex justify-center">
-                                <div class="flex items-center space-x-6">
+                        <div
+                            class="bg-white rounded-lg md:py-8 lg:py-12 mb-4 w-full"
+                        >
+                            <div class="flex w-full justify-center">
+                                <div
+                                    class="flex justify-start w-full md:w-[50%] flex-col gap-6 p-6"
+                                >
                                     <!-- Rank -->
-                                    <div
-                                        class="flex items-center justify-center px-4 py-4 rounded-lg bg-custom-light"
-                                    >
-                                        <span
-                                            id="first-rank"
-                                            class="text-4xl font-bold text-amber-300"
-                                        ></span>
-                                    </div>
-
-                                    <!-- Avatar -->
-                                    <div
-                                        class="w-24 h-24 border-2 rounded-lg border-amber-300 overflow-hidden"
-                                    >
-                                        <img
-                                            id="first-avatar"
-                                            src=""
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
+                                    <div class="flex gap-6 items-center w-full">
+                                        <!-- Avatar -->
+                                        <div
+                                            class="lg:size-24 size-22 border-2 flex-shrink-0 rounded-lg border-amber-300 overflow-hidden"
+                                        >
+                                            <img
+                                                id="first-avatar"
+                                                src=""
+                                                alt="Avatar"
+                                                class="w-full h-full object-contain"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between items-start"
+                                        >
+                                            <div
+                                                id="first-rank"
+                                                class="p-2 text-xl md:text-2xl lg:text-4xl font-bold rounded-lg bg-custom-light text-amber-300"
+                                            ></div>
+                                            <div
+                                                id="first-username"
+                                                class="text-lg md:text-2xl font-semibold text-gray-800"
+                                            ></div>
+                                        </div>
                                     </div>
 
                                     <!-- Username + Stats -->
-                                    <div
-                                        class="flex flex-col text-left h-full justify-between"
-                                    >
-                                        <span
-                                            id="first-username"
-                                            class="text-2xl font-semibold text-gray-800"
-                                        ></span>
+
+                                    <div>
                                         <div
-                                            class="text-md flex gap-24 font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
+                                            class="text-md flex gap-24 justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
                                         >
-                                            <span id="first-score"></span>
+                                            <div id="first-score"></div>
                                             <div>
                                                 <span id="first-games"></span>
                                                 partite
@@ -265,47 +269,51 @@
                         </div>
 
                         <!-- Secondo e Terzo classificato -->
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Secondo -->
                             <div
-                                class="bg-white rounded-lg py-6 px-4 mb-4 w-full"
+                                class="bg-white rounded-lg md:py-8 mb-4 w-full"
                             >
-                                <div class="flex justify-left">
-                                    <div class="flex items-center w-full gap-4">
+                                <div class="flex w-full justify-center">
+                                    <div
+                                        class="flex justify-start w-full flex-col gap-6 p-6"
+                                    >
                                         <!-- Rank -->
                                         <div
-                                            class="flex items-center justify-center px-2 py-2 rounded-lg bg-custom-light"
+                                            class="flex gap-2 items-center h-full"
                                         >
-                                            <span
+                                            <div
                                                 id="second-rank"
-                                                class="text-2xl font-bold text-custom-blue"
-                                            ></span>
-                                        </div>
-
-                                        <!-- Avatar -->
-                                        <div
-                                            class="w-20 h-20 border-2 rounded-lg border-custom-blue overflow-hidden"
-                                        >
-                                            <img
-                                                id="second-avatar"
-                                                src=""
-                                                alt="Avatar"
-                                                class="w-full h-full object-contain"
-                                            />
+                                                class="p-2 text-lg md:text-xl lg:text-2xl font-bold rounded-lg bg-custom-light text-amber-300"
+                                            ></div>
+                                            <!-- Avatar -->
+                                            <div
+                                                class="lg:size-20 size-14 border-2 flex-shrink-0 rounded-lg border-amber-300 overflow-hidden"
+                                            >
+                                                <img
+                                                    id="second-avatar"
+                                                    src=""
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                            <div
+                                                class="flex flex-col text-left justify-between items-start"
+                                            >
+                                                <div
+                                                    id="second-username"
+                                                    class="text-lg md:text-2xl font-semibold text-gray-800"
+                                                ></div>
+                                            </div>
                                         </div>
 
                                         <!-- Username + Stats -->
-                                        <div
-                                            class="flex flex-col flex-1 text-left h-full justify-between"
-                                        >
-                                            <span
-                                                id="second-username"
-                                                class="text-xl font-semibold text-gray-800"
-                                            ></span>
+
+                                        <div>
                                             <div
-                                                class="text-md flex justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
+                                                class="text-md flex gap-24 justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
                                             >
-                                                <span id="second-score"></span>
+                                                <div id="second-score"></div>
                                                 <div>
                                                     <span
                                                         id="second-games"
@@ -320,44 +328,48 @@
 
                             <!-- Terzo -->
                             <div
-                                class="bg-white rounded-lg py-6 px-4 mb-4 w-full"
+                                class="bg-white rounded-lg md:py-8 mb-4 w-full"
                             >
-                                <div class="flex justify-left">
-                                    <div class="flex items-center w-full gap-4">
+                                <div class="flex w-full justify-center">
+                                    <div
+                                        class="flex justify-start w-full flex-col gap-6 p-6"
+                                    >
                                         <!-- Rank -->
                                         <div
-                                            class="flex items-center justify-center px-2 py-2 rounded-lg bg-custom-light"
+                                            class="flex gap-2 items-center h-full"
                                         >
-                                            <span
+                                            <div
                                                 id="third-rank"
-                                                class="text-2xl font-bold text-custom-blue"
-                                            ></span>
-                                        </div>
-
-                                        <!-- Avatar -->
-                                        <div
-                                            class="w-20 h-20 border-2 rounded-lg border-custom-blue overflow-hidden"
-                                        >
-                                            <img
-                                                id="third-avatar"
-                                                src=""
-                                                alt="Avatar"
-                                                class="w-full h-full object-contain"
-                                            />
+                                                class="p-2 text-lg md:text-xl lg:text-2xl font-bold rounded-lg bg-custom-light text-amber-300"
+                                            ></div>
+                                            <!-- Avatar -->
+                                            <div
+                                                class="lg:size-20 size-14 border-2 flex-shrink-0 rounded-lg border-amber-300 overflow-hidden"
+                                            >
+                                                <img
+                                                    id="third-avatar"
+                                                    src=""
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                            <div
+                                                class="flex flex-col text-left justify-between items-start"
+                                            >
+                                                <div
+                                                    id="third-username"
+                                                    class="text-lg md:text-2xl font-semibold text-gray-800"
+                                                ></div>
+                                            </div>
                                         </div>
 
                                         <!-- Username + Stats -->
-                                        <div
-                                            class="flex flex-col flex-1 text-left h-full justify-between"
-                                        >
-                                            <span
-                                                id="third-username"
-                                                class="text-xl font-semibold text-gray-800"
-                                            ></span>
+
+                                        <div>
                                             <div
-                                                class="text-md flex justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
+                                                class="text-md flex gap-24 justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
                                             >
-                                                <span id="third-score"></span>
+                                                <div id="third-score"></div>
                                                 <div>
                                                     <span
                                                         id="third-games"
@@ -374,15 +386,13 @@
 
                     <div class="overflow-x-auto rounded-lg">
                         <table class="min-w-full text-sm text-gray-800">
-                            <thead class="text-xs uppercase">
+                            <thead class="text-[10px] uppercase">
                                 <tr>
-                                    <th class="px-6 py-3 text-left w-[40%]">
-                                        Rank
-                                    </th>
-                                    <th class="px-6 py-3 text-center w-[20%]">
+                                    <th class="py-3 text-left w-[40%]">Rank</th>
+                                    <th class="py-3 text-center w-[20%]">
                                         Giocatore
                                     </th>
-                                    <th class="px-6 py-3 text-right w-[40%]">
+                                    <th class="py-3 text-right w-[40%]">
                                         Punteggio
                                     </th>
                                 </tr>
