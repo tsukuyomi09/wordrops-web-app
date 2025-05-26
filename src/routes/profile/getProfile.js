@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { client } = require("../../database/db");
 const { playerStatsMap } = require("../../utils/playerStatistics");
+const { loadProfileBooks } = require("../../utils/loadProfileBooks");
 
 router.get("/:username", async (req, res) => {
     const { username } = req.params;
@@ -33,50 +34,19 @@ router.get("/:username", async (req, res) => {
         const rank =
             allStats.findIndex((player) => player.user_id === user_id) + 1;
 
-        const userGames = await client.query(
-            `SELECT 
-                gc.id,
-                gc.title,
-                gc.game_type,
-                gc.game_speed,
-                gc.finished_at,
-                gc.back_cover,
-                gc.cover_image_url
-            FROM game_players gp
-            JOIN games_completed gc ON gp.game_uuid = gc.game_uuid
-            WHERE gp.user_id = $1
-            ORDER BY gc.finished_at DESC
-            LIMIT 5
-            `,
-            [user_id]
-        );
+        const books = await loadProfileBooks(user_id, 5, 0);
 
         res.json({
             username,
             avatar,
             rank,
             stats,
-            games: Array.isArray(userGames.rows)
-                ? userGames.rows.map((game) => ({
-                      ...game,
-                      slug: generateSlug(game.title),
-                  }))
-                : [],
+            games: books,
         });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Errore server" });
     }
 });
-
-function generateSlug(title) {
-    return title
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .substring(0, 50);
-}
 
 module.exports = router;

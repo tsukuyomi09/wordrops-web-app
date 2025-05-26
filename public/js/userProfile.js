@@ -1,3 +1,6 @@
+const bookLimit = 5;
+let bookOffset = 0;
+
 document.addEventListener("DOMContentLoaded", function () {
     getUserData();
 });
@@ -34,6 +37,39 @@ function getUserData() {
                     const books = data.games;
                     console.log(`I giochi ricevuti:`, books);
                     displayUserBooks(books);
+                    bookOffset += bookLimit;
+                }
+            })
+            .catch((error) => {
+                console.error(
+                    "Errore durante il recupero degli elementi:",
+                    error
+                );
+            });
+    }
+}
+
+function loadMoreBooks() {
+    const username = window.location.pathname.split("/")[2];
+    if (username) {
+        fetch(`/profile/load-more-books/${username}?offset=${bookOffset}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Errore nella rete");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.games.length > 0) {
+                    const books = data.games;
+                    displayUserBooks(books);
+                    bookOffset += bookLimit;
                 }
             })
             .catch((error) => {
@@ -76,7 +112,6 @@ function displayUserBooks(books) {
 
     console.log(`the games: ${books}`);
     const booksGrid = document.getElementById("books-grid");
-    booksGrid.innerHTML = "";
 
     books.forEach((book) => {
         const card = document.createElement("a");
