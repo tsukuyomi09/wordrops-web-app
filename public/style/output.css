@@ -1891,6 +1891,13 @@
       }
     }
   }
+  .hover\:bg-custom-blue {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-custom-blue);
+      }
+    }
+  }
   .hover\:bg-gray-100 {
     &:hover {
       @media (hover: hover) {
