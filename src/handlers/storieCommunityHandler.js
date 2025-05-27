@@ -1,6 +1,8 @@
 const { client } = require("../database/db");
 
 async function storieCommunityHandler(req, res) {
+    const limit = 10;
+    const offset = 0;
     try {
         const storiesQuery = await client.query(
             `
@@ -17,8 +19,10 @@ async function storieCommunityHandler(req, res) {
             WHERE
                 publish = 'publish' 
             ORDER BY
-                started_at DESC;
-        `
+                started_at DESC
+            LIMIT $1 OFFSET $2;
+            `,
+            [limit, offset]
         );
 
         const storiesRaw = storiesQuery.rows;

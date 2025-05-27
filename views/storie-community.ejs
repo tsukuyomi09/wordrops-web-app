@@ -228,6 +228,7 @@
                             >
                                 <a
                                     href="/storia/<%= story.id %>-<%= story.slug %>"
+                                    target="blank"
                                     class="card-container flex justify-start items-start"
                                 >
                                     <% if (story.game_type === 'classificata') {
@@ -261,6 +262,14 @@
                         <% }); %> <% } else { %>
                         <p>Nessuna storia pubblicata al momento.</p>
                         <% } %>
+                    </div>
+                    <div class="w-full flex justify-center">
+                        <button
+                            class="cursor-pointer p-4 bg-custom-blue button-container text-sm text-white font-semibold rounded-lg"
+                            onclick="loadMoreBooks()"
+                        >
+                            carica altro
+                        </button>
                     </div>
                 </div>
             </div>
