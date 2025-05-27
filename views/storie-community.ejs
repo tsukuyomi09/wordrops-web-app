@@ -195,101 +195,69 @@
                 </div>
             </div>
         </div>
-        <header class="py-12" style="background-color: #faf4f4">
+        <header style="background-color: #faf4f4">
             <div class="max-w-screen-xl mx-auto px-6 text-center py-12">
                 <h1
-                    class="text-gray-800 text-4xl font-extrabold sm:text-5xl lg:text-6xl"
+                    class="text-gray-800 text-2xl font-extrabold sm:text-4xl lg:text-6xl"
                 >
                     Storie della Community
                 </h1>
-                <p class="mt-4 font-semibold text-lg sm:text-xl">
+                <p class="mt-4 font-semibold text-sm sm:text-xl">
                     Esplora, vota e pubblica le tue storie. Unisciti alla nostra
                     community creativa!
                 </p>
             </div>
-            <div class="max-w-screen-lg mx-auto px-6">
-                <div
-                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
-                >
-                    <div class="flex justify-center items-center gap-2">
-                        <h3 class="text-md font-bold text-orange-400">
-                            Autori:
-                        </h3>
-                        <p class="text-lg text-gray-800 font-bold" id="autori">
-                            0
-                        </p>
-                    </div>
-
-                    <div class="flex justify-center items-center gap-2">
-                        <h3 class="text-md font-bold text-orange-400">
-                            Storie Pubblicate:
-                        </h3>
-                        <p class="text-lg text-gray-800 font-bold" id="storie">
-                            0
-                        </p>
-                    </div>
-
-                    <div class="flex justify-center items-center gap-2">
-                        <h3 class="text-md font-bold text-orange-400">
-                            Voti Totali:
-                        </h3>
-                        <p class="text-lg text-gray-800 font-bold" id="voti">
-                            0
-                        </p>
-                    </div>
-
-                    <div class="flex justify-center items-center gap-2">
-                        <h3 class="text-md font-bold text-orange-400">
-                            Partite Concluse:
-                        </h3>
-                        <p class="text-lg text-gray-800 font-bold" id="partite">
-                            0
-                        </p>
-                    </div>
-                </div>
-            </div>
         </header>
         <div class="filters-section"></div>
         <div
-            class="flex flex-col gap-6 z-10 w-full justify-start pb-24 items-center mt-24"
+            class="flex flex-col gap-6 z-10 py-12 md:py-24 w-full justify-start items-center"
         >
             <div class="w-full max-w-6xl rounded-lg px-6 py-10">
-                <div class="w-full max-w-6xl px-6 py-4 flex flex-col gap-24">
+                <div class="w-full py-4 flex flex-col gap-24">
                     <div
                         id="games-content"
-                        class="flex w-full min-h-[450px] flex-col gap-6"
+                        class="grid grid-cols-2 w-full gap-6 md:gap-12"
                     >
                         <% if (stories && stories.length > 0) { %> <%
                         stories.forEach(story => { %>
-                        <a
-                            href="/storia/<%= story.id %>-<%= story.slug %>"
-                            style="text-decoration: none; color: inherit"
+                        <div
+                            class="flex flex-col md:flex-row p-4 gap-4 bg-gray-50 rounded-lg shadow-xs"
                         >
                             <div
-                                style="
-                                    display: flex;
-                                    gap: 1rem;
-                                    align-items: flex-start;
-                                    margin-bottom: 1.5rem;
-                                    cursor: pointer;
-                                "
+                                class="relative flex justify-start items-start"
                             >
-                                <img
-                                    src="<%= story.cover_image_url || '/images/book_cover_placeholder.jpeg' %>"
-                                    alt="Copertina di <%= story.title %>"
-                                    style="
-                                        width: 120px;
-                                        height: 160px;
-                                        object-fit: cover;
-                                    "
-                                />
-                                <div>
-                                    <h3><%= story.title %></h3>
-                                    <h4><%= story.game_type %></h4>
-                                    <p><%= story.back_cover %></p>
-                                </div>
+                                <a
+                                    href="/storia/<%= story.id %>-<%= story.slug %>"
+                                    class="card-container flex justify-start items-start"
+                                >
+                                    <% if (story.game_type === 'classificata') {
+                                    %>
+                                    <img
+                                        src="/images/icons/star.png"
+                                        class="absolute z-10 w-4 h-4 top-2 left-2"
+                                        alt="stella"
+                                    />
+                                    <% } %>
+                                    <img
+                                        src="<%= story.cover_image_url || '/images/book_cover_placeholder.jpeg' %>"
+                                        alt="Copertina di <%= story.title %>"
+                                        class="w-24 md:w-48 lg:h-64 object-cover rounded-sm"
+                                    />
+                                </a>
                             </div>
-                        </a>
+                            <div
+                                class="flex-1 md:p-4 flex flex-col justify-start gap-4 items-start"
+                            >
+                                <h3
+                                    class="text-sm md:text-md font-semibold text-gray-800"
+                                >
+                                    <%= story.title %>
+                                </h3>
+                                <p class="text-sm hidden md:block">
+                                    <%= story.back_cover %>
+                                </p>
+                            </div>
+                        </div>
                         <% }); %> <% } else { %>
                         <p>Nessuna storia pubblicata al momento.</p>
                         <% } %>
@@ -297,7 +265,7 @@
                 </div>
             </div>
         </div>
-        <section class="md:py-12 py-6 px-4 relative w-full bg-red-50">
+        <section class="md:py-12 py-6 px-4 relative w-full bg-custom-light">
             <footer class="text-gray-800 py-6">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">

@@ -167,6 +167,18 @@ font-family: 'Consolas', 'Courier New', monospace;
   .button-container:hover {
     transform: scale(1.1); /* ingrandisce tutto il contenitore (icona + testo) */
   }
+
+    .card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease-in-out; /* applica la transizione al contenitore */
+  }
+  
+  .card-container:hover {
+    transform: scale(1.03); /* ingrandisce tutto il contenitore (icona + testo) */
+  }
   
   .icon-image {
 

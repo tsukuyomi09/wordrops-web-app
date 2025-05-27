@@ -26,6 +26,8 @@ async function storieCommunityHandler(req, res) {
         const stories = storiesRaw.map((story) => ({
             ...story,
             slug: generateSlug(story.title),
+            game_type: translateGameType(story.game_type),
+            game_speed: translateGameSpeed(story.game_speed),
         }));
         res.render("storie-community", {
             stories: stories,
@@ -50,6 +52,22 @@ function generateSlug(title) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "")
         .substring(0, 50);
+}
+
+function translateGameType(type) {
+    const types = {
+        ranked: "classificata",
+        normal: "classica",
+    };
+    return types[type] || type;
+}
+
+function translateGameSpeed(speed) {
+    const speeds = {
+        slow: "lunga",
+        fast: "corta",
+    };
+    return speeds[speed] || speed;
 }
 
 module.exports = { storieCommunityHandler };
