@@ -7,7 +7,6 @@ router.get("/", checkAuth, async (req, res) => {
     const user_id = req.user_id;
 
     try {
-        // Query per ottenere solo id e title delle storie completate
         const { rows } = await client.query(
             `SELECT DISTINCT g.id, g.title, g.finished_at, g.back_cover, g.cover_image_url, g.game_type, g.game_speed
              FROM games_chapters gc

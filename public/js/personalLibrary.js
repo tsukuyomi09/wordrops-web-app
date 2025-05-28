@@ -25,7 +25,6 @@ async function fetchCompletedGames() {
 
 function renderCompletedGames(books) {
     const container = document.getElementById("stories-container");
-    container.innerHTML = "";
 
     books.forEach((book) => {
         const storyDiv = document.createElement("div");
