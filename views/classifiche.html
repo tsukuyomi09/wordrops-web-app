@@ -53,88 +53,35 @@
         >
             <div
                 id="menu"
-                class="w-full z-50 sticky h-24 top-0 p-4 bg-custom-light"
+                class="w-full z-50 sticky top-0 md:p-4 md:bg-custom-light"
             >
-                <div class="flex justify-between w-full h-full items-center">
+                <div
+                    class="flex relative flex-col md:flex-row justify-between w-full h-full items-center"
+                >
                     <div class="">
-                        <img
-                            src="/images/logo_wordrops_classic.svg"
-                            alt="Wordrops Logo"
-                            class="mx-auto w-20 lg:w-36"
-                        />
+                        <a href="/">
+                            <img
+                                src="/images/logo_wordrops_classic.svg"
+                                alt="Wordrops Logo"
+                                class="mx-auto lg:w-32 hidden md:w-28 md:block"
+                            />
+                        </a>
                     </div>
                     <div
-                        class="flex flex-row gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        class="flex flex-row items-center justify-between w-full md:w-auto gap-6 md:gap-2 bg-custom-light p-4 md:p-0"
                     >
-                        <div
-                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
-                        >
-                            <a
-                                href="/classifiche"
-                                class="button-container flex flex-col justify-center items-center"
-                            >
-                                <img
-                                    src="/images/icons/icons8-trofeo-48.png"
-                                    alt="trophy Icon"
-                                    class="icon-image size-6"
-                                />
-                                <div
-                                    class="text-sm font-semibold text-gray-800"
-                                >
-                                    classifiche
-                                </div>
-                            </a>
-                        </div>
-                        <div
-                            class="w-32 py-2 border-1 border-gray-200 rounded-lg cursor-pointer"
-                        >
-                            <a
-                                onclick="dashboardButton()"
-                                class="button-container flex flex-col justify-center items-center"
-                            >
-                                <img
-                                    src="/images/icons/icons8-casa-100.png"
-                                    alt="leaderboard Icon"
-                                    class="icon-image size-6"
-                                />
-                                <div
-                                    class="text-sm font-semibold text-gray-800"
-                                >
-                                    dashboard
-                                </div>
-                            </a>
-                        </div>
-                        <div
-                            class="w-32 py-2 border-1 border-gray-200 rounded-lg"
-                        >
-                            <a
-                                href="/storie-community"
-                                class="button-container flex flex-col justify-center items-center"
-                            >
-                                <img
-                                    src="/images/icons/library-icon.png"
-                                    alt="library Icon"
-                                    class="icon-image size-6"
-                                />
-                                <div
-                                    class="text-sm font-semibold text-gray-800"
-                                >
-                                    libreria
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="flex flex-row gap-4">
-                        <button
-                            class="group w-32 cursor-pointer relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 font-medium text-white duration-500"
+                        <a
+                            href="/register"
+                            class="group px-5 py-2.5 md:flex-none text-sm text-lg cursor-pointer relative items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white duration-500"
                         >
                             <div
-                                class="translate-x-0 opacity-100 transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                                class="transition group-hover:-translate-x-[150%] group-hover:opacity-0"
                             >
                                 registrati
                             </div>
+
                             <div
-                                class="absolute translate-x-[150%] opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
+                                class="absolute top-1/2 -translate-y-1/2 translate-x-[150%] opacity-0 transition group-hover:translate-x-[50%] group-hover:opacity-100"
                             >
                                 <svg
                                     width="15"
@@ -152,21 +99,87 @@
                                     ></path>
                                 </svg>
                             </div>
-                        </button>
-                        <button
-                            class="cursor-pointer w-32 relative h-12 overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2.5 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                        </a>
+                        <div class="md:flex-none">
+                            <a href="/">
+                                <img
+                                    src="/images/wordrops_logo_animal.png"
+                                    alt="Wordrops Logo"
+                                    class="w-16 md:hidden"
+                                />
+                            </a>
+                        </div>
+                        <a
+                            href="/register"
+                            class="cursor-pointer font-semibold text-sm text-lg relative overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2 text-gray-800 transition-all duration-300 hover:border-custom-blue"
                         >
-                            <span class="relative font-semibold">login</span>
-                        </button>
+                            login
+                        </a>
+                    </div>
+
+                    <div
+                        class="flex flex-row gap-4 md:gap-8 py-2 bg-white md:bg-transparent w-full md:w-auto justify-center border-b border-custom-light md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
+                    >
+                        <div class="">
+                            <a
+                                href="/classifiche"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-trofeo-48.png"
+                                    alt="trophy Icon"
+                                    class="icon-image size-5 md:size-8"
+                                />
+                                <div
+                                    class="text-xs md:text-sm font-semibold text-gray-800"
+                                >
+                                    classifiche
+                                </div>
+                            </a>
+                        </div>
+                        <div class="">
+                            <a
+                                onclick="dashboardButton()"
+                                class="button-container cursor-pointer flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/icons8-casa-100.png"
+                                    alt="leaderboard Icon"
+                                    class="icon-image size-5 md:size-8"
+                                />
+                                <div
+                                    class="text-xs md:text-sm font-semibold text-gray-800"
+                                >
+                                    dashboard
+                                </div>
+                            </a>
+                        </div>
+                        <div class="">
+                            <a
+                                href="/storie-community"
+                                class="button-container flex flex-col justify-center items-center"
+                            >
+                                <img
+                                    src="/images/icons/library-icon.png"
+                                    alt="library Icon"
+                                    class="icon-image size-5 md:size-8"
+                                />
+                                <div
+                                    class="text-xs md:text-sm font-semibold text-gray-800"
+                                >
+                                    libreria
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div
-                class="w-full py-12 bg-white max-w-6xl fixed z-10 top-24 flex flex-row justify-between items-center"
+                class="w-full py-6 md:py-12 bg-white max-w-6xl md:sticky z-10 top-24 md:top-21 flex flex-col gap-y-6 md:flex-row justify-between items-center"
             >
                 <div>
                     <h1
-                        class="text-4xl font-bold text-gray-800 text-center tracking-tight"
+                        class="text-xl md:text-4xl font-bold text-gray-800 text-center tracking-tight"
                     >
                         🏆 Classifica Globale
                     </h1>
@@ -198,103 +211,113 @@
             </div>
 
             <div
-                class="flex flex-col gap-6 w-full justify-start pb-24 items-center mt-52"
+                class="flex flex-col gap-6 w-full justify-start pb-24 items-center"
             >
                 <div
-                    class="w-full max-w-6xl px-6 py-10"
+                    class="w-full max-w-6xl px-2 md:px-6 py-10"
                     style="background-color: #faf4f4"
                 >
                     <div class="mb-8 hidden" id="podium">
                         <!-- Primo classificato -->
-                        <div class="bg-white rounded-lg py-12 mb-4 w-full">
-                            <div class="flex justify-center">
-                                <div class="flex items-center space-x-6">
+                        <div
+                            class="bg-white rounded-lg md:py-8 lg:py-12 mb-4 w-full"
+                        >
+                            <div class="flex w-full justify-center">
+                                <a
+                                    id="first-container"
+                                    class="flex justify-start w-full md:w-[50%] flex-col gap-6 p-6"
+                                >
                                     <!-- Rank -->
-                                    <div
-                                        class="flex items-center justify-center px-4 py-4 rounded-lg bg-custom-light"
-                                    >
-                                        <span
-                                            id="first-rank"
-                                            class="text-4xl font-bold text-amber-300"
-                                        ></span>
-                                    </div>
-
-                                    <!-- Avatar -->
-                                    <div
-                                        class="w-24 h-24 border-2 rounded-lg border-amber-300 overflow-hidden"
-                                    >
-                                        <img
-                                            id="first-avatar"
-                                            src=""
-                                            alt="Avatar"
-                                            class="w-full h-full object-contain"
-                                        />
+                                    <div class="flex gap-6 items-center w-full">
+                                        <!-- Avatar -->
+                                        <div
+                                            class="lg:size-24 size-22 border-2 flex-shrink-0 rounded-lg border-amber-300 overflow-hidden"
+                                        >
+                                            <img
+                                                id="first-avatar"
+                                                src=""
+                                                alt="Avatar"
+                                                class="w-full h-full object-contain"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-col text-left h-full justify-between items-start"
+                                        >
+                                            <div
+                                                id="first-rank"
+                                                class="p-2 text-xl md:text-2xl lg:text-4xl font-bold rounded-lg bg-custom-light text-amber-300"
+                                            ></div>
+                                            <div
+                                                id="first-username"
+                                                class="text-lg md:text-2xl font-semibold text-gray-800"
+                                            ></div>
+                                        </div>
                                     </div>
 
                                     <!-- Username + Stats -->
-                                    <div
-                                        class="flex flex-col text-left h-full justify-between"
-                                    >
-                                        <span
-                                            id="first-username"
-                                            class="text-2xl font-semibold text-gray-800"
-                                        ></span>
+
+                                    <div>
                                         <div
-                                            class="text-md flex gap-24 font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
+                                            class="text-md flex gap-24 justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
                                         >
-                                            <span id="first-score"></span>
+                                            <div id="first-score"></div>
                                             <div>
                                                 <span id="first-games"></span>
                                                 partite
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
 
                         <!-- Secondo e Terzo classificato -->
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Secondo -->
                             <div
-                                class="bg-white rounded-lg py-6 px-4 mb-4 w-full"
+                                class="bg-white rounded-lg md:py-8 mb-4 w-full"
                             >
-                                <div class="flex justify-left">
-                                    <div class="flex items-center w-full gap-4">
+                                <div class="flex w-full justify-center">
+                                    <a
+                                        id="second-container"
+                                        class="flex justify-start w-full flex-col gap-6 p-6"
+                                    >
                                         <!-- Rank -->
                                         <div
-                                            class="flex items-center justify-center px-2 py-2 rounded-lg bg-custom-light"
+                                            class="flex gap-2 items-center h-full"
                                         >
-                                            <span
+                                            <div
                                                 id="second-rank"
-                                                class="text-2xl font-bold text-custom-blue"
-                                            ></span>
-                                        </div>
-
-                                        <!-- Avatar -->
-                                        <div
-                                            class="w-20 h-20 border-2 rounded-lg border-custom-blue overflow-hidden"
-                                        >
-                                            <img
-                                                id="second-avatar"
-                                                src=""
-                                                alt="Avatar"
-                                                class="w-full h-full object-contain"
-                                            />
+                                                class="p-2 text-lg md:text-xl lg:text-2xl font-bold rounded-lg bg-custom-light text-amber-300"
+                                            ></div>
+                                            <!-- Avatar -->
+                                            <div
+                                                class="lg:size-20 size-14 border-2 flex-shrink-0 rounded-lg border-amber-300 overflow-hidden"
+                                            >
+                                                <img
+                                                    id="second-avatar"
+                                                    src=""
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                            <div
+                                                class="flex flex-col text-left justify-between items-start"
+                                            >
+                                                <div
+                                                    id="second-username"
+                                                    class="text-lg md:text-2xl font-semibold text-gray-800"
+                                                ></div>
+                                            </div>
                                         </div>
 
                                         <!-- Username + Stats -->
-                                        <div
-                                            class="flex flex-col flex-1 text-left h-full justify-between"
-                                        >
-                                            <span
-                                                id="second-username"
-                                                class="text-xl font-semibold text-gray-800"
-                                            ></span>
+
+                                        <div>
                                             <div
-                                                class="text-md flex justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
+                                                class="text-md flex gap-24 justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
                                             >
-                                                <span id="second-score"></span>
+                                                <div id="second-score"></div>
                                                 <div>
                                                     <span
                                                         id="second-games"
@@ -303,50 +326,55 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
 
                             <!-- Terzo -->
                             <div
-                                class="bg-white rounded-lg py-6 px-4 mb-4 w-full"
+                                class="bg-white rounded-lg md:py-8 mb-4 w-full"
                             >
-                                <div class="flex justify-left">
-                                    <div class="flex items-center w-full gap-4">
+                                <div class="flex w-full justify-center">
+                                    <a
+                                        id="third-container"
+                                        class="flex justify-start w-full flex-col gap-6 p-6"
+                                    >
                                         <!-- Rank -->
                                         <div
-                                            class="flex items-center justify-center px-2 py-2 rounded-lg bg-custom-light"
+                                            class="flex gap-2 items-center h-full"
                                         >
-                                            <span
+                                            <div
                                                 id="third-rank"
-                                                class="text-2xl font-bold text-custom-blue"
-                                            ></span>
-                                        </div>
-
-                                        <!-- Avatar -->
-                                        <div
-                                            class="w-20 h-20 border-2 rounded-lg border-custom-blue overflow-hidden"
-                                        >
-                                            <img
-                                                id="third-avatar"
-                                                src=""
-                                                alt="Avatar"
-                                                class="w-full h-full object-contain"
-                                            />
+                                                class="p-2 text-lg md:text-xl lg:text-2xl font-bold rounded-lg bg-custom-light text-amber-300"
+                                            ></div>
+                                            <!-- Avatar -->
+                                            <div
+                                                class="lg:size-20 size-14 border-2 flex-shrink-0 rounded-lg border-amber-300 overflow-hidden"
+                                            >
+                                                <img
+                                                    id="third-avatar"
+                                                    src=""
+                                                    alt="Avatar"
+                                                    class="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                            <div
+                                                class="flex flex-col text-left justify-between items-start"
+                                            >
+                                                <div
+                                                    id="third-username"
+                                                    class="text-lg md:text-2xl font-semibold text-gray-800"
+                                                ></div>
+                                            </div>
                                         </div>
 
                                         <!-- Username + Stats -->
-                                        <div
-                                            class="flex flex-col flex-1 text-left h-full justify-between"
-                                        >
-                                            <span
-                                                id="third-username"
-                                                class="text-xl font-semibold text-gray-800"
-                                            ></span>
+
+                                        <div>
                                             <div
-                                                class="text-md flex justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
+                                                class="text-md flex gap-24 justify-between font-semibold bg-custom-light px-4 py-2 rounded-lg text-gray-800"
                                             >
-                                                <span id="third-score"></span>
+                                                <div id="third-score"></div>
                                                 <div>
                                                     <span
                                                         id="third-games"
@@ -355,7 +383,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -363,15 +391,13 @@
 
                     <div class="overflow-x-auto rounded-lg">
                         <table class="min-w-full text-sm text-gray-800">
-                            <thead class="text-xs uppercase">
+                            <thead class="text-[10px] uppercase">
                                 <tr>
-                                    <th class="px-6 py-3 text-left w-[40%]">
-                                        Rank
-                                    </th>
-                                    <th class="px-6 py-3 text-center w-[20%]">
+                                    <th class="py-3 text-left w-[40%]">Rank</th>
+                                    <th class="py-3 text-center w-[20%]">
                                         Giocatore
                                     </th>
-                                    <th class="px-6 py-3 text-right w-[40%]">
+                                    <th class="py-3 text-right w-[40%]">
                                         Punteggio
                                     </th>
                                 </tr>
@@ -409,6 +435,139 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+            <section class="md:py-12 py-6 px-4 relative w-full bg-custom-light">
+                <footer class="text-gray-800 py-6">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <!-- Link ai Termini e Privacy -->
+                            <div
+                                class="flex flex-col justify-center md:items-center items-start"
+                            >
+                                <div
+                                    class="flex-col justify-center items-start"
+                                >
+                                    <h3 class="font-semibold text-lg mb-4">
+                                        Informazioni Legali
+                                    </h3>
+                                    <ul class="text-sm">
+                                        <li class="mb-2">
+                                            <a
+                                                href="/termini-e-condizioni"
+                                                class="hover:text-blue-500 font-semibold py-4"
+                                                target="_blank"
+                                                >Termini e Condizioni</a
+                                            >
+                                        </li>
+                                        <li class="mb-2">
+                                            <a
+                                                href="/privacy-policy"
+                                                class="hover:text-blue-500 font-semibold py-4"
+                                                target="_blank"
+                                                >Privacy Policy</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Supporto -->
+                            <div
+                                class="flex flex-col justify-center items-center"
+                            >
+                                <div
+                                    class="flex-col justify-center items-start"
+                                >
+                                    <h3 class="font-semibold text-lg mb-2">
+                                        Supporto
+                                    </h3>
+                                    <p class="text-sm">
+                                        Per qualsiasi domanda o problema,
+                                        contattaci via email:
+                                    </p>
+                                    <a
+                                        href="mailto:support@wordrops.com"
+                                        class="text-blue-500 hover:text-blue-700"
+                                        >support@wordrops.com</a
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Copyright -->
+                            <div
+                                class="col-span-1 sm:col-span-2 lg:col-span-4 text-center mt-4 sm:mt-0"
+                            >
+                                <p class="text-sm">
+                                    © 2025 wordrops. Tutti i diritti riservati.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
+        <div
+            id="popup-register-user"
+            onclick="closeModal(`popup-register-user`)"
+            class="fixed inset-0 bg-black/40 flex justify-center items-center z-50 hidden"
+        >
+            <div
+                class="bg-white relative rounded-lg p-6 w-auto max-w-full flex flex-col items-center gap-8 z-60"
+            >
+                <div class="md:flex-none">
+                    <img
+                        src="/images/wordrops_logo_animal.png"
+                        alt="Wordrops Logo"
+                        class="w-16"
+                    />
+                </div>
+
+                <h3
+                    id="book-vote-text"
+                    class="text-lg text-center text-gray-800 font-semibold"
+                >
+                    Accedi ed entra nella community!
+                </h3>
+
+                <div class="flex flex-row w-full items-center gap-2">
+                    <a
+                        href="/register"
+                        class="group flex-1 px-5 py-2.5 text-sm text-lg cursor-pointer text-center relative items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-medium text-white duration-500"
+                    >
+                        <div
+                            class="transition group-hover:-translate-x-[150%] group-hover:opacity-0"
+                        >
+                            registrati
+                        </div>
+
+                        <div
+                            class="absolute top-1/2 -translate-y-1/2 translate-x-[150%] opacity-0 transition group-hover:translate-x-[50%] group-hover:opacity-100"
+                        >
+                            <svg
+                                width="15"
+                                height="15"
+                                viewBox="0 0 15 15"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                            >
+                                <path
+                                    d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                ></path>
+                            </svg>
+                        </div>
+                    </a>
+
+                    <a
+                        href="/register"
+                        class="cursor-pointer text-center flex-1 font-semibold text-sm text-lg relative overflow-hidden rounded border-2 border-gray-200 rounded-lg px-5 py-2 text-gray-800 transition-all duration-300 hover:border-custom-blue"
+                    >
+                        login
+                    </a>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-router.use("/story-rate", require("./storyRate"));
+router.use("/load-more-books", require("./communityMoreBooks"));
 
 module.exports = router;

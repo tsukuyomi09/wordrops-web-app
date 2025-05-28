@@ -369,6 +369,7 @@ async function fetchdashboardData() {
         }
         const data = await response.json();
         localStorage.setItem("user_id", data.user_id);
+        const user_id = data.user_id;
         const username = data.username;
         const status = data.status;
         const games = data.games;
@@ -559,7 +560,7 @@ function toggleGrayscale(hovered, other) {
 }
 
 function openOverlay() {
-    var overlay = document.getElementById("overlay-new-game");
+    const overlay = document.getElementById("overlay-new-game");
     overlay.style.display = "flex";
     setTimeout(() => {
         overlay.classList.remove("opacity-0", "translate-y-10");

@@ -6,6 +6,7 @@ router.use("/user-profile-data", require("./getProfile"));
 router.use("/delete-account", require("./deleteAccount"));
 router.use("/avatar", require("./updateAvatar"));
 router.use("/user-data", require("./userData"));
+router.use("/load-more-books", require("./loadMoreBooks"));
 router.use("/user-stats", require("./userStats"));
 router.use("/remove-game-notification", require("./removeNotification"));
 

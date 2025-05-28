@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
             `SELECT u.username, u.avatar, us.ranked_score, us.ranked_played, us.classic_played
             FROM user_statistics us
             JOIN users u ON us.user_id = u.user_id
+            WHERE u.is_onboarding_complete = true
             ORDER BY us.ranked_score DESC
             LIMIT $1 OFFSET $2`,
             [limit + 1, offset]

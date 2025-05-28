@@ -1,4 +1,5 @@
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
+const { generateImageWithOpenAI } = require("../utils/generateImageWithOpenAI");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
 const { saveRankedNotification } = require("../utils/handleRankedNotification");
 const {
@@ -31,8 +32,8 @@ async function saveGame(game) {
 
         const finishedAt = new Date();
         const result = await client.query(
-            `INSERT INTO games_completed (title, started_at, finished_at, game_uuid, game_type, game_speed, back_cover, publish, status)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            `INSERT INTO games_completed (title, started_at, finished_at, game_uuid, game_type, game_speed, back_cover, prompt_image, publish, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
              RETURNING id`,
             [
                 metadata.title,
@@ -42,7 +43,8 @@ async function saveGame(game) {
                 game.gameType,
                 game.gameSpeed,
                 metadata.backCover,
-                "publish",
+                metadata.imagePrompt,
+                "waiting-image",
                 "completed",
             ]
         );
@@ -115,6 +117,35 @@ async function saveGame(game) {
         if (isRanked) {
             await saveRankedNotification(game.chapters, databaseGameId);
         }
+
+        try {
+            const imageUrl = await generateImageWithOpenAI(
+                databaseGameId,
+                metadata.title,
+                metadata.imagePrompt
+            );
+
+            if (!imageUrl) {
+                console.error(
+                    "imageUrl è undefined o null, interrompo l'update"
+                );
+                return false;
+            }
+
+            const res = await client.query(
+                `UPDATE games_completed
+                SET cover_image_url  = $2, publish = 'publish', prompt_image = $3
+                WHERE id = $1
+                RETURNING cover_image_url , publish, prompt_image`,
+                [databaseGameId, imageUrl, metadata.imagePrompt]
+            );
+
+            return true;
+        } catch (err) {
+            console.error("Error generazione immagine o update DB:", err);
+            throw err;
+        }
+
         return true;
     } catch (err) {
         console.error("Error saving game and chapters:", err);

@@ -1,13 +1,19 @@
 const path = require("path");
+const getRatingAggregate = require("../services/getRatingAggregate");
+
 const { client } = require("../database/db");
 
 async function storiaHandler(req, res) {
+    userVote = null;
+    const user_id = req.user_id;
+    const isLoggedIn = req.isLoggedIn;
     const id_slug = req.params.id_slug;
-    console.log(id_slug);
-    const id = parseInt(id_slug.split("-")[0]);
+    const idPart = parseInt(id_slug.split("-")[0]);
+    const id = Number(idPart);
+
     try {
         const gameResult = await client.query(
-            "SELECT id, title, game_type, game_speed, finished_at FROM games_completed WHERE id = $1",
+            "SELECT id, title, game_type, game_speed, back_cover, finished_at FROM games_completed WHERE id = $1",
             [id]
         );
 
@@ -38,6 +44,18 @@ async function storiaHandler(req, res) {
             [id]
         );
 
+        const { average, totalVotes } = await getRatingAggregate(id);
+
+        if (isLoggedIn) {
+            const voteResult = await client.query(
+                `SELECT rating FROM story_ratings WHERE game_id = $1 AND user_id = $2`,
+                [id, user_id]
+            );
+            if (voteResult.rows.length > 0) {
+                userVote = voteResult.rows[0].rating;
+            }
+        }
+
         const chapters = chaptersResult.rows;
         const genres = genreQuery.rows.map((row) => row.name);
 
@@ -45,18 +63,26 @@ async function storiaHandler(req, res) {
             username: chapter.username,
             avatar: chapter.avatar,
         }));
-        console.log(`autori: ${authors}`);
-
-        console.log(chapters);
 
         if (gameResult.rows.length > 0) {
-            const { id, title, finished_at, game_type, game_speed } =
-                gameResult.rows[0];
+            const {
+                id,
+                title,
+                finished_at,
+                game_type,
+                game_speed,
+                back_cover,
+            } = gameResult.rows[0];
             const slugTitle = generateSlug(title);
             console.log(slugTitle);
 
             // Qui usi res.render e passi i dati a EJS
             res.render("storia", {
+                isLoggedIn,
+                user_id,
+                userVote,
+                average,
+                totalVotes,
                 game_type: translateGameType(game_type),
                 game_speed: translateGameSpeed(game_speed),
                 book_title: title,
@@ -66,6 +92,8 @@ async function storiaHandler(req, res) {
                 finished_at: finished_at,
                 chapters: chapters,
                 genres: genres,
+                back_cover: back_cover,
+                story_url: `https://wordrops.com/storia/${id}-${slugTitle}`,
             });
         } else {
             res.status(404).sendFile(

@@ -11,6 +11,7 @@ const openai = new OpenAI({
 async function generateFullMetadata(chaptersToElaborate, gameType) {
     const titleAndBackCover = await generateTitleAndBlurb(chaptersToElaborate);
     const genres = await generateGenres(chaptersToElaborate);
+    const imagePrompt = await generateImagePrompt(chaptersToElaborate);
 
     let chapterRatings = [];
     if (gameType === "ranked") {
@@ -24,6 +25,7 @@ async function generateFullMetadata(chaptersToElaborate, gameType) {
         backCover: titleAndBackCover.backCover,
         genres,
         chapterRatings,
+        imagePrompt,
     };
 }
 
@@ -129,6 +131,39 @@ Testo: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
         );
         return generateGenres(chaptersToElaborate);
     }
+}
+
+async function generateImagePrompt(chaptersToElaborate) {
+    const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+            {
+                role: "system",
+                content: `
+                You are an assistant creating a concise and effective image prompt for an AI image generation model (gpt-image-1).
+                The prompt should be 1-3 sentences max, focused on clear visual elements: scene, environment, colors, mood, style.
+                Avoid narrative, character backstory, emotions, or abstract concepts.
+                Do not include names, text, or anything that could trigger safety filters (nudity, violence, children, real people, celebrities).
+                The prompt must be in English.
+                `,
+            },
+            {
+                role: "user",
+                content: `
+                Here is the story content to inspire the image prompt:
+
+                """${JSON.stringify(chaptersToElaborate, null, 2)}"""
+                `,
+            },
+        ],
+        temperature: 0.8,
+        max_tokens: 500,
+    });
+
+    // 👇 DEBUG COMPLETO
+    console.dir(response, { depth: null });
+
+    return response.choices?.[0]?.message?.content?.trim();
 }
 
 async function generateChapterRatingsWithRetry(

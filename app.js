@@ -7,10 +7,13 @@ const http = require("http");
 const { initSocket } = require("./src/services/socketManager");
 const { connectDB } = require("./src/database/db");
 const cookieParser = require("cookie-parser");
-const { preGameQueue } = require("./src/routes/game/gameQueue");
+// const { preGameQueue } = require("./src/routes/game/gameQueue");
+const checkOptionalAuth = require("./src/middlewares/checkOptionalAuth");
 const { storiaHandler } = require("./src/handlers/storiaHandler");
+const {
+    storieCommunityHandler,
+} = require("./src/handlers/storieCommunityHandler");
 const { sitemapGenerator } = require("./src/services/sitemapGenerator");
-
 const { activeGames } = require("./src/services/gameManager");
 const { client } = require("./src/database/db");
 const {
@@ -43,25 +46,25 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("playerReady", ({ gameId, userId }) => {
-        try {
-            if (!gameId || !userId) {
-                return;
-            }
-            const game = preGameQueue[gameId];
-            const player = game.players.find((p) => p.socketId === userId);
+    // socket.on("playerReady", ({ gameId, userId }) => {
+    //     try {
+    //         if (!gameId || !userId) {
+    //             return;
+    //         }
+    //         const game = preGameQueue[gameId];
+    //         const player = game.players.find((p) => p.socketId === userId);
 
-            if (!player) {
-                return;
-            }
-            player.pronto = true;
-        } catch (error) {
-            console.error(
-                "Errore durante l'elaborazione dell'evento 'playerReady':",
-                error
-            );
-        }
-    });
+    //         if (!player) {
+    //             return;
+    //         }
+    //         player.pronto = true;
+    //     } catch (error) {
+    //         console.error(
+    //             "Errore durante l'elaborazione dell'evento 'playerReady':",
+    //             error
+    //         );
+    //     }
+    // });
 
     socket.on("sendChatMessage", (messageData) => {
         const { game_id, user_id, messageText } = messageData;
@@ -110,7 +113,7 @@ io.on("connection", (socket) => {
         }
 
         const gameChatMap = chatReadMap.get(game_id);
-        gameChatMap.set(user_id, readUntil);
+        gameChatMap.set(user_id, new Date(readUntil));
     });
 
     socket.on("chapterRead", ({ game_id, user_id, readUntil }) => {
@@ -167,6 +170,33 @@ io.on("connection", (socket) => {
         if (game.chat.length === 0) {
             allMessagesRead = true;
         }
+
+        console.log("[DEBUG read status]", {
+            gameId,
+            user_id,
+            lastRead: lastRead ? lastRead.toISOString() : null,
+            lastMessageSentAt: lastMessage
+                ? new Date(lastMessage.sentAt).toISOString()
+                : null,
+            comparison:
+                lastRead && lastMessage
+                    ? lastRead >= new Date(lastMessage.sentAt)
+                    : "n/a",
+            gameChatLength: game.chat.length,
+        });
+
+        console.dir(
+            Array.from(chatReadMap.entries()).map(([gameId, userMap]) => ({
+                gameId,
+                userMap: Array.from(userMap.entries()).map(
+                    ([userId, timestamp]) => ({
+                        userId,
+                        timestamp,
+                    })
+                ),
+            })),
+            { depth: null }
+        );
 
         socket.emit("chatStatus", {
             allMessagesRead,
@@ -229,8 +259,8 @@ app.get("/privacy-policy", (req, res) => {
 app.get("/termini-e-condizioni", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "termini-e-condizioni.html"));
 });
-app.get("/register01", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "register01.html"));
+app.get("/register", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "register.html"));
 });
 app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
@@ -238,10 +268,10 @@ app.get("/game/:gameId", (req, res) => {
 app.get("/profile-page/:username", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "profile-page.html"));
 });
-app.get("/storie-community", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "storie-community.html"));
-});
-app.get("/storia/:id_slug", storiaHandler);
+
+app.get("/storie-community", storieCommunityHandler);
+
+app.get("/storia/:id_slug", checkOptionalAuth, storiaHandler);
 
 app.get("/classifiche", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "classifiche.html"));
@@ -279,6 +309,7 @@ const authRoute = require("./src/routes/auth");
 const gameRoute = require("./src/routes/game");
 const libraryRoute = require("./src/routes/library");
 const storyRoute = require("./src/routes/story");
+const communityRoute = require("./src/routes/community");
 const onboardingRoute = require("./src/routes/onboarding");
 const profileRoute = require("./src/routes/profile");
 const searchRoute = require("./src/routes/search");
@@ -288,6 +319,7 @@ app.use("/auth", authRoute);
 app.use("/game", gameRoute);
 app.use("/library", libraryRoute);
 app.use("/story", storyRoute);
+app.use("/community", communityRoute);
 app.use("/onboarding", onboardingRoute);
 app.use("/profile", profileRoute);
 app.use("/search", searchRoute);

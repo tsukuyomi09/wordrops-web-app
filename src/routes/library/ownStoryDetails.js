@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const checkAuth = require("../../middlewares/checkAuthToken");
 const { client } = require("../../database/db");
+const getRatingAggregate = require("../../services/getRatingAggregate");
 
 router.get("/:game_id", checkAuth, async (req, res) => {
     const { game_id } = req.params;
@@ -39,8 +40,16 @@ router.get("/:game_id", checkAuth, async (req, res) => {
             [game_id]
         );
 
+        const { average, totalVotes } = await getRatingAggregate(game_id);
+
         const genres = genreQuery.rows.map((row) => row.name);
-        res.json({ genres, chapters: chaptersWithAuthors });
+        console.log(genres, average, totalVotes);
+        res.json({
+            genres,
+            chapters: chaptersWithAuthors,
+            average,
+            totalVotes,
+        });
     } catch (err) {
         console.error("Errore nel recupero dei capitoli:", err);
         res.status(500).json({

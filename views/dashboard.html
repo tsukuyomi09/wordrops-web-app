@@ -78,11 +78,11 @@
         >
             <div
                 id="overlay-backdrop"
-                class="absolute inset-0 bg-black/80 z-50 transition-opacity duration-500"
+                class="absolute inset-0 bg-white z-50 transition-opacity duration-500"
             ></div>
             <button
                 onclick="closeBookOverlay()"
-                class="cursor-pointer text-white z-50 font-bold mt-2 px-4 py-2 rounded flex items-center justify-center shadow-lg transition duration-300"
+                class="cursor-pointer text-white z-50 font-bold mt-2 px-4 py-2 flex items-center justify-center transition duration-300"
             >
                 <img
                     class="size-6 md:size-8"
@@ -91,77 +91,88 @@
                 />
             </button>
             <div
-                class="bg-white p-4 md:p-8 h-full rounded-lg shadow-lg max-w-6xl w-full flex flex-col overflow-y-auto z-50"
+                class="h-full w-full overflow-hidden flex flew-col items-center justify-center bg-white z-50"
             >
-                <!-- Prima parte: Immagine e informazioni libro -->
                 <div
-                    class="flex flex-col gap-4 md:flex-row md:gap-12 px-4 py-10 bg-custom-light rounded-lg shadow-lg"
+                    class="bg-white p-4 md:p-8 h-full w-full flex flex-col md:border-1 border-gray-100 shadow-2xl md:gap-24 md:flex-row overflow-y-auto z-50"
                 >
-                    <!-- Immagine del libro -->
-                    <div class="w-auto flex justify-left items-start">
-                        <img
-                            src="/images/book-icon.png"
-                            alt="Icona Libro"
-                            class="size-14 md:size-26 lg:size-36"
-                        />
-                    </div>
-
-                    <!-- Dettagli libro -->
-                    <div id="book-details" class="w-2/3 flex flex-col gap-6">
-                        <!-- Titolo -->
-                        <h2
-                            class="text-xl lg:text-4xl italic font-semibold"
-                            id="book-title"
-                        ></h2>
-
-                        <!-- Rating -->
-                        <div class="flex items-center gap-2">
-                            <div id="book-rating" class="flex gap-1">
-                                <i class="fa-regular fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
-                                <i class="fa-regular fa-star"></i
-                                ><i class="fa-regular fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
+                    <!-- Prima parte: Immagine e informazioni libro -->
+                    <div
+                        class="flex flex-col py-12 flex-1 gap-4 md:sticky h-auto top-0 md:flex-row md:gap-12 px-4 bg-custom-light rounded-lg shadow-lg"
+                    >
+                        <!-- Dettagli libro -->
+                        <div
+                            id="book-details"
+                            class="relative flex flex-col gap-4"
+                        >
+                            <div class="w-full">
+                                <img
+                                    alt="Icona Libro"
+                                    class="aspect-[2/3] w-26 book-cover-mob md:hidden shadow-2xl"
+                                />
                             </div>
-                        </div>
+                            <h2
+                                class="text-xl lg:text-2xl md:mt-16 italic font-semibold"
+                                id="book-title"
+                            ></h2>
+                            <div
+                                id="total-rating"
+                                class="absolute top-0 right-0 p-2 md:p-3 ml-2 text-sm md:text-xl font-bold text-custom-blue bg-white rounded-lg"
+                            >
+                                <img
+                                    src="/images/icons/star.png"
+                                    alt="star icon"
+                                    class="absolute top-0 left-0 transform -translate-y-1/2 -translate-x-1/2 h-3 md:h-4"
+                                />
+                                <span id="average-rating">4.5</span
+                                ><span>/5</span>
+                            </div>
+                            <div
+                                id="book-genre"
+                                class="flex flex-row flex-wrap md:flex-nowrap gap-2"
+                            ></div>
+                            <div class="flex gap-2">
+                                <span
+                                    id="game-type"
+                                    class="px-4 py-1 bg-amber-400 text-gray-800 rounded-md text-sm md:text-md"
+                                ></span>
+                                <span
+                                    id="game-speed"
+                                    class="px-4 py-1 bg-green-600 text-gray-800 rounded-lg text-sm md:text-md"
+                                ></span>
+                            </div>
 
-                        <!-- Autori -->
-                        <div>
                             <div class="flex gap-4">
                                 <div
                                     id="authors-container"
-                                    class="flex items-center gap-4"
+                                    class="flex items-center flex-wrap md:flex-nowrap gap-4"
                                 ></div>
                             </div>
-                        </div>
 
-                        <!-- Genere -->
-                        <div id="book-genre" class="flex flex-row gap-4"></div>
-
-                        <div class="flex gap-4">
-                            <span
-                                id="game-type"
-                                class="px-4 py-1 bg-amber-400 text-gray-800 rounded-lg font-mono"
-                            ></span>
-                            <span
-                                id="game-speed"
-                                class="px-4 py-1 bg-green-600 text-gray-800 rounded-lg font-mono"
-                            ></span>
-                        </div>
-
-                        <!-- Descrizione -->
-                        <div class="">
-                            <h3 class="text-lg font-semibold">Descrizione:</h3>
-                            <p id="book-summary" class="text-gray-700"></p>
+                            <!-- Descrizione -->
+                            <div class="">
+                                <h3 class="text-lg font-semibold">
+                                    Descrizione:
+                                </h3>
+                                <p id="book-summary" class="text-gray-700"></p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Seconda parte: Capitoli -->
-                <div
-                    class="mt-12 md:mt:24 max-h-80 book-chapters-container flex flex-col gap-20"
-                >
-                    <!-- dynamic chapters -->
+                    <!-- Seconda parte: Capitoli -->
+                    <div
+                        class="max-h-full lg:w-[40%] md:w-[50%] mt-20 md:mt-0 book-chapters-container flex flex-col gap-20"
+                    >
+                        <!-- dynamic chapters -->
+                    </div>
+                    <div class="flex-1 md:sticky top-1 h-full hidden md:block">
+                        <div class="w-full">
+                            <img
+                                alt="Icona Libro"
+                                class="aspect-[2/3] book-cover-desk hidden md:block shadow-2xl"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
