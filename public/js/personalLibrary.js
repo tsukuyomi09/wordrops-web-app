@@ -45,12 +45,12 @@ function renderCompletedGames(books) {
         storyDiv.innerHTML = `
         <div class="p-2 md:p-4  rounded-lg w-full flex flex-col items-start gap-2">
             <!-- Immagine del libro -->
-            <div class="w-12 md:w-16 lg:w-20 aspect-[2/3]">
+            <div class="w-12 md:w-16  aspect-[2/3]">
                 <img src="${book.cover_image_url}" alt="Icona Libro" class="w-full h-full object-cover rounded">
             </div>
 
             <!-- Titolo sotto, allineato a sinistra -->
-            <h3 class="story-title text-sm md:text-lg  font-semibold text-left italic"> ${book.title}</h3>
+            <h3 class="story-title text-sm font-semibold text-left italic"> ${book.title}</h3>
         </div>
             `;
 
