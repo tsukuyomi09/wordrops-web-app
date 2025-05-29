@@ -25,7 +25,6 @@ async function fetchCompletedGames() {
 
 function renderCompletedGames(books) {
     const container = document.getElementById("stories-container");
-    container.innerHTML = "";
 
     books.forEach((book) => {
         const storyDiv = document.createElement("div");
@@ -143,7 +142,7 @@ function openBookOverlay(book, storyDetails) {
     bookCoverDesk.src = book.cover_image_url;
     bookCoverMob.src = book.cover_image_url;
 
-    bookRating.innerHTML = `${storyDetails.average}`;
+    bookRating.innerHTML = `${storyDetails.average ?? "?"}`;
     gameType.innerHTML = `${translateGameType(book.game_type)}`;
     gameSpeed.innerHTML = `${translateGameSpeed(book.game_speed)}`;
 

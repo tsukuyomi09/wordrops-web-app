@@ -426,18 +426,11 @@ function showGameStartPopup() {
     const gameStartPopup = document.createElement("div");
     gameStartPopup.classList.add(
         "fixed",
-        "top-1/2",
-        "left-1/2",
-        "bg-green-500",
-        "text-white",
-        "py-2",
-        "px-4",
-        "rounded-lg",
-        "shadow-lg",
-        "z-50",
+        "inset-0",
         "flex",
+        "items-center",
         "justify-center",
-        "items-center"
+        "z-50"
     );
     gameStartPopup.innerHTML = "<strong>La partita è iniziata!</strong>";
     document.body.appendChild(gameStartPopup);

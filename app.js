@@ -171,33 +171,6 @@ io.on("connection", (socket) => {
             allMessagesRead = true;
         }
 
-        console.log("[DEBUG read status]", {
-            gameId,
-            user_id,
-            lastRead: lastRead ? lastRead.toISOString() : null,
-            lastMessageSentAt: lastMessage
-                ? new Date(lastMessage.sentAt).toISOString()
-                : null,
-            comparison:
-                lastRead && lastMessage
-                    ? lastRead >= new Date(lastMessage.sentAt)
-                    : "n/a",
-            gameChatLength: game.chat.length,
-        });
-
-        console.dir(
-            Array.from(chatReadMap.entries()).map(([gameId, userMap]) => ({
-                gameId,
-                userMap: Array.from(userMap.entries()).map(
-                    ([userId, timestamp]) => ({
-                        userId,
-                        timestamp,
-                    })
-                ),
-            })),
-            { depth: null }
-        );
-
         socket.emit("chatStatus", {
             allMessagesRead,
             chat: game?.chat || [],
