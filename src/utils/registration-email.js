@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const path = require("path");
+require("dotenv").config();
 
 const sendRegistrationEmail = async (userEmail, verificationToken) => {
     const transporter = nodemailer.createTransport({
@@ -9,7 +10,7 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         secure: true,
         auth: {
             user: "noreply@wordrops.com",
-            pass: "JXfigN73LePZ",
+            pass: process.env.ZOHO_SMTP_PASS,
         },
     });
 
