@@ -1,5 +1,7 @@
 # Wordrops
 
+![wordrops platform dashboard](./docs/images/dashboard_playing.png)
+
 **Wordrops is a real-time collaborative and competitive writing platform that lets users create stories together, earn points through gameplay, climb global leaderboards, and engage with a vibrant community of writers. It’s designed as a scalable web service accessible anywhere.**
 
 ### Author
