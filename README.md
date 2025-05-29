@@ -173,7 +173,7 @@ If the match was ranked, additional evaluation is triggered:
 
 📸 Example — live AI-generated score and feedback after a ranked match:
 
-<img src="./docs/images/game_score.gif" width="400" alt="Example AI Score" />
+<img src="./docs/images/game_score.gif" width="150" alt="Example AI Score" />
 
 📄 [textGeneratorAi.js](./src/utils/textGeneratorAi.js) – Manages title, back cover, genres, image prompts, and scoring logic using OpenAI.
 
