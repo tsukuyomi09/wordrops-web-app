@@ -154,34 +154,19 @@ async function startCountdownPreGame(io, gameId) {
             const game = preGameQueue[gameId];
 
             if (game) {
-                const allReady = game.players.every((player) => player.pronto);
+                const { gameId: newGameId, turnOrder } =
+                    await createGameAndAssignPlayers(game);
+                const players = game.players;
+                delete preGameQueue[gameId];
+                players.forEach((player) => {
+                    delete playerQueuePosition[player.user_id];
+                });
 
-                if (allReady) {
-                    const { gameId: newGameId, turnOrder } =
-                        await createGameAndAssignPlayers(game);
-                    const players = game.players;
-                    delete preGameQueue[gameId];
-                    players.forEach((player) => {
-                        delete playerQueuePosition[player.user_id];
-                    });
-
-                    io.to(gameId).emit("game-start", {
-                        message: "Tutti pronti: inizia il gioco",
-                        gameId: newGameId,
-                        turnOrder: turnOrder,
-                    });
-                } else {
-                    const players = game.players;
-                    delete preGameQueue[gameId];
-                    players.forEach((player) => {
-                        delete playerQueuePosition[player.user_id];
-                    });
-
-                    io.to(gameId).emit(
-                        "gamequeue-cancelled",
-                        "Non tutti i giocatori erano pronti, partita annullata"
-                    );
-                }
+                io.to(gameId).emit("game-start", {
+                    message: "Inizia il gioco",
+                    gameId: newGameId,
+                    turnOrder: turnOrder,
+                });
             }
         } else {
             countdown--;
