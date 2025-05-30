@@ -67,6 +67,11 @@ function openRegisterModal() {
     registerModal.classList.remove("hidden");
 }
 
+function openComingSoonModal() {
+    const ComingSoonModal = document.getElementById("popup-coming-soon");
+    ComingSoonModal.classList.remove("hidden");
+}
+
 /// score logic ///
 
 const giveScoreModal = document.getElementById("vote-modal");
