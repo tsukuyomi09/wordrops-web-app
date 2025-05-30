@@ -75,8 +75,6 @@ function addGameForPlayer(
     const playerData = playersMap.get(user_id);
     playerData.games[gameId] = { status, gameType, gameSpeed };
     playersMap.set(user_id, playerData);
-    console.log("[addGameForPlayer] Inserito o aggiornato:", user_id);
-    console.log("playersMap ora:", Object.fromEntries(playersMap));
 }
 
 function getActiveGames() {

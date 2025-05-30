@@ -32,13 +32,11 @@ function staticUrlsToXml(urls) {
 }
 
 async function sitemapGenerator(req, res) {
-    console.log("generator reached");
     try {
         const result = await client.query(
             "SELECT id, title, finished_at FROM games_completed WHERE publish = 'publish'"
         );
 
-        console.log(result.rows);
         const urlsXml = result.rows
             .map((row) => {
                 const slug = generateSlug(row.title);

@@ -10,7 +10,6 @@ async function handlePlayersMap(game) {
 
     game.players.forEach((player) => {
         const playerId = player.user_id;
-        console.log("[handlePlayersMap] Rimosso:", playerId);
         const playerData = playersMap.get(playerId);
 
         if (!playerData) return;
@@ -21,10 +20,6 @@ async function handlePlayersMap(game) {
         if (Object.keys(playerData.games).length === 0) {
             playersMap.delete(playerId);
         }
-        console.log(
-            "playersMap dopo rimozione:",
-            Object.fromEntries(playersMap)
-        );
     });
 }
 

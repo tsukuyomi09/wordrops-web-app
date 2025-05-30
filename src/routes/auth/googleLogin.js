@@ -17,7 +17,6 @@ router.post("/", async (req, res) => {
         const { sub, email } = payload;
 
         let user = await findUserByGoogleId(sub);
-        console.log(`user sub ${sub}`);
 
         if (user) {
             if (!user.is_onboarding_complete) {
@@ -48,7 +47,6 @@ router.post("/", async (req, res) => {
             });
         } else {
             const existingUserByEmail = await findUserByEmail(email);
-            console.log(`user: ${existingUserByEmail}`);
             if (existingUserByEmail) {
                 // Caso: utente Google che non ha ancora completato il profilo
                 if (
@@ -110,7 +108,6 @@ const findUserByGoogleId = async (googleId) => {
         "SELECT * FROM users WHERE google_id = $1",
         [googleId]
     );
-    console.log("Query result:", result.rows); // <-- qui
     return result.rowCount > 0 ? result.rows[0] : null;
 };
 

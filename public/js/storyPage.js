@@ -32,7 +32,6 @@ const wrapperContainer = document.getElementById("content-wrapper");
 document.querySelectorAll(".chapter-btn").forEach((button) => {
     button.addEventListener("click", () => {
         const idx = button.dataset.index;
-        console.log(idx);
         const chapter = chapters[idx];
 
         document.getElementById("chapter-title").textContent = chapter.title;
@@ -66,6 +65,11 @@ function dashboardButton() {
 function openRegisterModal() {
     const registerModal = document.getElementById("popup-register-user");
     registerModal.classList.remove("hidden");
+}
+
+function openComingSoonModal() {
+    const ComingSoonModal = document.getElementById("popup-coming-soon");
+    ComingSoonModal.classList.remove("hidden");
 }
 
 /// score logic ///
@@ -158,7 +162,6 @@ function closeModal(id) {
 }
 
 async function sendVote() {
-    console.log("send vote");
     voteText = document.getElementById("book-vote-text");
     const storyPath = window.location.pathname;
     const story_id = parseInt(storyPath.split("/").pop().split("-")[0], 10);

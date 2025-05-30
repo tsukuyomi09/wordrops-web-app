@@ -3,7 +3,6 @@ const router = express.Router();
 const { client } = require("../../database/db");
 
 router.get("/", async (req, res) => {
-    console.log("2richiesta arrivata");
     const limit = 10;
     const offset = parseInt(req.query.offset, 10) || 0;
 

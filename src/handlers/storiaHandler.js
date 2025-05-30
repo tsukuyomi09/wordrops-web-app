@@ -74,7 +74,6 @@ async function storiaHandler(req, res) {
                 back_cover,
             } = gameResult.rows[0];
             const slugTitle = generateSlug(title);
-            console.log(slugTitle);
 
             // Qui usi res.render e passi i dati a EJS
             res.render("storia", {
