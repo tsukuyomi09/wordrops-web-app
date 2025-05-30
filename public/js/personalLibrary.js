@@ -181,7 +181,6 @@ async function fetchStoryDetails(storyId) {
             `/library/dashboard-story-details/${storyId}`
         );
         const data = await response.json();
-        console.log(`book details:\n${JSON.stringify(data, null, 2)}`);
 
         if (!response.ok) {
             throw new Error(

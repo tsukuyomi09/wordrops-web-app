@@ -39,9 +39,7 @@ function getUserData() {
             .then((data) => {
                 displayUserItems(data);
                 if (data.games.length > 0) {
-                    console.log("entrato nella fuzione");
                     const books = data.games;
-                    console.log(`I giochi ricevuti:`, books);
                     displayUserBooks(books);
                     bookOffset += bookLimit;
                 }
@@ -116,7 +114,6 @@ function displayUserBooks(books) {
     document.getElementById("no-books-container").classList.add("hidden");
     document.getElementById("books-grid").classList.remove("hidden");
 
-    console.log(`the games: ${books}`);
     const booksGrid = document.getElementById("books-grid");
 
     books.forEach((book) => {

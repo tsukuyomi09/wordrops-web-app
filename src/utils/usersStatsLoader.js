@@ -29,13 +29,6 @@ async function loadPlayerStatsIntoMap() {
         const top5 = Array.from(playerStatsMap.entries())
             .sort((a, b) => b[1].ranked_played - a[1].ranked_played)
             .slice(0, 5);
-
-        console.log("🏆 Top 5 utenti per ranked_played:");
-        for (const [user_id, stats] of top5) {
-            console.log(
-                `User ${user_id}: ranked_played = ${stats.ranked_played}`
-            );
-        }
     } catch (err) {
         console.error("❌ Errore nel caricamento delle statistiche:", err);
     }

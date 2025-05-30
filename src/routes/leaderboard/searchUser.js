@@ -4,7 +4,6 @@ const { client } = require("../../database/db");
 
 router.post("/", async (req, res) => {
     const { username } = req.body;
-    console.log(username);
     if (!username) return res.status(400).json({ error: "Username mancante" });
 
     try {

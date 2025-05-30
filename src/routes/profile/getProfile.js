@@ -6,8 +6,6 @@ const { loadProfileBooks } = require("../../utils/loadProfileBooks");
 
 router.get("/:username", async (req, res) => {
     const { username } = req.params;
-    console.log("Richiesta ricevuta per l'utente:", username);
-    console.log(username);
 
     try {
         const userCheck = await client.query(

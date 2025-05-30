@@ -12,7 +12,6 @@ async function registerUser() {
         });
 
         if (response.ok) {
-            const data = await response.json();
             const modal = document.getElementById("registration-modal");
             modal.classList.remove("hidden");
             modal.classList.add("flex");
@@ -20,7 +19,7 @@ async function registerUser() {
             setTimeout(() => {
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
-            }, 5000);
+            }, 3000);
         } else {
             const errorData = await response.json();
             alert(errorData.message || "Registrazione fallita. Riprova.");

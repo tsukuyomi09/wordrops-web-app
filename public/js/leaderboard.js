@@ -22,7 +22,6 @@ function closeModal(id) {
 async function fetchLeaderboard(page) {
     const response = await fetch(`/leaderboard/?page=${page}&limit=${limit}`);
     const data = await response.json();
-    console.log(data);
     if (page === 1) {
         document.getElementById("podium").classList.remove("hidden");
         const podiumUsers = data.users.slice(0, 3);

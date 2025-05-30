@@ -7,7 +7,6 @@ const getRatingAggregate = require("../../services/getRatingAggregate");
 router.post("/", checkAuth, async (req, res) => {
     const { story_id, story_vote } = req.body;
     const user_id = req.user_id;
-    console.log(`Voto ricevuto per storia ${story_id}: ${story_vote}`);
 
     if (!story_id || !story_vote) {
         return res

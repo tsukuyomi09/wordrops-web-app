@@ -606,7 +606,6 @@ avatars.forEach((avatar) => {
 });
 
 function closeAvatarMenu() {
-    console.log("click first");
     if (selectedAvatar) {
         fetch("/profile/avatar", {
             method: "POST",
@@ -624,13 +623,11 @@ function closeAvatarMenu() {
                 console.error("Errore nella selezione dell'avatar:", error);
             });
     } else {
-        console.log("before closeMenu()");
         closeMenu();
     }
 }
 
 function closeMenu() {
-    console.log("inside close menu");
     const avatarsModalContainer = document.getElementById(
         "avatars-modal-container"
     );

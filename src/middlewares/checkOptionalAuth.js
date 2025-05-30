@@ -23,7 +23,6 @@ const checkOptionalAuth = async (req, res, next) => {
 
     // Se siamo qui, l'accessToken è mancante o scaduto
     if (refreshToken) {
-        console.log(`refresh token: ${refreshToken}`);
         try {
             const decodedRefresh = jwt.verify(
                 refreshToken,

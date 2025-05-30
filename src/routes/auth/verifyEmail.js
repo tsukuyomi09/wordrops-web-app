@@ -4,10 +4,7 @@ const { client } = require("../../database/db");
 const path = require("path");
 
 router.get("/", async (req, res) => {
-    console.log("Richiesta ricevuta per la verifica dell'email");
-
     const { token } = req.query;
-    console.log(`il token ${token}`);
 
     if (!token) {
         return res.status(400).json({ message: "Token mancante." });
