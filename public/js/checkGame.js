@@ -460,13 +460,13 @@ function updateCurrentPlayerDisplay(currentPlayer) {
 
         currentTurnDisplay.innerHTML = `
         <div class="flex items-center justify-center gap-4 bg-gradient-to-r from-blue-400 to-purple-500  px-4 py-3 rounded-xl shadow">
-        <div class="lg:text-3xl md:text-2xl sm:text-x font-semibold text-white whitespace-nowrap"> ${turnText} </div>
+        <div class="lg:text-xl md:text-lg sm:text-md font-semibold text-white whitespace-nowrap"> ${turnText} </div>
             ${
                 !isMyTurn
                     ? `
             <div class="flex items-center gap-4">
-            <p class=" lg:text-3xl md:text-2xl sm:text-xl font-semibold text-white">${currentPlayer.username}</p>
-                <div class="size-14 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
+            <p class=" lg:text-lg md:text-lg sm:text-md font-semibold text-white">${currentPlayer.username}</p>
+                <div class="size-10 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center relative">
                     <img src="${avatarSrc}" alt="Avatar" class="w-full h-full " />
                 </div>
             </div>
@@ -489,10 +489,10 @@ function updateTurnOrderDisplay(turnOrder) {
                 const avatarSrc = getAvatarSrc(player.avatar);
                 return `
             <div class="turn-order-item flex flex-col items-center justify-center">
-                <div class=" size-12 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
+                <div class=" size-10 flex flex-col items-center rounded-lg overflow-hidden bg-gray-100 shadow-2xl mb-2">
                     <img src="${avatarSrc}" alt="Avatar" class="w-full h-full" />
                 </div>
-                <span class="text-sm font-medium">${player.username}</span>
+                <span class="text-sm md:text-white font-medium">${player.username}</span>
             </div>
         `;
             })
@@ -516,11 +516,11 @@ function getChapter() {
     const wordCount = editorContent ? editorContent.split(/\s+/).length : 0;
 
     if (!title) {
-        alert("Il titolo è obbligatorio!");
+        showError("Il titolo è obbligatorio!");
         return;
     }
     if (wordCount < 100) {
-        alert("Il contenuto deve avere almeno 100 parole!");
+        showError("Il contenuto deve avere almeno 100 parole!");
         return;
     }
 
@@ -530,6 +530,25 @@ function getChapter() {
         currentUser: currentUser,
     };
     saveChapterChangeTurn(data);
+}
+
+function showError(message) {
+    const popup = document.getElementById("error-more-info-chapter");
+    const text = document.getElementById("error-chapter-text");
+
+    text.textContent = message;
+
+    popup.classList.remove("hidden", "opacity-0");
+    popup.classList.add("opacity-100");
+
+    setTimeout(() => {
+        popup.classList.remove("opacity-100");
+        popup.classList.add("opacity-0");
+
+        setTimeout(() => {
+            popup.classList.add("hidden");
+        }, 300);
+    }, 2000);
 }
 
 function saveChapterChangeTurn(data) {
