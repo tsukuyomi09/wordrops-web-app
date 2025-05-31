@@ -68,8 +68,8 @@ function openRegisterModal() {
 }
 
 function openComingSoonModal() {
-    const ComingSoonModal = document.getElementById("popup-coming-soon");
-    ComingSoonModal.classList.remove("hidden");
+    const comingSoonModal = document.getElementById("popup-coming-soon");
+    comingSoonModal.classList.remove("hidden");
 }
 
 /// score logic ///
