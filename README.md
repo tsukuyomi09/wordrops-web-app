@@ -6,7 +6,9 @@
 
 ### Author
 
-Samuele Sala - tsukiyomiiii — software and web developer. More about me on LinkedIn [https://www.linkedin.com/in/samuele-sala-a1a63722a/]
+**Samuele Sala** — Software & Web Developer  
+Founder and sole developer of Wordrops  
+🔗 [LinkedIn](https://www.linkedin.com/in/samuele-sala-a1a63722a/)
 
 ## Live Site
 
