@@ -26,9 +26,9 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 3600000;
+        let countdownDuration = 86400000;
         if (gameSpeed === "fast") {
-            countdownDuration = 86400000;
+            countdownDuration = 3600000;
         }
 
         activeGames.set(newGameId, {
@@ -77,13 +77,8 @@ function addGameForPlayer(
     playersMap.set(user_id, playerData);
 }
 
-function getActiveGames() {
-    return activeGames;
-}
-
 module.exports = {
     createGameAndAssignPlayers,
     activeGames,
-    getActiveGames,
     playersMap,
 };

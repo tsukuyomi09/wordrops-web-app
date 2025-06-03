@@ -276,9 +276,13 @@ app.get("/404", (req, res) => {
     console.log("Route 404 chiamata");
     res.sendFile(path.join(__dirname, "views", "404.html"));
 });
+app.get("/admin-panel", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "admin-panel.html"));
+});
 app.get("/sitemap.xml", sitemapGenerator);
 
 const authRoute = require("./src/routes/auth");
+const adminRoute = require("./src/routes/admin");
 const gameRoute = require("./src/routes/game");
 const libraryRoute = require("./src/routes/library");
 const storyRoute = require("./src/routes/story");
@@ -289,6 +293,7 @@ const searchRoute = require("./src/routes/search");
 const leaderboardRoute = require("./src/routes/leaderboard");
 
 app.use("/auth", authRoute);
+app.use("/admin", adminRoute);
 app.use("/game", gameRoute);
 app.use("/library", libraryRoute);
 app.use("/story", storyRoute);
