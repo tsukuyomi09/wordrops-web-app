@@ -38,6 +38,7 @@ function startPing(intervalMs = 60000) {
                     "Content-Type": "application/json",
                 },
             });
+
             if (!res.ok) throw new Error("Errore ping");
         } catch (err) {
             console.error("Ping fallito", err);
@@ -45,7 +46,7 @@ function startPing(intervalMs = 60000) {
     }
 
     ping(); // ping iniziale subito
-    return setInterval(ping, intervalMs); // ritorna l'id per poter stoppare se serve
+    setInterval(ping, intervalMs);
 }
 
 function showLoadingAnimation() {
