@@ -348,32 +348,6 @@
                     <div
                         class="flex justify-center items-center gap-2 md:gap-4"
                     >
-                        <div class="relative">
-                            <div class="flex flex-col relative">
-                                <div class="flex items-center gap-4 relative">
-                                    <input
-                                        id="search-input"
-                                        type="text"
-                                        placeholder="cerca utente"
-                                        class="border-2 size-10 border-gray-200 px-4 py-1 md:py-2 text-gray-800 rounded-lg w-full"
-                                    />
-                                    <button
-                                        onclick="searchUser()"
-                                        class="absolute right-0 bg-custom-light h-full cursor-pointer border-2 border-gray-200 rounded-lg"
-                                    >
-                                        <img
-                                            class="size-8 p-2"
-                                            src="/images/icons/search-interface-symbol.png"
-                                            alt="Cerca"
-                                        />
-                                    </button>
-                                </div>
-                                <div
-                                    id="error-message"
-                                    class="text-red-600 absolute -bottom-6 right-0 text-sm"
-                                ></div>
-                            </div>
-                        </div>
                         <button
                             onclick="toggleDropdownMobile()"
                             class="p-2 rounded-md border-2 size-10 border-gray-200 focus:outline-none"
@@ -474,7 +448,6 @@
                     <div
                         onclick="openOverlay()"
                         class="relative cursor-pointer flex flex-col justify-center items-center"
-                        id="lottie-button"
                     >
                         <img
                             src="/images/book_new_game.png"
@@ -1090,21 +1063,5 @@
         <script src="/js/menu.js" defer></script>
         <script src="/js/getUserStats.js" defer></script>
         <script src="/js/personalLibrary.js"></script>
-
-        <audio
-            id="click-sound"
-            src="/images/button-hover-sound.mp3"
-            preload="auto"
-        ></audio>
-        <audio
-            id="select-sound"
-            src="/images/avatar-select-1.mp3"
-            preload="auto"
-        ></audio>
-        <audio
-            id="select-sound-new-game"
-            src="/images/new-game-sound.mp3"
-            preload="auto"
-        ></audio>
     </body>
 </html>

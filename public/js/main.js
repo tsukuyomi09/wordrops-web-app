@@ -67,24 +67,6 @@ function showLoadingAnimation() {
     }, 3000);
 }
 
-const bookAnimation = lottie.loadAnimation({
-    container: document.getElementById("lottie-book"),
-    renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "/images/new-book-anime.json",
-});
-
-const lottieButton = document.getElementById("lottie-button");
-
-lottieButton.addEventListener("mouseenter", function () {
-    bookAnimation.play();
-});
-
-lottieButton.addEventListener("mouseleave", function () {
-    bookAnimation.stop();
-});
-
 function showAvatarTransition() {
     const avatarContainer = document.querySelector(".avatar-container");
     setTimeout(() => {
@@ -454,7 +436,7 @@ async function fetchdashboardData() {
         fetchAvatarData(username);
         displayItems(username);
     } catch (error) {
-        alert("Si è verificato un errore.");
+        alert("Si è verificato un errore. questo?");
     }
 }
 

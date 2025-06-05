@@ -41,6 +41,9 @@ class Queue {
         }
         return null;
     }
+    toArray() {
+        return this.items.slice(this.head, this.tail);
+    }
 }
 
 const gameQueues = {
@@ -89,6 +92,25 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
     queue.enqueue(player);
     const players = queue.checkAndCreateGame(player);
     playerQueuePosition[user_id] = { gameType, gameSpeed };
+
+    console.log("----- STATO COMPLETO DELLE CODE -----");
+    for (const gameType in gameQueues) {
+        for (const gameSpeed in gameQueues[gameType]) {
+            const queue = gameQueues[gameType][gameSpeed];
+            const players = queue.toArray().map((p, index) => ({
+                pos: index + 1,
+                user_id: p.user_id,
+                username: p.username,
+                socketId: p.socketId,
+                timestamp: new Date(p.timestamp).toLocaleTimeString(),
+            }));
+            console.log(
+                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
+            );
+            console.table(players);
+        }
+    }
+    console.log("-------------------------------------");
     if (players) {
         const gameId = `${gameType}_${gameSpeed}:${Date.now()}`;
         preGameQueue[gameId] = {
@@ -130,6 +152,25 @@ router.delete("/", checkAuth, async (req, res) => {
     delete playerQueuePosition[user_id];
     const queue = gameQueues[player.gameType][player.gameSpeed];
     queue.removePlayer(user_id);
+
+    console.log("----- STATO COMPLETO DELLE CODE -----");
+    for (const gameType in gameQueues) {
+        for (const gameSpeed in gameQueues[gameType]) {
+            const queue = gameQueues[gameType][gameSpeed];
+            const players = queue.toArray().map((p, index) => ({
+                pos: index + 1,
+                user_id: p.user_id,
+                username: p.username,
+                socketId: p.socketId,
+                timestamp: new Date(p.timestamp).toLocaleTimeString(),
+            }));
+            console.log(
+                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
+            );
+            console.table(players);
+        }
+    }
+    console.log("-------------------------------------");
 
     if (socket) {
         socket.emit("queueAbandoned", {
