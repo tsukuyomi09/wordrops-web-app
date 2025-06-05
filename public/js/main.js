@@ -130,6 +130,9 @@ function initSocket() {
 
         socket.on("in-queue", (message) => {
             waitingOverlay.classList.remove("hidden");
+            document
+                .getElementById("mini-queue-display")
+                .classList.remove("hidden");
         });
 
         socket.on("game-ready", (message) => {
@@ -277,6 +280,9 @@ function initSocket() {
 
         socket.on("queueAbandoned", (data) => {
             waitingOverlay.classList.add("hidden");
+            document
+                .getElementById("mini-queue-display")
+                .classList.add("hidden");
         });
     });
 }
@@ -357,13 +363,40 @@ function updateAvatarImage(avatar) {
 
 let username;
 
-async function fetchdashboardData() {
+async function fetchQueueStatus() {
     try {
-        const response = await fetch("/profile/user-data", {
+        const response = await fetch("/profile/player-queue-status", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.inQueue) {
+            if (!socketId) await initSocket();
+            if (socketId) {
+                // await updateQueueSocket(data.gameType, data.gameSpeed);
+                document
+                    .getElementById("mini-queue-display")
+                    .classList.remove("hidden");
+            }
+        }
+    } catch (error) {
+        console.error("Errore nel fetch della queue status:", error);
+        return false; // fallback
+    }
+}
+
+async function fetchdashboardData() {
+    try {
+        const response = await fetch("/profile/user-data", {
+            method: "GET",
             credentials: "include",
         });
 
@@ -436,7 +469,7 @@ async function fetchdashboardData() {
         fetchAvatarData(username);
         displayItems(username);
     } catch (error) {
-        alert("Si è verificato un errore. questo?");
+        console.log("Si è verificato un errore");
     }
 }
 
@@ -446,6 +479,7 @@ function displayItems(username) {
 }
 
 fetchdashboardData();
+fetchQueueStatus();
 
 let isInQueue = false;
 
@@ -499,6 +533,14 @@ async function joinQueue({ gameType, gameSpeed }) {
     closeOverlay();
 }
 
+function closeWaitingQueueModal() {
+    waitingOverlay.classList.add("hidden");
+}
+
+function openWaitingQueueModal() {
+    waitingOverlay.classList.remove("hidden");
+}
+
 function showGameLimitMessage() {
     const game_limit_box = document.getElementById("game-limit-reached");
     game_limit_box.classList.remove("hidden");
@@ -523,12 +565,7 @@ function abandonQueue() {
             if (!response.ok) {
                 throw new Error(`Errore HTTP: ${response.status}`);
             }
-            if (socket) {
-                socket.disconnect();
-                socket = null;
-            } else {
-                alert("Si è verificato un errore. Riprova più tardi.");
-            }
+
             setTimeout(() => {
                 waitingOverlay.classList.add("hidden");
             }, 1500);
