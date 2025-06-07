@@ -394,29 +394,18 @@
                     </div>
                 </div>
             </div>
-            <div
-                class="p-2 w-full flex flex-row justify-center items-center gap-12"
-            >
-                <div
-                    id="mini-ingame-display"
-                    class="hidden flex flex-row justify-center items-center gap-2"
-                >
-                    <div class="font-semibold text-xs text-gray-800">
-                        in partita
-                    </div>
-                    <img class="size-4" src="/images/book-icon.png" alt="" />
-                </div>
+            <div class="p-2 w-full flex flex-row justify-center items-center">
                 <button
                     onclick="openWaitingQueueModal()"
                     id="mini-queue-display"
-                    class="cursor-pointer hidden flex flex-row justify-center items-center font-semibold text-sm text-gray-800"
+                    class="cursor-pointer relative hidden flex flex-row justify-center items-center font-semibold text-sm text-gray-800"
                 >
                     <div
                         class="cursor-pointer font-semibold text-sm text-green-600"
                     >
                         in coda
                     </div>
-                    <div id="waiting-gif">
+                    <div class="absolute -right-6" id="waiting-gif">
                         <img
                             src="/images/gifs/queue-spinner.gif"
                             alt="Waiting Gif"

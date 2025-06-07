@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
             el.classList.toggle("opacity-10", idx === index);
         });
     }
+    fetchdashboardData();
+    fetchQueueStatus();
     startPing(60000);
 });
 
@@ -149,6 +151,18 @@ function initSocket() {
             document.getElementById("countdown-seconds").innerText = seconds;
         });
 
+        socket.on("game-start", (data) => {
+            document
+                .getElementById("countdown-seconds-container")
+                .classList.add("hidden");
+            document
+                .getElementById("game-ready-container")
+                .classList.remove("hidden");
+            setTimeout(() => {
+                window.location.href = `/game/${data.gameId}`;
+            }, 3000);
+        });
+
         socket.on("gameIdAssigned", (data) => {
             currentGameId = data.gameId;
         });
@@ -266,18 +280,6 @@ function initSocket() {
             }, 2000);
         });
 
-        socket.on("game-start", (data) => {
-            document
-                .getElementById("countdown-seconds-container")
-                .classList.add("hidden");
-            document
-                .getElementById("game-ready-container")
-                .classList.remove("hidden");
-            setTimeout(() => {
-                window.location.href = `/game/${data.gameId}`;
-            }, 3000);
-        });
-
         socket.on("queueAbandoned", (data) => {
             waitingOverlay.classList.add("hidden");
             document
@@ -381,7 +383,8 @@ async function fetchQueueStatus() {
         if (data.inQueue) {
             if (!socketId) await initSocket();
             if (socketId) {
-                // await updateQueueSocket(data.gameType, data.gameSpeed);
+                await updateQueueSocket(data.gameType, data.gameSpeed);
+
                 document
                     .getElementById("mini-queue-display")
                     .classList.remove("hidden");
@@ -390,6 +393,30 @@ async function fetchQueueStatus() {
     } catch (error) {
         console.error("Errore nel fetch della queue status:", error);
         return false; // fallback
+    }
+}
+
+async function updateQueueSocket(gameType, gameSpeed) {
+    try {
+        const response = await fetch("/profile/update-queue-socket", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ socketId, gameType, gameSpeed }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Socket ID aggiornato in coda:", result);
+        return true;
+    } catch (error) {
+        console.error("Errore aggiornando socket ID in coda:", error);
+        return false;
     }
 }
 
@@ -407,11 +434,14 @@ async function fetchdashboardData() {
         localStorage.setItem("user_id", data.user_id);
         const user_id = data.user_id;
         const username = data.username;
+        console.log(username);
         const status = data.status;
         const games = data.games;
         const maxGamesReached = data.maxGamesReached;
         const gameNotifications = data.gameNotifications;
         showScoreNotificationsSequential(gameNotifications);
+        fetchAvatarData(username);
+        displayItems(username);
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket();
@@ -465,9 +495,6 @@ async function fetchdashboardData() {
                 }
             });
         }
-
-        fetchAvatarData(username);
-        displayItems(username);
     } catch (error) {
         console.log("Si è verificato un errore");
     }
@@ -477,9 +504,6 @@ function displayItems(username) {
     const usernameDashboard = document.getElementById("username");
     usernameDashboard.textContent = username;
 }
-
-fetchdashboardData();
-fetchQueueStatus();
 
 let isInQueue = false;
 
