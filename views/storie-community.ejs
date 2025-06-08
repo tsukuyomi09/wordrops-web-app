@@ -431,56 +431,74 @@
                 </div>
             </div>
         </div>
-        <div class="page-wrap p-6 fixed min-h-screen z-50">
+        <div class="p-6 fixed min-h-screen z-50">
             <!-- queue overlay -->
             <div
                 id="waiting-overlay"
-                class="fixed inset-0 bg-black/80 flex flex-col items-center justify-center hidden"
+                class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden"
             >
-                <button
-                    onclick="closeWaitingQueueModal()"
-                    id="close-avatar-menu"
-                    class="cursor-pointer border-1 border-gray-800 w-6 h-6 rounded-full bg-white text-black text-lg flex items-center justify-center"
+                <div
+                    class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+                ></div>
+                <div
+                    class="bg-white rounded-2xl p-8 md:p-24 w-full md:max-w-4xl relative"
                 >
-                    X
-                </button>
-                <div class="flex flex-col items-center">
-                    <div id="waiting-text" class="text-white text-2xl mb-4">
-                        In attesa di altri giocatori...
-                    </div>
-                    <div id="waiting-gif" class="mb-4">
-                        <img
-                            src="/images/gifs/queue-spinner.gif"
-                            alt="Waiting Gif"
-                            class="w-32 h-32"
-                        />
-                    </div>
                     <button
-                        id="abandon-queue-button"
-                        onclick="abandonQueue()"
-                        class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
+                        onclick="closeWaitingQueueModal()"
+                        class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold w-12 h-12 lg:size-14 ext-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
                     >
-                        ABBANDONA
+                        X
                     </button>
+
+                    <div
+                        class="flex flex-col items-center justify-center gap-4"
+                    >
+                        <div
+                            id="waiting-text"
+                            class="text-gray-800 font-semibold text-center text-lg md:text-xl lg:text-2xl"
+                        >
+                            In attesa di altri giocatori...
+                        </div>
+                        <div id="waiting-gif" class="py-6">
+                            <img
+                                src="/images/wordrops_logo_animal.png"
+                                alt="Wordrops Spinner"
+                                class="custom-spinner"
+                            />
+                        </div>
+                        <button
+                            id="abandon-queue-button"
+                            onclick="abandonQueue()"
+                            class="px-6 py-3 bg-red-500 text-white font-semibold text-md md:text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
+                        >
+                            ABBANDONA
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- preQueue overlay -->
             <div
                 id="countdown-overlay"
-                class="fixed inset-0 bg-black/80 flex items-center justify-center z-10 hidden"
+                class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden"
             >
+                <div
+                    class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+                ></div>
                 <div
                     id="game-ready-container"
                     class="flex flex-col items-center hidden"
                 >
-                    <h2 class="text-white text-4xl font-bold">Si Inizia!</h2>
+                    <h2 class="text-gray-800 text-4xl font-bold">Si Inizia!</h2>
                 </div>
                 <div
                     id="countdown-seconds-container"
                     class="flex flex-col items-center"
                 >
-                    <div id="countdown" class="text-white text-2xl mb-2">
+                    <div
+                        id="countdown"
+                        class="text-gray-800 font-bold text-2xl mb-2"
+                    >
                         Partita trovata, Inizio in:
                     </div>
                     <h2
@@ -488,30 +506,6 @@
                         class="text-red-500 text-9xl font-bold"
                     ></h2>
                 </div>
-            </div>
-        </div>
-        <!-- preQueue overlay -->
-        <div
-            id="countdown-overlay"
-            class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-50"
-        >
-            <div
-                id="game-ready-container"
-                class="flex flex-col items-center hidden"
-            >
-                <h2 class="text-white text-4xl font-bold">Si Inizia!</h2>
-            </div>
-            <div
-                id="countdown-seconds-container"
-                class="flex flex-col items-center"
-            >
-                <div id="countdown" class="text-white text-2xl mb-2">
-                    Partita trovata, Inizio in:
-                </div>
-                <h2
-                    id="countdown-seconds"
-                    class="text-red-500 text-9xl font-bold"
-                ></h2>
             </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>

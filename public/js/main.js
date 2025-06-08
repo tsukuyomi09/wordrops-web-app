@@ -625,19 +625,18 @@ function toggleGrayscale(hovered, other) {
 
 function openOverlay() {
     const overlay = document.getElementById("overlay-new-game");
-    overlay.style.display = "flex";
-    setTimeout(() => {
-        overlay.classList.remove("opacity-0", "translate-y-10");
-        overlay.classList.add("opacity-100", "translate-y-0");
-    }, 10);
+    overlay.classList.remove("hidden");
+    void overlay.offsetWidth;
+    overlay.classList.remove("opacity-0", "translate-y-10");
+    overlay.classList.add("opacity-100", "translate-y-0");
 }
 
 function closeOverlay() {
-    var overlay = document.getElementById("overlay-new-game");
+    const overlay = document.getElementById("overlay-new-game");
     overlay.classList.remove("opacity-100", "translate-y-0");
     overlay.classList.add("opacity-0", "translate-y-10");
     setTimeout(() => {
-        overlay.style.display = "none";
+        overlay.classList.add("hidden");
     }, 500);
 }
 
