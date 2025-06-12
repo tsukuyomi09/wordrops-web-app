@@ -26,7 +26,30 @@ document.addEventListener("DOMContentLoaded", function () {
             el.classList.toggle("opacity-10", idx === index);
         });
     }
+    fetchdashboardData();
+    fetchQueueStatus();
+    startPing(60000);
 });
+
+function startPing(intervalMs = 60000) {
+    async function ping() {
+        try {
+            const res = await fetch("/profile/user-last-seen", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) throw new Error("Errore ping");
+        } catch (err) {
+            console.error("Ping fallito", err);
+        }
+    }
+
+    ping(); // ping iniziale subito
+    setInterval(ping, intervalMs);
+}
 
 function showLoadingAnimation() {
     const overlay = document.getElementById("loading-overlay");
@@ -45,24 +68,6 @@ function showLoadingAnimation() {
         }, 1000);
     }, 3000);
 }
-
-const bookAnimation = lottie.loadAnimation({
-    container: document.getElementById("lottie-book"),
-    renderer: "svg",
-    loop: false,
-    autoplay: false,
-    path: "/images/new-book-anime.json",
-});
-
-const lottieButton = document.getElementById("lottie-button");
-
-lottieButton.addEventListener("mouseenter", function () {
-    bookAnimation.play();
-});
-
-lottieButton.addEventListener("mouseleave", function () {
-    bookAnimation.stop();
-});
 
 function showAvatarTransition() {
     const avatarContainer = document.querySelector(".avatar-container");
@@ -127,6 +132,9 @@ function initSocket() {
 
         socket.on("in-queue", (message) => {
             waitingOverlay.classList.remove("hidden");
+            document
+                .getElementById("mini-queue-display")
+                .classList.remove("hidden");
         });
 
         socket.on("game-ready", (message) => {
@@ -141,6 +149,18 @@ function initSocket() {
                 countdownStarted = true;
             }
             document.getElementById("countdown-seconds").innerText = seconds;
+        });
+
+        socket.on("game-start", (data) => {
+            document
+                .getElementById("countdown-seconds-container")
+                .classList.add("hidden");
+            document
+                .getElementById("game-ready-container")
+                .classList.remove("hidden");
+            setTimeout(() => {
+                window.location.href = `/game/${data.gameId}`;
+            }, 3000);
         });
 
         socket.on("gameIdAssigned", (data) => {
@@ -260,20 +280,11 @@ function initSocket() {
             }, 2000);
         });
 
-        socket.on("game-start", (data) => {
-            document
-                .getElementById("countdown-seconds-container")
-                .classList.add("hidden");
-            document
-                .getElementById("game-ready-container")
-                .classList.remove("hidden");
-            setTimeout(() => {
-                window.location.href = `/game/${data.gameId}`;
-            }, 3000);
-        });
-
         socket.on("queueAbandoned", (data) => {
             waitingOverlay.classList.add("hidden");
+            document
+                .getElementById("mini-queue-display")
+                .classList.add("hidden");
         });
     });
 }
@@ -354,13 +365,65 @@ function updateAvatarImage(avatar) {
 
 let username;
 
-async function fetchdashboardData() {
+async function fetchQueueStatus() {
     try {
-        const response = await fetch("/profile/user-data", {
+        const response = await fetch("/profile/player-queue-status", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.inQueue) {
+            if (!socketId) await initSocket();
+            if (socketId) {
+                await updateQueueSocket(data.gameType, data.gameSpeed);
+
+                document
+                    .getElementById("mini-queue-display")
+                    .classList.remove("hidden");
+            }
+        }
+    } catch (error) {
+        console.error("Errore nel fetch della queue status:", error);
+        return false; // fallback
+    }
+}
+
+async function updateQueueSocket(gameType, gameSpeed) {
+    try {
+        const response = await fetch("/profile/update-queue-socket", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ socketId, gameType, gameSpeed }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Socket ID aggiornato in coda:", result);
+        return true;
+    } catch (error) {
+        console.error("Errore aggiornando socket ID in coda:", error);
+        return false;
+    }
+}
+
+async function fetchdashboardData() {
+    try {
+        const response = await fetch("/profile/user-data", {
+            method: "GET",
             credentials: "include",
         });
 
@@ -371,11 +434,14 @@ async function fetchdashboardData() {
         localStorage.setItem("user_id", data.user_id);
         const user_id = data.user_id;
         const username = data.username;
+        console.log(username);
         const status = data.status;
         const games = data.games;
         const maxGamesReached = data.maxGamesReached;
         const gameNotifications = data.gameNotifications;
         showScoreNotificationsSequential(gameNotifications);
+        fetchAvatarData(username);
+        displayItems(username);
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
             await initSocket();
@@ -429,11 +495,8 @@ async function fetchdashboardData() {
                 }
             });
         }
-
-        fetchAvatarData(username);
-        displayItems(username);
     } catch (error) {
-        alert("Si è verificato un errore.");
+        console.log("Si è verificato un errore");
     }
 }
 
@@ -441,8 +504,6 @@ function displayItems(username) {
     const usernameDashboard = document.getElementById("username");
     usernameDashboard.textContent = username;
 }
-
-fetchdashboardData();
 
 let isInQueue = false;
 
@@ -496,6 +557,14 @@ async function joinQueue({ gameType, gameSpeed }) {
     closeOverlay();
 }
 
+function closeWaitingQueueModal() {
+    waitingOverlay.classList.add("hidden");
+}
+
+function openWaitingQueueModal() {
+    waitingOverlay.classList.remove("hidden");
+}
+
 function showGameLimitMessage() {
     const game_limit_box = document.getElementById("game-limit-reached");
     game_limit_box.classList.remove("hidden");
@@ -520,12 +589,7 @@ function abandonQueue() {
             if (!response.ok) {
                 throw new Error(`Errore HTTP: ${response.status}`);
             }
-            if (socket) {
-                socket.disconnect();
-                socket = null;
-            } else {
-                alert("Si è verificato un errore. Riprova più tardi.");
-            }
+
             setTimeout(() => {
                 waitingOverlay.classList.add("hidden");
             }, 1500);
@@ -561,19 +625,18 @@ function toggleGrayscale(hovered, other) {
 
 function openOverlay() {
     const overlay = document.getElementById("overlay-new-game");
-    overlay.style.display = "flex";
-    setTimeout(() => {
-        overlay.classList.remove("opacity-0", "translate-y-10");
-        overlay.classList.add("opacity-100", "translate-y-0");
-    }, 10);
+    overlay.classList.remove("hidden");
+    void overlay.offsetWidth;
+    overlay.classList.remove("opacity-0", "translate-y-10");
+    overlay.classList.add("opacity-100", "translate-y-0");
 }
 
 function closeOverlay() {
-    var overlay = document.getElementById("overlay-new-game");
+    const overlay = document.getElementById("overlay-new-game");
     overlay.classList.remove("opacity-100", "translate-y-0");
     overlay.classList.add("opacity-0", "translate-y-10");
     setTimeout(() => {
-        overlay.style.display = "none";
+        overlay.classList.add("hidden");
     }, 500);
 }
 

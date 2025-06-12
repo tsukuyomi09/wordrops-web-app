@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <title>
+            Wordrops – La piattaforma per scrivere e collaborare in tempo reale
+        </title>
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon/favicon-16x16.png"
+        />
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-N6J3B7DJ");
+        </script>
+        <!-- End Google Tag Manager -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="/style/output.css" rel="stylesheet" />
+
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-N6J3B7DJ"
+                height="0"
+                width="0"
+                style="display: none; visibility: hidden"
+            ></iframe
+        ></noscript>
+
+        <div
+            id="admin-login"
+            class="page-wrapper h-screen lg:p-36 p-8 flex-row items-center justify-center bg-cover relative z-50"
+        >
+            <img
+                class="absolute z-0 bottom-0 right-0 w-1/2 md:block hidden h-screen"
+                src="/images/blue-background.jpg"
+                alt="blue background"
+            />
+
+            <!-- Immagine per dispositivi mobili -->
+            <img
+                class="absolute z-0 bottom-0 right-0 w-full md:hidden sm:block"
+                src="/images/blue-bg-mobile.jpg"
+                alt="blue background"
+            />
+
+            <img
+                class="absolute bottom-0 right-0 w-1/2 md:w-auto"
+                src="/images/library_platypus.png"
+                alt="ornitorinco davanti alla libreria"
+            />
+            <a
+                href="/"
+                class="button-container logo-container relative lg:absolute lg:left-4 lg:top-4"
+            >
+                <img
+                    src="/images/logo_wordrops_classic.svg"
+                    alt="Wordrops Logo"
+                    class="mx-auto w-26 lg:w-36"
+                />
+            </a>
+
+            <div
+                class="flex flex-col items-center lg:justify-center justify-start mt-24 lg:mt-0 relative z-10 lg:h-full h-auto"
+            >
+                <h2 class="mb-4 text-xl font-bold text-gray-600">admin</h2>
+                <div
+                    class="wrapper text-center relative bg-gray-100 lg:px-6 lg:py-12 px-4 py-8 lg:w-96 w-auto bg-opacity-90 rounded-lg shadow-md"
+                >
+                    <img
+                        src="./images/pen.png"
+                        alt="penna grossa colorata"
+                        class="absolute -top-3 -left-2 lg:w-16 lg:h-16 w-8 h-8"
+                    />
+                    <span
+                        id="login-error"
+                        class="text-red-500 text-sm mt-2 opacity-0"
+                    >
+                        Credenziali errate
+                    </span>
+                    <form id="registrationForm" class="flex-col">
+                        <br />
+                        <input
+                            id="username"
+                            class="p-2 rounded-lg mb-4 border border-blue-400 w-full"
+                            type="username"
+                            placeholder="username"
+                            required
+                        />
+                        <br />
+                        <input
+                            id="password"
+                            class="p-2 rounded-lg mb-4 border border-blue-400 w-full"
+                            type="password"
+                            placeholder="Password"
+                            autocomplete="new-password"
+                            required
+                        />
+                        <br />
+                        <div
+                            style="
+                                display: flex;
+                                gap: 16px;
+                                align-items: center;
+                            "
+                        >
+                            <button
+                                class="cursor-pointer p-2 border-2 w-full font-semibold rounded-lg px-4 text-sg text-white bg-green-400 hover:bg-green-500"
+                                type="button"
+                                onclick="adminLogin()"
+                            >
+                                LOGIN
+                            </button>
+                        </div>
+                    </form>
+
+                    <div
+                        id="buttonDiv"
+                        class="w-full h-px bg-gray-200 my-6"
+                    ></div>
+                </div>
+            </div>
+        </div>
+        <div
+            id="admin-panel"
+            class="min-h-screen hidden flex flex-col justify-center items-center bg-custom-light p-6 font-sans text-gray-900"
+        >
+            <div
+                class="bg-white p-12 w-4xl flex flex-col justify-center items-center"
+            >
+                <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+                <div
+                    id="data-container"
+                    class="flex flex-col w-full gap-8 max-w-4xl"
+                >
+                    <!-- Sezione Partite -->
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h2
+                            class="text-lg font-semibold mb-4 border-b pb-2 border-gray-300"
+                        >
+                            Partite
+                        </h2>
+                        <ul class="space-y-3 text-md">
+                            <li>
+                                <strong>Partite attive:</strong>
+                                <span id="active-games-count" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+
+                            <li>
+                                <strong>Partite completate oggi:</strong>
+                                <span id="completed-today" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                            <li>
+                                <strong
+                                    >Partite completate ultima
+                                    settimana:</strong
+                                >
+                                <span id="completed-week" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Sezione Utenti -->
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h2
+                            class="text-lg font-semibold mb-4 border-b pb-2 border-gray-300"
+                        >
+                            Utenti
+                        </h2>
+                        <ul class="space-y-3 text-md">
+                            <li>
+                                <strong>Utenti attivi al momento:</strong>
+                                <span id="active-users-now" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                            <li>
+                                <strong>Utenti attivi oggi:</strong>
+                                <span id="active-users-today" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                            <li>
+                                <strong>Utenti attivi ultima settimana:</strong>
+                                <span id="active-users-week" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                            <li>
+                                <strong>Utenti registrati oggi:</strong>
+                                <span id="registered-today" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                            <li>
+                                <strong
+                                    >Utenti registrati ultima settimana:</strong
+                                >
+                                <span id="registered-week" class="font-mono"
+                                    >--</span
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="./js/admin.js"></script>
+    </body>
+</html>

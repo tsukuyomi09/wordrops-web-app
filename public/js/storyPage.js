@@ -1,5 +1,29 @@
 /// MENU TOGGLE CHAPTERS AND AUTHORS ///
 
+document.addEventListener("DOMContentLoaded", function () {
+    startPing(60000);
+});
+
+function startPing(intervalMs = 60000) {
+    async function ping() {
+        try {
+            const res = await fetch("/profile/user-last-seen", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) throw new Error("Errore ping");
+        } catch (err) {
+            console.error("Ping fallito", err);
+        }
+    }
+
+    ping(); // ping iniziale subito
+    setInterval(ping, intervalMs);
+}
+
 const btnAutori = document.getElementById("btnAutori");
 const dropAutori = document.getElementById("dropupAutori");
 const btnCapitoli = document.getElementById("btnCapitoli");
@@ -68,8 +92,8 @@ function openRegisterModal() {
 }
 
 function openComingSoonModal() {
-    const ComingSoonModal = document.getElementById("popup-coming-soon");
-    ComingSoonModal.classList.remove("hidden");
+    const comingSoonModal = document.getElementById("popup-coming-soon");
+    comingSoonModal.classList.remove("hidden");
 }
 
 /// score logic ///

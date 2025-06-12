@@ -1,6 +1,29 @@
+document.addEventListener("DOMContentLoaded", function () {
+    startPing(60000);
+});
+
+function startPing(intervalMs = 60000) {
+    async function ping() {
+        try {
+            const res = await fetch("/profile/user-last-seen", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) throw new Error("Errore ping");
+        } catch (err) {
+            console.error("Ping fallito", err);
+        }
+    }
+
+    ping(); // ping iniziale subito
+    setInterval(ping, intervalMs);
+}
+
 // button functionalities
 const betaForm = document.getElementById("beta-form");
-const registerButton = document.getElementById("registerButton");
 
 function openBetaForm() {
     betaForm.classList.remove("hidden");
@@ -13,14 +36,6 @@ function closeBetaForm() {
     betaForm.classList.remove("flex");
     document.body.style.overflow = "";
 }
-
-registerButton.addEventListener("mouseover", function () {
-    registerButton.textContent = "Presto disponibile";
-});
-
-registerButton.addEventListener("mouseout", function () {
-    registerButton.textContent = "REGISTRATI";
-});
 
 const revealElements = document.querySelectorAll(".reveal-on-scroll");
 
@@ -104,14 +119,38 @@ document
                     waitingListAge,
                 }),
             });
-
-            if (response.ok) {
-                document.getElementById("waiting-list-form").reset();
-                alert("Grazie.. ti avviseremo al piu presto!");
-            } else {
-                alert("Qualcosa é andato storto");
+            if (!response.ok) {
+                const errorData = await response.json();
+                if (errorData.code === "DUPLICATE_EMAIL") {
+                    showPopupMessage(errorData.message);
+                } else {
+                    showPopupMessage(
+                        errorData.message || "Qualcosa è andato storto."
+                    );
+                }
+                return;
             }
+
+            // Se la risposta è OK
+            document.getElementById("waiting-list-form").reset();
+            showPopupMessage("Grazie mille, a breve riceverai un'email");
+            closeBetaForm();
         } catch (error) {
             console.error("Errore durante la registrazione:", error);
+            showPopupMessage(
+                "Impossibile connettersi al server. Controlla la tua connessione."
+            );
         }
     });
+
+const showPopupMessage = (message) => {
+    const popup = document.getElementById("popup-beta-tester");
+    const popupText = document.getElementById("popup-beta-tester-text");
+    popupText.textContent = message;
+    popup.classList.remove("hidden");
+
+    setTimeout(() => {
+        popup.classList.add("hidden");
+        popupText.textContent = "";
+    }, 3000);
+};

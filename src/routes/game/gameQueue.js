@@ -3,53 +3,11 @@ const router = express.Router();
 const { createGameAndAssignPlayers } = require("../../services/gameManager");
 const checkAuth = require("../../middlewares/checkAuthToken");
 const checkUserStatus = require("../../middlewares/checkUserStatus");
-
-class Queue {
-    constructor() {
-        this.items = [];
-        this.head = 0;
-        this.tail = 0;
-    }
-    enqueue(item) {
-        this.items[this.tail] = item;
-        this.tail++;
-    }
-
-    removePlayer(user_id) {
-        const index = this.items.findIndex(
-            (player) => player.user_id === user_id
-        );
-        if (index === -1) return false;
-
-        this.items.splice(index, 1);
-        this.tail--;
-        return true;
-    }
-    dequeueMultiples(n) {
-        const players = [];
-        for (let i = 0; i < n && this.head < this.tail; i++) {
-            players.push(this.items[this.head]);
-            this.head++;
-        }
-        return players;
-    }
-    checkAndCreateGame() {
-        const numPlayers = this.tail - this.head;
-        if (numPlayers >= 5) {
-            const players = this.dequeueMultiples(5);
-            return players;
-        }
-        return null;
-    }
-}
-
-const gameQueues = {
-    ranked: { slow: new Queue(), fast: new Queue() },
-    normal: { slow: new Queue(), fast: new Queue() },
-};
-
-const playerQueuePosition = {};
-let preGameQueue = {};
+const {
+    gameQueues,
+    playerQueuePosition,
+    preGameQueue,
+} = require("../../services/gameQueueData");
 
 router.post("/", checkAuth, checkUserStatus, (req, res) => {
     const { socketId, avatarForGame: avatar, gameType, gameSpeed } = req.body;
@@ -89,6 +47,25 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
     queue.enqueue(player);
     const players = queue.checkAndCreateGame(player);
     playerQueuePosition[user_id] = { gameType, gameSpeed };
+
+    console.log("----- STATO COMPLETO DELLE CODE -----");
+    for (const gameType in gameQueues) {
+        for (const gameSpeed in gameQueues[gameType]) {
+            const queue = gameQueues[gameType][gameSpeed];
+            const players = queue.toArray().map((p, index) => ({
+                pos: index + 1,
+                user_id: p.user_id,
+                username: p.username,
+                socketId: p.socketId,
+                timestamp: new Date(p.timestamp).toLocaleTimeString(),
+            }));
+            console.log(
+                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
+            );
+            console.table(players);
+        }
+    }
+    console.log("-------------------------------------");
     if (players) {
         const gameId = `${gameType}_${gameSpeed}:${Date.now()}`;
         preGameQueue[gameId] = {
@@ -130,6 +107,25 @@ router.delete("/", checkAuth, async (req, res) => {
     delete playerQueuePosition[user_id];
     const queue = gameQueues[player.gameType][player.gameSpeed];
     queue.removePlayer(user_id);
+
+    console.log("----- STATO COMPLETO DELLE CODE -----");
+    for (const gameType in gameQueues) {
+        for (const gameSpeed in gameQueues[gameType]) {
+            const queue = gameQueues[gameType][gameSpeed];
+            const players = queue.toArray().map((p, index) => ({
+                pos: index + 1,
+                user_id: p.user_id,
+                username: p.username,
+                socketId: p.socketId,
+                timestamp: new Date(p.timestamp).toLocaleTimeString(),
+            }));
+            console.log(
+                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
+            );
+            console.table(players);
+        }
+    }
+    console.log("-------------------------------------");
 
     if (socket) {
         socket.emit("queueAbandoned", {
@@ -175,5 +171,3 @@ async function startCountdownPreGame(io, gameId) {
 }
 
 module.exports = router;
-module.exports.gameQueues = gameQueues;
-module.exports.preGameQueue = preGameQueue;

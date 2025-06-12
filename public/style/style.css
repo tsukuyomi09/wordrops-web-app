@@ -1,3 +1,6 @@
+
+
+
 .my-title {
   font-family: 'Yellowtail';
 }
@@ -338,6 +341,20 @@ font-family: 'Consolas', 'Courier New', monospace;
   }
 }
 
+
+.custom-spinner {
+  width: 46px;
+  animation: spin-reverse 2s linear infinite;
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
 
 
 

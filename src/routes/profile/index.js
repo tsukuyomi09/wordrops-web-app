@@ -9,5 +9,8 @@ router.use("/user-data", require("./userData"));
 router.use("/load-more-books", require("./loadMoreBooks"));
 router.use("/user-stats", require("./userStats"));
 router.use("/remove-game-notification", require("./removeNotification"));
+router.use("/user-last-seen", require("./updateUserLastSeen"));
+router.use("/player-queue-status", require("./playerQueueStatus"));
+router.use("/update-queue-socket", require("./updateQueueSocket"));
 
 module.exports = router;

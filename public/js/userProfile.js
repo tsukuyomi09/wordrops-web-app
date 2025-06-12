@@ -3,7 +3,28 @@ let bookOffset = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
     getUserData();
+    startPing(60000);
 });
+
+function startPing(intervalMs = 60000) {
+    async function ping() {
+        try {
+            const res = await fetch("/profile/user-last-seen", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) throw new Error("Errore ping");
+        } catch (err) {
+            console.error("Ping fallito", err);
+        }
+    }
+
+    ping(); // ping iniziale subito
+    setInterval(ping, intervalMs);
+}
 
 function dashboardButton() {
     const username = localStorage.getItem("username");

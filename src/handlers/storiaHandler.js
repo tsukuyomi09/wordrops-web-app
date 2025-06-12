@@ -110,8 +110,11 @@ async function storiaHandler(req, res) {
 function generateSlug(title) {
     return title
         .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+        .replace(/^-+|-+$/g, "")
+        .substring(0, 50);
 }
 
 function translateGameType(type) {

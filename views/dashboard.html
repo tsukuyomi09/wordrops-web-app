@@ -208,103 +208,114 @@
 
         <div
             id="overlay-new-game"
-            class="fixed inset-0 z-50 flex bg-black/75 flex flex-col md:flex-row transform translate-y-10 transition-all duration-500"
-            style="display: none"
+            class="fixed inset-0 hidden opacity-0 z-50 p-12 flex bg-custom-light flex-col md:flex-row justify-center items-center transform translate-y-10 transition-all duration-500"
         >
+            <div
+                class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+            ></div>
+
             <div
                 id="game-limit-reached"
                 class="absolute hidden z-50 left-1/2 -translate-x-1/2 top-2 text-sm lg:text-xl bg-red-200 text-gray-800 font-semibold md:rounded-2xl py-4 px-6"
             >
                 troppe partite
             </div>
-            <button
-                onclick="closeOverlay()"
-                class="absolute cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 z-50 -translate-y-1/2 bg-red-600 text-white font-bold w-12 h-12 lg:w-16 lg:h-16 text-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition duration-300"
-            >
-                ESCI
-            </button>
+            <div class="w-full max-w-6xl relative">
+                <button
+                    onclick="closeOverlay()"
+                    class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold w-12 h-12 lg:size-14 ext-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
+                >
+                    X
+                </button>
 
-            <div
-                class="w-full md:w-1/2 h-full flex items-center justify-center ml-auto relative group"
-            >
-                <!-- Contenitore dei pulsanti -->
-                <div class="flex flex-col gap-6 lg:gap-10 items-center">
-                    <button
-                        id="new-game-button-normal-fast"
-                        onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
-                        class="py-4 px-8 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
-                    >
-                        CORTA
-                        <div
-                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
-                        >
-                            TURNO: 1 ORA
-                        </div>
-                    </button>
+                <div
+                    class="relative rounded-2xl max-h-[90vh] overflow-hidden max-w-6xl flex flex-col md:flex-row justify-center items-center"
+                >
+                    <img
+                        class="absolute hidden md:block w-18 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        src="/images/wordrops_logo_animal.png"
+                        alt=""
+                    />
 
+                    <!-- Colonna Sinistra -->
                     <div
-                        class="w-full text-center text-white text-xl md:text-2xl lg:text-6xl font-extrabold z-10"
+                        class="flex flex-col w-full py-12 md:py-24 bg-white justify-center items-center gap-4"
                     >
-                        CLASSICA
+                        <button
+                            id="new-game-button-normal-fast"
+                            onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
+                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        >
+                            CORTA
+                            <div
+                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                            >
+                                TURNO: 1 ORA
+                            </div>
+                        </button>
+                        <div class="px-6 py-4 text-center">
+                            <p
+                                class="text-lg md:text-xl text-custom-blue font-bold"
+                            >
+                                CLASSICA
+                            </p>
+                            <p>per divertirsi e allenarsi</p>
+                        </div>
+                        <button
+                            id="new-game-button-normal-slow"
+                            onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
+                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        >
+                            LUNGA
+                            <div
+                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                            >
+                                TURNO: 12 ORE
+                            </div>
+                        </button>
                     </div>
 
-                    <button
-                        id="new-game-button-normal-slow"
-                        onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
-                        class="py-4 px-8 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                    <!-- Colonna Destra -->
+                    <div
+                        class="flex flex-col py-12 md:py-24 bg-gradient-to-r from-purple-500 to-red-300 w-full justify-center items-center gap-4"
                     >
-                        LUNGA
-                        <div
-                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                        <button
+                            id="new-game-button-ranked-fast"
+                            onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
+                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
-                            TURNO: 12 ORE
+                            CORTA
+                            <div
+                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                            >
+                                TURNO: 1 ORA
+                            </div>
+                        </button>
+                        <div class="px-6 py-4 text-center">
+                            <p class="text-lg md:text-xl text-white font-bold">
+                                CLASSIFICATA
+                            </p>
+                            <p class="text-white text-xs md:text-sm">
+                                Guadagna punti, scala le classifiche
+                            </p>
                         </div>
-                    </button>
+                        <button
+                            id="new-game-button-ranked-slow"
+                            onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
+                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        >
+                            LUNGA
+                            <div
+                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                            >
+                                TURNO: 12 ORE
+                            </div>
+                        </button>
+                    </div>
                 </div>
-
-                <!-- Testo NORMAL -->
             </div>
 
             <!-- Sezione destra -->
-
-            <div
-                class="w-full md:w-1/2 h-full flex items-center justify-center ml-auto relative group"
-            >
-                <!-- Contenitore dei pulsanti -->
-                <div class="flex flex-col gap-6 lg:gap-10 items-center">
-                    <button
-                        id="new-game-button-ranked-fast"
-                        onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
-                        class="py-4 px-8 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
-                    >
-                        CORTA
-                        <div
-                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
-                        >
-                            TURNO: 1 ORA
-                        </div>
-                    </button>
-
-                    <div
-                        class="w-full text-center text-white text-xl md:text-2xl lg:text-6xl font-extrabold z-10"
-                    >
-                        CLASSIFICATA
-                    </div>
-
-                    <button
-                        id="new-game-button-ranked-slow"
-                        onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
-                        class="py-4 px-8 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-gradient-to-r from-purple-800 to-red-400 border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
-                    >
-                        LUNGA
-                        <div
-                            class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
-                        >
-                            TURNO: 12 ORE
-                        </div>
-                    </button>
-                </div>
-            </div>
         </div>
 
         <div class="h-[35%] flex flex-col w-full">
@@ -348,32 +359,6 @@
                     <div
                         class="flex justify-center items-center gap-2 md:gap-4"
                     >
-                        <div class="relative">
-                            <div class="flex flex-col relative">
-                                <div class="flex items-center gap-4 relative">
-                                    <input
-                                        id="search-input"
-                                        type="text"
-                                        placeholder="cerca utente"
-                                        class="border-2 size-10 border-gray-200 px-4 py-1 md:py-2 text-gray-800 rounded-lg w-full"
-                                    />
-                                    <button
-                                        onclick="searchUser()"
-                                        class="absolute right-0 bg-custom-light h-full cursor-pointer border-2 border-gray-200 rounded-lg"
-                                    >
-                                        <img
-                                            class="size-8 p-2"
-                                            src="/images/icons/search-interface-symbol.png"
-                                            alt="Cerca"
-                                        />
-                                    </button>
-                                </div>
-                                <div
-                                    id="error-message"
-                                    class="text-red-600 absolute -bottom-6 right-0 text-sm"
-                                ></div>
-                            </div>
-                        </div>
                         <button
                             onclick="toggleDropdownMobile()"
                             class="p-2 rounded-md border-2 size-10 border-gray-200 focus:outline-none"
@@ -419,6 +404,26 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="p-2 w-full flex flex-row justify-center items-center">
+                <button
+                    onclick="openWaitingQueueModal()"
+                    id="mini-queue-display"
+                    class="cursor-pointer relative hidden flex flex-row justify-center items-center font-semibold text-sm text-gray-800"
+                >
+                    <div
+                        class="cursor-pointer font-semibold text-sm text-green-600"
+                    >
+                        in coda
+                    </div>
+                    <div class="absolute -right-6" id="waiting-gif">
+                        <img
+                            src="/images/gifs/queue-spinner.gif"
+                            alt="Waiting Gif"
+                            class="size-5"
+                        />
+                    </div>
+                </button>
             </div>
 
             <!-- Middle row -->
@@ -474,7 +479,6 @@
                     <div
                         onclick="openOverlay()"
                         class="relative cursor-pointer flex flex-col justify-center items-center"
-                        id="lottie-button"
                     >
                         <img
                             src="/images/book_new_game.png"
@@ -1030,49 +1034,74 @@
             </div>
         </div>
 
-        <div class="page-wrap p-6 fixed min-h-screen z-50">
+        <div class="p-6 fixed min-h-screen z-50">
             <!-- queue overlay -->
             <div
                 id="waiting-overlay"
-                class="fixed inset-0 bg-black/80 flex items-center justify-center hidden"
+                class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden"
             >
-                <div class="flex flex-col items-center">
-                    <div id="waiting-text" class="text-white text-2xl mb-4">
-                        In attesa di altri giocatori...
-                    </div>
-                    <div id="waiting-gif" class="mb-4">
-                        <img
-                            src="/images/gifs/queue-spinner.gif"
-                            alt="Waiting Gif"
-                            class="w-32 h-32"
-                        />
-                    </div>
+                <div
+                    class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+                ></div>
+                <div
+                    class="bg-white rounded-2xl p-8 md:p-24 w-full md:max-w-4xl relative"
+                >
                     <button
-                        id="abandon-queue-button"
-                        onclick="abandonQueue()"
-                        class="px-6 py-3 bg-red-500 text-white font-semibold text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
+                        onclick="closeWaitingQueueModal()"
+                        class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold w-12 h-12 lg:size-14 ext-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
                     >
-                        esci dalla coda
+                        X
                     </button>
+
+                    <div
+                        class="flex flex-col items-center justify-center gap-4"
+                    >
+                        <div
+                            id="waiting-text"
+                            class="text-gray-800 font-semibold text-center text-lg md:text-xl lg:text-2xl"
+                        >
+                            In attesa di altri giocatori...
+                        </div>
+                        <div id="waiting-gif" class="py-6">
+                            <img
+                                src="/images/wordrops_logo_animal.png"
+                                alt="Wordrops Spinner"
+                                class="custom-spinner"
+                            />
+                        </div>
+                        <button
+                            id="abandon-queue-button"
+                            onclick="abandonQueue()"
+                            class="px-6 py-3 bg-red-500 text-white font-semibold text-md md:text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
+                        >
+                            ABBANDONA
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- preQueue overlay -->
             <div
                 id="countdown-overlay"
-                class="fixed inset-0 bg-black/80 flex items-center justify-center z-10 hidden"
+                class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden"
             >
+                <div
+                    class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+                ></div>
                 <div
                     id="game-ready-container"
                     class="flex flex-col items-center hidden"
                 >
-                    <h2 class="text-white text-4xl font-bold">Si Inizia!</h2>
+                    <h2 class="text-gray-800 text-4xl font-bold">Si Inizia!</h2>
                 </div>
                 <div
                     id="countdown-seconds-container"
                     class="flex flex-col items-center"
                 >
-                    <div id="countdown" class="text-white text-2xl mb-2">
+                    <div
+                        id="countdown"
+                        class="text-gray-800 font-bold text-2xl mb-2"
+                    >
                         Partita trovata, Inizio in:
                     </div>
                     <h2
@@ -1090,21 +1119,5 @@
         <script src="/js/menu.js" defer></script>
         <script src="/js/getUserStats.js" defer></script>
         <script src="/js/personalLibrary.js"></script>
-
-        <audio
-            id="click-sound"
-            src="/images/button-hover-sound.mp3"
-            preload="auto"
-        ></audio>
-        <audio
-            id="select-sound"
-            src="/images/avatar-select-1.mp3"
-            preload="auto"
-        ></audio>
-        <audio
-            id="select-sound-new-game"
-            src="/images/new-game-sound.mp3"
-            preload="auto"
-        ></audio>
     </body>
 </html>

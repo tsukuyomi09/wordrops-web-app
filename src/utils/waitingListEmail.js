@@ -35,8 +35,8 @@ const sendWaitingListEmail = async (userEmail, name) => {
         text: `Ciao ${name}!`,
         html: `
             <img src="cid:wordropsLogo" alt="Wordrops" width="120" />
-            <h2>🎉 Grazie per esserti iscritto!</h2>
-            <p>Ciao ${name}! Sei ufficialmente nella nostra waiting list. Ti invieremo una notifica quando sarà il tuo turno per accedere alla beta di <strong>Wordrops</strong>.</p>
+            <h2>🎉 Grazie per l'iscrizione!</h2>
+            <p>Ciao ${name}! Sei ufficialmente registrato come beta tester. Ti invieremo una notifica quando sarà il tuo turno per accedere e provare <strong>Wordrops</strong>.</p>
             <br/>
             <small>Questa è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.</small>
         `,

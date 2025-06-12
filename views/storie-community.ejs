@@ -139,7 +139,7 @@
                 </div>
 
                 <div
-                    class="flex flex-row gap-4 md:gap-8 py-2 bg-white md:bg-transparent w-full md:w-auto justify-center border-b border-custom-light md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
+                    class="relative flex flex-row gap-4 md:gap-8 py-3 bg-white md:bg-transparent w-full md:w-auto justify-center border-b border-custom-light md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
                 >
                     <div class="">
                         <a
@@ -149,10 +149,10 @@
                             <img
                                 src="/images/icons/icons8-trofeo-48.png"
                                 alt="trophy Icon"
-                                class="icon-image size-5 md:size-8"
+                                class="icon-image size-6"
                             />
                             <div
-                                class="text-xs md:text-sm font-semibold text-gray-800"
+                                class="text-xs hidden md:block md:text-sm font-semibold text-gray-800"
                             >
                                 classifiche
                             </div>
@@ -166,12 +166,12 @@
                             <img
                                 src="/images/icons/icons8-casa-100.png"
                                 alt="leaderboard Icon"
-                                class="icon-image size-5 md:size-8"
+                                class="icon-image size-6"
                             />
                             <div
-                                class="text-xs md:text-sm font-semibold text-gray-800"
+                                class="text-xs hidden md:block md:text-sm font-semibold text-gray-800"
                             >
-                                dashboard
+                                profilo
                             </div>
                         </a>
                     </div>
@@ -183,14 +183,36 @@
                             <img
                                 src="/images/icons/library-icon.png"
                                 alt="library Icon"
-                                class="icon-image size-5 md:size-8"
+                                class="icon-image size-6"
                             />
                             <div
-                                class="text-xs md:text-sm font-semibold text-gray-800"
+                                class="text-xs hidden md:block md:text-sm font-semibold text-gray-800"
                             >
-                                libreria
+                                community
                             </div>
                         </a>
+                    </div>
+                    <div
+                        class="flex justify-center absolute top-1/2 right-0 md:-right-26"
+                    >
+                        <button
+                            onclick="openWaitingQueueModal()"
+                            id="mini-queue-display"
+                            class="cursor-pointer relative hidden flex justify-center items-center font-semibold text-sm text-gray-800 transform -translate-y-1/2"
+                        >
+                            <div
+                                class="cursor-pointer font-semibold text-sm text-green-600"
+                            >
+                                in coda
+                            </div>
+                            <div class="" id="waiting-gif">
+                                <img
+                                    src="/images/gifs/queue-spinner.gif"
+                                    alt="Waiting Gif"
+                                    class="size-5"
+                                />
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -409,6 +431,85 @@
                 </div>
             </div>
         </div>
+        <div class="p-6 fixed min-h-screen z-50">
+            <!-- queue overlay -->
+            <div
+                id="waiting-overlay"
+                class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden"
+            >
+                <div
+                    class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+                ></div>
+                <div
+                    class="bg-white rounded-2xl p-8 md:p-24 w-full md:max-w-4xl relative"
+                >
+                    <button
+                        onclick="closeWaitingQueueModal()"
+                        class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold w-12 h-12 lg:size-14 ext-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
+                    >
+                        X
+                    </button>
+
+                    <div
+                        class="flex flex-col items-center justify-center gap-4"
+                    >
+                        <div
+                            id="waiting-text"
+                            class="text-gray-800 font-semibold text-center text-lg md:text-xl lg:text-2xl"
+                        >
+                            In attesa di altri giocatori...
+                        </div>
+                        <div id="waiting-gif" class="py-6">
+                            <img
+                                src="/images/wordrops_logo_animal.png"
+                                alt="Wordrops Spinner"
+                                class="custom-spinner"
+                            />
+                        </div>
+                        <button
+                            id="abandon-queue-button"
+                            onclick="abandonQueue()"
+                            class="px-6 py-3 bg-red-500 text-white font-semibold text-md md:text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
+                        >
+                            ABBANDONA
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- preQueue overlay -->
+            <div
+                id="countdown-overlay"
+                class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden"
+            >
+                <div
+                    class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
+                ></div>
+                <div
+                    id="game-ready-container"
+                    class="flex flex-col items-center hidden"
+                >
+                    <h2 class="text-gray-800 text-4xl font-bold">Si Inizia!</h2>
+                </div>
+                <div
+                    id="countdown-seconds-container"
+                    class="flex flex-col items-center"
+                >
+                    <div
+                        id="countdown"
+                        class="text-gray-800 font-bold text-2xl mb-2"
+                    >
+                        Partita trovata, Inizio in:
+                    </div>
+                    <h2
+                        id="countdown-seconds"
+                        class="text-red-500 text-9xl font-bold"
+                    ></h2>
+                </div>
+            </div>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/queueControl.js" defer></script>
         <script src="/js/menu.js" defer></script>
         <script src="/js/community.js" defer></script>
     </body>

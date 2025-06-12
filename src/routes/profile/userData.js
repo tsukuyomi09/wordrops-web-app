@@ -10,7 +10,7 @@ router.get("/", checkAuth, checkUserStatus, async (req, res) => {
             req;
 
         if (!username) {
-            return res.status(404).json({ error: "Username non trovato" });
+            return res.status(400).json({ error: "Username non trovato" });
         }
 
         const gameNotifications = notificationMap.get(user_id);

@@ -28,7 +28,7 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         "..",
         "public",
         "images",
-        "logo_wordrops_classic_blue.png"
+        "email_logo.png"
     );
 
     const mailOptions = {
@@ -50,7 +50,7 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
 
         attachments: [
             {
-                filename: "logo_wordrops_classic_blue.png",
+                filename: "email_logo.png",
                 path: imagePath,
                 cid: "wordropsLogo",
             },

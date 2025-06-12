@@ -6,7 +6,9 @@
 
 ### Author
 
-Samuele Sala - tsukiyomiiii — software and web developer. More about me on LinkedIn [https://www.linkedin.com/in/samuele-sala-a1a63722a/]
+**Samuele Sala** — Software & Web Developer  
+Founder and sole developer of Wordrops  
+🔗 [LinkedIn](https://www.linkedin.com/in/samuele-sala-a1a63722a/)
 
 ## Live Site
 
@@ -18,34 +20,23 @@ Samuele Sala - tsukiyomiiii — software and web developer. More about me on Lin
 
 _A full demo video is coming soon._
 
-In the upcoming video, you'll see:
+## TL;DR Wordrops – Technical Overview
 
--   🔐 **Signup + Onboarding**  
-    Register, choose your avatar and username
+### Real-time full-stack app, designed and built from scratch
 
--   🧭 **Dashboard Navigation**  
-    Stories in progress, completed games, user stats and much more
+-   **Backend:** Node.js (Express), PostgreSQL, WebSocket, OpenAI API, OAuth, JWT
 
--   🎮 **Start a Match**  
-    Different mode games to choose from, classic and ranked
+-   **Frontend:** HTML + Tailwind + JavaScript (responsive UI)
 
--   🕹️ **In-Game Experience**  
-    Real-time multiplayer, live chat, countdown, turn-based chapters
+-   **Real-time multiplayer** system with dynamic matchmaking (**O(1) queues**)
 
--   💬 **Live Notifications**  
-    Popups for new chapters, game events, unread messages
+-   **AI integration** for titles, covers, genres, scoring, and generated images
 
--   🧠 **AI Post-Match**  
-    Ai taking care of creating titlea, back covers, genres, ranking points and custom cover images
+-   **Advanced security:** Argon2, OAuth, JWT with refresh tokens
 
--   📚 **Community Stories**  
-    Browse, read, and rate public stories
+-   Live notifications via **WebSocket** + fallback database system
 
--   🏆 **Leaderboards**  
-    Ranked users with global stats
-
--   🙋 **User Profiles**  
-    Public author pages with stats and stories
+-   Full deployment on **Railway** + **Cloudinary**
 
 ## 📦 1. Features
 
