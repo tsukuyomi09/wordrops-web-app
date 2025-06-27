@@ -223,6 +223,10 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
+app.get("/en", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "homepage-en.html"));
+});
+
 app.get("/dashboard/:user_id", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "dashboard.html"));
 });
