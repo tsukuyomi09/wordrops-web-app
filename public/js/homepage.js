@@ -117,6 +117,7 @@ document
                     waitingListpreferences,
                     waitingListGender,
                     waitingListAge,
+                    language: "it",
                 }),
             });
             if (!response.ok) {

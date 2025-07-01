@@ -10,12 +10,16 @@ router.post("/", async (req, res) => {
         waitingListpreferences,
         waitingListGender,
         waitingListAge,
+        language,
     } = req.body;
 
     if (
         !waitingListName ||
         !waitingListEmail ||
-        !waitingListpreferences | !waitingListGender | !waitingListAge
+        !waitingListpreferences ||
+        !waitingListGender ||
+        !waitingListAge ||
+        !language
     ) {
         return res
             .status(400)
@@ -24,16 +28,17 @@ router.post("/", async (req, res) => {
 
     try {
         const query =
-            "INSERT INTO waiting_list (name, email, preferences, gender, age_range, created_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *";
+            "INSERT INTO waiting_list (name, email, preferences, gender, age_range, language, created_at) VALUES ($1, $2, $3, $4, $5, $6, NOW()) RETURNING *";
         const result = await client.query(query, [
             waitingListName,
             waitingListEmail,
             waitingListpreferences,
             waitingListGender,
             waitingListAge,
+            language,
         ]);
 
-        sendWaitingListEmail(waitingListEmail, waitingListName);
+        sendWaitingListEmail(waitingListEmail, waitingListName, language);
         res.status(201).json(result.rows[0]);
     } catch (error) {
         if (
