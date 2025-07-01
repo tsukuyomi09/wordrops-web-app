@@ -1,6 +1,54 @@
 document.addEventListener("DOMContentLoaded", function () {
     startPing(60000);
+    const aboveTheFold = document.getElementById("above-the-fold");
+    const toggleBetaButtonVisibility = (entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                switchNavLogoAndButton("visible");
+            } else {
+                switchNavLogoAndButton("hidden");
+            }
+        });
+    };
+
+    const options = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+    };
+
+    const observer = new IntersectionObserver(
+        toggleBetaButtonVisibility,
+        options
+    );
+    observer.observe(aboveTheFold);
 });
+
+function switchNavLogoAndButton(state) {
+    const centralLogo = document.getElementById("central-logo");
+    const revealLogo = document.getElementById("reveal-logo");
+    const betaButton = document.getElementById("beta-tester-reveal");
+
+    if (state === "visible") {
+        // Stato: sopra la fold, mostro centralLogo
+        centralLogo.classList.remove("opacity-0", "pointer-events-none");
+        centralLogo.classList.add("opacity-100");
+
+        [revealLogo, betaButton].forEach((el) => {
+            el.classList.remove("opacity-100");
+            el.classList.add("opacity-0", "pointer-events-none");
+        });
+    } else {
+        // Stato: sotto la fold, nascondo centralLogo, mostro gli altri
+        centralLogo.classList.add("opacity-0", "pointer-events-none");
+        centralLogo.classList.remove("opacity-100");
+
+        [revealLogo, betaButton].forEach((el) => {
+            el.classList.remove("opacity-0", "pointer-events-none");
+            el.classList.add("opacity-100");
+        });
+    }
+}
 
 function startPing(intervalMs = 60000) {
     async function ping() {

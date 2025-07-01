@@ -273,16 +273,44 @@
                 </button>
             </form>
         </div>
-        <div id="menu" class="w-full z-50 sticky top-0 md:p-4 bg-white">
+        <div
+            id="menu"
+            class="w-full z-50 sticky top-0 md:p-4 bg-white py-4 px-6"
+        >
             <div
-                class="flex relative flex-col md:flex-row justify-center w-full h-full items-center"
+                class="flex relative flex-row justify-center w-full h-full items-center"
             >
-                <div class="">
+                <div
+                    id="reveal-logo"
+                    class="mr-auto pointer-events-none opacity-0 transition-opacity duration-500"
+                >
                     <img
                         src="/images/logo_wordrops_classic.svg"
                         alt="Wordrops Logo"
-                        class="mx-auto lg:w-32 hidden md:w-28 md:block"
+                        class="w-18 lg:w-32 md:w-28 md:block"
                     />
+                </div>
+                <div
+                    id="central-logo"
+                    class="opacity-100 transition-opacity duration-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                >
+                    <img
+                        src="/images/logo_wordrops_classic.svg"
+                        alt="Wordrops Logo"
+                        class="w-18 lg:w-32 md:w-28 md:block"
+                    />
+                </div>
+                <div
+                    id="beta-tester-reveal"
+                    class="ml-auto block pointer-events-none opacity-0 transition-opacity duration-500 lg:absolute lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
+                >
+                    <button
+                        onclick="openBetaForm()"
+                        id=""
+                        class="cursor-pointer text-xs md:text-md card-container font-semibold bg-gradient-to-r from-purple-500 to-red-500 py-4 px-4 lg:py-4 lg:px-8 text-white rounded-md"
+                    >
+                        ENTRA COME BETA TESTER
+                    </button>
                 </div>
                 <!-- <div
                     class="flex flex-row items-center justify-between w-full md:w-auto gap-6 md:gap-2 p-4 md:p-0"
@@ -309,11 +337,12 @@
                 </div> -->
             </div>
         </div>
-        <div class="wrap pt-2 overflow-hidden">
+        <div class="wrap overflow-hidden">
             <div
+                id="above-the-fold"
                 class="section mx-auto md:px-6 flex flex-col justify-center items-center"
             >
-                <div class="relative flex-col justify-center md:my-6 my-4 px-4">
+                <div class="relative flex-col justify-center md:my-6 px-4">
                     <div class="py-8 flex flex-col justify-center items-center">
                         <!-- <h1 class="text-center lg:text-7xl md:text-3xl text-3xl font-bold ">NO ORDINARY WRITERS</h1> -->
                         <h1
@@ -322,7 +351,7 @@
                             Conquista l'Arte Dello Scrivere
                         </h1>
                         <h3
-                            class="text-center md:py-2 text-gray-800 text-md md:text-xl font-bold"
+                            class="text-center md:py-2 text-gray-800 text-lg md:text-xl font-bold"
                         >
                             La prima piattaforma per collaborare, competere e
                             scalare le classifiche
@@ -547,9 +576,9 @@
                             id="top-container"
                         >
                             <div
-                                class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white"
+                                class="flexflex-col gap-4 w-full rounded-md md:py-6 py-8 md:px-10 px-6 bg-white"
                             >
-                                <div class="flex items-center mb-2 gap-4">
+                                <div class="flex items-center mb-6 gap-4">
                                     <h2 class="text-3xl font-bold">
                                         Modalità
                                         <span class="text-red-500"
@@ -559,7 +588,7 @@
                                     <img
                                         src="/images/icons/icon1.png"
                                         alt="Icona Sfida"
-                                        class="md:w-12 md:h-12 w-24 h-24"
+                                        class="md:size-12 size-10"
                                     />
                                 </div>
                                 <p class="text-lg">
@@ -579,9 +608,9 @@
                             id="bottom-container"
                         >
                             <div
-                                class="flexflex-col gap-4 w-full rounded-md md:py-6 py-4 md:px-10 px-6 bg-white"
+                                class="flexflex-col gap-4 w-full rounded-md md:py-6 py-8 md:px-10 px-6 bg-white"
                             >
-                                <div class="flex items-center mb-2 gap-4">
+                                <div class="flex items-center mb-6 gap-4">
                                     <h2 class="text-3xl font-bold">
                                         Modalità
                                         <span class="text-green-600"
@@ -591,7 +620,7 @@
                                     <img
                                         src="/images/icons/icon2.png"
                                         alt="Icona Relax"
-                                        class="md:w-12 md:h-12 w-24 h-24"
+                                        class="md:size-12 size-10"
                                     />
                                 </div>
                                 <p class="text-lg">
@@ -650,7 +679,7 @@
                         </h3>
                     </div>
                     <div class="flex-col">
-                        <p>
+                        <p class="text-lg">
                             Entra in gioco con 4 altri scrittori sconosciuti e
                             inizia a creare una storia unica. Ogni volta, la
                             trama si sviluppa in modo imprevedibile: questa è
@@ -674,7 +703,7 @@
                         </h3>
                     </div>
                     <div class="flex-col">
-                        <p>
+                        <p class="text-lg">
                             Quando è il tuo turno, avrai un tempo definito per
                             aggiungere il tuo tocco personale alla storia. Ma
                             attenzione: ogni capitolo deve intrecciarsi con
@@ -698,13 +727,13 @@
                         </h3>
                     </div>
                     <div class="flex-col">
-                        <p>
+                        <p class="text-lg">
                             Dopo 5 turni, la tua squadra avrà completato una
                             storia epica (si spera). A seconda della modalità
                             scelta, il gioco si sviluppa in modi diversi.
                         </p>
                         <br />
-                        <p>
+                        <p class="text-lg">
                             <span class="text-red-500 text-lg font-bold"
                                 >Classificata:</span
                             >
@@ -712,7 +741,7 @@
                             Ogni contributo che fa la differenza ti farà
                             guadagnare punti per scalare la classifica globale.
                         </p>
-                        <p>
+                        <p class="text-lg">
                             <br /><span class="text-green-500 text-lg font-bold"
                                 >Classica:</span
                             >
@@ -735,7 +764,7 @@
                         </h3>
                     </div>
                     <div class="flex-col">
-                        <p>
+                        <p class="text-lg">
                             Ogni storia completata e ogni capitolo scritto ti
                             permette di scalare la classifica e dimostrare a
                             tutti chi è il miglior narratore. In questa
@@ -757,9 +786,7 @@
                     <h2 class="ls:text-6xl md:text-4xl text-3xl font-bold">
                         Storie della community
                     </h2>
-                    <p
-                        class="text-sm md:text-[16px] md:w-[75%] text-center lg:text-left"
-                    >
+                    <p class="md:w-[75%] text-center text-lg lg:text-left">
                         Leggi le storie scritte da altri giocatori. Prenditi una
                         pausa, segui i tuoi autori preferiti, vota i racconti,
                         condividili e lasciati ispirare dalla creatività.
@@ -804,9 +831,7 @@
                     <h2 class="ls:text-6xl md:text-4xl text-3xl font-bold">
                         Le Classifiche
                     </h2>
-                    <p
-                        class="text-sm md:text-[16px] md:w-[75%] text-center lg:text-left"
-                    >
+                    <p class="md:w-[75%] text-center text-lg lg:text-left">
                         Sei pronto a competere? Confrontati con altri scrittori,
                         segui i tuoi progressi nel tempo. Presto premi e molto
                         altro settimanali e mensili per gli scrittori piu
@@ -837,7 +862,7 @@
                         per scrittori e lettori
                     </h2>
                     <p
-                        class="text-sm md:text-[16px] md:w-[75%] lg:w-[50%] text-center text-white font-semibold mb-10 md:mb-14 lg:mb-20"
+                        class="text-md md:text-[16px] md:w-[75%] lg:w-[50%] text-center text-white font-semibold mb-10 md:mb-14 lg:mb-20"
                     >
                         Wordrops non è solo un gioco: Scrivi storie, leggi
                         quelle della community, condividi, segui altri utenti,
