@@ -82,7 +82,7 @@
                         id="book-vote-text"
                         class="text-lg text-center font-semibold"
                     >
-                        Vota!
+                        Vote!
                     </h3>
 
                     <div
@@ -98,7 +98,7 @@
                             class="px-4 py-2 cursor-pointer bg-blue-600 text-sm text-white rounded hover:bg-blue-700"
                             disabled
                         >
-                            Conferma
+                            Confirm
                         </button>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                         id="book-vote-text"
                         class="text-lg text-center font-semibold"
                     >
-                        Accedi ed entra nella community!
+                        Log in and join the community!
                     </h3>
 
                     <div class="flex flex-row w-full items-center gap-2">
@@ -134,7 +134,7 @@
                             <div
                                 class="transition group-hover:-translate-x-[150%] group-hover:opacity-0"
                             >
-                                registrati
+                                register
                             </div>
 
                             <div
@@ -187,7 +187,7 @@
                         id="book-vote-text"
                         class="text-lg text-center font-semibold"
                     >
-                        Funzionalitá Presto disponibile!
+                        Feature Coming Soon!
                     </h3>
                 </div>
             </div>
@@ -217,7 +217,7 @@
                             <div
                                 class="transition group-hover:-translate-x-[150%] group-hover:opacity-0"
                             >
-                                registrati
+                                register
                             </div>
 
                             <div
@@ -272,7 +272,7 @@
                                 <div
                                     class="text-xs hidden md:block md:text-sm font-semibold text-gray-800"
                                 >
-                                    classifiche
+                                    leaderboards
                                 </div>
                             </a>
                         </div>
@@ -289,7 +289,7 @@
                                 <div
                                     class="text-xs hidden md:block md:text-sm font-semibold text-gray-800"
                                 >
-                                    profilo
+                                    profile
                                 </div>
                             </a>
                         </div>
@@ -321,7 +321,7 @@
                                 <div
                                     class="cursor-pointer font-semibold text-sm text-green-600"
                                 >
-                                    in coda
+                                    in queue
                                 </div>
                                 <div class="" id="waiting-gif">
                                     <img
@@ -420,7 +420,7 @@
                                     class="flex flex-row items-center md:hidden justify-center w-full text-md font-semibold text-gray-800"
                                     onclick="authorsDropup()"
                                 >
-                                    autori
+                                    authors
                                 </button>
 
                                 <!-- dropdown authors -->
@@ -497,7 +497,7 @@
                                             class="size-7 cursor-pointer transition-transform duration-300 hover:scale-110"
                                         />
                                         <span class="hidden md:block"
-                                            >Commenta</span
+                                            >Comment</span
                                         >
                                     </button>
 
@@ -513,7 +513,7 @@
                                             class="size-7 cursor-pointer"
                                         />
                                         <span class="hidden md:block"
-                                            >Preferiti</span
+                                            >Bookmark</span
                                         >
                                     </button>
 
@@ -541,9 +541,9 @@
                                         </div>
                                         <div class="hidden md:block">
                                             <% if (userVote) { %>
-                                            <p>tuo voto</p>
+                                            <p>your vote</p>
                                             <% } else { %>
-                                            <p>Vota</p>
+                                            <p>Vote</p>
                                             <% } %>
                                         </div>
                                     </button>
@@ -559,7 +559,7 @@
                                     class="cursor-pointer flex flex-row bg-custom-light items-center justify-center md:justify-start w-full text-md font-semibold text-gray-800 md:p-4"
                                     onclick="chaptersDropup()"
                                 >
-                                    <div>capitoli</div>
+                                    <div>chapters</div>
                                     <span
                                         class="w-full hidden md:block flex justify-end md:ml-4"
                                         ><img
@@ -650,7 +650,7 @@
                         <div
                             class="flex flex-col justify-center items-center gap-6"
                         >
-                            <div class="hidden md:block">condividi</div>
+                            <div class="hidden md:block">share</div>
                             <a
                                 href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(story_url) %>"
                                 target="_blank"
@@ -703,7 +703,7 @@
                                     class="flex-col justify-center items-start"
                                 >
                                     <h3 class="font-semibold text-lg mb-4">
-                                        Informazioni Legali
+                                        Legal Info
                                     </h3>
                                     <ul class="text-sm">
                                         <li class="mb-2">
@@ -711,7 +711,7 @@
                                                 href="/termini-e-condizioni"
                                                 class="hover:text-blue-500 font-semibold py-4"
                                                 target="_blank"
-                                                >Termini e Condizioni</a
+                                                >Terms And Conditions</a
                                             >
                                         </li>
                                         <li class="mb-2">
@@ -734,11 +734,11 @@
                                     class="flex-col justify-center items-start"
                                 >
                                     <h3 class="font-semibold text-lg mb-2">
-                                        Supporto
+                                        Support
                                     </h3>
                                     <p class="text-sm">
-                                        Per qualsiasi domanda o problema,
-                                        contattaci via email:
+                                        For any question or issue, don't esitate
+                                        to contact us via email:
                                     </p>
                                     <a
                                         href="mailto:support@wordrops.com"
@@ -753,7 +753,7 @@
                                 class="col-span-1 sm:col-span-2 lg:col-span-4 text-center mt-4 sm:mt-0"
                             >
                                 <p class="text-sm">
-                                    © 2025 wordrops. Tutti i diritti riservati.
+                                    © 2025 wordrops. All Rights Reserved.
                                 </p>
                             </div>
                         </div>
@@ -780,7 +780,7 @@
                             onclick="closeWaitingQueueModal()"
                             class="flex items-center gap-1 cursor-pointer z-50 text-custom-blue font-bold text-sm md:text-md"
                         >
-                            <span>nascondi finestra</span>
+                            <span>hide window</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="w-4 h-4"
@@ -805,7 +805,7 @@
                             id="waiting-text"
                             class="text-gray-800 font-semibold text-center text-lg md:text-xl lg:text-2xl"
                         >
-                            In attesa di altri giocatori...
+                            Waiting for other players..
                         </div>
                         <div id="waiting-gif" class="py-6">
                             <img
@@ -819,7 +819,7 @@
                             onclick="abandonQueue()"
                             class="px-6 py-3 bg-red-500 text-white font-semibold text-md md:text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
                         >
-                            ABBANDONA
+                            ABANDON
                         </button>
                     </div>
                 </div>
@@ -837,7 +837,9 @@
                     id="game-ready-container"
                     class="flex flex-col items-center hidden"
                 >
-                    <h2 class="text-gray-800 text-4xl font-bold">Si Inizia!</h2>
+                    <h2 class="text-gray-800 text-4xl font-bold">
+                        Grab your pencil!
+                    </h2>
                 </div>
                 <div
                     id="countdown-seconds-container"
@@ -847,7 +849,7 @@
                         id="countdown"
                         class="text-gray-800 font-bold text-2xl mb-2"
                     >
-                        Partita trovata, Inizio in:
+                        Match found, starting in:
                     </div>
                     <h2
                         id="countdown-seconds"
