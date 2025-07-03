@@ -13,13 +13,13 @@ router.post("/:gameId", checkAuth, async (req, res) => {
     const { title, content, currentUser } = req.body;
 
     if (username !== currentUser) {
-        res.status(403).json({ message: "Utente non autorizzato." });
+        res.status(403).json({ message: "User not authorized." });
         return;
     }
 
     const game = activeGames.get(gameId);
     if (!game) {
-        res.status(404).json({ message: "Partita non trovata." });
+        res.status(404).json({ message: "Game not found." });
         return;
     }
 
@@ -28,14 +28,14 @@ router.post("/:gameId", checkAuth, async (req, res) => {
 
     if (!currentTurnPlayer) {
         res.status(500).json({
-            message: "Errore nel recupero del turno corrente.",
+            message: "Error retrieving current turn.",
         });
         return;
     }
 
     if (currentTurnPlayer.username !== currentUser) {
         res.status(403).json({
-            message: "Non è il turno di questo giocatore.",
+            message: "It is not this player's turn.",
         });
         return;
     }
@@ -59,16 +59,15 @@ router.post("/:gameId", checkAuth, async (req, res) => {
             if (!saveSuccess) {
                 return res
                     .status(500)
-                    .json({ message: "Errore nel salvataggio del gioco." });
+                    .json({ message: "Error saving the game." });
             }
 
             return res.json({
-                message: "Gioco completato e giocatori notificati.",
+                message: "Game completed and players notified.",
             });
         } catch (err) {
             return res.status(500).json({
-                message:
-                    "Si è verificato un errore durante la gestione del gioco.",
+                message: "An error occurred while handling the game.",
             });
         }
     }
@@ -89,7 +88,7 @@ router.post("/:gameId", checkAuth, async (req, res) => {
         previousAuthor: username,
     });
 
-    res.json({ message: "Dati ricevuti correttamente." });
+    res.json({ message: "Data received successfully." });
 });
 
 module.exports = router;

@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
         username === process.env.ADMIN_USERNAME &&
         password === process.env.ADMIN_PASS
     ) {
-        console.log("Credenziali corrette, procedo");
+        console.log("Correct credentials, proceeding");
 
         try {
             const usersData = await client.query(`
@@ -73,13 +73,13 @@ router.post("/", async (req, res) => {
             };
             return res.status(200).json({ panelData });
         } catch (error) {
-            console.error("Errore interno:", error);
+            console.error("Internal error:", error);
             return res
                 .status(500)
-                .json({ message: `Errore server, ${error.message || error}` });
+                .json({ message: `Server error,, ${error.message || error}` });
         }
     } else {
-        return res.status(400).json({ message: "Credenziali errate" });
+        return res.status(400).json({ message: "Incorrect credentials" });
     }
 });
 

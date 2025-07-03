@@ -1,10 +1,10 @@
 function validateArrayFormat(ratings, numberOfChapters) {
     if (!Array.isArray(ratings)) {
-        throw new Error("I punteggi devono essere un array.");
+        throw new Error("Scores must be an array.");
     }
     if (ratings.length !== numberOfChapters) {
         throw new Error(
-            "Il numero di punteggi deve corrispondere al numero dei capitoli."
+            "The number of scores must match the number of chapters."
         );
     }
 }
@@ -27,27 +27,25 @@ function validateChapterFormat(ratings, numberOfChapters) {
                     typeof chapterNumber === "number" &&
                     !isNaN(chapterNumber) &&
                     chapterNumber > 0,
-                message: `Capitolo ${
+                message: `Chapter ${
                     index + 1
-                }: "chapterNumber" non valido. Ricevuto: ${
-                    rating.chapterNumber
-                }`,
+                }: Invalid "chapterNumber" received:  ${rating.chapterNumber}`,
             },
             {
                 valid: chapterNumber >= 1 && chapterNumber <= numberOfChapters,
-                message: `Capitolo ${
+                message: `Chapter ${
                     index + 1
-                }: "chapterNumber" fuori range (1-${numberOfChapters}). Ricevuto: ${chapterNumber}`,
+                }: "chapterNumber" out of range (1-${numberOfChapters}). Received: ${chapterNumber}`,
             },
             {
                 valid: !seenChapterNumbers.has(chapterNumber),
-                message: `Capitolo ${
+                message: `Chapter ${
                     index + 1
-                }: "chapterNumber" duplicato: ${chapterNumber}`,
+                }: "chapterNumber" duplicate: ${chapterNumber}`,
             },
             {
                 valid: typeof comment === "string" && comment.trim() !== "",
-                message: `Capitolo ${index + 1}: "comment" non valido o vuoto.`,
+                message: `Chapter ${index + 1}: "comment" invalid or missing.`,
             },
         ];
 
@@ -59,9 +57,7 @@ function validateChapterFormat(ratings, numberOfChapters) {
     });
 
     if (errors.length > 0) {
-        throw new Error(
-            `Errori validazione capitoli:\n- ${errors.join("\n- ")}`
-        );
+        throw new Error(`Chapter validation errors:\n- ${errors.join("\n- ")}`);
     }
 }
 
@@ -76,7 +72,7 @@ function validateScoreFormat(ratings) {
             !Number.isInteger(rating.number)
         ) {
             throw new Error(
-                `Il valore "number" per il capitolo ${rating.chapterNumber} non è un intero valido.`
+                `The "number" value for chapter ${rating.chapterNumber} is not a valid integer.`
             );
         }
     });
@@ -86,7 +82,7 @@ function validateScoreRange(ratings, numberOfChapters) {
     ratings.forEach((rating) => {
         if (rating.number < 1 || rating.number > numberOfChapters) {
             throw new Error(
-                `Il "number" del capitolo ${rating.chapterNumber} non è nel range valido [1, ${numberOfChapters}].`
+                `The "number" for chapter ${rating.chapterNumber} is not within the valid range [1, ${numberOfChapters}].`
             );
         }
     });

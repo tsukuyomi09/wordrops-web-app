@@ -11,7 +11,7 @@ router.post("/:gameId", checkAuth, async (req, res) => {
 
     const game = activeGames.get(gameId);
     if (!game) {
-        return res.status(404).json({ error: "Gioco non trovato" });
+        return res.status(404).json({ error: "Game not found" });
     }
 
     game.readyPlayersCount.add(user_id);

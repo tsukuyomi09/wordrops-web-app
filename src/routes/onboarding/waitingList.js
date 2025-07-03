@@ -21,9 +21,7 @@ router.post("/", async (req, res) => {
         !waitingListAge ||
         !language
     ) {
-        return res
-            .status(400)
-            .json({ message: "Tutti i campi sono richiesti." });
+        return res.status(400).json({ message: "All fields are required." });
     }
 
     try {
@@ -48,14 +46,14 @@ router.post("/", async (req, res) => {
             return res.status(409).json({
                 // 409 Conflict è un codice HTTP appropriato per questo scenario
                 message:
-                    "Questo indirizzo email è già registrato come beta tester.",
+                    "This email address is already registered as a beta tester.",
                 code: "DUPLICATE_EMAIL", // Un codice personalizzato per il client
             });
         } else {
             // Per tutti gli altri errori
             return res.status(500).json({
                 message:
-                    "Si è verificato un errore inatteso durante la registrazione. Riprova più tardi.",
+                    "An unexpected error occurred during registration. Please try again later.",
                 code: "SERVER_ERROR", // Un codice personalizzato per il client
             });
         }

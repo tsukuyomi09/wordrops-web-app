@@ -13,13 +13,13 @@ router.post("/", async (req, res) => {
         );
 
         if (userCheck.rows.length === 0) {
-            return res.status(404).json({ error: "Utente non trovato" });
+            return res.status(404).json({ error: "Missing username" });
         }
 
         return res.status(200).json({ success: true });
     } catch (err) {
-        console.error("Errore nel controllo username:", err);
-        return res.status(500).json({ error: "Errore interno del server" });
+        console.error("User not found:", err);
+        return res.status(500).json({ error: "Internal server error" });
     }
 });
 

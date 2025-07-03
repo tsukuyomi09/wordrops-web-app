@@ -7,10 +7,10 @@ router.delete("/", checkAuth, (req, res) => {
         res.clearCookie("accesstoken");
         res.clearCookie("refreshToken");
 
-        res.status(200).json({ message: "Logout effettuato con successo" });
+        res.status(200).json({ message: "Logout successful" });
     } catch (err) {
-        console.error("Errore durante il logout:", err);
-        res.status(500).json({ error: "Errore del server" });
+        console.error("Error during logout:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 

@@ -18,7 +18,7 @@ router.post("/", checkAuth, (req, res) => {
     const player = queue.toArray().find((p) => p.user_id === user_id);
 
     player.socketId = socketId;
-    console.log("----- STATO COMPLETO DELLE CODE -----");
+    console.log("----- COMPLETE QUEUE STATUS -----");
     for (const gameType in gameQueues) {
         for (const gameSpeed in gameQueues[gameType]) {
             const queue = gameQueues[gameType][gameSpeed];
@@ -30,12 +30,12 @@ router.post("/", checkAuth, (req, res) => {
                 timestamp: new Date(p.timestamp).toLocaleTimeString(),
             }));
             console.log(
-                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
+                `Queue ${gameType}/${gameSpeed} (${players.length} player):`
             );
             console.table(players);
         }
     }
-    return res.json({ success: true, message: "SocketId aggiornato" });
+    return res.json({ success: true, message: "SocketId updates" });
 });
 
 module.exports = router;

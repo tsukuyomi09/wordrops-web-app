@@ -100,7 +100,7 @@ async function storiaHandler(req, res) {
             );
         }
     } catch (error) {
-        console.error("Errore durante la query:", error);
+        console.error("Error during query:", error);
         res.status(500).sendFile(
             path.join(__dirname, "../../views", "404.html")
         );

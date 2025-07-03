@@ -8,7 +8,7 @@ router.delete("/", checkAuth, async (req, res) => {
         const user_id = req.user_id;
 
         if (!user_id) {
-            return res.status(400).json({ message: "Dati mancanti." });
+            return res.status(400).json({ message: "Missing data." });
         }
 
         await client.query("DELETE FROM users WHERE user_id = $1", [user_id]);
@@ -22,10 +22,12 @@ router.delete("/", checkAuth, async (req, res) => {
             secure: process.env.NODE_ENV === "production",
         });
 
-        res.status(200).json({ message: "Account cancellato." });
+        res.status(200).json({ message: "Account deleted." });
     } catch (err) {
-        console.error("Errore nella cancellazione:", err);
-        res.status(401).json({ message: "Password errata o errore interno." });
+        console.error("Error deleting account:", err);
+        res.status(401).json({
+            message: "Incorrect password or internal error.",
+        });
     }
 });
 

@@ -15,7 +15,7 @@ router.get("/:username", async (req, res) => {
         );
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: "Utente non trovato" });
+            return res.status(404).json({ error: "User not found" });
         }
 
         const user_id = result.rows[0].user_id;
@@ -25,7 +25,7 @@ router.get("/:username", async (req, res) => {
         res.json({ games }); // 👈 solo questo, niente stats/avatar
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Errore del server" });
+        res.status(500).json({ error: "Server error" });
     }
 });
 

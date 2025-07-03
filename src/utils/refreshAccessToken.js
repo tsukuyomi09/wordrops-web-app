@@ -13,8 +13,8 @@ const refreshAccessToken = async (userId, username) => {
 
         return newAccessToken;
     } catch (err) {
-        console.error("Errore nella generazione del nuovo access token:", err);
-        throw new Error("Errore nella generazione del nuovo access token");
+        console.error("Error generating new access token:", err);
+        throw new Error("Error generating new access token");
     }
 };
 

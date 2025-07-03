@@ -4,8 +4,6 @@ const { playerQueuePosition } = require("../../services/gameQueueData");
 const checkAuth = require("../../middlewares/checkAuthToken");
 
 router.get("/", checkAuth, (req, res) => {
-    console.log("✅ Rotta /game caricata correttamente");
-
     const user_id = req.user_id;
     const queueInfo = playerQueuePosition[user_id];
 

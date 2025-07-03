@@ -20,9 +20,9 @@ router.get("/", checkAuth, async (req, res) => {
         // Restituisce solo i titoli delle storie
         res.json({ completedGames: rows });
     } catch (err) {
-        console.error("Errore nel recupero dei giochi completati:", err);
+        console.error("Error retrieving completed games:", err);
         res.status(500).json({
-            message: "Errore nel recupero dei giochi completati.",
+            message: "Error retrieving completed games.",
         });
     }
 });

@@ -38,13 +38,8 @@ async function storieCommunityHandler(req, res) {
             query: {},
         });
     } catch {
-        console.error(
-            "Errore nel caricamento della pagina della libreria:",
-            error
-        );
-        res.status(500).send(
-            "Si è verificato un errore nel caricamento della libreria."
-        );
+        console.error("Error loading the library page:", error);
+        res.status(500).send("An error occurred while loading the library.");
     }
 }
 

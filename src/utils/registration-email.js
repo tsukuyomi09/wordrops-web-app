@@ -34,9 +34,9 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
     const mailOptions = {
         from: '"Wordrops Team" <noreply@wordrops.com>',
         to: userEmail,
-        subject: "🎉 Benvenuto su wordrops.com!",
+        subject: "🎉 Welcome to wordrops.com!",
 
-        text: `Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:\n\n${verificationUrl}\n\nQuesta è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.`,
+        text: `To complete your registration, click the link below to verify your email address:\n\n${verificationUrl}\n\nQuesta è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.`,
 
         html: `
             <div style="font-family: sans-serif; color: #333;">
@@ -44,7 +44,7 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
                 <p>Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:</p>
                 <p><a href="${verificationUrl}">${verificationUrl}</a></p>
                 <br />
-                <small>Questa è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.</small>
+                <small>This is an automated email sent by Wordrops. Do not reply to this address.</small>
             </div>
         `,
 
@@ -60,7 +60,7 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
     try {
         await transporter.sendMail(mailOptions);
     } catch (error) {
-        console.error("Errore nell'invio dell'email:", error);
+        console.error("Error sending email:", error);
     }
 };
 

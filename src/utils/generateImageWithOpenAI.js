@@ -45,7 +45,7 @@ async function generateImageWithOpenAI(game_id, game_title, imagePrompt) {
 
         return results.secure_url;
     } catch (err) {
-        console.error("❌ Errore nella generazione dell'immagine:", err);
+        console.error("❌ Error generating book cover:", err);
     }
 }
 

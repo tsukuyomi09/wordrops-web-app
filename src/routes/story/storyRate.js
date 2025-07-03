@@ -11,13 +11,13 @@ router.post("/", checkAuth, async (req, res) => {
     if (!story_id || !story_vote) {
         return res
             .status(400)
-            .json({ error: true, message: "Parametri mancanti o non validi" });
+            .json({ error: true, message: "Missing or invalid parameters" });
     }
 
     if (typeof story_vote !== "number" || story_vote < 1 || story_vote > 5) {
         return res
             .status(400)
-            .json({ error: true, message: "Valore voto non valido" });
+            .json({ error: true, message: "Invalid vote value" });
     }
 
     try {
@@ -28,8 +28,8 @@ router.post("/", checkAuth, async (req, res) => {
         );
         return res.status(200).json(data);
     } catch (error) {
-        console.error("Errore nel recupero dati storia:", error);
-        res.status(500).json({ error: "Errore interno del server" });
+        console.error("Error retrieving story data:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

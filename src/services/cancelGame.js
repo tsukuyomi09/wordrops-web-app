@@ -44,8 +44,7 @@ async function cancelGameAndSave(game) {
         );
     } catch (err) {
         return {
-            message:
-                "Si è verificato un errore durante la cancellazione del gioco.",
+            message: "An error occurred while deleting the game.",
         };
     }
 }

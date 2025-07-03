@@ -194,7 +194,7 @@ io.on("connection", (socket) => {
 
             game.chapterReadMap.set(user_id, lastChapterTimestamp);
         } else {
-            console.error(`Gioco con ID ${game_id} non trovato.`);
+            console.error(`Game ${game_id} not found.`);
         }
     });
 
@@ -261,12 +261,12 @@ app.get("/completa-profilo/:email", (req, res) => {
         [email],
         (err, result) => {
             if (err) {
-                console.error("Errore nel recuperare i dati dell'utente", err);
-                return res.status(500).send("Errore nel recupero dell'utente.");
+                console.error("Error retrieving user data", err);
+                return res.status(500).send("Error retrieving user..");
             }
 
             if (result.rows.length === 0) {
-                return res.status(404).send("Utente non trovato.");
+                return res.status(404).send("User not found.");
             }
 
             // Se tutto va bene, mostra la pagina HTML

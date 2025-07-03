@@ -43,13 +43,13 @@ router.get("/", checkAuth, async (req, res) => {
         );
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "Avatar non trovato" });
+            return res.status(404).json({ message: "Avatar not found" });
         }
 
         res.status(200).json({ avatar: result.rows[0].avatar });
     } catch (err) {
-        console.error("Errore nel recupero dell'avatar:", err);
-        res.status(500).json({ message: "Errore del server" });
+        console.error("Error retrieving avatar:", err);
+        res.status(500).json({ message: "Server error" });
     }
 });
 

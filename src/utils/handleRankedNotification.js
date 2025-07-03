@@ -33,10 +33,7 @@ async function removeRankedNotification(user_id, game_id) {
         );
         notificationMap.remove(game_id, user_id);
     } catch (error) {
-        console.error(
-            "Errore durante la rimozione della notifica dal DB",
-            error
-        );
+        console.error("Error removing notification from DB", error);
     }
 }
 

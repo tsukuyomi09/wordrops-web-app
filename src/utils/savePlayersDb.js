@@ -14,10 +14,7 @@ async function savePlayersDb(game) {
             })
         );
     } catch (error) {
-        console.log(
-            "[savePlayersDb] Errore durante il salvataggio dei giocatori:",
-            error
-        );
+        console.log("[savePlayersDb] Error saving players database:", error);
     }
 }
 

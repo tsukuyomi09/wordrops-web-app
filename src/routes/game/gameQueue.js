@@ -25,10 +25,10 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
             .status(user_id ? (playerQueuePosition[user_id] ? 400 : 500) : 401)
             .json({
                 error: !user_id
-                    ? "Utente non autenticato"
+                    ? "User not authenticated"
                     : playerQueuePosition[user_id]
-                    ? "Utente già in coda"
-                    : "Errore di connessione. Riprova più tardi.",
+                    ? "User already in queue"
+                    : "Connection error. Please try again later.",
             });
     }
 
@@ -60,7 +60,7 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
                 timestamp: new Date(p.timestamp).toLocaleTimeString(),
             }));
             console.log(
-                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
+                `Queue ${gameType}/${gameSpeed} (${players.length} player):`
             );
             console.table(players);
         }
@@ -83,12 +83,12 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
         setTimeout(() => {
             startCountdownPreGame(req.io, gameId);
         }, 1000);
-        return res.status(200).json({ message: "Utente in pre partita" });
+        return res.status(200).json({ message: "User in pre-game" });
     } else {
         setTimeout(() => {
-            socket.emit("in-queue", "In attesa di altri giocatori");
+            socket.emit("in-queue", "Waiting for more players");
         }, 1000);
-        return res.status(200).json({ message: "Utente aggiunto alla coda" });
+        return res.status(200).json({ message: "User added to queue" });
     }
 });
 
@@ -159,7 +159,7 @@ async function startCountdownPreGame(io, gameId) {
                 });
 
                 io.to(gameId).emit("game-start", {
-                    message: "Inizia il gioco",
+                    message: "Game started",
                     gameId: newGameId,
                     turnOrder: turnOrder,
                 });

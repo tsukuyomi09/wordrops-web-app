@@ -9,7 +9,7 @@ router.get("/", checkAuth, async (req, res) => {
     if (!query || query.length < 3) {
         return res
             .status(400)
-            .json({ error: "La query deve contenere almeno 3 caratteri" });
+            .json({ error: "Query must be at least 3 characters long" });
     }
 
     try {
@@ -25,7 +25,7 @@ router.get("/", checkAuth, async (req, res) => {
         return res.json(result.rows);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Errore durante la ricerca" });
+        return res.status(500).json({ error: "Error during search" });
     }
 });
 

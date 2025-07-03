@@ -14,9 +14,7 @@ router.post("/", async (req, res) => {
     const { userEmail, userPassword } = req.body;
 
     if (!userEmail || !userPassword) {
-        return res
-            .status(400)
-            .json({ message: "Tutti i campi sono richiesti." });
+        return res.status(400).json({ message: "All fields are required." });
     }
 
     let hashedPassword;
@@ -28,10 +26,8 @@ router.post("/", async (req, res) => {
             parallelism: 1,
         });
     } catch (err) {
-        console.error("Errore durante hashing della password");
-        return res
-            .status(500)
-            .json({ message: "Errore durante la registrazione." });
+        console.error("Error during password hashing");
+        return res.status(500).json({ message: "Error during registration." });
     }
 
     try {
@@ -49,11 +45,13 @@ router.post("/", async (req, res) => {
 
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error("Errore durante l'inserimento nel database", err);
+        console.error("Error inserting into database", err);
         if (err.code === "23505") {
-            return res.status(400).json({ message: "L'email e già in uso." });
+            return res
+                .status(400)
+                .json({ message: "Email is already in use." });
         } else {
-            return res.status(500).json({ message: "Errore del server." });
+            return res.status(500).json({ message: "Server error." });
         }
     }
 });

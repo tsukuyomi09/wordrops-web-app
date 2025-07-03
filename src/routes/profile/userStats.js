@@ -28,8 +28,8 @@ router.get("/", checkAuth, async (req, res) => {
 
         return res.json(playerStats);
     } catch (err) {
-        console.error("Errore nel recupero delle statistiche:", err);
-        return res.status(500).json({ error: "Errore interno del server." });
+        console.error("Error retrieving statistics:", err);
+        return res.status(500).json({ error: "Internal server error." });
     }
 });
 

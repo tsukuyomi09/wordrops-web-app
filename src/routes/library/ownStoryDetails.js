@@ -51,9 +51,9 @@ router.get("/:game_id", checkAuth, async (req, res) => {
             totalVotes,
         });
     } catch (err) {
-        console.error("Errore nel recupero dei capitoli:", err);
+        console.error("Error retrieving chapters:", err);
         res.status(500).json({
-            message: "Errore nel recupero dei capitoli.",
+            message: "Error retrieving chapters.",
         });
     }
 });

@@ -16,8 +16,8 @@ router.post("/", checkAuth, async (req, res) => {
         );
         res.status(200).json({ message: "Last seen updated" });
     } catch (error) {
-        console.error("Errore aggiornamento last_seen:", error);
-        res.status(500).json({ error: "Errore server" });
+        console.error("Error updating last_seen:", error);
+        res.status(500).json({ error: "Server error" });
     }
 });
 

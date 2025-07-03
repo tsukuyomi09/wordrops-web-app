@@ -14,7 +14,7 @@ router.get("/:username", async (req, res) => {
         );
 
         if (userCheck.rows.length === 0) {
-            return res.status(404).json({ error: "Utente non trovato" });
+            return res.status(404).json({ error: "User not found" });
         }
 
         const { user_id, avatar } = userCheck.rows[0];
@@ -23,7 +23,7 @@ router.get("/:username", async (req, res) => {
         const stats = playerStatsMap.get(user_id);
 
         if (!stats) {
-            return res.status(404).json({ error: "Statistiche non trovate" });
+            return res.status(404).json({ error: "Statistics not found" });
         }
 
         const allStats = Array.from(playerStatsMap.values());
@@ -43,7 +43,7 @@ router.get("/:username", async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Errore server" });
+        res.status(500).json({ error: "Server Error" });
     }
 });
 
