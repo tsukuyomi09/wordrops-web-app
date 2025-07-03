@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
 
         if (!user.username) {
             return res.status(200).json({
-                redirectTo: `/completa-profilo/${user.email}`,
+                redirectTo: `/complete-profile/${user.email}`,
             });
         }
 

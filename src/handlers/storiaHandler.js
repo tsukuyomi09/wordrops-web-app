@@ -76,7 +76,7 @@ async function storiaHandler(req, res) {
             const slugTitle = generateSlug(title);
 
             // Qui usi res.render e passi i dati a EJS
-            res.render("storia", {
+            res.render("story", {
                 isLoggedIn,
                 user_id,
                 userVote,
@@ -92,7 +92,7 @@ async function storiaHandler(req, res) {
                 chapters: chapters,
                 genres: genres,
                 back_cover: back_cover,
-                story_url: `https://wordrops.com/storia/${id}-${slugTitle}`,
+                story_url: `https://wordrops.com/story/${id}-${slugTitle}`,
             });
         } else {
             res.status(404).sendFile(

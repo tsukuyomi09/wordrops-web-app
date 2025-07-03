@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
                 return res.json({
                     success: true,
                     needsProfileCompletion: true,
-                    redirectTo: `/completa-profilo/${encodeURIComponent(
+                    redirectTo: `/complete-profile/${encodeURIComponent(
                         user.email
                     )}`,
                 });
@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
                     return res.json({
                         success: true,
                         needsProfileCompletion: true,
-                        redirectTo: `/completa-profilo/${encodeURIComponent(
+                        redirectTo: `/complete-profile/${encodeURIComponent(
                             email
                         )}`,
                     });
@@ -74,7 +74,7 @@ router.post("/", async (req, res) => {
             return res.json({
                 success: true,
                 needsProfileCompletion: true,
-                redirectTo: `/completa-profilo/${encodeURIComponent(email)}`,
+                redirectTo: `/complete-profile/${encodeURIComponent(email)}`,
             });
         }
     } catch (error) {

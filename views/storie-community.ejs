@@ -146,7 +146,7 @@
                 >
                     <div class="">
                         <a
-                            href="/classifiche"
+                            href="/leaderboards"
                             class="button-container flex flex-col justify-center items-center"
                         >
                             <img
@@ -180,7 +180,7 @@
                     </div>
                     <div class="">
                         <a
-                            href="/storie-community"
+                            href="/stories-library"
                             class="button-container flex flex-col justify-center items-center"
                         >
                             <img
@@ -252,12 +252,11 @@
                                 class="relative flex justify-start items-start"
                             >
                                 <a
-                                    href="/storia/<%= story.id %>-<%= story.slug %>"
+                                    href="/story/<%= story.id %>-<%= story.slug %>"
                                     target="blank"
                                     class="card-container flex justify-start items-start"
                                 >
-                                    <% if (story.game_type === 'classificata') {
-                                    %>
+                                    <% if (story.game_type === 'ranked') { %>
                                     <img
                                         src="/images/icons/star.png"
                                         class="absolute z-10 w-4 h-4 top-2 left-2"
@@ -322,7 +321,7 @@
                                 <ul class="text-sm">
                                     <li class="mb-2">
                                         <a
-                                            href="/termini-e-condizioni"
+                                            href="/terms-and-conditions"
                                             class="hover:text-blue-500 font-semibold py-4"
                                             target="_blank"
                                             >Terms And Conditions</a

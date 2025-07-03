@@ -233,8 +233,8 @@ app.get("/dashboard/:user_id", (req, res) => {
 app.get("/privacy-policy", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "privacy-policy.html"));
 });
-app.get("/termini-e-condizioni", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "termini-e-condizioni.html"));
+app.get("/terms-and-conditions", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "terms-and-conditions.html"));
 });
 app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "register.html"));
@@ -246,14 +246,15 @@ app.get("/profile-page/:username", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "profile-page.html"));
 });
 
-app.get("/storie-community", storieCommunityHandler);
+app.get("/stories-library", storieCommunityHandler);
 
-app.get("/storia/:id_slug", checkOptionalAuth, storiaHandler);
+app.get("/story/:id_slug", checkOptionalAuth, storiaHandler);
 
-app.get("/classifiche", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "classifiche.html"));
+app.get("/leaderboards", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "leaderboards.html"));
 });
-app.get("/completa-profilo/:email", (req, res) => {
+
+app.get("/complete-profile/:email", (req, res) => {
     const email = req.params.email;
 
     client.query(
@@ -271,13 +272,12 @@ app.get("/completa-profilo/:email", (req, res) => {
 
             // Se tutto va bene, mostra la pagina HTML
             res.sendFile(
-                path.join(__dirname, "views", "completa-profilo.html")
+                path.join(__dirname, "views", "complete-profile.html")
             );
         }
     );
 });
 app.get("/404", (req, res) => {
-    console.log("Route 404 chiamata");
     res.sendFile(path.join(__dirname, "views", "404.html"));
 });
 app.get("/admin-panel", (req, res) => {

@@ -33,7 +33,7 @@ async function storieCommunityHandler(req, res) {
             game_type: story.game_type,
             game_speed: story.game_speed,
         }));
-        res.render("storie-community", {
+        res.render("stories-library", {
             stories: stories,
             query: {},
         });

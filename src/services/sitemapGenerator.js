@@ -42,7 +42,7 @@ async function sitemapGenerator(req, res) {
                 const slug = generateSlug(row.title);
                 return `
                 <url>
-                    <loc>https://wordrops.com/storia/${row.id}-${slug}</loc>
+                    <loc>https://wordrops.com/story/${row.id}-${slug}</loc>
                     <lastmod>${row.finished_at.toISOString()}</lastmod>
                     <priority>0.8</priority>
                 </url>`;
