@@ -18,9 +18,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -33,8 +33,7 @@ async function fetchUserData() {
         const urlPath = window.location.pathname;
         const urlGameId = urlPath.split("/").pop();
         const response = await fetch("/profile/user-data");
-        if (!response.ok)
-            throw new Error("Errore nel recupero dei dati utente");
+        if (!response.ok) throw new Error("Error retrieving user data:");
 
         const data = await response.json();
 
@@ -45,7 +44,7 @@ async function fetchUserData() {
             window.location.href = `/dashboard/${data.username}`;
         }
     } catch (error) {
-        console.error("Errore nel recupero dei dati utente:", error);
+        console.error("Error retrieving user data:", error);
     }
 }
 
@@ -53,8 +52,7 @@ async function initializeGame(game_id) {
     initializeSocket(game_id);
     try {
         const response = await fetch(`/game/game-status/${game_id}`);
-        if (!response.ok)
-            throw new Error("Errore nel recupero dello stato del gioco");
+        if (!response.ok) throw new Error("Error retrieving game status:");
 
         const data = await response.json();
         if (data.status === "to-start") {
@@ -67,7 +65,7 @@ async function initializeGame(game_id) {
             }
         }
     } catch (error) {
-        console.error("Errore nel recupero dello stato del gioco:", error);
+        console.error("Error retrieving game status:", error);
     }
 
     fetchGameData(game_id);
@@ -76,8 +74,7 @@ async function initializeGame(game_id) {
 async function fetchGameData(game_id) {
     try {
         const response = await fetch(`/game/game-data/${game_id}`);
-        if (!response.ok)
-            throw new Error("Errore nel recupero dei dati del gioco");
+        if (!response.ok) throw new Error("Error retrieving game status:");
 
         const data = await response.json();
         updateCurrentPlayerDisplay(data.currentPlayer);
@@ -89,7 +86,7 @@ async function fetchGameData(game_id) {
 
         updateChaptersDisplay(data.chapters);
     } catch (error) {
-        console.error("Errore durante il recupero dei dati del gioco:", error);
+        console.error("Error retrieving game status:", error);
     }
 }
 
@@ -98,7 +95,6 @@ function openScoreModal(chapters) {
     const container = document.getElementById("chaptersContainer");
 
     if (!Array.isArray(chapters)) {
-        console.error("Errore: chapters non è un array!", chapters);
         return;
     }
 
@@ -108,7 +104,7 @@ function openScoreModal(chapters) {
         const chapterBox = document.createElement("div");
         chapterBox.className =
             "p-3 border rounded-lg bg-gray-200 cursor-pointer hover:bg-gray-300 transition";
-        chapterBox.textContent = `Capitolo ${index + 1}: ${chapter.title}`;
+        chapterBox.textContent = `Chapter ${index + 1}: ${chapter.title}`;
 
         container.appendChild(chapterBox);
     });
@@ -121,7 +117,7 @@ function initializeSocket(game_id) {
     game_id;
     try {
         if (!game_id) {
-            console.error("Errore: gameId non trovato nell'URL");
+            console.error("Error: gameId not found in URL");
             return;
         }
 
@@ -144,7 +140,7 @@ function initializeSocket(game_id) {
             const username = localStorage.getItem("username");
             const closeBtn = document.getElementById("end-game-redirect");
 
-            popupText.textContent = "Un nuovo racconto ha preso vita!";
+            popupText.textContent = "A new story has come to life!";
             popup.classList.remove("hidden");
             popup.classList.add("flex");
 
@@ -173,9 +169,7 @@ function initializeSocket(game_id) {
             if (existingPopup) {
                 existingPopup.remove();
             }
-            showGameCanceledPopup(
-                data.reason || "La partita è stata annullata."
-            );
+            showGameCanceledPopup(data.reason || "The match was cancelled");
         });
 
         socket.on("nextChapterUpdate", (data) => {
@@ -263,7 +257,7 @@ function initializeSocket(game_id) {
             try {
                 updateCountdownDisplay(data.formatted);
             } catch (error) {
-                console.error("Errore durante updateCountdownDisplay:", error);
+                console.error("Error during updateCountdownDisplay:", error);
             }
         });
 
@@ -271,10 +265,7 @@ function initializeSocket(game_id) {
             socket.emit("joinNewGame", { gameId: game_id, user_id });
         });
     } catch (error) {
-        console.error(
-            "Errore durante l'inizializzazione della connessione:",
-            error
-        );
+        console.error("Error during connection initialization:", error);
     }
 }
 
@@ -285,10 +276,10 @@ function showGameCanceledPopup(message) {
 
     overlay.innerHTML = `
         <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center animate-scaleIn">
-            <h2 class="text-2xl font-bold mb-4 text-red-600">Partita Annullata</h2>
+            <h2 class="text-2xl font-bold mb-4 text-red-600">Back to Dashboard</h2>
             <p class="text-gray-700 mb-6">${message}</p>
             <button id="backToDashboardBtn" onclick="dashboardButton()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl transition">
-                Torna alla Dashboard
+                Back to Dashboard
             </button>
         </div>
     `;
@@ -301,7 +292,7 @@ function dashboardButton() {
     if (username) {
         window.location.href = `/dashboard/${username}`;
     } else {
-        alert("Errore: nome utente non trovato.");
+        alert("Error: username not found.");
     }
 }
 
@@ -382,7 +373,7 @@ function logMessage(messageText) {
 
     <div>
             <div class="font-semibold text-sm text-gray-800">${
-                username || "Anonimo"
+                username || "Anonymous"
             }</div>
             <div class="text-sm">${messageText}</div>
         </div>
@@ -402,7 +393,7 @@ function displayReceivedMessage(messageText, avatar, username) {
         <img src="/images/avatars/${avatar}.png" alt="Avatar" class="w-4 h-4 rounded-lg" />
         <div>
             <div class="font-semibold text-sm text-gray-800">${
-                username || "Anonimo"
+                username || "Anonymous"
             }</div>
             <div class="text-sm">${messageText}</div>
         </div>
@@ -437,7 +428,7 @@ function buttonStartGame() {
             }
         })
         .catch((error) =>
-            console.error("Errore nel segnare il giocatore come pronto:", error)
+            console.error("Error marking player as ready:", error)
         );
 }
 
@@ -453,7 +444,7 @@ function showGameStartPopup() {
         "justify-center",
         "z-50"
     );
-    gameStartPopup.innerHTML = "<strong>La partita è iniziata!</strong>";
+    gameStartPopup.innerHTML = "<strong>The game has started!</strong>";
     document.body.appendChild(gameStartPopup);
 
     setTimeout(() => {
@@ -477,7 +468,7 @@ function updateCurrentPlayerDisplay(currentPlayer) {
 
         const currentUser = localStorage.getItem("username");
         const isMyTurn = currentPlayer.username === currentUser;
-        const turnText = isMyTurn ? "il tuo turno" : ``;
+        const turnText = isMyTurn ? "your turn" : ``;
 
         currentTurnDisplay.innerHTML = `
         <div class="flex items-center justify-center gap-4 bg-gradient-to-r from-blue-400 to-purple-500  px-4 py-3 rounded-xl shadow">
@@ -497,7 +488,7 @@ function updateCurrentPlayerDisplay(currentPlayer) {
         </div>
     `;
     } else if (currentTurnDisplay) {
-        currentTurnDisplay.textContent = `Turno corrente non trovato!`;
+        currentTurnDisplay.textContent = `Current turn not found!`;
     }
 }
 
@@ -537,11 +528,11 @@ function getChapter() {
     const wordCount = editorContent ? editorContent.split(/\s+/).length : 0;
 
     if (!title) {
-        showError("Il titolo è obbligatorio!");
+        showError("Title is required!");
         return;
     }
     if (wordCount < 100) {
-        showError("Il contenuto deve avere almeno 100 parole!");
+        showError("Content must be at least 100 words!");
         return;
     }
 
@@ -584,7 +575,7 @@ function saveChapterChangeTurn(data) {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Errore durante il salvataggio del capitolo.");
+                throw new Error("Error saving the chapter.");
             }
             return response.json();
         })
@@ -594,7 +585,7 @@ function saveChapterChangeTurn(data) {
         })
         .catch((error) => {
             console.error("Errore:", error);
-            alert("Si è verificato un errore durante l'invio.");
+            alert("An error occurred during submission.");
         });
 }
 
@@ -678,7 +669,7 @@ getChapterFromLocal();
 function handleEditorAccess(currentPlayer, currentUser) {
     const sendChapterButton = document.getElementById("send-chapter-button");
     if (!sendChapterButton) {
-        console.error("Pulsante 'send-chapter-button' non trovato.");
+        console.error("Button 'send-chapter-button' not found.");
         return;
     }
 
@@ -767,10 +758,10 @@ function changeTurnShowPopup(author, nextPlayer) {
     popup.innerHTML = `
         <div class="bg-gray-200 p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
             <p class="text-lg font-semibold text-gray-800">
-                <span class="font-bold text-blue-600">${author}</span> ha scritto un nuovo capitolo!
+                <span class="font-bold text-blue-600">${author}</span> has written a new chapter!
             </p>
             <p class="mt-2 text-gray-600">
-                Ora è il turno di <span class="font-bold text-blue-600">${nextPlayer.username}</span>.
+                It’s now <span class="font-bold text-blue-600">${nextPlayer.username}</span>’s turn.
             </p>
             <button class="mt-4 bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-400 focus:outline-none" onclick="closeChangeTurnPopup(this)">
                 OK

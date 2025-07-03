@@ -13,13 +13,10 @@ async function fetchCompletedGames() {
                 renderCompletedGames(data.completedGames);
             }
         } else {
-            console.log(
-                "Errore nel recupero dei giochi completati:",
-                data.message
-            );
+            console.log("Error retrieving completed games:", data.message);
         }
     } catch (err) {
-        console.log("Errore di rete:", err);
+        console.log("Network error:", err);
     }
 }
 
@@ -143,8 +140,8 @@ function openBookOverlay(book, storyDetails) {
     bookCoverMob.src = book.cover_image_url;
 
     bookRating.innerHTML = `${storyDetails.average ?? "?"}`;
-    gameType.innerHTML = `${translateGameType(book.game_type)}`;
-    gameSpeed.innerHTML = `${translateGameSpeed(book.game_speed)}`;
+    gameType.innerHTML = `${book.game_type}`;
+    gameSpeed.innerHTML = `${book.game_speed}`;
 
     overlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
@@ -159,22 +156,6 @@ function closeBookOverlay() {
     }, 500);
 }
 
-function translateGameType(type) {
-    const types = {
-        ranked: "classificata",
-        normal: "classica",
-    };
-    return types[type] || type;
-}
-
-function translateGameSpeed(speed) {
-    const speeds = {
-        slow: "lunga",
-        fast: "corta",
-    };
-    return speeds[speed] || speed;
-}
-
 async function fetchStoryDetails(storyId) {
     try {
         const response = await fetch(
@@ -183,14 +164,12 @@ async function fetchStoryDetails(storyId) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(
-                data.message || "Errore nel recupero dettagli storia"
-            );
+            throw new Error(data.message || "Error retrieving story details");
         }
 
         return data;
     } catch (err) {
-        console.log("Errore di rete:", err);
+        console.log("Network error:", err);
         throw err;
     }
 }

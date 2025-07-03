@@ -27,7 +27,7 @@ async function checkUsernameAndProceed() {
     const username = document.getElementById("username").value;
 
     if (!username) {
-        alert("Per favore, inserisci un username.");
+        alert("Please enter a username.");
         return;
     }
     try {
@@ -44,7 +44,7 @@ async function checkUsernameAndProceed() {
             usernameErrorAnimation();
         }
     } catch {
-        alert("Si è verificato un errore. Riprova più tardi.");
+        alert("An error occurred. Please try again later.");
     }
 }
 
@@ -73,7 +73,7 @@ function goToStep2(username) {
             step2.classList.add("opacity-100");
         }, 1000);
     } else {
-        alert("Inserisci uno username.");
+        alert("Enter a username.");
     }
 }
 
@@ -106,7 +106,7 @@ function confirmProfile() {
     if (username && avatarName) {
         finishOnboarding(username, avatarName);
     } else {
-        alert("Assicurati di aver selezionato un avatar.");
+        alert("Make sure you have selected an avatar.");
     }
 }
 
@@ -133,7 +133,7 @@ function selectAvatar(id) {
         if (selectedAvatarInput) {
             selectedAvatarInput.value = avatarName;
         } else {
-            alert("Errore: campo 'selectedAvatar' non trovato.");
+            alert("Error: 'selectedAvatar' field not found.");
         }
     }
 }
@@ -157,11 +157,11 @@ async function finishOnboarding(username, avatarName) {
         } else {
             const errorData = await response.json();
             alert(
-                "Errore durante il completamento dell'onboarding: " +
-                    (errorData.message || "Riprova più tardi.")
+                "Error completing onboarding: " +
+                    (errorData.message || "Please try again later.")
             );
         }
     } catch {
-        alert("Errore di rete durante l'invio dei dati. Riprova.");
+        alert("Network error while sending data. Please try again.");
     }
 }

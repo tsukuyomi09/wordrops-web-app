@@ -16,9 +16,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -66,10 +66,7 @@ function getUserData() {
                 }
             })
             .catch((error) => {
-                console.error(
-                    "Errore durante il recupero degli elementi:",
-                    error
-                );
+                console.error("Error retrieving items:", error);
             });
     }
 }
@@ -86,7 +83,7 @@ function loadMoreBooks() {
         })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Errore nella rete");
+                    throw new Error("Network error");
                 }
                 return response.json();
             })
@@ -98,10 +95,7 @@ function loadMoreBooks() {
                 }
             })
             .catch((error) => {
-                console.error(
-                    "Errore durante il recupero degli elementi:",
-                    error
-                );
+                console.error("Error retrieving items:", error);
             });
     }
 }
@@ -174,12 +168,12 @@ function displayUserBooks(books) {
                         book.title
                     }</h3>
                     <div class="flex gap-4">
-                        <span id="game-type" class="text-sm px-4 py-1 bg-amber-400 text-gray-800 rounded-lg font-mono">${translateGameType(
+                        <span id="game-type" class="text-sm px-4 py-1 bg-amber-400 text-gray-800 rounded-lg font-mono">${
                             book.game_type
-                        )}</span>
-                        <span id="game-speed" class=" text-sm px-4 py-1 bg-green-600 text-gray-800 rounded-lg font-mono">${translateGameSpeed(
+                        }</span>
+                        <span id="game-speed" class=" text-sm px-4 py-1 bg-green-600 text-gray-800 rounded-lg font-mono">${
                             book.game_speed
-                        )}</span>
+                        }</span>
                     </div>
                     <div>
                         <p id="book-description" class="text-sm ">${
@@ -191,20 +185,4 @@ function displayUserBooks(books) {
         `;
         booksGrid.appendChild(card);
     });
-}
-
-function translateGameType(type) {
-    const types = {
-        ranked: "classificata",
-        normal: "classica",
-    };
-    return types[type] || type;
-}
-
-function translateGameSpeed(speed) {
-    const speeds = {
-        slow: "lunga",
-        fast: "corta",
-    };
-    return speeds[speed] || speed;
 }

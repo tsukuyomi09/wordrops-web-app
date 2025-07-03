@@ -41,9 +41,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -95,10 +95,7 @@ window.onpopstate = function (event) {
         })
 
         .catch((error) => {
-            console.error(
-                "Errore nella richiesta per abbandonare la coda:",
-                error
-            );
+            console.error("Error in request to leave queue:", error);
         });
 };
 
@@ -122,12 +119,12 @@ function initSocket() {
         });
 
         socket.on("connect_error", (err) => {
-            console.error("Errore di connessione:", err);
+            console.error("Connection error:", err);
             reject(err);
         });
 
         socket.on("connect_timeout", () => {
-            reject("Timeout di connessione");
+            reject("Connection timeout");
         });
 
         socket.on("in-queue", (message) => {
@@ -231,7 +228,7 @@ function initSocket() {
                     chapterNotificationDot.classList.remove("hidden");
                 }
             }
-            showNotification("NUOVO CAPITOLO", "📚");
+            showNotification("NEW CHAPTER", "📚");
         });
 
         socket.on("gameCanceled", (data) => {
@@ -244,7 +241,7 @@ function initSocket() {
                 gameWrapper.remove();
             }
 
-            showNotification("PARTITA ANNULLATA", "❌");
+            showNotification("GAME CANCELED", "❌");
         });
 
         socket.on("gameCompleted", (data) => {
@@ -255,7 +252,7 @@ function initSocket() {
             if (gameWrapper) {
                 gameWrapper.remove();
             }
-            showNotification("PARTITA CONCLUSA", "🏆");
+            showNotification("GAME FINISHED", "🏆");
         });
 
         socket.on("gamequeue-cancelled", (message) => {
@@ -271,7 +268,7 @@ function initSocket() {
                     "block";
                 document.getElementById("ready-btn").style.display = "block";
                 document.getElementById("countdown").innerText =
-                    "Partita trovata, Inizio in:";
+                    "Match found, Starting in:";
                 document.getElementById("ready-btn").classList.remove("hidden");
                 document.getElementById("pronto-text").classList.add("hidden");
                 countdownStarted = false;
@@ -342,7 +339,7 @@ function fetchAvatarData(username) {
         })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Errore nella rete");
+                    throw new Error("Network error");
                 }
                 return response.json();
             })
@@ -353,7 +350,7 @@ function fetchAvatarData(username) {
                 updateAvatarImage(avatar);
             })
             .catch((error) => {
-                console.error("Errore durante il recupero dell'avatar:", error);
+                console.error("Error retrieving avatar:", error);
             });
     }
 }
@@ -391,7 +388,7 @@ async function fetchQueueStatus() {
             }
         }
     } catch (error) {
-        console.error("Errore nel fetch della queue status:", error);
+        console.error("Error fetching queue status:", error);
         return false; // fallback
     }
 }
@@ -412,10 +409,10 @@ async function updateQueueSocket(gameType, gameSpeed) {
         }
 
         const result = await response.json();
-        console.log("Socket ID aggiornato in coda:", result);
+        console.log("Socket ID updated in queue:", result);
         return true;
     } catch (error) {
-        console.error("Errore aggiornando socket ID in coda:", error);
+        console.error("Error updating socket ID in queue:", error);
         return false;
     }
 }
@@ -482,7 +479,7 @@ async function fetchdashboardData() {
                                     }" class="w-2/3  object-contain" />
                                </div>
                                <div>
-                                    Libro ${index + 1}
+                                    Book ${index + 1}
                                </div>
                     </button>
                     <div class="chat-notification-dot absolute -top-4 -left-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white hidden"></div>
@@ -496,7 +493,7 @@ async function fetchdashboardData() {
             });
         }
     } catch (error) {
-        console.log("Si è verificato un errore");
+        console.log("An error occurred");
     }
 }
 
@@ -546,13 +543,10 @@ async function joinQueue({ gameType, gameSpeed }) {
                 throw new Error(error || "Errore HTTP");
             }
         } catch (error) {
-            console.error(
-                "Errore nella richiesta per unirsi alla coda:",
-                error
-            );
+            console.error("Error requesting to join the queue:", error);
         }
     } else {
-        alert("Si è verificato un errore. Riprova più tardi.");
+        alert("An error occurred. Please try again later.");
     }
     closeOverlay();
 }
@@ -598,10 +592,7 @@ function abandonQueue() {
         })
 
         .catch((error) => {
-            console.error(
-                "Errore nella richiesta per abbandonare la coda:",
-                error
-            );
+            console.error("Error requesting to leave the queue:", error);
         });
 }
 
@@ -614,7 +605,7 @@ function handleBackToGame(firstGameId) {
 
         window.location.href = `/game/${firstGameId}`;
     } else {
-        console.error("game_id non trovato. Impossibile tornare in partita.");
+        console.error("game_id not found. Cannot return to the game.");
     }
 }
 
@@ -683,7 +674,7 @@ function closeAvatarMenu() {
                 closeMenu();
             })
             .catch((error) => {
-                console.error("Errore nella selezione dell'avatar:", error);
+                console.error("Error selecting avatar:", error);
             });
     } else {
         closeMenu();
@@ -765,7 +756,7 @@ function showScoreNotificationsSequential(gameNotifications) {
                     <img src="/images/trophy-image.png" alt="Trophy" class="absolute -top-6 -left-6 md:-top-12 md:-left-12  transform -rotate-24 object-contain size-18 md:size-24 " />
         
                     <div class=" py-6 bg-gray-200 rounded-2xl">
-                        <h2 class="text-md lg:text-lg font-semibold text-center text-gray-800 ">Nuovo punteggio!</h2>
+                        <h2 class="text-md lg:text-lg font-semibold text-center text-gray-800 ">New Score!</h2>
                     </div>
 
                     <div class="p-4 flex flex-col relative w-full h-auto">
@@ -829,11 +820,11 @@ function deleteNotification(game_id) {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Errore nella rimozione della notifica");
+                throw new Error("Error removing notification");
             }
         })
         .catch(() => {
-            alert("Qualcosa é andato storto");
+            alert("Something went wrong");
         });
 }
 
@@ -859,11 +850,11 @@ async function searchUser() {
             return;
         }
 
-        throw new Error(data.error || "Errore nella ricerca");
+        throw new Error(data.error || "Error during search");
     } catch (err) {
         console.error(err);
         const errorMessage = document.getElementById("error-message");
-        errorMessage.textContent = "L'utente non esiste";
+        errorMessage.textContent = "User does not exist";
         errorMessage.classList.remove("hidden");
         setTimeout(() => {
             errorMessage.classList.add("hidden");

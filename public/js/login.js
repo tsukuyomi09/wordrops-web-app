@@ -22,10 +22,12 @@ async function registerUser() {
             }, 3000);
         } else {
             const errorData = await response.json();
-            alert(errorData.message || "Registrazione fallita. Riprova.");
+            alert(
+                errorData.message || "Registration failed. Please try again."
+            );
         }
     } catch {
-        alert("Errore di rete. Riprova più tardi.");
+        alert("Network error. Please try again later.");
     }
 }
 
@@ -68,7 +70,7 @@ async function loginUser() {
             }
         }
     } catch {
-        alert("Errore di rete. Riprova più tardi.");
+        alert("Network error. Please try again later.");
     }
 }
 
@@ -95,12 +97,12 @@ function handleCredentialResponse(response) {
                 if (data.error === "EMAIL_ALREADY_EXISTS") {
                     alert(data.message);
                 } else {
-                    alert("Autenticazione fallita. Riprova.");
+                    alert("Authentication failed. Please try again.");
                 }
             }
         })
         .catch(() => {
-            alert("Errore durante il login con Google. Riprova più tardi.");
+            alert("Error during Google login. Please try again later.");
         });
 }
 
@@ -117,6 +119,6 @@ window.onload = function () {
             size: "large",
         });
     } else {
-        alert("Errore nel caricamento di Google Login. Ricarica la pagina.");
+        alert("Error loading Google Login. Please reload the page.");
     }
 };

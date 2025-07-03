@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     startPing(60000);
+
     const aboveTheFold = document.getElementById("above-the-fold");
     const toggleBetaButtonVisibility = (entries, observer) => {
         entries.forEach((entry) => {
@@ -60,9 +61,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -144,6 +145,7 @@ document
     .getElementById("waiting-list-form")
     .addEventListener("submit", async (e) => {
         e.preventDefault();
+        const langFlag = form.dataset.lang || "en";
 
         const waitingListName = document.getElementById("name").value;
         const waitingListEmail = document.getElementById("email").value;
@@ -165,7 +167,7 @@ document
                     waitingListpreferences,
                     waitingListGender,
                     waitingListAge,
-                    language: "it",
+                    language: langFlag,
                 }),
             });
             if (!response.ok) {
@@ -174,7 +176,7 @@ document
                     showPopupMessage(errorData.message);
                 } else {
                     showPopupMessage(
-                        errorData.message || "Qualcosa è andato storto."
+                        errorData.message || "Something went wrong."
                     );
                 }
                 return;
@@ -182,12 +184,12 @@ document
 
             // Se la risposta è OK
             document.getElementById("waiting-list-form").reset();
-            showPopupMessage("Grazie mille, a breve riceverai un'email");
+            showPopupMessage("Thank you! You will receive an email shortly.");
             closeBetaForm();
         } catch (error) {
-            console.error("Errore durante la registrazione:", error);
+            console.error("Error during registration: ", error);
             showPopupMessage(
-                "Impossibile connettersi al server. Controlla la tua connessione."
+                "Unable to connect to the server. Please check your connection."
             );
         }
     });

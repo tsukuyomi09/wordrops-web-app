@@ -76,8 +76,6 @@ async function fetchQueueStatus() {
         }
 
         const data = await response.json();
-        console.log("siamo arrivati qui");
-        console.log(data.inQueue);
 
         if (data.inQueue) {
             if (!socketId) await initSocket();
@@ -89,7 +87,7 @@ async function fetchQueueStatus() {
             }
         }
     } catch (error) {
-        console.error("Errore nel fetch della queue status:", error);
+        console.error("Error fetching queue status:", error);
         return false; // fallback
     }
 }
@@ -110,10 +108,9 @@ async function updateQueueSocket(gameType, gameSpeed) {
         }
 
         const result = await response.json();
-        console.log("Socket ID aggiornato in coda:", result);
         return true;
     } catch (error) {
-        console.error("Errore aggiornando socket ID in coda:", error);
+        console.error("Error updating socket ID in queue:", error);
         return false;
     }
 }
@@ -144,10 +141,7 @@ function abandonQueue() {
         })
 
         .catch((error) => {
-            console.error(
-                "Errore nella richiesta per abbandonare la coda:",
-                error
-            );
+            console.error("Error while requesting to leave the queue:", error);
         });
 }
 

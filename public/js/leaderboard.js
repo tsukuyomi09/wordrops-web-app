@@ -16,9 +16,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -156,7 +156,7 @@ async function searchUser() {
     } catch (err) {
         console.error(err);
         const errorMessage = document.getElementById("error-message");
-        errorMessage.textContent = "L'utente non esiste";
+        errorMessage.textContent = "User does not exist";
         errorMessage.classList.remove("hidden");
         setTimeout(() => {
             errorMessage.classList.add("hidden");
