@@ -133,7 +133,7 @@ function displayUserBooks(books) {
 
     books.forEach((book) => {
         const card = document.createElement("a");
-        card.href = `/story/${book.id}-${book.slug}`;
+        card.href = `/story/${book.lang}/${book.id}-${book.slug}`;
 
         card.classList.add(
             "h-full",
