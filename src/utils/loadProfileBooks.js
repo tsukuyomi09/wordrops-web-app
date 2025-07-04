@@ -2,7 +2,7 @@ const { client } = require("../database/db");
 
 async function loadProfileBooks(user_id, limit, offset) {
     const result = await client.query(
-        `SELECT gc.id, gc.title, gc.game_type, gc.game_speed, gc.finished_at, gc.back_cover, gc.cover_image_url
+        `SELECT gc.id, gc.title, gc.game_type, gc.game_speed, gc.finished_at, gc.back_cover, gc.cover_image_url, gc.lang
         FROM game_players gp
         JOIN games_completed gc ON gp.game_uuid = gc.game_uuid
         WHERE gp.user_id = $1
@@ -14,6 +14,7 @@ async function loadProfileBooks(user_id, limit, offset) {
     return result.rows.map((game) => ({
         ...game,
         slug: generateSlug(game.title),
+        lang: game.lang,
     }));
 }
 

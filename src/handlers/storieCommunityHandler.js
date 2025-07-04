@@ -13,7 +13,8 @@ async function storieCommunityHandler(req, res) {
                 game_type,
                 game_speed,
                 finished_at,
-                cover_image_url
+                cover_image_url,
+                lang
             FROM
                 games_completed
             WHERE
@@ -32,6 +33,7 @@ async function storieCommunityHandler(req, res) {
             slug: generateSlug(story.title),
             game_type: story.game_type,
             game_speed: story.game_speed,
+            lang: story.lang,
         }));
         res.render("stories-library", {
             stories: stories,

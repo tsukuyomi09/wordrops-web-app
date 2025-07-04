@@ -34,7 +34,7 @@ function staticUrlsToXml(urls) {
 async function sitemapGenerator(req, res) {
     try {
         const result = await client.query(
-            "SELECT id, title, finished_at FROM games_completed WHERE publish = 'publish'"
+            "SELECT id, title, finished_at, lang FROM games_completed WHERE publish = 'publish'"
         );
 
         const urlsXml = result.rows
@@ -42,7 +42,9 @@ async function sitemapGenerator(req, res) {
                 const slug = generateSlug(row.title);
                 return `
                 <url>
-                    <loc>https://wordrops.com/story/${row.id}-${slug}</loc>
+                    <loc>https://wordrops.com/story/${row.lang}/${
+                    row.id
+                }-${slug}</loc>
                     <lastmod>${row.finished_at.toISOString()}</lastmod>
                     <priority>0.8</priority>
                 </url>`;

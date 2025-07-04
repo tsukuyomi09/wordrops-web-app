@@ -78,7 +78,7 @@ function displayUserBooks(books) {
         imageContainer.className = "relative flex justify-start items-start";
 
         const link = document.createElement("a");
-        link.href = `/story/${book.id}-${book.slug}`;
+        link.href = `/story/${book.lang}/${book.id}-${book.slug}`;
         link.target = "_blank";
 
         link.className = "card-container flex justify-start items-start";
