@@ -128,6 +128,10 @@
                                 ><span>/5</span>
                             </div>
                             <div
+                                id="lang-box"
+                                class="self-start inline-flex md:absolute text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10"
+                            ></div>
+                            <div
                                 id="book-genre"
                                 class="flex flex-row flex-wrap md:flex-nowrap gap-2"
                             ></div>
@@ -244,7 +248,7 @@
                         <button
                             id="new-game-button-normal-fast"
                             onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
-                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
                             SHORT
                             <div
@@ -255,16 +259,15 @@
                         </button>
                         <div class="px-6 py-4 text-center">
                             <p
-                                class="text-lg md:text-xl text-custom-blue font-bold"
+                                class="text-xl md:text-2xl text-custom-blue font-bold"
                             >
                                 CLASSIC
                             </p>
-                            <p>To have fun and practice</p>
                         </div>
                         <button
                             id="new-game-button-normal-slow"
                             onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
-                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
                             LONG
                             <div
@@ -282,27 +285,24 @@
                         <button
                             id="new-game-button-ranked-fast"
                             onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
-                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
                             SHORT
                             <div
                                 class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
                             >
-                                TURN: 1 HOURS
+                                TURN: 1 HOUR
                             </div>
                         </button>
                         <div class="px-6 py-4 text-center">
-                            <p class="text-lg md:text-xl text-white font-bold">
+                            <p class="text-xl md:text-2xl text-white font-bold">
                                 RANKED
-                            </p>
-                            <p class="text-white text-xs md:text-sm">
-                                Earn points, climb the leaderboards
                             </p>
                         </div>
                         <button
                             id="new-game-button-ranked-slow"
                             onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
-                            class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
                             LONG
                             <div

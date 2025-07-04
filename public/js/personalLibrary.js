@@ -72,6 +72,7 @@ function openBookOverlay(book, storyDetails) {
     const bookGenresContainer = document.getElementById("book-genre");
     const bookDescription = document.getElementById("book-summary");
     const bookRating = document.getElementById("average-rating");
+    const storyLang = document.getElementById("lang-box");
     const gameType = document.getElementById("game-type");
     const gameSpeed = document.getElementById("game-speed");
 
@@ -102,6 +103,7 @@ function openBookOverlay(book, storyDetails) {
                     <span class="text-mg md:text-lg font-semibold ">${item.username}</span>
                 </a>
             </div>
+
             <p class="text-gray-700 text-md leading-[2.5] md:text-lg mt-2" id="chapter-text">
                 ${item.content}
             </p>
@@ -140,6 +142,7 @@ function openBookOverlay(book, storyDetails) {
     bookCoverMob.src = book.cover_image_url;
 
     bookRating.innerHTML = `${storyDetails.average ?? "?"}`;
+    storyLang.innerHTML = `${book.lang.toUpperCase()}`;
     gameType.innerHTML = `${book.game_type}`;
     gameSpeed.innerHTML = `${book.game_speed}`;
 
