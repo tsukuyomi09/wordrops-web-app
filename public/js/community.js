@@ -103,17 +103,23 @@ function displayUserBooks(books) {
 
         // Container testo
         const textContainer = document.createElement("div");
-        textContainer.className =
-            "flex-1 md:p-4 flex flex-col justify-start gap-4 items-start";
 
+        textContainer.className =
+            "flex-1 md:p-4 flex flex-col justify-start gap-4 items-start relative";
+
+        langBox.className =
+            "md:absolute md:-top-4 md:-right-4 static text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10";
+        langBox.title = book.lang.toUpperCase();
+        langBox.textContent = book.lang.toUpperCase();
         const title = document.createElement("h3");
-        title.className = "text-sm md:text-md font-semibold text-gray-800";
+        title.className = "text-xl md:text-2xl italic font-semibold";
         title.textContent = book.title;
 
         const backCover = document.createElement("p");
         backCover.className = "text-sm hidden md:block";
         backCover.textContent = book.back_cover;
 
+        textContainer.appendChild(langBox);
         textContainer.appendChild(title);
         textContainer.appendChild(backCover);
 
