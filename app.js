@@ -42,29 +42,9 @@ io.on("connection", (socket) => {
 
     socket.on("text-update-animation", ({ gameId, username }) => {
         io.in(gameId).emit("text-update-animation", {
-            message: `${username} sta scrivendo`,
+            message: `${username} is writing`,
         });
     });
-
-    // socket.on("playerReady", ({ gameId, userId }) => {
-    //     try {
-    //         if (!gameId || !userId) {
-    //             return;
-    //         }
-    //         const game = preGameQueue[gameId];
-    //         const player = game.players.find((p) => p.socketId === userId);
-
-    //         if (!player) {
-    //             return;
-    //         }
-    //         player.pronto = true;
-    //     } catch (error) {
-    //         console.error(
-    //             "Errore durante l'elaborazione dell'evento 'playerReady':",
-    //             error
-    //         );
-    //     }
-    // });
 
     socket.on("sendChatMessage", (messageData) => {
         const { game_id, user_id, messageText } = messageData;
