@@ -36,18 +36,18 @@ async function generateTitleAndBlurb(chaptersToElaborate) {
             {
                 role: "system",
                 content:
-                    "Sei un assistente che genera titoli e quarte di copertura per libri. Devi generare un **titolo** e una **descrizione** (massimo 100 parole) che riassuma l'intero libro, basandoti sui seguenti capitoli. Restituisci **un solo titolo e blurb** in formato JSON, con il seguente schema:",
+                    "You are an assistant that generates book titles and back covers. You must generate a **title** and a **description** (maximum 100 words) that summarizes the entire book, based on the following chapters. Return **only one title and blurb** in JSON format, using the following schema:",
             },
             {
                 role: "user",
-                content: `Genera un JSON valido e preciso con il titolo:title e la quarta di copertina:backCover (range di 25-35 perole), in questo formato: 
+                content: `Generate a valid and precise JSON with the title:title and the back cover:backCover (range of 25–35 words), in this format: 
                 {
-                    "title": "Titolo del libro",
-                    "backCover": "Descrizione del libro"
+                    "title": "Book title",
+                    "backCover": "Book description"
                 }
-                Assicurati che il JSON sia correttamente formattato e senza errori. Non includere altro testo.
+                Make sure the JSON is correctly formatted and error-free. Do not include any other text.
 
-                Testo da utilizzare: """${JSON.stringify(
+                Text to use: """${JSON.stringify(
                     chaptersToElaborate,
                     null,
                     2
@@ -66,28 +66,28 @@ async function generateTitleAndBlurb(chaptersToElaborate) {
 
 async function generateGenres(chaptersToElaborate) {
     const prompt = `
-    Scegli da 1 a 3 generi letterari pertinenti per questa storia. Scegli solo tra i seguenti ID corrispondenti ai generi indicati:
-    1 - Fantasy
-    2 - Fantascienza
-    3 - Thriller
-    4 - Horror
-    5 - Romantico
-    6 - Commedia
-    7 - Drammatico
-    8 - Avventura
-    9 - Storico
-    10 - Slice of life
+    Choose 1 to 3 relevant literary genres for this story. Select only from the following IDs corresponding to the listed genres:
+    1 - Fantasy  
+    2 - Science Fiction  
+    3 - Thriller  
+    4 - Horror  
+    5 - Romance  
+    6 - Comedy  
+    7 - Drama  
+    8 - Adventure  
+    9 - Historical  
+    10 - Slice of Life
     
-    Rispondi con un array JSON valido con gli ID dei generi scelti (da 1 a 10), senza altre aggiunte. Il formato della risposta deve essere:
+    Respond with a valid JSON array containing only the selected genre IDs (from 1 to 10), with **no extra content**. The response format must be:
     
     [
         1, 3, 5
     ]
 
-    Rispondere con un array contenente solo numeri validi (da 1 a 10). Ogni numero corrisponde a un genere letterario che deve essere scelto per la storia.
+    Respond with an array containing only valid numbers (1 to 10). Each number represents a literary genre that fits the story.
 
-Testo: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
-`;
+    Text: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
+    `;
 
     const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -95,7 +95,7 @@ Testo: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
             {
                 role: "system",
                 content:
-                    "Sei un assistente che classifica le storie in generi letterari. Rispondi sempre con un array JSON valido di 1-3 generi scelti da una lista predefinita.",
+                    "You are an assistant that classifies stories into literary genres. Always respond with a valid JSON array of 1 to 3 genres selected from a predefined list.",
             },
             {
                 role: "user",
@@ -121,14 +121,11 @@ Testo: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
             return genres;
         } else {
             throw new Error(
-                "La risposta contiene ID non validi o formattazione errata."
+                "The response contains invalid IDs or incorrect formatting."
             );
         }
     } catch (error) {
-        console.error(
-            "Errore nel parsing del JSON o dati non validi:",
-            error.message
-        );
+        console.error("Error parsing JSON or invalid data:", error.message);
         return generateGenres(chaptersToElaborate);
     }
 }
@@ -175,16 +172,16 @@ async function generateChapterRatingsWithRetry(
             const ratings = await generateChapterRatings(chaptersToElaborate);
             return ratings;
         } catch (error) {
-            console.log(`Tentativo ${i + 1} fallito: ${error.message}`);
+            console.log(`Attempt ${i + 1} failed: ${error.message}`);
         }
     }
     console.log(
-        "Impossibile generare punteggi validi dopo 3 tentativi. Restituendo fallback."
+        "Unable to generate valid scores after 3 attempts. Returning fallback."
     );
     return chaptersToElaborate.map((chapter) => ({
         chapter: chapter.title,
         score: 0,
-        comment: "Non è stato possibile generare un punteggio",
+        comment: "Unable to generate a score",
     }));
 }
 
@@ -192,36 +189,37 @@ async function generateChapterRatings(chaptersToElaborate) {
     const chaptersCount = chaptersToElaborate.length;
 
     const prompt = `
-    Sei un critico letterario esperto. 
-    Leggi questi capitoli e fai una classifica dal migliore al peggiore. 
-    Devi giudicarli e confrontarli fra di loro basandoti su diversi criteri, fra cui: la qualità della trama, lo sviluppo dei personaggi, la profondità emotiva, la coerenza narrativa, l'originalità delle idee, la scrittura e lo stile, l'impatto generale e la capacità di coinvolgere il lettore. Considera anche come ogni capitolo contribuisce al ritmo complessivo della storia.
-    Per esempio, se ritieni che il Capitolo 2 sia il migliore, gli assegnerai il numero **1**. 
-    Se pensi che il Capitolo 4 sia il peggiore, dovrai assegnargli il numero **5**. 
+    You are an expert literary critic.  
+    Read these chapters and rank them from best to worst.  
+    You must evaluate and compare them based on several criteria, including: plot quality, character development, emotional depth, narrative coherence, originality of ideas, writing and style, overall impact, and the ability to engage the reader.
+    Also consider how each chapter contributes to the overall pacing of the story.  
 
-    Oltre alla classifica, genere una breve appunto di 10-20 parole come recesione per ogni capitolo
+    For example, if you think Chapter 2 is the best, assign it the number **1**.  
+    If you think Chapter 4 is the worst, assign it the number **5**.
+
+    In addition to the ranking, generate a brief note of 10-20 words as a review for each chapter.
+    Return the response **only** in JSON format, structured as follows:
+    [
+    { "chapterNumber": x, "number": 1, "comment": "your comment"},
+    { "chapterNumber": y, "number": 2, "comment": "your comment" },
+    { "chapterNumber": z, "number": 3, "comment": "your comment" },
+    { "chapterNumber": a, "number": 4, "comment": "your comment" },
+    { "chapterNumber": b, "number": 5, "comment": "your comment" }
+    ]
+
+    Final example could be:
+
+    [
+    { "chapterNumber": 3, "number": 1, "comment": "A chapter rich in detail and atmosphere that captures the reader's attention."},
+    { "chapterNumber": 2, "number": 2, "comment": "Good tension building with excellent character development."},
+    { "chapterNumber": 1, "number": 3, "comment": "An interesting chapter, but with less emotional impact than the previous ones."},
+    { "chapterNumber": 5, "number": 4, "comment": "Useful plot development, but lacks depth and engagement."},
+    { "chapterNumber": 4, "number": 5, "comment": "A dull chapter with dialogues that fail to maintain interest."}
+    ]
+
+    Important: for each object, use the chapter number (**chapterNumber**) as reference, NOT the title.
     
-    Restituisci la risposta **solo** in formato JSON, così strutturato:
-[
-  { "chapterNumber": x, "number": 1, "comment": "tuo commento"},
-  { "chapterNumber": y, "number": 2, "comment": "tuo commento" },
-  { "chapterNumber": z, "number": 3, "comment": "tuo commento" },
-  { "chapterNumber": a, "number": 4, "comment": "tuo commento" },
-  { "chapterNumber": b, "number": 5, "comment": "tuo commento" }
-]
-
-Esempio finale potrebbe essere:
-
-[
-  { "chapterNumber": 3, "number": 1, "comment": "Un capitolo ricco di dettagli e atmosfera, che cattura l'attenzione del lettore."},
-  { "chapterNumber": 2, "number": 2, "comment": "Buona costruzione della tensione, con un'ottima caratterizzazione dei personaggi." },
-  { "chapterNumber": 1, "number": 3, "comment": "Un capitolo interessante, ma con meno impatto emotivo rispetto ai precedenti." },
-  { "chapterNumber": 5, "number": 4, "comment": "Sviluppo della trama utile, ma manca di profondità e coinvolgimento." },
-  { "chapterNumber": 4, "number": 5, "comment": "Capitolo poco avvincente, con dialoghi che non riescono a mantenere l'interesse." }
-]
-
-Importante: per ogni oggetto, usa il numero di capitolo (**chapterNumber**) come riferimento, NON il titolo.
-    
-    Testo dei capitoli: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
+    Text of the chapters: """${JSON.stringify(chaptersToElaborate, null, 2)}"""
     `;
 
     const response = await openai.chat.completions.create({
@@ -229,7 +227,7 @@ Importante: per ogni oggetto, usa il numero di capitolo (**chapterNumber**) come
         messages: [
             {
                 role: "system",
-                content: `Agisci come un critico letterario esperto. Ti fornirò dei capitoli della stessa storia. Assegna un punteggio numerico SECCO per ciascun capitolo, seguendo queste regole: Ogni punteggio deve essere un numero intero, diverso dagli altri. Usa una sola volta ciascun range.`,
+                content: `Act as an expert literary critic. I will provide you chapters from the same story. Assign a distinct integer score to each chapter, following these rules: Each score must be a unique integer, different from the others. Use each score only once.`,
             },
             {
                 role: "user",
@@ -247,7 +245,7 @@ Importante: per ogni oggetto, usa il numero di capitolo (**chapterNumber**) come
     try {
         ratings = JSON.parse(raw);
     } catch (error) {
-        throw new Error(`Errore nel parsing del JSON: ${error.message}`);
+        throw new Error(`Error parsing JSON: ${error.message}`);
     }
 
     validateChapterRatings(ratings, chaptersCount);
