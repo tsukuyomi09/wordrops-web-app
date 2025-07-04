@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!response.ok) {
-                throw new Error("Errore nella rete");
+                throw new Error("Network error");
             }
 
             const data = await response.json();
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showStatsOnScreen(data);
             }
         } catch (error) {
-            console.error("Errore durante il recupero dei dati:", error);
+            console.error("Error retrieving data:", error);
         }
     }
 

@@ -126,9 +126,7 @@ async function saveGame(game) {
             );
 
             if (!imageUrl) {
-                console.error(
-                    "imageUrl è undefined o null, interrompo l'update"
-                );
+                console.error("imageUrl is undefined or null, stopping update");
                 return false;
             }
 
@@ -142,7 +140,7 @@ async function saveGame(game) {
 
             return true;
         } catch (err) {
-            console.error("Error generazione immagine o update DB:", err);
+            console.error("Error generating image or updating DB:", err);
             throw err;
         }
 

@@ -30,7 +30,7 @@ async function loadPlayerStatsIntoMap() {
             .sort((a, b) => b[1].ranked_played - a[1].ranked_played)
             .slice(0, 5);
     } catch (err) {
-        console.error("❌ Errore nel caricamento delle statistiche:", err);
+        console.error("❌ Error loading statistics:", err);
     }
 }
 

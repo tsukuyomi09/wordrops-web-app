@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
                 return res.json({
                     success: true,
                     needsProfileCompletion: true,
-                    redirectTo: `/completa-profilo/${encodeURIComponent(
+                    redirectTo: `/complete-profile/${encodeURIComponent(
                         user.email
                     )}`,
                 });
@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
                     return res.json({
                         success: true,
                         needsProfileCompletion: true,
-                        redirectTo: `/completa-profilo/${encodeURIComponent(
+                        redirectTo: `/complete-profile/${encodeURIComponent(
                             email
                         )}`,
                     });
@@ -67,18 +67,18 @@ router.post("/", async (req, res) => {
                     success: false,
                     error: "EMAIL_ALREADY_EXISTS",
                     message:
-                        "Hai già un account registrato con questa email. Accedi con email e password.",
+                        "You already have an account registered with this email. Log in with email and password.",
                 });
             }
             user = await createUser(email, sub);
             return res.json({
                 success: true,
                 needsProfileCompletion: true,
-                redirectTo: `/completa-profilo/${encodeURIComponent(email)}`,
+                redirectTo: `/complete-profile/${encodeURIComponent(email)}`,
             });
         }
     } catch (error) {
-        console.error("Errore durante la verifica del token:", error);
+        console.error("Error during token verification:", error);
         res.status(400).json({ success: false, error: "Invalid token" });
     }
 });

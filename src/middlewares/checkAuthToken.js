@@ -10,7 +10,7 @@ const checkAuth = async (req, res, next) => {
         if (!refreshToken) {
             return res
                 .status(401)
-                .json({ message: "Token mancante o non valido." });
+                .json({ message: "Missing or invalid token." });
         }
 
         try {
@@ -34,9 +34,7 @@ const checkAuth = async (req, res, next) => {
             req.username = decodedRefresh.username;
             return next();
         } catch (err) {
-            return res
-                .status(401)
-                .json({ message: "Refresh token non valido." });
+            return res.status(401).json({ message: "Invalid refresh token." });
         }
     }
 
@@ -51,8 +49,7 @@ const checkAuth = async (req, res, next) => {
         if (err.name === "TokenExpiredError") {
             if (!refreshToken) {
                 return res.status(401).json({
-                    message:
-                        "Token scaduto e nessun refresh token disponibile.",
+                    message: "Token expired and no refresh token available.",
                 });
             }
 
@@ -78,11 +75,11 @@ const checkAuth = async (req, res, next) => {
             } catch (err) {
                 return res
                     .status(401)
-                    .json({ message: "Refresh token non valido." });
+                    .json({ message: "Invalid refresh token." });
             }
         }
 
-        return res.status(401).json({ message: "Token non valido." });
+        return res.status(401).json({ message: "Invalid token." });
     }
 };
 

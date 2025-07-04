@@ -15,9 +15,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -49,7 +49,7 @@ function loadMoreBooks() {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("Errore nella rete");
+                throw new Error("Network error");
             }
             return response.json();
         })
@@ -61,7 +61,7 @@ function loadMoreBooks() {
             }
         })
         .catch((error) => {
-            console.error("Errore durante il recupero degli elementi:", error);
+            console.error("Error fetching items:", error);
         });
 }
 
@@ -78,7 +78,7 @@ function displayUserBooks(books) {
         imageContainer.className = "relative flex justify-start items-start";
 
         const link = document.createElement("a");
-        link.href = `/storia/${book.id}-${book.slug}`;
+        link.href = `/story/${book.id}-${book.slug}`;
         link.target = "_blank";
 
         link.className = "card-container flex justify-start items-start";
@@ -88,14 +88,14 @@ function displayUserBooks(books) {
             const starIcon = document.createElement("img");
             starIcon.src = "/images/icons/star.png";
             starIcon.className = "absolute z-10 w-4 h-4 top-2 left-2";
-            starIcon.alt = "stella";
+            starIcon.alt = "star";
             link.appendChild(starIcon);
         }
 
         const coverImg = document.createElement("img");
         coverImg.src =
             book.cover_image_url || "/images/book_cover_placeholder.jpeg";
-        coverImg.alt = `Copertina di ${book.title}`;
+        coverImg.alt = `Cover of ${book.title}`;
         coverImg.className = "w-24 md:w-48 lg:h-64 object-cover rounded-sm";
 
         link.appendChild(coverImg);

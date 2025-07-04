@@ -10,30 +10,33 @@ router.post("/", async (req, res) => {
         waitingListpreferences,
         waitingListGender,
         waitingListAge,
+        language,
     } = req.body;
 
     if (
         !waitingListName ||
         !waitingListEmail ||
-        !waitingListpreferences | !waitingListGender | !waitingListAge
+        !waitingListpreferences ||
+        !waitingListGender ||
+        !waitingListAge ||
+        !language
     ) {
-        return res
-            .status(400)
-            .json({ message: "Tutti i campi sono richiesti." });
+        return res.status(400).json({ message: "All fields are required." });
     }
 
     try {
         const query =
-            "INSERT INTO waiting_list (name, email, preferences, gender, age_range, created_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *";
+            "INSERT INTO waiting_list (name, email, preferences, gender, age_range, language, created_at) VALUES ($1, $2, $3, $4, $5, $6, NOW()) RETURNING *";
         const result = await client.query(query, [
             waitingListName,
             waitingListEmail,
             waitingListpreferences,
             waitingListGender,
             waitingListAge,
+            language,
         ]);
 
-        sendWaitingListEmail(waitingListEmail, waitingListName);
+        sendWaitingListEmail(waitingListEmail, waitingListName, language);
         res.status(201).json(result.rows[0]);
     } catch (error) {
         if (
@@ -43,14 +46,14 @@ router.post("/", async (req, res) => {
             return res.status(409).json({
                 // 409 Conflict è un codice HTTP appropriato per questo scenario
                 message:
-                    "Questo indirizzo email è già registrato come beta tester.",
+                    "This email address is already registered as a beta tester.",
                 code: "DUPLICATE_EMAIL", // Un codice personalizzato per il client
             });
         } else {
             // Per tutti gli altri errori
             return res.status(500).json({
                 message:
-                    "Si è verificato un errore inatteso durante la registrazione. Riprova più tardi.",
+                    "An unexpected error occurred during registration. Please try again later.",
                 code: "SERVER_ERROR", // Un codice personalizzato per il client
             });
         }

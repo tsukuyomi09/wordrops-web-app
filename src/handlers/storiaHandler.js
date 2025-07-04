@@ -76,14 +76,14 @@ async function storiaHandler(req, res) {
             const slugTitle = generateSlug(title);
 
             // Qui usi res.render e passi i dati a EJS
-            res.render("storia", {
+            res.render("story", {
                 isLoggedIn,
                 user_id,
                 userVote,
                 average,
                 totalVotes,
-                game_type: translateGameType(game_type),
-                game_speed: translateGameSpeed(game_speed),
+                game_type: game_type,
+                game_speed: game_speed,
                 book_title: title,
                 slug: slugTitle,
                 id: id,
@@ -92,7 +92,7 @@ async function storiaHandler(req, res) {
                 chapters: chapters,
                 genres: genres,
                 back_cover: back_cover,
-                story_url: `https://wordrops.com/storia/${id}-${slugTitle}`,
+                story_url: `https://wordrops.com/story/${id}-${slugTitle}`,
             });
         } else {
             res.status(404).sendFile(
@@ -100,7 +100,7 @@ async function storiaHandler(req, res) {
             );
         }
     } catch (error) {
-        console.error("Errore durante la query:", error);
+        console.error("Error during query:", error);
         res.status(500).sendFile(
             path.join(__dirname, "../../views", "404.html")
         );
@@ -115,22 +115,6 @@ function generateSlug(title) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "")
         .substring(0, 50);
-}
-
-function translateGameType(type) {
-    const types = {
-        ranked: "classificata",
-        normal: "classica",
-    };
-    return types[type] || type;
-}
-
-function translateGameSpeed(speed) {
-    const speeds = {
-        slow: "lunga",
-        fast: "corta",
-    };
-    return speeds[speed] || speed;
 }
 
 module.exports = { storiaHandler };

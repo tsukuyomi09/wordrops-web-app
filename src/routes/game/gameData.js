@@ -8,14 +8,14 @@ router.get("/:gameId", checkAuth, async (req, res) => {
     const game = activeGames.get(gameId);
 
     if (!game) {
-        return res.status(404).json({ error: "Gioco non trovato" });
+        return res.status(404).json({ error: "Game not found" });
     }
 
     const { players, turnOrder, turnIndex, status, chapters } = game;
 
     if (!Array.isArray(players)) {
         return res.status(500).json({
-            error: "I giocatori non sono in formato array",
+            error: "Players are not in array format",
         });
     }
 
@@ -25,7 +25,7 @@ router.get("/:gameId", checkAuth, async (req, res) => {
 
     if (!currentPlayer) {
         return res.status(500).json({
-            error: "Errore nella determinazione del giocatore attuale",
+            error: "Error determining the current player",
         });
     }
 

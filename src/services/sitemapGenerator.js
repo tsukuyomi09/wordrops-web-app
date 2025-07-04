@@ -12,7 +12,7 @@ const staticUrlsXml = [
         priority: "0.80",
     },
     {
-        loc: "https://wordrops.com/termini-e-condizioni",
+        loc: "https://wordrops.com/terms-and-conditions",
         lastmod: "2025-04-17T19:03:28+00:00",
         priority: "0.80",
     },
@@ -42,7 +42,7 @@ async function sitemapGenerator(req, res) {
                 const slug = generateSlug(row.title);
                 return `
                 <url>
-                    <loc>https://wordrops.com/storia/${row.id}-${slug}</loc>
+                    <loc>https://wordrops.com/story/${row.id}-${slug}</loc>
                     <lastmod>${row.finished_at.toISOString()}</lastmod>
                     <priority>0.8</priority>
                 </url>`;
@@ -69,7 +69,7 @@ async function sitemapGenerator(req, res) {
         res.setHeader("Content-Type", "application/xml");
         res.send(sitemapXml);
     } catch (error) {
-        console.error("Errore nella generazione della sitemap:", error);
+        console.error("Error generating sitemap:", error);
         res.status(500).send("Internal Server Error");
     }
 }

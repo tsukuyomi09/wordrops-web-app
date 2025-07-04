@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>
-            Wordrops Dashboard – La piattaforma per scrivere e collaborare in
-            tempo reale
+            Wordrops Dashboard – The platform to write, collaborate, and compete
+            in real time
         </title>
         <!-- Google Tag Manager -->
         <script>
@@ -152,7 +152,7 @@
                             <!-- Descrizione -->
                             <div class="">
                                 <h3 class="text-lg font-semibold">
-                                    Descrizione:
+                                    Description:
                                 </h3>
                                 <p id="book-summary" class="text-gray-700"></p>
                             </div>
@@ -183,24 +183,24 @@
         >
             <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
                 <h2 class="text-xl font-bold mb-4 text-red-600">
-                    Conferma Cancellazione
+                    Confirm Deletion
                 </h2>
                 <p class="mb-4 text-sm text-gray-600">
-                    Sei sicuro/a di voler cancellare il tuo account? Questa
-                    azione è irreversibile.
+                    Are you sure you want to delete your account? This action is
+                    irreversible.
                 </p>
                 <div class="flex justify-end gap-4">
                     <button
                         onclick="closeDeleteModal()"
                         class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 cursor-pointer"
                     >
-                        Annulla
+                        Exit
                     </button>
                     <button
                         onclick="confirmDeleteAccount()"
                         class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer"
                     >
-                        Conferma
+                        Confirm
                     </button>
                 </div>
             </div>
@@ -218,7 +218,7 @@
                 id="game-limit-reached"
                 class="absolute hidden z-50 left-1/2 -translate-x-1/2 top-2 text-sm lg:text-xl bg-red-200 text-gray-800 font-semibold md:rounded-2xl py-4 px-6"
             >
-                troppe partite
+                too many games
             </div>
             <div class="w-full max-w-6xl relative">
                 <button
@@ -246,31 +246,31 @@
                             onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
                             class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
-                            CORTA
+                            SHORT
                             <div
                                 class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
                             >
-                                TURNO: 1 ORA
+                                TURN: 1 HOUR
                             </div>
                         </button>
                         <div class="px-6 py-4 text-center">
                             <p
                                 class="text-lg md:text-xl text-custom-blue font-bold"
                             >
-                                CLASSICA
+                                CLASSIC
                             </p>
-                            <p>per divertirsi e allenarsi</p>
+                            <p>To have fun and practice</p>
                         </div>
                         <button
                             id="new-game-button-normal-slow"
                             onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
                             class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
-                            LUNGA
+                            LONG
                             <div
                                 class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
                             >
-                                TURNO: 12 ORE
+                                TURN: 12 HOURS
                             </div>
                         </button>
                     </div>
@@ -284,19 +284,19 @@
                             onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
                             class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
-                            CORTA
+                            SHORT
                             <div
                                 class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
                             >
-                                TURNO: 1 ORA
+                                TURN: 1 HOURS
                             </div>
                         </button>
                         <div class="px-6 py-4 text-center">
                             <p class="text-lg md:text-xl text-white font-bold">
-                                CLASSIFICATA
+                                RANKED
                             </p>
                             <p class="text-white text-xs md:text-sm">
-                                Guadagna punti, scala le classifiche
+                                Earn points, climb the leaderboards
                             </p>
                         </div>
                         <button
@@ -304,11 +304,11 @@
                             onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
                             class="py-3 px-4 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
                         >
-                            LUNGA
+                            LONG
                             <div
                                 class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
                             >
-                                TURNO: 12 ORE
+                                TURN: 12 HOURS
                             </div>
                         </button>
                     </div>
@@ -335,7 +335,7 @@
                         class="flex justify-center items-center mr-auto gap-2 md:gap-4 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
                     >
                         <a
-                            href="/classifiche"
+                            href="/leaderboards"
                             class="button-container flex flex-col size-10 md:size-12 justify-center items-center rounded-lg border-2 border-gray-200"
                         >
                             <img
@@ -346,7 +346,7 @@
                         </a>
 
                         <a
-                            href="/storie-community"
+                            href="/stories-library"
                             class="button-container flex flex-col size-10 md:size-12 justify-center items-center rounded-lg border-2 border-gray-200"
                         >
                             <img
@@ -398,7 +398,7 @@
                                     id="delete-account-btn"
                                     class="w-full pointer-events-none text-sm text-left text-red-600 hover:bg-red-100"
                                 >
-                                    Cancella Account
+                                    Delete Account
                                 </button>
                             </div>
                         </div>
@@ -414,7 +414,7 @@
                     <div
                         class="cursor-pointer font-semibold text-sm text-green-600"
                     >
-                        in coda
+                        in queue
                     </div>
                     <div class="absolute -right-6" id="waiting-gif">
                         <img
@@ -489,7 +489,7 @@
                             <h2
                                 class="my-title text-center text-lg md:text-xl lg:text-2xl text-gray-800"
                             >
-                                Nuova Storia
+                                New Story
                             </h2>
                         </div>
                     </div>
@@ -531,7 +531,7 @@
                             <h2
                                 class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Partite in Corso
+                                Current Matches
                             </h2>
                             <div
                                 id="buttons-container"
@@ -569,7 +569,7 @@
                             <h2
                                 class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Storie Completate
+                                Completed Stories
                             </h2>
                             <div
                                 class="w-full h-full max-w-6xl scrollbar-hidden mt-12 flex flex-col justify-start items-center overflow-y-auto px-4"
@@ -598,7 +598,7 @@
                             <h2
                                 class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Preferiti
+                                Favorites
                             </h2>
 
                             <div
@@ -611,7 +611,7 @@
                                 <h3
                                     class="text-lg italic font-semibold text-gray-600"
                                 >
-                                    presto disponibile
+                                    soon available
                                 </h3>
                             </div>
                         </div>
@@ -625,7 +625,7 @@
                             <h2
                                 class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Amici
+                                Friends
                             </h2>
                             <div
                                 class="h-full w-full flex justify-center items-center"
@@ -633,7 +633,7 @@
                                 <h3
                                     class="text-lg italic font-semibold text-gray-600"
                                 >
-                                    presto disponibile
+                                    soon available
                                 </h3>
                             </div>
                         </div>
@@ -652,7 +652,7 @@
                             <h2
                                 class="text-gray-800 text-2xl md:text-4xl font-bold text-center"
                             >
-                                Statistiche
+                                Stats
                             </h2>
                             <div
                                 class="flex md:py-36 md:px-6 max-w-6xl h-full w-full gap-6 justify-center items-center"
@@ -690,7 +690,7 @@
                                                     <p
                                                         class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Classiche
+                                                        Leaderboards
                                                     </p>
                                                 </div>
                                             </div>
@@ -723,7 +723,7 @@
                                                     <p
                                                         class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Classificata
+                                                        Ranked
                                                     </p>
                                                 </div>
                                             </div>
@@ -755,7 +755,7 @@
                                                     <p
                                                         class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Miglior Performance
+                                                        Best Performance
                                                     </p>
                                                 </div>
                                             </div>
@@ -787,7 +787,7 @@
                                                     <p
                                                         class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Punteggio
+                                                        Score
                                                     </p>
                                                 </div>
                                             </div>
@@ -821,7 +821,7 @@
                                                     <p
                                                         class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Partite Pessime
+                                                        Ugly Chapters
                                                     </p>
                                                 </div>
                                             </div>
@@ -854,7 +854,7 @@
                                                     <p
                                                         class="text-[12px] md:text-lg font-bold text-white"
                                                     >
-                                                        Abbandoni
+                                                        Drops
                                                     </p>
                                                 </div>
                                             </div>
@@ -881,7 +881,7 @@
                     id="new-popup-close"
                     class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full w-full"
                 >
-                    Chiudi
+                    Close
                 </button>
             </div>
         </div>
@@ -1029,7 +1029,7 @@
                     onclick="closeAvatarMenu()"
                     class="bg-blue-500 cursor-pointer text-white py-2 px-4 rounded"
                 >
-                    Seleziona
+                    Select
                 </button>
             </div>
         </div>
@@ -1044,14 +1044,32 @@
                     class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
                 ></div>
                 <div
-                    class="bg-white rounded-2xl p-8 md:p-24 w-full md:max-w-4xl relative"
+                    class="bg-white rounded-2xl p-8 md:pb-12 md:py-6 px-12 w-auto inline-block relative flex flex-col gap-12"
                 >
-                    <button
-                        onclick="closeWaitingQueueModal()"
-                        class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold w-12 h-12 lg:size-14 ext-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
+                    <div
+                        class="minimize-waiting-overlay w-full flex justify-center mb-12"
                     >
-                        X
-                    </button>
+                        <button
+                            onclick="closeWaitingQueueModal()"
+                            class="flex items-center gap-1 cursor-pointer z-50 text-custom-blue font-bold text-sm md:text-md"
+                        >
+                            <span>hide window</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-4 h-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19 9l-7 7-7-7"
+                                />
+                            </svg>
+                        </button>
+                    </div>
 
                     <div
                         class="flex flex-col items-center justify-center gap-4"
@@ -1060,7 +1078,7 @@
                             id="waiting-text"
                             class="text-gray-800 font-semibold text-center text-lg md:text-xl lg:text-2xl"
                         >
-                            In attesa di altri giocatori...
+                            waiting for other players..
                         </div>
                         <div id="waiting-gif" class="py-6">
                             <img
@@ -1074,7 +1092,7 @@
                             onclick="abandonQueue()"
                             class="px-6 py-3 bg-red-500 text-white font-semibold text-md md:text-lg rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 cursor-pointer"
                         >
-                            ABBANDONA
+                            ABANDON
                         </button>
                     </div>
                 </div>
@@ -1092,7 +1110,9 @@
                     id="game-ready-container"
                     class="flex flex-col items-center hidden"
                 >
-                    <h2 class="text-gray-800 text-4xl font-bold">Si Inizia!</h2>
+                    <h2 class="text-gray-800 text-4xl font-bold">
+                        Grab your pencil!
+                    </h2>
                 </div>
                 <div
                     id="countdown-seconds-container"
@@ -1102,7 +1122,7 @@
                         id="countdown"
                         class="text-gray-800 font-bold text-2xl mb-2"
                     >
-                        Partita trovata, Inizio in:
+                        Match found, starting in:
                     </div>
                     <h2
                         id="countdown-seconds"

@@ -5,7 +5,7 @@ async function checkSessionStatus() {
         });
 
         if (!response.ok) {
-            console.log("Sessione non valida");
+            console.log("Invalid session");
 
             const currentPath = window.location.pathname;
             if (currentPath !== "/register") {
@@ -19,7 +19,7 @@ async function checkSessionStatus() {
             }
         }
     } catch (error) {
-        console.error("Errore durante il controllo della sessione:", error);
+        console.error("Error checking session:", error);
     }
 }
 

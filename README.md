@@ -96,36 +96,7 @@ _A full demo video is coming soon._
 -   OAuth login integration
 -   Passwords hashed with Argon2
 
-## ⚙️ 2. Tech Stack
-
-### Frontend
-
--   HTML, EJS (server-side rendering for SEO pages)
--   TailwindCSS
--   Vanilla JavaScript
-
-### Backend
-
--   Node.js
--   Express
--   WebSocket (Socket.io)
--   Cloudinary (media storage)
-
-### Database
-
--   PostgreSQL
-
-### Authentication & Security
-
--   JWT (JSON Web Tokens)
--   OAuth
--   Argon2 (password hashing)
-
-### AI Integration
-
--   OpenAI API
-
-## 3. Architecture Overview
+## 2. Architecture Overview
 
 The overall architecture of the platform is designed to ensure smooth communication between the client, backend, database, AI services, and external authentication.
 
@@ -142,7 +113,7 @@ This interaction flow ensures real-time responsiveness and dynamic content gener
 
 ![Architecture Overview](./docs/images/wordrops_architecture_high_level.jpeg)
 
-## 4. AI Integration
+## 3. AI Integration
 
 AI is used to automate content generation and scoring based on the chapters written by users during a match. This allows the platform to deliver fully-formed stories and rankings without slowing down the user experience.
 
@@ -170,7 +141,7 @@ If the match was ranked, additional evaluation is triggered:
 
 📄 [textGeneratorAi.js](./src/utils/textGeneratorAi.js) – Manages title, back cover, genres, image prompts, and scoring logic using OpenAI.
 
-## 5. Real-time Multiplayer
+## 4. Real-time Multiplayer
 
 The matchmaking logic is handled server-side with custom queue management.  
 **Socket.io** is used only once a match is created, to enable real-time communication between the server and connected players.
@@ -207,7 +178,7 @@ Key events:
 
 <img src="./docs/images/hub_pic.png" width="400" alt="game demo" />
 
-## 6. Authentication & Security
+## 5. Authentication & Security
 
 This project uses standard practices for user authentication and security:
 
@@ -225,7 +196,7 @@ This project uses standard practices for user authentication and security:
 -   **Session protection**:  
     Sessions use secure cookies with **HTTPOnly** and **Secure** flags to mitigate XSS and session hijacking attacks.
 
-## 7. Database
+## 6. Database
 
 The database is designed to support the multiplayer game logic, user management, and social interactions (comments, notifications, statistics).
 
@@ -247,7 +218,7 @@ The database is designed to support the multiplayer game logic, user management,
 -   User statistics are aggregated to track user progress over time.
 -   Game-to-genre associations are managed through the `Game_genres` and `Genres` tables.
 
-## 🔔 8. Notification System
+## 🔔 7. Notification System
 
 When a ranked game ends, each player receives a score and a short AI-generated comment for their chapter contribution. These notifications are:
 

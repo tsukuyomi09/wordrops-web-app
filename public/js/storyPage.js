@@ -14,9 +14,9 @@ function startPing(intervalMs = 60000) {
                 },
             });
 
-            if (!res.ok) throw new Error("Errore ping");
+            if (!res.ok) throw new Error("Ping error");
         } catch (err) {
-            console.error("Ping fallito", err);
+            console.error("Ping failed", err);
         }
     }
 
@@ -191,7 +191,7 @@ async function sendVote() {
     const story_id = parseInt(storyPath.split("/").pop().split("-")[0], 10);
 
     if (isNaN(story_id)) {
-        console.error("❌ ID della storia non valido.");
+        console.error("❌ Invalid story ID.");
         return;
     }
 
@@ -209,11 +209,11 @@ async function sendVote() {
         const data = await res.json();
 
         if (res.status === 401) {
-            timeoutPlusMessage("registrati per accedere");
+            timeoutPlusMessage("register to get in");
         }
 
         if (!res.ok) {
-            throw new Error(data.message || "Errore sconosciuto");
+            throw new Error(data.message || "Unknown error");
         }
 
         if (data.status === "unchanged") {
@@ -223,7 +223,10 @@ async function sendVote() {
         timeoutPlusMessage(data.message);
         updateVoteDisplay(selectedRating, data.data.average);
     } catch (err) {
-        console.error("Errore durante l'invio del voto:", err.message);
+        console.error(
+            "An error occurred while submitting the vote.",
+            err.message
+        );
         // Eventuale feedback visivo per l'utente
     }
 }

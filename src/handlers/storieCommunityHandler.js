@@ -30,21 +30,16 @@ async function storieCommunityHandler(req, res) {
         const stories = storiesRaw.map((story) => ({
             ...story,
             slug: generateSlug(story.title),
-            game_type: translateGameType(story.game_type),
-            game_speed: translateGameSpeed(story.game_speed),
+            game_type: story.game_type,
+            game_speed: story.game_speed,
         }));
-        res.render("storie-community", {
+        res.render("stories-library", {
             stories: stories,
             query: {},
         });
     } catch {
-        console.error(
-            "Errore nel caricamento della pagina della libreria:",
-            error
-        );
-        res.status(500).send(
-            "Si è verificato un errore nel caricamento della libreria."
-        );
+        console.error("Error loading the library page:", error);
+        res.status(500).send("An error occurred while loading the library.");
     }
 }
 
@@ -56,22 +51,6 @@ function generateSlug(title) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "")
         .substring(0, 50);
-}
-
-function translateGameType(type) {
-    const types = {
-        ranked: "classificata",
-        normal: "classica",
-    };
-    return types[type] || type;
-}
-
-function translateGameSpeed(speed) {
-    const speeds = {
-        slow: "lunga",
-        fast: "corta",
-    };
-    return speeds[speed] || speed;
 }
 
 module.exports = { storieCommunityHandler };

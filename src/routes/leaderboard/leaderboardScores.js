@@ -23,8 +23,8 @@ router.get("/", async (req, res) => {
 
         res.json({ users, hasNextPage });
     } catch (err) {
-        console.error("Errore nella leaderboard:", err);
-        res.status(500).json({ error: "Errore interno del server" });
+        console.error("Error in leaderboard:", err);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

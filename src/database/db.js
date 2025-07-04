@@ -14,11 +14,11 @@ const client = new Client({
 const connectDB = async () => {
     try {
         await client.connect();
-        console.log("Connesso al database");
+        console.log("Connected to the database");
         const res = await client.query("SELECT NOW()");
-        console.log("Data e ora dal database:", res.rows[0]);
+        console.log("Date and time from database:", res.rows[0]);
     } catch (err) {
-        console.error("Errore di connessione:", err.stack);
+        console.error("Connection error:", err.stack);
     }
 };
 
@@ -44,7 +44,7 @@ async function resetUserStatus(players) {
             ["idle", usernames]
         );
     } catch (err) {
-        console.error("Errore durante il reset dello stato degli utenti:", err);
+        console.error("Error while resetting user statuses:", err);
         throw err;
     }
 }

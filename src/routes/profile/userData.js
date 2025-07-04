@@ -10,7 +10,7 @@ router.get("/", checkAuth, checkUserStatus, async (req, res) => {
             req;
 
         if (!username) {
-            return res.status(400).json({ error: "Username non trovato" });
+            return res.status(400).json({ error: "Username not found" });
         }
 
         const gameNotifications = notificationMap.get(user_id);
@@ -24,8 +24,8 @@ router.get("/", checkAuth, checkUserStatus, async (req, res) => {
             gameNotifications,
         });
     } catch (err) {
-        console.error("Errore durante il recupero dello username:", err);
-        res.status(500).json({ error: "Errore del server" });
+        console.error("Error retrieving username:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 

@@ -9,7 +9,7 @@ function startCountdown(gameId) {
     const io = getSocket();
     const game = activeGames.get(gameId);
     if (!game) {
-        console.error(`Gioco con ID ${gameId} non trovato`);
+        console.error(`Game not found`);
         return;
     }
 
@@ -71,7 +71,7 @@ async function handleCountdownExpiration(io, game, gameId, startCountdown) {
         await new Promise((resolve, reject) => {
             try {
                 io.to(gameId).emit("gameCanceled", {
-                    reason: "La partita è stata annullata: troppi capitoli nulli.",
+                    reason: "The match was canceled: too many null chapters.",
                     gameId,
                 });
                 resolve();
@@ -114,16 +114,16 @@ async function checkAndCompleteGame(io, game, gameId) {
         const saveSuccess = await saveGame(game);
         if (!saveSuccess) {
             io.to(gameId).emit("gameError", {
-                message: "Errore nel salvataggio del gioco.",
+                message: "Error saving the game.",
             });
             // eventuale logica di recovery
             return false;
         }
         return true;
     } catch (err) {
-        console.error("Errore durante il completamento:", err);
+        console.error("Error during completion:", err);
         io.to(gameId).emit("gameError", {
-            message: "Errore nel processo di completamento del gioco.",
+            message: "Error in game completion process.",
         });
         return false;
     }

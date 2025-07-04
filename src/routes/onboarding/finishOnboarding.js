@@ -9,7 +9,7 @@ router.post("/:email", async (req, res) => {
 
     if (!username || !avatarName) {
         return res.status(400).json({
-            message: "Username e avatar sono obbligatori.",
+            message: "Username and avatar are required.",
         });
     }
 
@@ -56,15 +56,14 @@ router.post("/:email", async (req, res) => {
         });
 
         res.status(201).json({
-            message: "Onboarding completato con successo!",
+            message: "Onboarding completed successfully!",
             success: true,
             username: updatedUsername,
         });
     } catch (error) {
-        console.error("Errore nel database:", error);
+        console.error("Error in the database:", error);
         res.status(500).json({
-            message:
-                "Si è verificato un errore durante il completamento dell'onboarding.",
+            message: "An error occurred during onboarding completion.",
             error: error.message,
         });
     }

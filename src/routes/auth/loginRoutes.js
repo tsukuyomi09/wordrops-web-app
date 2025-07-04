@@ -19,14 +19,13 @@ router.post("/", async (req, res) => {
         if (user.verified !== true) {
             return res.status(401).json({
                 error: "unverified_email",
-                message:
-                    "Email non verificata. Controlla la tua casella di posta.",
+                message: "Email not verified. Check your inbox.",
             });
         }
 
         if (!user.username) {
             return res.status(200).json({
-                redirectTo: `/completa-profilo/${user.email}`,
+                redirectTo: `/complete-profile/${user.email}`,
             });
         }
 
@@ -66,8 +65,8 @@ router.post("/", async (req, res) => {
             username: user.username,
         });
     } catch (err) {
-        console.error("Errore durante il login:", err);
-        res.status(401).json({ message: err.message || "Errore del server" });
+        console.error("Error during login:", err);
+        res.status(401).json({ message: err.message || "Server error" });
     }
 });
 

@@ -42,29 +42,9 @@ io.on("connection", (socket) => {
 
     socket.on("text-update-animation", ({ gameId, username }) => {
         io.in(gameId).emit("text-update-animation", {
-            message: `${username} sta scrivendo`,
+            message: `${username} is writing`,
         });
     });
-
-    // socket.on("playerReady", ({ gameId, userId }) => {
-    //     try {
-    //         if (!gameId || !userId) {
-    //             return;
-    //         }
-    //         const game = preGameQueue[gameId];
-    //         const player = game.players.find((p) => p.socketId === userId);
-
-    //         if (!player) {
-    //             return;
-    //         }
-    //         player.pronto = true;
-    //     } catch (error) {
-    //         console.error(
-    //             "Errore durante l'elaborazione dell'evento 'playerReady':",
-    //             error
-    //         );
-    //     }
-    // });
 
     socket.on("sendChatMessage", (messageData) => {
         const { game_id, user_id, messageText } = messageData;
@@ -194,7 +174,7 @@ io.on("connection", (socket) => {
 
             game.chapterReadMap.set(user_id, lastChapterTimestamp);
         } else {
-            console.error(`Gioco con ID ${game_id} non trovato.`);
+            console.error(`Game ${game_id} not found.`);
         }
     });
 
@@ -223,14 +203,18 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "homepage.html"));
 });
+app.get("/it", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "homepage-it.html"));
+});
+
 app.get("/dashboard/:user_id", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "dashboard.html"));
 });
 app.get("/privacy-policy", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "privacy-policy.html"));
 });
-app.get("/termini-e-condizioni", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "termini-e-condizioni.html"));
+app.get("/terms-and-conditions", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "terms-and-conditions.html"));
 });
 app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "register.html"));
@@ -242,14 +226,15 @@ app.get("/profile-page/:username", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "profile-page.html"));
 });
 
-app.get("/storie-community", storieCommunityHandler);
+app.get("/stories-library", storieCommunityHandler);
 
-app.get("/storia/:id_slug", checkOptionalAuth, storiaHandler);
+app.get("/story/:id_slug", checkOptionalAuth, storiaHandler);
 
-app.get("/classifiche", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "classifiche.html"));
+app.get("/leaderboards", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "leaderboards.html"));
 });
-app.get("/completa-profilo/:email", (req, res) => {
+
+app.get("/complete-profile/:email", (req, res) => {
     const email = req.params.email;
 
     client.query(
@@ -257,23 +242,22 @@ app.get("/completa-profilo/:email", (req, res) => {
         [email],
         (err, result) => {
             if (err) {
-                console.error("Errore nel recuperare i dati dell'utente", err);
-                return res.status(500).send("Errore nel recupero dell'utente.");
+                console.error("Error retrieving user data", err);
+                return res.status(500).send("Error retrieving user..");
             }
 
             if (result.rows.length === 0) {
-                return res.status(404).send("Utente non trovato.");
+                return res.status(404).send("User not found.");
             }
 
             // Se tutto va bene, mostra la pagina HTML
             res.sendFile(
-                path.join(__dirname, "views", "completa-profilo.html")
+                path.join(__dirname, "views", "complete-profile.html")
             );
         }
     );
 });
 app.get("/404", (req, res) => {
-    console.log("Route 404 chiamata");
     res.sendFile(path.join(__dirname, "views", "404.html"));
 });
 app.get("/admin-panel", (req, res) => {

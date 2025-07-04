@@ -12,22 +12,22 @@ router.get("/:username", checkAuth, checkUserGameStatus, async (req, res) => {
         if (username !== req.username) {
             return res
                 .status(403)
-                .send("Non puoi visualizzare la dashboard di un altro utente.");
+                .send("You cannot view another user's dashboard.");
         }
         const result = await client.query(
             "SELECT * FROM users WHERE username = $1",
             [username]
         );
         if (result.rows.length === 0) {
-            return res.status(404).send("Utente non trovato");
+            return res.status(404).send("User not found");
         }
         res.sendFile(
             path.join(__dirname, "..", "..", "views", "dashboard.html")
         );
     } catch (err) {
-        console.error("Errore nel recupero dei dati dell'utente:", err);
+        console.error("Error retrieving user data:", err);
         res.status(500).json({
-            message: "Errore interno del server. Riprova più tardi.",
+            message: "Internal server error. Please try again later.",
         });
     }
 });

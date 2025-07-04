@@ -13,7 +13,7 @@ async function loadNotificationsIntoMap() {
             notificationMap.add(game_id, user_id, score, comment);
         });
     } catch (err) {
-        console.error("Errore durante il caricamento delle notifiche:", err);
+        console.error("Error loading notifications:", err);
     }
 }
 

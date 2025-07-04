@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     if (!username) {
         return res
             .status(400)
-            .json({ available: false, error: "Username mancante" });
+            .json({ available: false, error: "Missing username" });
     }
 
     try {
@@ -20,10 +20,10 @@ router.get("/", async (req, res) => {
         const isTaken = result.rows.length > 0;
         return res.json({ available: !isTaken });
     } catch (err) {
-        console.error("Errore nella verifica dello username:", err);
+        console.error("Error verifying username:", err);
         return res
             .status(500)
-            .json({ available: false, error: "Errore del server" });
+            .json({ available: false, error: "Server error" });
     }
 });
 

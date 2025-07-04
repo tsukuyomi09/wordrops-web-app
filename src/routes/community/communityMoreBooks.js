@@ -35,8 +35,8 @@ router.get("/", async (req, res) => {
 
         res.json({ games: gamesWithSlug });
     } catch (err) {
-        console.error("Errore durante il recupero dei libri:", err);
-        res.status(500).json({ error: "Errore del server" });
+        console.error("Error retrieving books:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 

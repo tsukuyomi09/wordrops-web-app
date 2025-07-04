@@ -20,10 +20,10 @@ async function logout() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error("Errore durante il logout:", errorData.error);
+            console.error("Error during logout:", errorData.error);
         }
     } catch (error) {
-        console.error("Errore: Problema con il logout:", error);
+        console.error("Error: Problem with logout:", error);
     } finally {
         localStorage.clear();
         window.location.href = "/";
@@ -54,9 +54,9 @@ async function confirmDeleteAccount() {
     const data = await res.json();
 
     if (res.ok) {
-        alert("Account cancellato. Verrai disconnesso.");
+        alert("Account deleted. You will be logged out.");
         window.location.href = "/";
     } else {
-        alert(data.message || "Errore nella cancellazione.");
+        alert(data.message || "Error deleting account.");
     }
 }

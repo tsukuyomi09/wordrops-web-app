@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
     const { token } = req.query;
 
     if (!token) {
-        return res.status(400).json({ message: "Token mancante." });
+        return res.status(400).json({ message: "Missing Token." });
     }
 
     try {
@@ -31,8 +31,8 @@ router.get("/", async (req, res) => {
             path.join(__dirname, "../../../views/verify-email-success.html")
         );
     } catch (err) {
-        console.error("Errore nella verifica:", err);
-        res.status(500).send("Errore del server");
+        console.error("Error during verification:", err);
+        res.status(500).send("Server error");
     }
 });
 
