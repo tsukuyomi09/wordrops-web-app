@@ -107,6 +107,7 @@ function displayUserBooks(books) {
         textContainer.className =
             "flex-1 md:p-4 flex flex-col justify-start gap-4 items-start relative";
 
+        const langBox = document.createElement("div");
         langBox.className =
             "md:absolute md:-top-4 md:-right-4 static text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10";
         langBox.title = book.lang.toUpperCase();
