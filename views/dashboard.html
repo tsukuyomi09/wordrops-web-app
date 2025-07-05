@@ -212,7 +212,7 @@
 
         <div
             id="overlay-new-game"
-            class="fixed inset-0 hidden opacity-0 z-50 p-12 flex bg-custom-light flex-col md:flex-row justify-center items-center transform translate-y-10 transition-all duration-500"
+            class="fixed hidden opacity-0 inset-0 z-50 p-6 flex bg-custom-light flex-col md:flex-row justify-center items-center transform translate-y-10 transition-all duration-500"
         >
             <div
                 class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
@@ -232,87 +232,180 @@
                     X
                 </button>
 
-                <div
-                    class="relative rounded-2xl max-h-[90vh] overflow-hidden max-w-6xl flex flex-col md:flex-row justify-center items-center"
+                <form
+                    id="queue-form"
+                    class="w-full h-full bg-white gap-6 rounded-2xl flex flex-col justify-center items-center py-12"
+                    onsubmit="event.preventDefault(); handleQueueSubmit(this)"
                 >
-                    <img
-                        class="absolute hidden md:block w-18 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                        src="/images/wordrops_logo_animal.png"
-                        alt=""
-                    />
-
-                    <!-- Colonna Sinistra -->
-                    <div
-                        class="flex flex-col w-full py-12 md:py-24 bg-white justify-center items-center gap-4"
+                    <!-- MODE -->
+                    <fieldset
+                        class="flex flex-row justify-center gap-6 items-center w-full mt-6"
                     >
-                        <button
-                            id="new-game-button-normal-fast"
-                            onclick="joinQueue({ gameType: 'normal', gameSpeed: 'fast' })"
-                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        <legend
+                            class="text-center w-full mb-4 font-semibold text-custom-blue"
                         >
-                            SHORT
-                            <div
-                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
-                            >
-                                TURN: 1 HOUR
-                            </div>
-                        </button>
-                        <div class="px-6 py-4 text-center">
-                            <p
-                                class="text-xl md:text-2xl text-custom-blue font-bold"
-                            >
-                                CLASSIC
-                            </p>
-                        </div>
-                        <button
-                            id="new-game-button-normal-slow"
-                            onclick="joinQueue({ gameType: 'normal', gameSpeed: 'slow' })"
-                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                            MODE
+                        </legend>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
                         >
-                            LONG
-                            <div
-                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                            <input
+                                type="radio"
+                                name="gameType"
+                                value="normal"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
                             >
-                                TURN: 12 HOURS
-                            </div>
-                        </button>
-                    </div>
+                                classic
+                            </span>
+                        </label>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
+                        >
+                            <input
+                                type="radio"
+                                name="gameType"
+                                value="ranked"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
+                            >
+                                ranked
+                            </span>
+                        </label>
+                    </fieldset>
 
-                    <!-- Colonna Destra -->
-                    <div
-                        class="flex flex-col py-12 md:py-24 bg-gradient-to-r from-purple-500 to-red-300 w-full justify-center items-center gap-4"
+                    <!-- SPEED -->
+                    <fieldset
+                        class="flex flex-row justify-center gap-6 items-center w-full mt-6"
                     >
-                        <button
-                            id="new-game-button-ranked-fast"
-                            onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'fast' })"
-                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                        <legend
+                            class="text-center w-full mb-4 font-semibold text-custom-blue"
                         >
-                            SHORT
-                            <div
-                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
-                            >
-                                TURN: 1 HOUR
-                            </div>
-                        </button>
-                        <div class="px-6 py-4 text-center">
-                            <p class="text-xl md:text-2xl text-white font-bold">
-                                RANKED
-                            </p>
-                        </div>
-                        <button
-                            id="new-game-button-ranked-slow"
-                            onclick="joinQueue({ gameType: 'ranked', gameSpeed: 'slow' })"
-                            class="py-3 px-12 lg:py-6 lg:px-14 cursor-pointer transition duration-700 hover-sound text-sm bg-custom-blue border border-white text-white font-semibold rounded-xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 hover:shadow-2xl font-extrabold relative group"
+                            SPEED
+                        </legend>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
                         >
-                            LONG
-                            <div
-                                class="absolute -top-2 -right-1 translate-x-1/2 bg-red-500 px-2 text-white text-[8px] md:text-xs px-2 py-1 rounded transition duration-300 rotate-12 transform"
+                            <input
+                                type="radio"
+                                name="gameSpeed"
+                                value="fast"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
                             >
-                                TURN: 12 HOURS
-                            </div>
-                        </button>
-                    </div>
-                </div>
+                                1 Hour<br />
+                                Turn
+                            </span>
+                        </label>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
+                        >
+                            <input
+                                type="radio"
+                                name="gameSpeed"
+                                value="slow"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
+                            >
+                                12 Hours<br />
+                                Turn
+                            </span>
+                        </label>
+                    </fieldset>
+
+                    <!-- LANGUAGE -->
+                    <fieldset
+                        class="flex flex-row justify-center gap-6 items-center w-full mt-6"
+                    >
+                        <legend
+                            class="text-center w-full mb-4 font-semibold text-custom-blue"
+                        >
+                            LANGUAGE
+                        </legend>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
+                        >
+                            <input
+                                type="radio"
+                                name="language"
+                                value="it"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="block w-14 h-14 rounded-full border-3 border-gray-100 peer-checked:border-custom-blue"
+                                title="Italiano"
+                            >
+                                <img
+                                    src="/images/icons/italy-flag.png"
+                                    alt="Italian flag"
+                                    class="w-full h-full object-cover"
+                                />
+                            </span>
+                        </label>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
+                        >
+                            <input
+                                type="radio"
+                                name="language"
+                                value="en"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="block w-14 h-14 rounded-full border-3 border-gray-100 peer-checked:border-custom-blue"
+                                title="English"
+                            >
+                                <img
+                                    src="/images/icons/uk-flag.png"
+                                    alt="UK flag"
+                                    class="w-full h-full object-cover"
+                                />
+                            </span>
+                        </label>
+                        <label
+                            class="cursor-pointer hover:scale-105 transition-transform duration-300"
+                        >
+                            <input
+                                type="radio"
+                                name="language"
+                                value="es"
+                                class="peer sr-only"
+                                required
+                            />
+                            <span
+                                class="block w-14 h-14 rounded-full border-3 border-gray-100 peer-checked:border-custom-blue"
+                                title="Spanish"
+                            >
+                                <img
+                                    src="/images/icons/spain-flag.png"
+                                    alt="Spain flag"
+                                    class="w-full h-full object-cover"
+                                />
+                            </span>
+                        </label>
+                    </fieldset>
+
+                    <button
+                        type="submit"
+                        class="cursor-pointer mt-8 bg-custom-blue text-white rounded-xl py-3 px-8 font-bold hover:scale-105 transition-transform duration-300"
+                    >
+                        Play
+                    </button>
+                </form>
             </div>
 
             <!-- Sezione destra -->
