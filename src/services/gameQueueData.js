@@ -41,8 +41,30 @@ class Queue {
 }
 
 const gameQueues = {
-    ranked: { slow: new Queue(), fast: new Queue() },
-    normal: { slow: new Queue(), fast: new Queue() },
+    ranked: {
+        slow: {
+            it: new Queue(),
+            en: new Queue(),
+            es: new Queue(),
+        },
+        fast: {
+            it: new Queue(),
+            en: new Queue(),
+            es: new Queue(),
+        },
+    },
+    normal: {
+        slow: {
+            it: new Queue(),
+            en: new Queue(),
+            es: new Queue(),
+        },
+        fast: {
+            it: new Queue(),
+            en: new Queue(),
+            es: new Queue(),
+        },
+    },
 };
 
 const playerQueuePosition = {};

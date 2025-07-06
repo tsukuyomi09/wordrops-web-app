@@ -508,53 +508,53 @@ async function handleQueueSubmit(form) {
     const formData = new FormData(form);
     const gameType = formData.get("gameType");
     const gameSpeed = formData.get("gameSpeed");
-    const language = formData.get("language");
+    const gameLang = formData.get("gameLang");
 
     if (
         !["ranked", "normal"].includes(gameType) ||
         !["fast", "slow"].includes(gameSpeed) ||
-        !["it", "en", "es"].includes(language)
+        !["it", "en", "es"].includes(gameLang)
     ) {
         return;
     }
 
     await initSocket();
 
-    // if (socketId) {
-    //     try {
-    //         const usernameForAvatar = localStorage.getItem("username");
-    //         const avatarKey = `avatar_${usernameForAvatar}`;
-    //         const avatarForGame = localStorage.getItem(avatarKey);
+    if (socketId) {
+        try {
+            const usernameForAvatar = localStorage.getItem("username");
+            const avatarKey = `avatar_${usernameForAvatar}`;
+            const avatarForGame = localStorage.getItem(avatarKey);
 
-    //         const response = await fetch("/game/game-queue", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             credentials: "include",
-    //             body: JSON.stringify({
-    //                 socketId,
-    //                 avatarForGame,
-    //                 gameType,
-    //                 gameSpeed,
-    //                 language,
-    //             }),
-    //         });
+            const response = await fetch("/game/game-queue", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    socketId,
+                    avatarForGame,
+                    gameType,
+                    gameSpeed,
+                    gameLang,
+                }),
+            });
 
-    //         if (!response.ok) {
-    //             const { error } = await response.json();
-    //             if (error === "Max games limit reached") {
-    //                 showGameLimitMessage();
-    //                 return;
-    //             }
-    //             throw new Error(error || "Errore HTTP");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error requesting to join the queue:", error);
-    //     }
-    // } else {
-    //     alert("An error occurred. Please try again later.");
-    // }
+            if (!response.ok) {
+                const { error } = await response.json();
+                if (error === "Max games limit reached") {
+                    showGameLimitMessage();
+                    return;
+                }
+                throw new Error(error || "Errore HTTP");
+            }
+        } catch (error) {
+            console.error("Error requesting to join the queue:", error);
+        }
+    } else {
+        alert("An error occurred. Please try again later.");
+    }
 
     closeOverlay();
 }

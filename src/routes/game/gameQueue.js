@@ -10,7 +10,13 @@ const {
 } = require("../../services/gameQueueData");
 
 router.post("/", checkAuth, checkUserStatus, (req, res) => {
-    const { socketId, avatarForGame: avatar, gameType, gameSpeed } = req.body;
+    const {
+        socketId,
+        avatarForGame: avatar,
+        gameType,
+        gameSpeed,
+        gameLang,
+    } = req.body;
     const { user_id, username, maxGamesReached } = req;
     const socket = req.io.sockets.sockets.get(socketId);
 
@@ -39,38 +45,24 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
         socketId,
         gameType,
         gameSpeed,
+        gameLang,
         timestamp: Date.now(),
         pronto: true,
     };
 
-    const queue = gameQueues[gameType][gameSpeed];
+    const queue = gameQueues[gameType][gameSpeed][gameLang];
     queue.enqueue(player);
-    const players = queue.checkAndCreateGame(player);
-    playerQueuePosition[user_id] = { gameType, gameSpeed };
+    const players = queue.checkAndCreateGame();
+    playerQueuePosition[user_id] = { gameType, gameSpeed, gameLang };
 
-    console.log("----- STATO COMPLETO DELLE CODE -----");
-    for (const gameType in gameQueues) {
-        for (const gameSpeed in gameQueues[gameType]) {
-            const queue = gameQueues[gameType][gameSpeed];
-            const players = queue.toArray().map((p, index) => ({
-                pos: index + 1,
-                user_id: p.user_id,
-                username: p.username,
-                socketId: p.socketId,
-                timestamp: new Date(p.timestamp).toLocaleTimeString(),
-            }));
-            console.log(
-                `Queue ${gameType}/${gameSpeed} (${players.length} player):`
-            );
-            console.table(players);
-        }
-    }
-    console.log("-------------------------------------");
+    logActiveQueues();
+
     if (players) {
-        const gameId = `${gameType}_${gameSpeed}:${Date.now()}`;
+        const gameId = `${gameLang}_${gameType}_${gameSpeed}:${Date.now()}`;
         preGameQueue[gameId] = {
             gameType,
             gameSpeed,
+            gameLang,
             players,
         };
         players.forEach((player) => {
@@ -105,27 +97,11 @@ router.delete("/", checkAuth, async (req, res) => {
     }
 
     delete playerQueuePosition[user_id];
-    const queue = gameQueues[player.gameType][player.gameSpeed];
+    const queue =
+        gameQueues[player.gameType][player.gameSpeed][player.gameLang];
     queue.removePlayer(user_id);
 
-    console.log("----- STATO COMPLETO DELLE CODE -----");
-    for (const gameType in gameQueues) {
-        for (const gameSpeed in gameQueues[gameType]) {
-            const queue = gameQueues[gameType][gameSpeed];
-            const players = queue.toArray().map((p, index) => ({
-                pos: index + 1,
-                user_id: p.user_id,
-                username: p.username,
-                socketId: p.socketId,
-                timestamp: new Date(p.timestamp).toLocaleTimeString(),
-            }));
-            console.log(
-                `Coda ${gameType}/${gameSpeed} (${players.length} player):`
-            );
-            console.table(players);
-        }
-    }
-    console.log("-------------------------------------");
+    logActiveQueues();
 
     if (socket) {
         socket.emit("queueAbandoned", {
@@ -168,6 +144,32 @@ async function startCountdownPreGame(io, gameId) {
             countdown--;
         }
     }, 1000);
+}
+
+function logActiveQueues() {
+    console.log("----- STATO COMPLETO DELLE CODE -----");
+    for (const gameType in gameQueues) {
+        for (const gameSpeed in gameQueues[gameType]) {
+            for (const gameLang in gameQueues[gameType][gameSpeed]) {
+                const queue = gameQueues[gameType][gameSpeed][gameLang];
+                const players = queue.toArray().map((p, index) => ({
+                    pos: index + 1,
+                    user_id: p.user_id,
+                    username: p.username,
+                    socketId: p.socketId,
+                    timestamp: new Date(p.timestamp).toLocaleTimeString(),
+                }));
+                if (players.length > 0) {
+                    // <--- qui filtri
+                    console.log(
+                        `Queue ${gameType}/${gameSpeed}/${gameLang} (${players.length} players):`
+                    );
+                    console.table(players);
+                }
+            }
+        }
+    }
+    console.log("-------------------------------------");
 }
 
 module.exports = router;
