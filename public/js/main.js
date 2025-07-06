@@ -504,10 +504,16 @@ function displayItems(username) {
 
 let isInQueue = false;
 
-async function joinQueue({ gameType, gameSpeed }) {
+async function handleQueueSubmit(form) {
+    const formData = new FormData(form);
+    const gameType = formData.get("gameType");
+    const gameSpeed = formData.get("gameSpeed");
+    const game_lang = formData.get("game_lang");
+
     if (
         !["ranked", "normal"].includes(gameType) ||
-        !["fast", "slow"].includes(gameSpeed)
+        !["fast", "slow"].includes(gameSpeed) ||
+        !["it", "en", "es"].includes(game_lang)
     ) {
         return;
     }
@@ -531,6 +537,7 @@ async function joinQueue({ gameType, gameSpeed }) {
                     avatarForGame,
                     gameType,
                     gameSpeed,
+                    game_lang,
                 }),
             });
 
@@ -548,6 +555,7 @@ async function joinQueue({ gameType, gameSpeed }) {
     } else {
         alert("An error occurred. Please try again later.");
     }
+
     closeOverlay();
 }
 

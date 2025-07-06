@@ -78,7 +78,7 @@ function displayUserBooks(books) {
         imageContainer.className = "relative flex justify-start items-start";
 
         const link = document.createElement("a");
-        link.href = `/story/${book.lang}/${book.id}-${book.slug}`;
+        link.href = `/story/${book.game_lang}/${book.id}-${book.slug}`;
         link.target = "_blank";
 
         link.className = "card-container flex justify-start items-start";
@@ -110,8 +110,8 @@ function displayUserBooks(books) {
         const langBox = document.createElement("div");
         langBox.className =
             "md:absolute md:-top-4 md:-right-4 static text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10";
-        langBox.title = book.lang.toUpperCase();
-        langBox.textContent = book.lang.toUpperCase();
+        langBox.title = book.game_lang.toUpperCase();
+        langBox.textContent = book.game_lang.toUpperCase();
         const title = document.createElement("h3");
         title.className = "text-xl md:text-2xl italic font-semibold";
         title.textContent = book.title;

@@ -142,7 +142,7 @@ function openBookOverlay(book, storyDetails) {
     bookCoverMob.src = book.cover_image_url;
 
     bookRating.innerHTML = `${storyDetails.average ?? "?"}`;
-    storyLang.innerHTML = `${book.lang.toUpperCase()}`;
+    storyLang.innerHTML = `${book.game_lang.toUpperCase()}`;
     gameType.innerHTML = `${book.game_type}`;
     gameSpeed.innerHTML = `${book.game_speed}`;
 

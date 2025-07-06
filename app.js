@@ -228,7 +228,7 @@ app.get("/profile-page/:username", (req, res) => {
 
 app.get("/stories-library", storieCommunityHandler);
 
-app.get("/story/:lang/:id_slug", checkOptionalAuth, storiaHandler);
+app.get("/story/:game_lang/:id_slug", checkOptionalAuth, storiaHandler);
 
 app.get("/leaderboards", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "leaderboards.html"));

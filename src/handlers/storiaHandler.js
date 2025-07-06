@@ -13,7 +13,7 @@ async function storiaHandler(req, res) {
 
     try {
         const gameResult = await client.query(
-            "SELECT id, title, game_type, game_speed, back_cover, finished_at, lang FROM games_completed WHERE id = $1",
+            "SELECT id, title, game_type, game_speed, back_cover, finished_at, game_lang FROM games_completed WHERE id = $1",
             [id]
         );
 
@@ -72,7 +72,7 @@ async function storiaHandler(req, res) {
                 game_type,
                 game_speed,
                 back_cover,
-                lang: langFromDb,
+                game_lang,
             } = gameResult.rows[0];
             const slugTitle = generateSlug(title);
 
@@ -93,8 +93,8 @@ async function storiaHandler(req, res) {
                 chapters: chapters,
                 genres: genres,
                 back_cover: back_cover,
-                lang: langFromDb,
-                story_url: `https://wordrops.com/story/${langFromDb}/${id}-${slugTitle}`,
+                game_lang,
+                story_url: `https://wordrops.com/story/${game_lang}/${id}-${slugTitle}`,
             });
         } else {
             res.status(404).sendFile(

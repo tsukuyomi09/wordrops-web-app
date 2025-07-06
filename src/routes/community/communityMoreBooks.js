@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
                 game_speed,
                 finished_at,
                 cover_image_url,
-                lang
+                game_lang
             FROM
                 games_completed
             WHERE
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
         const gamesWithSlug = result.rows.map((game) => ({
             ...game,
             slug: generateSlug(game.title),
-            lang: game.lang,
+            game_lang: game.game_lang,
         }));
 
         res.json({ games: gamesWithSlug });
