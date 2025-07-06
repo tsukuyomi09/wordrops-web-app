@@ -15,7 +15,7 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
         avatarForGame: avatar,
         gameType,
         gameSpeed,
-        gameLang,
+        game_lang,
     } = req.body;
     const { user_id, username, maxGamesReached } = req;
     const socket = req.io.sockets.sockets.get(socketId);
@@ -45,24 +45,24 @@ router.post("/", checkAuth, checkUserStatus, (req, res) => {
         socketId,
         gameType,
         gameSpeed,
-        gameLang,
+        game_lang,
         timestamp: Date.now(),
         pronto: true,
     };
 
-    const queue = gameQueues[gameType][gameSpeed][gameLang];
+    const queue = gameQueues[gameType][gameSpeed][game_lang];
     queue.enqueue(player);
     const players = queue.checkAndCreateGame();
-    playerQueuePosition[user_id] = { gameType, gameSpeed, gameLang };
+    playerQueuePosition[user_id] = { gameType, gameSpeed, game_lang };
 
     logActiveQueues();
 
     if (players) {
-        const gameId = `${gameLang}_${gameType}_${gameSpeed}:${Date.now()}`;
+        const gameId = `${game_lang}_${gameType}_${gameSpeed}:${Date.now()}`;
         preGameQueue[gameId] = {
             gameType,
             gameSpeed,
-            gameLang,
+            game_lang,
             players,
         };
         players.forEach((player) => {
@@ -98,7 +98,7 @@ router.delete("/", checkAuth, async (req, res) => {
 
     delete playerQueuePosition[user_id];
     const queue =
-        gameQueues[player.gameType][player.gameSpeed][player.gameLang];
+        gameQueues[player.gameType][player.gameSpeed][player.game_lang];
     queue.removePlayer(user_id);
 
     logActiveQueues();
@@ -150,8 +150,8 @@ function logActiveQueues() {
     console.log("----- STATO COMPLETO DELLE CODE -----");
     for (const gameType in gameQueues) {
         for (const gameSpeed in gameQueues[gameType]) {
-            for (const gameLang in gameQueues[gameType][gameSpeed]) {
-                const queue = gameQueues[gameType][gameSpeed][gameLang];
+            for (const game_lang in gameQueues[gameType][gameSpeed]) {
+                const queue = gameQueues[gameType][gameSpeed][game_lang];
                 const players = queue.toArray().map((p, index) => ({
                     pos: index + 1,
                     user_id: p.user_id,
@@ -162,7 +162,7 @@ function logActiveQueues() {
                 if (players.length > 0) {
                     // <--- qui filtri
                     console.log(
-                        `Queue ${gameType}/${gameSpeed}/${gameLang} (${players.length} players):`
+                        `Queue ${gameType}/${gameSpeed}/${game_lang} (${players.length} players):`
                     );
                     console.table(players);
                 }

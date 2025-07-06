@@ -14,7 +14,7 @@ async function storieCommunityHandler(req, res) {
                 game_speed,
                 finished_at,
                 cover_image_url,
-                lang
+                game_lang
             FROM
                 games_completed
             WHERE
@@ -28,12 +28,14 @@ async function storieCommunityHandler(req, res) {
 
         const storiesRaw = storiesQuery.rows;
 
+        console.log("storiesRaw:", storiesRaw);
+
         const stories = storiesRaw.map((story) => ({
             ...story,
             slug: generateSlug(story.title),
             game_type: story.game_type,
             game_speed: story.game_speed,
-            lang: story.lang,
+            game_lang: story.game_lang,
         }));
         res.render("stories-library", {
             stories: stories,

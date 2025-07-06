@@ -133,7 +133,7 @@ function displayUserBooks(books) {
 
     books.forEach((book) => {
         const card = document.createElement("a");
-        card.href = `/story/${book.lang}/${book.id}-${book.slug}`;
+        card.href = `/story/${book.game_lang}/${book.id}-${book.slug}`;
 
         card.classList.add(
             "h-full",
@@ -170,7 +170,7 @@ function displayUserBooks(books) {
                     <div
                         id="lang-box"
                         class="self-start inline-flex text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10"
-                    >${book.lang.toUpperCase()}</div>
+                    >${book.game_lang.toUpperCase()}</div>
                     <div class="flex gap-4">
                         <span id="game-type" class="text-sm px-4 py-1 bg-amber-400 text-gray-800 rounded-lg font-mono">${
                             book.game_type

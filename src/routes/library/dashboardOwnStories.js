@@ -8,7 +8,7 @@ router.get("/", checkAuth, async (req, res) => {
 
     try {
         const { rows } = await client.query(
-            `SELECT DISTINCT g.id, g.title, g.finished_at, g.back_cover, g.cover_image_url, g.game_type, g.game_speed, g.lang
+            `SELECT DISTINCT g.id, g.title, g.finished_at, g.back_cover, g.cover_image_url, g.game_type, g.game_speed, g.game_lang
              FROM games_chapters gc
              JOIN games_completed g ON gc.game_id = g.id
              WHERE gc.author_id = $1 AND g.publish = 'publish'

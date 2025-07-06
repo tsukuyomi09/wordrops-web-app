@@ -508,12 +508,12 @@ async function handleQueueSubmit(form) {
     const formData = new FormData(form);
     const gameType = formData.get("gameType");
     const gameSpeed = formData.get("gameSpeed");
-    const gameLang = formData.get("gameLang");
+    const game_lang = formData.get("game_lang");
 
     if (
         !["ranked", "normal"].includes(gameType) ||
         !["fast", "slow"].includes(gameSpeed) ||
-        !["it", "en", "es"].includes(gameLang)
+        !["it", "en", "es"].includes(game_lang)
     ) {
         return;
     }
@@ -537,7 +537,7 @@ async function handleQueueSubmit(form) {
                     avatarForGame,
                     gameType,
                     gameSpeed,
-                    gameLang,
+                    game_lang,
                 }),
             });
 

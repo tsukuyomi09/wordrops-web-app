@@ -252,7 +252,7 @@
                                 class="relative flex justify-start items-start"
                             >
                                 <a
-                                    href="/story/<%= story.lang %>/<%= story.id %>-<%= story.slug %>"
+                                    href="/story/<%= story.game_lang %>/<%= story.id %>-<%= story.slug %>"
                                     target="blank"
                                     class="card-container flex justify-start items-start"
                                 >
@@ -275,9 +275,9 @@
                             >
                                 <div
                                     class="md:absolute md:-top-4 md:-right-4 static text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10"
-                                    title="<%= story.lang.toUpperCase() %>"
+                                    title="<%= story.game_lang.toUpperCase() %>"
                                 >
-                                    <%= story.lang.toUpperCase() %>
+                                    <%= story.game_lang.toUpperCase() %>
                                 </div>
                                 <h3
                                     class="text:sm md:text-lg md:text-md font-semibold text-gray-800"

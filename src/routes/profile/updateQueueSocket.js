@@ -12,7 +12,7 @@ router.post("/", checkAuth, (req, res) => {
 
     const pos = playerQueuePosition[user_id];
 
-    const queue = gameQueues[pos.gameType]?.[pos.gameSpeed]?.[pos.gameLang];
+    const queue = gameQueues[pos.gameType]?.[pos.gameSpeed]?.[pos.game_lang];
 
     // Cerca direttamente il player
     const player = queue.toArray().find((p) => p.user_id === user_id);
@@ -21,8 +21,8 @@ router.post("/", checkAuth, (req, res) => {
     console.log("----- COMPLETE QUEUE STATUS -----");
     for (const gameType in gameQueues) {
         for (const gameSpeed in gameQueues[gameType]) {
-            for (const gameLang in gameQueues[gameType][gameSpeed]) {
-                const queue = gameQueues[gameType][gameSpeed][gameLang];
+            for (const game_lang in gameQueues[gameType][gameSpeed]) {
+                const queue = gameQueues[gameType][gameSpeed][game_lang];
                 const players = queue.toArray().map((p, index) => ({
                     pos: index + 1,
                     user_id: p.user_id,
@@ -32,7 +32,7 @@ router.post("/", checkAuth, (req, res) => {
                 }));
                 if (players.length > 0) {
                     console.log(
-                        `Queue ${gameType}/${gameSpeed}/${gameLang} (${players.length} players):`
+                        `Queue ${gameType}/${gameSpeed}/${game_lang} (${players.length} players):`
                     );
                     console.table(players);
                 }
