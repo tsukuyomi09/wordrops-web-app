@@ -224,25 +224,36 @@
             >
                 too many games
             </div>
-            <div class="w-full max-w-6xl relative">
+            <div class="relative">
                 <button
                     onclick="closeOverlay()"
-                    class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold w-12 h-12 lg:size-14 ext-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
+                    class="absolute cursor-pointer transform translate-x-1/2 -translate-y-1/2 top-0 right-0 z-50 bg-red-500 text-white font-bold size-10 lg:size-14 text-sm md:text-md rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition duration-300"
                 >
                     X
                 </button>
+                <img
+                    class="absolute transform -translate-x-1/3 -translate-y-1/3 top-0 left-0 size-12 lg:size-18"
+                    src="/images/pen.png"
+                    alt=""
+                />
 
                 <form
                     id="queue-form"
-                    class="w-full h-full bg-white gap-6 rounded-2xl flex flex-col justify-center items-center py-12"
+                    class="w-full h-full bg-white xl:gap-4 rounded-2xl flex flex-col justify-center items-center py-8 px-8 lg:py-12 lg:px-18"
                     onsubmit="event.preventDefault(); handleQueueSubmit(this)"
                 >
+                    <h2
+                        class="text-xl xl:text-2xl text-center font-semibold text-gray-800"
+                    >
+                        Choose the story<br />
+                        you want to create
+                    </h2>
                     <!-- MODE -->
                     <fieldset
                         class="flex flex-row justify-center gap-6 items-center w-full mt-6"
                     >
                         <legend
-                            class="text-center w-full mb-4 font-semibold text-custom-blue"
+                            class="text-center w-full mb-2 font-semibold text-custom-blue"
                         >
                             MODE
                         </legend>
@@ -257,7 +268,7 @@
                                 required
                             />
                             <span
-                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
+                                class="text-center w-24 h-18 xl:w-32 xl:w-24 flex justify-center items-center text-gray-800 font-bold border-2 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
                             >
                                 classic
                             </span>
@@ -273,7 +284,7 @@
                                 required
                             />
                             <span
-                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
+                                class="text-center w-24 h-18 xl:w-32 xl:w-24 flex justify-center items-center text-gray-800 font-bold border-2 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
                             >
                                 ranked
                             </span>
@@ -285,7 +296,7 @@
                         class="flex flex-row justify-center gap-6 items-center w-full mt-6"
                     >
                         <legend
-                            class="text-center w-full mb-4 font-semibold text-custom-blue"
+                            class="text-center w-full mb-2 font-semibold text-custom-blue"
                         >
                             SPEED
                         </legend>
@@ -300,7 +311,7 @@
                                 required
                             />
                             <span
-                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
+                                class="text-center w-24 h-18 xl:w-32 xl:w-24 flex justify-center items-center text-gray-800 font-bold border-2 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
                             >
                                 1 Hour<br />
                                 Turn
@@ -317,7 +328,7 @@
                                 required
                             />
                             <span
-                                class="text-center w-36 h-24 flex justify-center items-center text-gray-800 font-bold border-3 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
+                                class="text-center w-24 h-18 xl:w-32 xl:w-24 flex justify-center items-center text-gray-800 font-bold border-2 border-gray-500 rounded-xl select-none peer-checked:border-custom-blue"
                             >
                                 12 Hours<br />
                                 Turn
@@ -330,7 +341,7 @@
                         class="flex flex-row justify-center gap-6 items-center w-full mt-6"
                     >
                         <legend
-                            class="text-center w-full mb-4 font-semibold text-custom-blue"
+                            class="text-center w-full mb-2 font-semibold text-custom-blue"
                         >
                             LANGUAGE
                         </legend>
@@ -345,7 +356,7 @@
                                 required
                             />
                             <span
-                                class="block w-14 h-14 rounded-full border-3 border-gray-100 peer-checked:border-custom-blue"
+                                class="block size-10 xl:size-12 rounded-full border-2 border-gray-100 peer-checked:border-custom-blue"
                                 title="Italiano"
                             >
                                 <img
@@ -366,7 +377,7 @@
                                 required
                             />
                             <span
-                                class="block w-14 h-14 rounded-full border-3 border-gray-100 peer-checked:border-custom-blue"
+                                class="block size-10 xl:size-12 rounded-full border-2 border-gray-100 peer-checked:border-custom-blue"
                                 title="English"
                             >
                                 <img
@@ -387,7 +398,7 @@
                                 required
                             />
                             <span
-                                class="block w-14 h-14 rounded-full border-3 border-gray-100 peer-checked:border-custom-blue"
+                                class="block size-10 xl:size-12 rounded-full border-2 border-gray-100 peer-checked:border-custom-blue"
                                 title="Spanish"
                             >
                                 <img
