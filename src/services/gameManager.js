@@ -6,7 +6,7 @@ async function createGameAndAssignPlayers(game) {
     newGameId = uuidv4();
 
     try {
-        const { gameType, gameSpeed, players } = game;
+        const { gameType, gameSpeed, game_lang, players } = game;
 
         players.forEach((player) => {
             addGameForPlayer(
@@ -14,7 +14,8 @@ async function createGameAndAssignPlayers(game) {
                 newGameId,
                 "in_progress",
                 gameType,
-                gameSpeed
+                gameSpeed,
+                game_lang
             );
         });
 
@@ -35,6 +36,7 @@ async function createGameAndAssignPlayers(game) {
             gameId: newGameId,
             gameType: gameType,
             gameSpeed: gameSpeed,
+            game_lang: game_lang,
             publishStatus: null,
             votes: {},
             players: players,
@@ -53,6 +55,15 @@ async function createGameAndAssignPlayers(game) {
             startedAt: new Date(),
         });
 
+        console.log("------ PLAYERS MAP ------");
+        for (const [user_id, data] of playersMap.entries()) {
+            console.log(`Player ${user_id}:`, JSON.stringify(data, null, 2));
+        }
+        console.log("------ ACTIVE GAMES ------");
+        for (const [gameId, gameData] of activeGames.entries()) {
+            console.log(`Game ${gameId}:`);
+            console.dir(gameData, { depth: null });
+        }
         return { gameId: newGameId, turnOrder };
     } catch (err) {
         throw err;
@@ -64,7 +75,8 @@ function addGameForPlayer(
     gameId,
     status = "in_progress",
     gameType,
-    gameSpeed
+    gameSpeed,
+    game_lang
 ) {
     if (!playersMap.has(user_id)) {
         playersMap.set(user_id, {
@@ -73,7 +85,7 @@ function addGameForPlayer(
     }
 
     const playerData = playersMap.get(user_id);
-    playerData.games[gameId] = { status, gameType, gameSpeed };
+    playerData.games[gameId] = { status, gameType, gameSpeed, game_lang };
     playersMap.set(user_id, playerData);
 }
 
