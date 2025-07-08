@@ -60,7 +60,8 @@ const checkAuth = async (req, res, next) => {
                 );
 
                 const newAccessToken = await refreshAccessToken(
-                    decodedRefresh.userId
+                    decodedRefresh.userId,
+                    decodedRefresh.username
                 );
 
                 res.cookie("accesstoken", newAccessToken, {

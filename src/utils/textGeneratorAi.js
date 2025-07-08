@@ -8,15 +8,20 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function generateFullMetadata(chaptersToElaborate, gameType) {
-    const titleAndBackCover = await generateTitleAndBlurb(chaptersToElaborate);
+async function generateFullMetadata(chaptersToElaborate, gameType, gameLang) {
+    const languageToUse = getLanguageName(gameLang);
+    const titleAndBackCover = await generateTitleAndBlurb(
+        chaptersToElaborate,
+        languageToUse
+    );
     const genres = await generateGenres(chaptersToElaborate);
     const imagePrompt = await generateImagePrompt(chaptersToElaborate);
 
     let chapterRatings = [];
     if (gameType === "ranked") {
         chapterRatings = await generateChapterRatingsWithRetry(
-            chaptersToElaborate
+            chaptersToElaborate,
+            languageToUse
         );
     }
 
@@ -29,14 +34,14 @@ async function generateFullMetadata(chaptersToElaborate, gameType) {
     };
 }
 
-async function generateTitleAndBlurb(chaptersToElaborate) {
+async function generateTitleAndBlurb(chaptersToElaborate, languageToUse) {
     const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
             {
                 role: "system",
                 content:
-                    "You are an assistant that generates book titles and back covers. You must generate a **title** and a **description** (maximum 100 words) that summarizes the entire book, based on the following chapters. Return **only one title and blurb** in JSON format, using the following schema:",
+                    "You are an assistant that generates book titles and back covers. The The title and backCover must be generated using this specific language: '${languageToUse}'. You must generate a **title** and a **description** (maximum 100 words) that summarizes the entire book, based on the following chapters. Return **only one title and blurb** in JSON format, using the following schema:",
             },
             {
                 role: "user",
@@ -165,11 +170,15 @@ async function generateImagePrompt(chaptersToElaborate) {
 
 async function generateChapterRatingsWithRetry(
     chaptersToElaborate,
+    languageToUse,
     attempts = 3
 ) {
     for (let i = 0; i < attempts; i++) {
         try {
-            const ratings = await generateChapterRatings(chaptersToElaborate);
+            const ratings = await generateChapterRatings(
+                chaptersToElaborate,
+                languageToUse
+            );
             return ratings;
         } catch (error) {
             console.log(`Attempt ${i + 1} failed: ${error.message}`);
@@ -185,7 +194,7 @@ async function generateChapterRatingsWithRetry(
     }));
 }
 
-async function generateChapterRatings(chaptersToElaborate) {
+async function generateChapterRatings(chaptersToElaborate, languageToUse) {
     const chaptersCount = chaptersToElaborate.length;
 
     const prompt = `
@@ -193,6 +202,8 @@ async function generateChapterRatings(chaptersToElaborate) {
     Read these chapters and rank them from best to worst.  
     You must evaluate and compare them based on several criteria, including: plot quality, character development, emotional depth, narrative coherence, originality of ideas, writing and style, overall impact, and the ability to engage the reader.
     Also consider how each chapter contributes to the overall pacing of the story.  
+
+    SUPER IMPORTANT: Write all review comments strictly in this language: '${languageToUse}'.
 
     For example, if you think Chapter 2 is the best, assign it the number **1**.  
     If you think Chapter 4 is the worst, assign it the number **5**.
@@ -250,6 +261,18 @@ async function generateChapterRatings(chaptersToElaborate) {
 
     validateChapterRatings(ratings, chaptersCount);
     return ratings;
+}
+
+function getLanguageName(lang) {
+    switch (lang) {
+        case "it":
+            return "Italian";
+        case "es":
+            return "Spanish";
+        case "en":
+        default:
+            return "English";
+    }
 }
 
 module.exports = { generateFullMetadata };

@@ -425,19 +425,32 @@ async function fetchdashboardData() {
         });
 
         if (!response.ok) {
-            throw new Error("Errore nella rete");
+            const errMsg = await response.text();
+            throw new Error(
+                `Errore nella rete (${response.status}): ${errMsg}`
+            );
         }
+
         const data = await response.json();
-        localStorage.setItem("user_id", data.user_id);
-        const user_id = data.user_id;
-        const username = data.username;
-        console.log(username);
-        const status = data.status;
-        const games = data.games;
-        const maxGamesReached = data.maxGamesReached;
-        const gameNotifications = data.gameNotifications;
+        const {
+            user_id,
+            username,
+            status,
+            games,
+            maxGamesReached,
+            gameNotifications,
+        } = data;
+
+        if (!user_id || !username) {
+            throw new Error("Dati utente mancanti o incompleti");
+        }
+
+        localStorage.setItem("user_id", user_id);
+
+        console.log("Utente:", username);
+
         showScoreNotificationsSequential(gameNotifications);
-        fetchAvatarData(username);
+        await fetchAvatarData(username);
         displayItems(username);
 
         if (status === "in_game" && games && Object.keys(games).length > 0) {
