@@ -27,10 +27,10 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 86400000;
-        if (gameSpeed === "fast") {
-            countdownDuration = 3600000;
-        }
+        let countdownDuration = 60000;
+        // if (gameSpeed === "fast") {
+        //     countdownDuration = 3600000;
+        // }
 
         activeGames.set(newGameId, {
             gameId: newGameId,

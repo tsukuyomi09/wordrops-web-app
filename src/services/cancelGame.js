@@ -9,8 +9,8 @@ async function cancelGameAndSave(game) {
         const finishedAt = new Date();
 
         const result = await client.query(
-            `INSERT INTO games_completed (started_at, finished_at, game_type, game_speed, publish, status)
-             VALUES ($1, $2, $3, $4, $5, $6)
+            `INSERT INTO games_completed (started_at, finished_at, game_type, game_speed, publish, status, game_lang)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING id`,
             [
                 game.startedAt,
@@ -19,6 +19,7 @@ async function cancelGameAndSave(game) {
                 game.gameSpeed,
                 "cancelled",
                 "cancelled",
+                game.game_lang,
             ]
         );
 

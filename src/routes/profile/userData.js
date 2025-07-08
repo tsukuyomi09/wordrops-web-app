@@ -9,6 +9,8 @@ router.get("/", checkAuth, checkUserStatus, async (req, res) => {
         const { user_id, username, userStatus, userGames, maxGamesReached } =
             req;
 
+        console.log(`username ${username}`);
+
         if (!username) {
             return res.status(400).json({ error: "Username not found" });
         }

@@ -28,12 +28,22 @@ function startPing(intervalMs = 60000) {
     setInterval(ping, intervalMs);
 }
 
-async function fetchUserData() {
+async function fetchUserData(retry = 0) {
     try {
         const urlPath = window.location.pathname;
         const urlGameId = urlPath.split("/").pop();
-        const response = await fetch("/profile/user-data");
-        if (!response.ok) throw new Error("Error retrieving user data:");
+        const response = await fetch("/profile/user-data", {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            if (response.status === 400 && retry < 3) {
+                return setTimeout(() => fetchUserData(retry + 1), 300);
+            }
+            throw new Error(`Error retrieving user data: ${text}`);
+        }
 
         const data = await response.json();
 

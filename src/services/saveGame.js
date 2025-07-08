@@ -20,7 +20,8 @@ async function saveGame(game) {
 
         const metadata = await generateFullMetadata(
             chaptersToElaborate,
-            game.gameType
+            game.gameType,
+            game.game_lang
         );
 
         if (isRanked) {
@@ -32,8 +33,8 @@ async function saveGame(game) {
 
         const finishedAt = new Date();
         const result = await client.query(
-            `INSERT INTO games_completed (title, started_at, finished_at, game_uuid, game_type, game_speed, back_cover, prompt_image, publish, status)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            `INSERT INTO games_completed (title, started_at, finished_at, game_uuid, game_type, game_speed, game_lang, back_cover, prompt_image, publish, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
              RETURNING id`,
             [
                 metadata.title,
@@ -42,6 +43,7 @@ async function saveGame(game) {
                 game.gameId,
                 game.gameType,
                 game.gameSpeed,
+                game.game_lang,
                 metadata.backCover,
                 metadata.imagePrompt,
                 "waiting-image",
@@ -60,11 +62,12 @@ async function saveGame(game) {
                     index + 1,
                     isRanked ? chapter.comment : null,
                     isRanked ? chapter.points : null,
+                    game.game_lang,
                 ];
 
                 return client.query(
-                    `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, score_comment, score, created_at)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
+                    `INSERT INTO games_chapters (game_id, title, content, author_id, turn_position, score_comment, score, game_lang, created_at)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
                     chapterValues
                 );
             })
