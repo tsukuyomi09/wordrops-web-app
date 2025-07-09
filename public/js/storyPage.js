@@ -59,8 +59,7 @@ document.querySelectorAll(".chapter-btn").forEach((button) => {
         const chapter = chapters[idx];
 
         document.getElementById("chapter-title").textContent = chapter.title;
-        document.getElementById("chapter-content").textContent =
-            chapter.content;
+        document.getElementById("chapter-content").innerHTML = chapter.content;
         document.getElementById("chapter-username").textContent =
             chapter.username;
         document.getElementById(

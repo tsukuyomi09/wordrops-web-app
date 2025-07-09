@@ -27,7 +27,7 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 60000;
+        let countdownDuration = 300000;
         // if (gameSpeed === "fast") {
         //     countdownDuration = 3600000;
         // }
