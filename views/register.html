@@ -6,7 +6,14 @@
             Wordrops – The platform to write, collaborate, and compete in real
             time
         </title>
-        <script src="https://cmp.osano.com/QlJmn7IrlA/70225bcf-c11e-4f67-acf4-0cf029ad9f3b/osano.js"></script>
+        <script>
+            if (location.hostname === "wordrops.com") {
+                var script = document.createElement("script");
+                script.src =
+                    "https://cmp.osano.com/QlJmn7IrlA/70225bcf-c11e-4f67-acf4-0cf029ad9f3b/osano.js";
+                document.head.appendChild(script);
+            }
+        </script>
 
         <link
             rel="icon"
