@@ -48,7 +48,7 @@ async function saveVoteAndCalculateAverage(user_id, story_id, story_vote) {
             if (oldVote === story_vote) {
                 return {
                     status: "unchanged",
-                    message: "Hai dato lo stesso voto",
+                    message: "You gave the same vote",
                 };
             }
             await client.query(
@@ -87,7 +87,7 @@ async function saveVoteAndCalculateAverage(user_id, story_id, story_vote) {
                 totalVotes,
                 story_vote,
             },
-            message: "Voto registrato con successo",
+            message: "Vote successfully registered!",
         };
     } catch (error) {
         console.error("Errore in saveVoteAndCalculateAverage:", error);

@@ -5,7 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="alternate" hreflang="en" href="https://wordrops.com/" />
         <link rel="alternate" hreflang="it" href="https://wordrops.com/it/" />
-        <script src="https://cmp.osano.com/QlJmn7IrlA/70225bcf-c11e-4f67-acf4-0cf029ad9f3b/osano.js"></script>
+        <script>
+            if (location.hostname === "wordrops.com") {
+                var script = document.createElement("script");
+                script.src =
+                    "https://cmp.osano.com/QlJmn7IrlA/70225bcf-c11e-4f67-acf4-0cf029ad9f3b/osano.js";
+                document.head.appendChild(script);
+            }
+        </script>
 
         <title>
             Wordrops – The platform to write, collaborate, and compete in real
