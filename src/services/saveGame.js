@@ -1,3 +1,4 @@
+const { convert } = require("html-to-text");
 const { generateFullMetadata } = require("../utils/textGeneratorAi");
 const { generateImageWithOpenAI } = require("../utils/generateImageWithOpenAI");
 const { calculateAndAssignRatings } = require("./calculateAndAssignRatings");
@@ -15,7 +16,10 @@ async function saveGame(game) {
         const chaptersToElaborate = game.chapters.map((chapter, index) => ({
             chapterNumber: index + 1,
             title: chapter.title,
-            content: chapter.content,
+            content: convert(chapter.content, {
+                wordwrap: false,
+                selectors: [{ selector: "a", options: { ignoreHref: true } }],
+            }),
         }));
 
         const metadata = await generateFullMetadata(

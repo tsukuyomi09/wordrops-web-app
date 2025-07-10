@@ -532,10 +532,11 @@ function getAvatarSrc(avatar) {
 
 function getChapter() {
     const title = document.getElementById("chapter-title").value.trim();
-    const editorContent = editor.getText().trim();
+    const plainText = editor.getText().trim();
+    const chapterHTML = editor.root.innerHTML.trim();
     const currentUser = localStorage.getItem("username");
 
-    const wordCount = editorContent ? editorContent.split(/\s+/).length : 0;
+    const wordCount = plainText ? plainText.split(/\s+/).length : 0;
 
     if (!title) {
         showError("Title is required!");
@@ -548,7 +549,7 @@ function getChapter() {
 
     const data = {
         title: title,
-        content: editorContent,
+        content: chapterHTML,
         currentUser: currentUser,
     };
     saveChapterChangeTurn(data);
