@@ -9,8 +9,14 @@
             content="<%= back_cover || 'Read a new collaborative story on Wordrops, created in real time by multiple authors.' %>"
         />
         <link rel="canonical" href="<%= story_url %>" />
-        <script src="https://cmp.osano.com/QlJmn7IrlA/70225bcf-c11e-4f67-acf4-0cf029ad9f3b/osano.js"></script>
-
+        <script>
+            if (location.hostname === "wordrops.com") {
+                var script = document.createElement("script");
+                script.src =
+                    "https://cmp.osano.com/QlJmn7IrlA/70225bcf-c11e-4f67-acf4-0cf029ad9f3b/osano.js";
+                document.head.appendChild(script);
+            }
+        </script>
         <link
             rel="icon"
             type="image/png"
