@@ -1209,16 +1209,14 @@
         <!-- preQueue overlay -->
         <div
             id="countdown-overlay"
-            class="fixed inset-0 p-12 bg-custom-light flex flex-col items-center justify-center hidden z-50"
+            class="fixed inset-0 p-12 bg-black/80 flex flex-col items-center justify-center hidden z-50"
         >
-            <div
-                class="absolute inset-0 bg-[url('/images/flying_books.jpg')] bg-cover bg-center opacity-20 -z-10"
-            ></div>
+            <div class="absolute inset-0 bg-center opacity-20 -z-10"></div>
             <div
                 id="game-ready-container"
                 class="flex flex-col items-center hidden"
             >
-                <h2 class="text-gray-800 text-4xl font-bold">
+                <h2 class="text-white text-4xl text-center font-bold">
                     Grab your pencil!
                 </h2>
             </div>
@@ -1228,9 +1226,9 @@
             >
                 <div
                     id="countdown"
-                    class="text-gray-800 font-bold text-2xl mb-2"
+                    class="text-white text-center font-bold text-2xl mb-2"
                 >
-                    Match found, starting in:
+                    Match found starting in:
                 </div>
                 <h2
                     id="countdown-seconds"
