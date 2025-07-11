@@ -263,10 +263,14 @@
                                 class="flex-1 md:p-4 flex flex-col relative justify-start gap-2 items-start"
                             >
                                 <div
-                                    class="md:absolute md:-top-4 md:-right-4 static text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10"
+                                    class="md:absolute md:-top-4 md:-right-4 static size-6 flex items-center justify-center rounded select-none z-10"
                                     title="<%= story.game_lang.toUpperCase() %>"
                                 >
-                                    <%= story.game_lang.toUpperCase() %>
+                                    <img
+                                        src="/images/icons/<%= story.game_lang === 'en' ? 'uk' : story.game_lang === 'es' ? 'spain' : 'italy' %>-flag.png"
+                                        alt="<%= story.game_lang %> flag"
+                                        class="w-full h-full object-cover"
+                                    />
                                 </div>
                                 <h3
                                     class="text:sm md:text-lg md:text-md font-semibold text-gray-800"

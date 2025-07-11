@@ -109,9 +109,17 @@ function displayUserBooks(books) {
 
         const langBox = document.createElement("div");
         langBox.className =
-            "md:absolute md:-top-4 md:-right-4 static text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10";
-        langBox.title = book.game_lang.toUpperCase();
-        langBox.textContent = book.game_lang.toUpperCase();
+            "md:absolute md:-top-4 md:-right-4 static size-6 flex items-center justify-center rounded-full overflow-hidden select-none z-10";
+        const img = document.createElement("img");
+        const flag =
+            book.game_lang === "en"
+                ? "uk"
+                : book.game_lang === "es"
+                ? "spain"
+                : "italy";
+        img.src = `/images/icons/${flag}-flag.png`;
+        img.alt = `${book.game_lang} flag`;
+        img.className = "w-full h-full object-cover";
         const title = document.createElement("h3");
         title.className = "text-xl md:text-2xl italic font-semibold";
         title.textContent = book.title;

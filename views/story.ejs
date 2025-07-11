@@ -382,9 +382,13 @@
                     >
                         <div
                             id="lang-box"
-                            class="text-xs md:text-lm p-1 md:p-2 border-1 bg-orange-500 text-white font-bold flex items-center justify-center rounded select-none z-10"
+                            class="size-6 font-bold flex items-center justify-center rounded select-none z-10"
                         >
-                            <%= game_lang.toUpperCase() %>
+                            <img
+                                src="/images/icons/<%= game_lang === 'en' ? 'uk' : game_lang === 'es' ? 'spain' : 'italy' %>-flag.png"
+                                alt="<%= game_lang %> flag"
+                                class="w-full h-full object-cover"
+                            />
                         </div>
                         <p class="text-xs">
                             <%= new
