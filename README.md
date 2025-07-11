@@ -48,6 +48,15 @@ _A full demo video is coming soon._
 -   Match history and story progression
 -   Automatic match ending + AI post-processing
 
+### 🌍 Multilingual Support
+
+-   Players can select the story language (English, Italian, Spanish) along with mode and speed before starting a match.
+-   Stories are grouped by language so users write collaboratively in their chosen language.
+-   AI-generated content (titles, descriptions, scoring comments) respects the selected language.
+-   Stories and pages have language-specific tags and localized HTML attributes for SEO.
+
+![wordrops mode and multilanguage](./docs/images/choose_a_mode.png)
+
 ### 👥 User System
 
 -   Signup + Onboarding with avatar and username
