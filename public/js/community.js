@@ -120,6 +120,7 @@ function displayUserBooks(books) {
         img.src = `/images/icons/${flag}-flag.png`;
         img.alt = `${book.game_lang} flag`;
         img.className = "w-full h-full object-cover";
+        langBox.appendChild(img);
         const title = document.createElement("h3");
         title.className = "text-xl md:text-2xl italic font-semibold";
         title.textContent = book.title;
