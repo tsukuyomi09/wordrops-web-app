@@ -122,7 +122,8 @@ function displayUserBooks(books) {
         img.className = "w-full h-full object-cover";
         langBox.appendChild(img);
         const title = document.createElement("h3");
-        title.className = "text-xl md:text-2xl italic font-semibold";
+        title.className =
+            "text:sm md:text-lg md:text-md font-semibold text-gray-800";
         title.textContent = book.title;
 
         const backCover = document.createElement("p");
