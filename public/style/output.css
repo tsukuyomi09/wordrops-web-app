@@ -647,6 +647,9 @@
   .h-\[90\%\] {
     height: 90%;
   }
+  .h-\[100vh\] {
+    height: 100vh;
+  }
   .h-auto {
     height: auto;
   }
@@ -736,6 +739,9 @@
   }
   .w-\[80vw\] {
     width: 80vw;
+  }
+  .w-\[100vw\] {
+    width: 100vw;
   }
   .w-auto {
     width: auto;
@@ -2204,6 +2210,11 @@
       height: calc(var(--spacing) * 24);
     }
   }
+  .md\:h-\[80vh\] {
+    @media (width >= 48rem) {
+      height: 80vh;
+    }
+  }
   .md\:h-auto {
     @media (width >= 48rem) {
       height: auto;
@@ -2302,6 +2313,11 @@
   .md\:w-\[80\%\] {
     @media (width >= 48rem) {
       width: 80%;
+    }
+  }
+  .md\:w-\[80vw\] {
+    @media (width >= 48rem) {
+      width: 80vw;
     }
   }
   .md\:w-auto {

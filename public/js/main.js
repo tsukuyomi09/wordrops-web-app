@@ -740,8 +740,10 @@ function showScoreNotificationsSequential(gameNotifications) {
             "transform",
             "-translate-x-1/2",
             "-translate-y-1/2",
-            "w-[80vw]",
-            "h-[80vh]",
+            "w-[100vw]",
+            "h-[100vh]",
+            "md:w-[80vw]",
+            "md:h-[80vh]",
             "z-1"
         );
         scorePopup.appendChild(lottieContainer);

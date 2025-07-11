@@ -206,6 +206,9 @@ app.get("/", (req, res) => {
 app.get("/it", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "homepage-it.html"));
 });
+app.get("/es", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "homepage-es.html"));
+});
 
 app.get("/dashboard/:user_id", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "dashboard.html"));
