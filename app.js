@@ -20,6 +20,11 @@ const {
     loadNotificationsIntoMap,
 } = require("./src/services/notificationLoader");
 const { loadPlayerStatsIntoMap } = require("./src/utils/usersStatsLoader");
+const translations = require("./locales/privacyPageTranslations");
+
+function privacyTranslations(lang) {
+    return translations.privacyPolicy[lang] || translations.privacyPolicy.en;
+}
 
 const app = express();
 app.get("/status", (req, res) => {
@@ -214,7 +219,9 @@ app.get("/dashboard/:user_id", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "dashboard.html"));
 });
 app.get("/privacy-policy", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "privacy-policy.html"));
+    const lang = req.query.lang || "en";
+    const texts = privacyTranslations(lang);
+    res.render("privacy-policy", { texts, lang });
 });
 app.get("/terms-and-conditions", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "terms-and-conditions.html"));
