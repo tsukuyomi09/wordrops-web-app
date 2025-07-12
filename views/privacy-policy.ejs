@@ -35,6 +35,24 @@
     </head>
     <body class="bg-gray-50 text-gray-800">
         <div class="mx-auto">
+            <div id="menu" class="w-full z-50 md:p-4 bg-white py-4 px-6">
+                <div
+                    class="flex relative flex-row justify-center w-full h-full items-center"
+                >
+                    <div id="central-logo" class="">
+                        <a
+                            href="/<%= lang === 'en' ? '' : lang %>"
+                            class="button-container logo-container relative"
+                        >
+                            <img
+                                src="/images/logo_wordrops_classic.svg"
+                                alt="Wordrops Logo"
+                                class="mx-auto w-26 lg:w-36"
+                            />
+                        </a>
+                    </div>
+                </div>
+            </div>
             <!-- Header -->
             <header
                 class="text-center py-12 px-4 sm:px-6 lg:px-8"
@@ -144,6 +162,96 @@
                     </section>
                 </div>
             </div>
+            <section class="md:py-12 py-6 px-4 relative w-full bg-custom-light">
+                <footer class="text-gray-800 py-6">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <!-- Link ai Termini e Privacy -->
+                            <div
+                                class="flex flex-col justify-center md:items-center items-start"
+                            >
+                                <div
+                                    class="flex-col justify-center items-start"
+                                >
+                                    <h3 class="font-semibold text-lg mb-4">
+                                        <% if (lang === 'it') { %>Informazioni
+                                        Legali<% } else if (lang === 'es') {
+                                        %>Información Legal<% } else { %>Legal
+                                        Info<% } %>
+                                    </h3>
+                                    <ul class="text-sm">
+                                        <li class="mb-2">
+                                            <a
+                                                href="/terms-and-conditions?<%= lang !== 'en' ? 'lang=' + lang : '' %>"
+                                                class="hover:text-blue-500 font-semibold py-4"
+                                                target="_blank"
+                                            >
+                                                <% if (lang === 'it') {
+                                                %>Termini e Condizioni<% } else
+                                                if (lang === 'es') { %>Términos
+                                                y Condiciones<% } else { %>Terms
+                                                And Conditions<% } %>
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a
+                                                href="/privacy-policy?<%= lang !== 'en' ? 'lang=' + lang : '' %>"
+                                                class="hover:text-blue-500 font-semibold py-4"
+                                                target="_blank"
+                                            >
+                                                <% if (lang === 'it') {
+                                                %>Privacy Policy<% } else if
+                                                (lang === 'es') { %>Política de
+                                                Privacidad<% } else { %>Privacy
+                                                Policy<% } %>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Supporto -->
+                            <div
+                                class="flex flex-col justify-center items-center"
+                            >
+                                <div
+                                    class="flex-col justify-center items-start"
+                                >
+                                    <h3 class="font-semibold text-lg mb-2">
+                                        <% if (lang === 'it') { %>Supporto<% }
+                                        else if (lang === 'es') { %>Soporte<% }
+                                        else { %>Support<% } %>
+                                    </h3>
+                                    <p class="text-sm">
+                                        <% if (lang === 'it') { %> Per qualsiasi
+                                        domanda o problema, contattaci via
+                                        email: <% } else if (lang === 'es') { %>
+                                        Para cualquier pregunta o problema,
+                                        contáctanos por correo electrónico: <% }
+                                        else { %> For any question or issue,
+                                        don't hesitate to contact us via email:
+                                        <% } %>
+                                    </p>
+                                    <a
+                                        href="mailto:support@wordrops.com"
+                                        class="text-blue-500 hover:text-blue-700"
+                                        >support@wordrops.com</a
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Copyright -->
+                            <div
+                                class="col-span-1 sm:col-span-2 lg:col-span-4 text-center mt-4 sm:mt-0"
+                            >
+                                <p class="text-sm">
+                                    © 2025 wordrops. All Rights Reserved.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </section>
         </div>
     </body>
 </html>
