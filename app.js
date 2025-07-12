@@ -20,10 +20,21 @@ const {
     loadNotificationsIntoMap,
 } = require("./src/services/notificationLoader");
 const { loadPlayerStatsIntoMap } = require("./src/utils/usersStatsLoader");
-const translations = require("./locales/privacyPageTranslations");
+const privacyTranslations = require("./locales/privacyPageTranslations");
+const termsAndConditionsTranslations = require("./locales/termsAndConditionsPageTranslations");
 
-function privacyTranslations(lang) {
-    return translations.privacyPolicy[lang] || translations.privacyPolicy.en;
+function getPrivacyTranslations(lang) {
+    return (
+        privacyTranslations.privacyPolicy[lang] ||
+        privacyTranslations.privacyPolicy.en
+    );
+}
+
+function getTermsTranslations(lang) {
+    return (
+        termsAndConditionsTranslations.termsAndConditions[lang] ||
+        termsAndConditionsTranslations.termsAndConditions.en
+    );
 }
 
 const app = express();
@@ -220,15 +231,19 @@ app.get("/dashboard/:user_id", (req, res) => {
 });
 app.get("/privacy-policy", (req, res) => {
     const lang = req.query.lang || "en";
-    const texts = privacyTranslations(lang);
+    const texts = getPrivacyTranslations(lang);
     res.render("privacy-policy", { texts, lang });
 });
 app.get("/terms-and-conditions", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "terms-and-conditions.html"));
+    const lang = req.query.lang || "en";
+    const texts = getTermsTranslations(lang);
+    res.render("terms-and-conditions", { texts, lang });
 });
-app.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "register.html"));
-});
+
+// we keep the register page hidden for now
+// app.get("/register", (req, res) => {
+//     res.sendFile(path.join(__dirname, "views", "register.html"));
+// });
 app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
 });
