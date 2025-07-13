@@ -241,9 +241,9 @@ app.get("/terms-and-conditions", (req, res) => {
 });
 
 // we keep the register page hidden for now
-// app.get("/register", (req, res) => {
-//     res.sendFile(path.join(__dirname, "views", "register.html"));
-// });
+app.get("/register", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "register.html"));
+});
 app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
 });
