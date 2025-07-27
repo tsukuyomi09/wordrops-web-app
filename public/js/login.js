@@ -2,13 +2,16 @@ async function registerUser() {
     const userEmail = document.getElementById("email").value;
     const userPassword = document.getElementById("password").value;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get("lang") || "en";
+
     try {
         const response = await fetch("/auth/register", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({ userEmail, userPassword }),
+            body: JSON.stringify({ userEmail, userPassword, lang }),
         });
 
         if (response.ok) {
@@ -77,12 +80,15 @@ async function loginUser() {
 // google sign in
 
 function handleCredentialResponse(response) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get("lang") || "en";
+
     fetch("/auth/google-login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idToken: response.credential }),
+        body: JSON.stringify({ idToken: response.credential, lang }),
     })
         .then((res) => res.json())
         .then((data) => {
