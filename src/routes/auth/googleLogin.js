@@ -10,7 +10,7 @@ const clientGoogle = new OAuth2Client(
 );
 
 router.post("/", async (req, res) => {
-    const { idToken } = req.body;
+    const { idToken, lang } = req.body;
 
     try {
         const payload = await verifyGoogleToken(idToken);
@@ -70,7 +70,7 @@ router.post("/", async (req, res) => {
                         "You already have an account registered with this email. Log in with email and password.",
                 });
             }
-            user = await createUser(email, sub);
+            user = await createUser(email, sub, lang);
             return res.json({
                 success: true,
                 needsProfileCompletion: true,
@@ -111,10 +111,10 @@ const findUserByGoogleId = async (googleId) => {
     return result.rowCount > 0 ? result.rows[0] : null;
 };
 
-const createUser = async (email, googleId) => {
+const createUser = async (email, googleId, lang) => {
     const result = await client.query(
-        "INSERT INTO users (email, password, google_id, verified) VALUES ($1, $2, $3, $4) RETURNING user_id, username, avatar",
-        [email, googleId, googleId, true]
+        "INSERT INTO users (email, password, google_id, verified, lang) VALUES ($1, $2, $3, $4, $5) RETURNING user_id, username, avatar",
+        [email, googleId, googleId, true, lang]
     );
     return result.rows[0];
 };

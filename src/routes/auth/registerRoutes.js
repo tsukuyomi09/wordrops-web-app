@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const { userEmail, userPassword } = req.body;
+    const { userEmail, userPassword, lang } = req.body;
 
     if (!userEmail || !userPassword) {
         return res.status(400).json({ message: "All fields are required." });
@@ -33,12 +33,13 @@ router.post("/", async (req, res) => {
     try {
         const verificationToken = crypto.randomBytes(32).toString("hex");
         const query =
-            "INSERT INTO users (email, password, username, verification_token) VALUES ($1, $2, $3, $4) RETURNING *";
+            "INSERT INTO users (email, password, username, verification_token, lang) VALUES ($1, $2, $3, $4, $5) RETURNING *";
         const result = await client.query(query, [
             userEmail,
             hashedPassword,
             null,
             verificationToken,
+            lang,
         ]);
 
         sendRegistrationEmail(userEmail, verificationToken);
