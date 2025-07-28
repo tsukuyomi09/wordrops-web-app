@@ -183,6 +183,17 @@ Key events:
 -   `gameCanceled`: triggered when two players fail to write a chapter, causing the match to be canceled
 -   `queueAbandoned`: triggered when **you** abandon the queue before a game starts
 
+### 🔁 Queue Persistence Across Pages (New)
+
+The multiplayer queue system now **persists across page changes**.
+
+-   When a player enters a game queue, their status is maintained even if they navigate away from the dashboard.
+-   A new WebSocket connection is **automatically established** on each page.
+-   The server **replaces the old socket** and preserves the player’s position in the queue.
+-   **Real-time indicators** across pages show that the user is still queued.
+-   When a match is found, the user is **auto-redirected to the game page**, no matter where they are.
+-   Players can also **manually leave the queue** from any section of the platform.
+
 ### 📸 Demo
 
 <img src="./docs/images/hub_pic.png" width="400" alt="game demo" />
@@ -243,9 +254,6 @@ The full notification flow includes caching, read-state handling, server crash r
 
 -   **MPA with vanilla JS**  
     The project is still a classic Multi-Page App without heavy frameworks like React or Next.js. This keeps things lightweight and simple, but with a multiplayer system and real-time notifications, it gets tricky to handle everything smoothly since every page reload resets connections.
-
--   **Leaving the page kicks you out of the queue**  
-    If a user joins a game queue and then leaves the page, they get removed from the queue. It works, but it’s not ideal — imagine wanting to browse or read stories while waiting for the game to start. This definitely needs a refactor to make the experience smoother and less restrictive.
 
 -   **Dependency on external AI models**  
     Wordrops relies on third-party AI models, which can change frequently (APIs and pricing). This is something to watch because it can affect costs and stability. Ideally, the AI integration should be modular enough to swap models without major rewrites.
