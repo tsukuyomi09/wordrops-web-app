@@ -2,10 +2,11 @@ const { getSocket } = require("./socketManager");
 const { saveGame } = require("./saveGame");
 const { cancelGameAndSave } = require("./cancelGame");
 const { handleGameCompletion } = require("../utils/handleGameCompletion");
+const { saveGameToDB } = require("../activeGameDB/saveActiveGame");
 
 const { activeGames } = require("./gameManager");
 
-function startCountdown(gameId) {
+async function startCountdown(gameId) {
     const io = getSocket();
     const game = activeGames.get(gameId);
     if (!game) {
@@ -19,6 +20,12 @@ function startCountdown(gameId) {
 
     if (game.countdownInterval) {
         clearInterval(game.countdownInterval);
+    }
+
+    try {
+        await saveGameToDB(game);
+    } catch (err) {
+        console.error("Errore salvataggio gioco a inizio countdown:", err);
     }
 
     game.countdownInterval = setInterval(async () => {
