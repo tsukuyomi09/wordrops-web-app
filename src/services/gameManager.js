@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+
 const activeGames = new Map();
 const playersMap = new Map();
 
@@ -27,10 +28,10 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 30000000;
-        // if (gameSpeed === "fast") {
-        //     countdownDuration = 3600000;
-        // }
+        let countdownDuration = 60 * 60 * 1000; // 1 hour
+        if (gameSpeed === "slow") {
+            countdownDuration = 12 * 60 * 60 * 1000; // 12 hours
+        }
 
         activeGames.set(newGameId, {
             gameId: newGameId,

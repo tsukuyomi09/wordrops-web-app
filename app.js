@@ -20,6 +20,7 @@ const {
     loadNotificationsIntoMap,
 } = require("./src/services/notificationLoader");
 const { loadPlayerStatsIntoMap } = require("./src/utils/usersStatsLoader");
+const { loadActiveGames } = require("./src/utils/loadActiveGames");
 const privacyTranslations = require("./locales/privacyPageTranslations");
 const termsAndConditionsTranslations = require("./locales/termsAndConditionsPageTranslations");
 
@@ -317,6 +318,7 @@ app.use("/leaderboard", leaderboardRoute);
         await connectDB();
         await loadNotificationsIntoMap();
         await loadPlayerStatsIntoMap();
+        await loadActiveGames();
 
         server.listen(port, "0.0.0.0", (err) => {
             if (err) {
