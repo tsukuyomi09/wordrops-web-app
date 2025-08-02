@@ -2,22 +2,48 @@ const usernameInput = document.getElementById("username");
 const confirmButton = document.getElementById("confirmButton");
 
 function checkUsername() {
-    const username = usernameInput.value;
+    const username = usernameInput.value.trim();
+    const confirmButton = document.getElementById("confirmButton");
+    const errorEl = document.getElementById("username-error");
 
-    const validUsernameRegex = /^[a-zA-Z0-9-_\.]+$/;
+    const validUsernameRegex = /^[a-zA-Z0-9-_.]+$/;
 
-    if (
-        !validUsernameRegex.test(username) ||
-        username.length < 4 ||
-        username.length > 16
-    ) {
+    let errorMsg = "";
+
+    if (username.length === 0) {
+        // reset state
         confirmButton.disabled = true;
-        confirmButton.classList.remove("bg-blue-600");
-        confirmButton.classList.add("bg-blue-400");
+        confirmButton.classList.remove("bg-blue-400");
+        confirmButton.classList.add("bg-red-400");
+        confirmButton.textContent = "CHOOSE A VALID USERNAME";
+        errorEl.classList.add("opacity-0");
+        return;
+    }
+
+    if (username.length < 4 || username.length > 16) {
+        errorMsg = "Username must be 4–16 characters.";
+    } else if (!validUsernameRegex.test(username)) {
+        errorMsg =
+            "Only letters, numbers, dashes (-), underscores (_) and dots (.) are allowed.";
+    }
+
+    if (errorMsg) {
+        confirmButton.disabled = true;
+        confirmButton.classList.remove("bg-blue-400");
+        confirmButton.classList.add("bg-red-400");
+        confirmButton.textContent = "CHOOSE A VALID USERNAME";
+
+        errorEl.textContent = errorMsg;
+        errorEl.classList.remove("opacity-0");
+        errorEl.classList.add("opacity-100");
     } else {
         confirmButton.disabled = false;
-        confirmButton.classList.remove("bg-blue-400");
-        confirmButton.classList.add("bg-blue-600");
+        confirmButton.classList.remove("bg-red-400");
+        confirmButton.classList.add("bg-blue-400");
+        confirmButton.textContent = "CONTINUE";
+
+        errorEl.classList.remove("opacity-100");
+        errorEl.classList.add("opacity-0");
     }
 }
 
@@ -50,8 +76,10 @@ async function checkUsernameAndProceed() {
 
 function usernameErrorAnimation() {
     const errorEl = document.getElementById("username-error");
+    errorEl.textContent = "Username already taken.";
     errorEl.classList.remove("opacity-0");
     errorEl.classList.add("opacity-100");
+
     setTimeout(() => {
         errorEl.classList.remove("opacity-100");
         errorEl.classList.add("opacity-0");
