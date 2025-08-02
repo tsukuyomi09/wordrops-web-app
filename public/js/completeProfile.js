@@ -14,7 +14,7 @@ function checkUsername() {
         // reset state
         confirmButton.disabled = true;
         confirmButton.classList.remove("bg-blue-400");
-        confirmButton.classList.add("bg-red-400");
+        confirmButton.classList.add("bg-red-500");
         confirmButton.textContent = "CHOOSE A VALID USERNAME";
         errorEl.classList.add("opacity-0");
         return;
@@ -30,7 +30,7 @@ function checkUsername() {
     if (errorMsg) {
         confirmButton.disabled = true;
         confirmButton.classList.remove("bg-blue-400");
-        confirmButton.classList.add("bg-red-400");
+        confirmButton.classList.add("bg-red-500");
         confirmButton.textContent = "CHOOSE A VALID USERNAME";
 
         errorEl.textContent = errorMsg;
@@ -38,7 +38,7 @@ function checkUsername() {
         errorEl.classList.add("opacity-100");
     } else {
         confirmButton.disabled = false;
-        confirmButton.classList.remove("bg-red-400");
+        confirmButton.classList.remove("bg-red-500");
         confirmButton.classList.add("bg-blue-400");
         confirmButton.textContent = "CONTINUE";
 
