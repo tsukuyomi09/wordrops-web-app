@@ -36,12 +36,12 @@ const sendRegistrationEmail = async (userEmail, verificationToken) => {
         to: userEmail,
         subject: "🎉 Welcome to wordrops.com!",
 
-        text: `To complete your registration, click the link below to verify your email address:\n\n${verificationUrl}\n\nQuesta è un'email automatica inviata da Wordrops. Non rispondere a questo indirizzo.`,
+        text: `To complete your registration, click the link below to verify your email address:\n\n${verificationUrl}\n\nThis is an automated email sent by Wordrops. Do not reply to this address.`,
 
         html: `
             <div style="font-family: sans-serif; color: #333;">
                 <img src="cid:wordropsLogo" alt="Wordrops" width="120" />
-                <p>Per completare la registrazione, clicca sul link qui sotto per verificare il tuo indirizzo email:</p>
+                <p>To complete your registration, click the link below to verify your email address:</p>
                 <p><a href="${verificationUrl}">${verificationUrl}</a></p>
                 <br />
                 <small>This is an automated email sent by Wordrops. Do not reply to this address.</small>
