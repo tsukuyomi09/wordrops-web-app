@@ -19,9 +19,27 @@ router.post("/:gameId", checkAuth, async (req, res) => {
     if (game.readyPlayersCount.size === 5) {
         game.status = "in-progress";
         game.readyPlayersCount.clear();
-        startCountdown(gameId);
+        startCountdown(gameId, false);
         req.io.to(gameId).emit("game-ready-popup");
         savePlayersDb(game, gameId);
+        const gameAfter = activeGames.get(gameId);
+        console.log("\n--- GAME STATUS DOPO START COUNTDOWN ---");
+        console.log(
+            "countdownStart:",
+            gameAfter.countdownStart,
+            typeof gameAfter.countdownStart
+        );
+        console.log(
+            "countdownEnd:",
+            gameAfter.countdownEnd,
+            typeof gameAfter.countdownEnd
+        );
+        console.log(
+            "countdownDuration:",
+            gameAfter.countdownDuration,
+            typeof gameAfter.countdownDuration
+        );
+        console.log("-------------------------\n");
         return res.json({ status: "in-progress" });
     }
 

@@ -6,7 +6,7 @@ const { saveGameToDB } = require("../activeGameDB/saveActiveGame");
 
 const { activeGames } = require("./gameManager");
 
-async function startCountdown(gameId) {
+async function startCountdown(gameId, isRestart = false) {
     const io = getSocket();
     const game = activeGames.get(gameId);
     if (!game) {
@@ -14,9 +14,15 @@ async function startCountdown(gameId) {
         return;
     }
 
-    const now = Date.now();
-    game.countdownStart = now;
-    game.countdownEnd = now + game.countdownDuration;
+    if (!isRestart) {
+        const now = Date.now();
+        game.countdownStart = now;
+        game.countdownEnd = now + game.countdownDuration;
+    } else {
+        const now = Date.now();
+        const elapsed = now - new Date(game.countdownStart).getTime();
+        game.countdownEnd = now + (game.countdownDuration - elapsed);
+    }
 
     if (game.countdownInterval) {
         clearInterval(game.countdownInterval);
@@ -27,6 +33,12 @@ async function startCountdown(gameId) {
     } catch (err) {
         console.error("Errore salvataggio gioco a inizio countdown:", err);
     }
+
+    console.log(
+        "countdownStart type:",
+        typeof game.countdownStart,
+        game.countdownStart
+    );
 
     game.countdownInterval = setInterval(async () => {
         const remainingTime = game.countdownEnd - Date.now();

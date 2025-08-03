@@ -20,6 +20,9 @@ const {
     loadNotificationsIntoMap,
 } = require("./src/services/notificationLoader");
 const { loadPlayerStatsIntoMap } = require("./src/utils/usersStatsLoader");
+const {
+    loadActivePlayersIntoMap,
+} = require("./src/utils/loadActivePlayersIntoMap");
 const { loadActiveGames } = require("./src/utils/loadActiveGames");
 const privacyTranslations = require("./locales/privacyPageTranslations");
 const termsAndConditionsTranslations = require("./locales/termsAndConditionsPageTranslations");
@@ -241,9 +244,14 @@ app.get("/terms-and-conditions", (req, res) => {
     res.render("terms-and-conditions", { texts, lang });
 });
 
-// we keep the register page hidden for now
 app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "register.html"));
+});
+app.get("/forgot-password", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "forgot-password.html"));
+});
+app.get("/reset-password", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "reset-password.html"));
 });
 app.get("/game/:gameId", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "game.html"));
@@ -319,6 +327,7 @@ app.use("/leaderboard", leaderboardRoute);
         await loadNotificationsIntoMap();
         await loadPlayerStatsIntoMap();
         await loadActiveGames();
+        await loadActivePlayersIntoMap();
 
         server.listen(port, "0.0.0.0", (err) => {
             if (err) {

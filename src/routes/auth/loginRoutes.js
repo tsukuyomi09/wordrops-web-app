@@ -13,9 +13,7 @@ router.post("/", async (req, res) => {
 
     try {
         const user = await getUserByEmail(userEmail);
-        if (process.env.NODE_ENV === "production") {
-            await verifyPassword(user.password, userPassword);
-        }
+        await verifyPassword(user.password, userPassword);
         if (user.verified !== true) {
             return res.status(401).json({
                 error: "unverified_email",

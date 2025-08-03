@@ -1,4 +1,4 @@
-const { playersMap } = require("../services/gameManager");
+const { activePlayersMap } = require("../services/gameManager");
 
 async function handlePlayersMap(game) {
     if (!game || !Array.isArray(game.players)) {
@@ -10,7 +10,7 @@ async function handlePlayersMap(game) {
 
     game.players.forEach((player) => {
         const playerId = player.user_id;
-        const playerData = playersMap.get(playerId);
+        const playerData = activePlayersMap.get(playerId);
 
         if (!playerData) return;
 
@@ -18,7 +18,7 @@ async function handlePlayersMap(game) {
             delete playerData.games[game.gameId];
         }
         if (Object.keys(playerData.games).length === 0) {
-            playersMap.delete(playerId);
+            activePlayersMap.delete(playerId);
         }
     });
 }

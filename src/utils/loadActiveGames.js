@@ -1,5 +1,6 @@
 const { client } = require("../database/db");
 const { activeGames } = require("../services/gameManager");
+const { startCountdown } = require("../services/gameCountdownStart");
 
 async function loadActiveGames() {
     try {
@@ -15,50 +16,40 @@ async function loadActiveGames() {
                 countdown_start,
                 started_at,
                 turn_order,
-                players
+                players,
+                chapters
             FROM active_games
         `);
 
-        for (const row of result.rows) {
-            const {
-                game_id,
-                game_type,
-                game_speed,
-                game_lang,
-                status,
-                turn_index,
-                countdown_duration,
-                countdown_start,
-                started_at,
-                turn_order,
-                players,
-            } = row;
+        await Promise.all(
+            result.rows.map(async (row) => {
+                const game = {
+                    gameId: row.game_id,
+                    gameType: row.game_type,
+                    gameSpeed: row.game_speed,
+                    game_lang: row.game_lang,
+                    status: row.status,
+                    turnIndex: row.turn_index,
+                    countdownDuration: Number(row.countdown_duration),
+                    countdownStart: new Date(row.countdown_start).getTime(),
+                    countdownEnd: null,
+                    countdownInterval: null,
+                    startedAt: row.started_at,
+                    turnOrder: safeParseJSON(row.turn_order),
+                    players: safeParseJSON(row.players),
+                    chapters: row.chapters || [],
+                    votes: {},
+                    chat: [],
+                    publishStatus: null,
+                    readyPlayersCount: new Set(),
+                    chapterReadMap: new Map(),
+                    connections: [],
+                };
 
-            const game = {
-                gameId: row.game_id,
-                gameType: row.game_type,
-                gameSpeed: row.game_speed,
-                game_lang: row.game_lang,
-                status: row.status,
-                turnIndex: row.turn_index,
-                countdownDuration: row.countdown_duration,
-                countdownStart: row.countdown_start,
-                countdownEnd: null,
-                countdownInterval: null,
-                startedAt: row.started_at,
-                turnOrder: safeParseJSON(row.turn_order),
-                players: safeParseJSON(row.players),
-                chapters: [],
-                votes: {},
-                chat: [],
-                publishStatus: null,
-                readyPlayersCount: new Set(),
-                chapterReadMap: new Map(),
-                connections: [],
-            };
-
-            activeGames.set(game_id, game);
-        }
+                activeGames.set(row.game_id, game);
+                await startCountdown(row.game_id, true);
+            })
+        );
 
         console.log("------ ACTIVE GAMES ------");
         for (const [gameId, gameData] of activeGames.entries()) {
