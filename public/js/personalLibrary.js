@@ -100,7 +100,7 @@ function openBookOverlay(book, storyDetails) {
                     <div class="size-10 rounded-lg overflow-hidden mr-2">
                         <img src="/images/avatars/${item.avatar}.png" alt="Autore" class="w-full h-full object-contain" />
                     </div>
-                    <span class="text-mg md:text-lg font-semibold ">${item.username}</span>
+                    <span class="text-md md:text-lg font-semibold ">${item.username}</span>
                 </a>
             </div>
 

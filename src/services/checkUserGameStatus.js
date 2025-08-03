@@ -1,9 +1,9 @@
-const { playersMap } = require("./gameManager");
+const { activePlayersMap } = require("./gameManager");
 
 const checkUserGameStatus = (req, res, next) => {
     const user_id = req.user_id;
-    if (playersMap.has(user_id)) {
-        const games = playersMap.get(user_id).games;
+    if (activePlayersMap.has(user_id)) {
+        const games = activePlayersMap.get(user_id).games;
         const gameId = req.params.gameId;
         if (games[gameId]) {
             req.isInGame = true;

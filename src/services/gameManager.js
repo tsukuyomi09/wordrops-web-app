@@ -1,7 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
+const { saveActivePlayersDB } = require("../activeGameDB/saveActivePlayersDB");
 
 const activeGames = new Map();
-const playersMap = new Map();
+const activePlayersMap = new Map();
 
 async function createGameAndAssignPlayers(game) {
     newGameId = uuidv4();
@@ -20,6 +21,17 @@ async function createGameAndAssignPlayers(game) {
             );
         });
 
+        const playersData = players.map((player) => ({
+            user_id: player.user_id,
+            game_id: newGameId,
+            status: "in_progress",
+            game_type: gameType,
+            game_speed: gameSpeed,
+            game_lang: game_lang,
+        }));
+
+        await saveActivePlayersDB(playersData);
+
         const turnOrder = game.players
             .map((player) => ({
                 user_id: player.user_id,
@@ -28,10 +40,10 @@ async function createGameAndAssignPlayers(game) {
             }))
             .sort(() => Math.random() - 0.5);
 
-        let countdownDuration = 60 * 60 * 1000; // 1 hour
-        if (gameSpeed === "slow") {
-            countdownDuration = 12 * 60 * 60 * 1000; // 12 hours
-        }
+        let countdownDuration = 30 * 1000; // 1 hour
+        // if (gameSpeed === "slow") {
+        //     countdownDuration = 12 * 60 * 60 * 1000; // 12 hours
+        // }
 
         activeGames.set(newGameId, {
             gameId: newGameId,
@@ -57,14 +69,22 @@ async function createGameAndAssignPlayers(game) {
         });
 
         console.log("------ PLAYERS MAP ------");
-        for (const [user_id, data] of playersMap.entries()) {
-            console.log(`Player ${user_id}:`, JSON.stringify(data, null, 2));
+        for (const [user_id, data] of activePlayersMap.entries()) {
+            console.log(`Player ${user_id} (type: ${typeof user_id})`);
+            for (const [game_id, gameData] of Object.entries(data.games)) {
+                console.log(
+                    `  → Game ID: ${game_id} (type: ${typeof game_id}) - status: ${
+                        gameData.status
+                    }, lang: ${gameData.game_lang}`
+                );
+            }
         }
-        console.log("------ ACTIVE GAMES ------");
-        for (const [gameId, gameData] of activeGames.entries()) {
-            console.log(`Game ${gameId}:`);
-            console.dir(gameData, { depth: null });
-        }
+
+        // console.log("------ ACTIVE GAMES ------");
+        // for (const [gameId, gameData] of activeGames.entries()) {
+        //     console.log(`Game ${gameId}:`);
+        //     console.dir(gameData, { depth: null });
+        // }
         return { gameId: newGameId, turnOrder };
     } catch (err) {
         throw err;
@@ -79,19 +99,19 @@ function addGameForPlayer(
     gameSpeed,
     game_lang
 ) {
-    if (!playersMap.has(user_id)) {
-        playersMap.set(user_id, {
+    if (!activePlayersMap.has(user_id)) {
+        activePlayersMap.set(user_id, {
             games: {},
         });
     }
 
-    const playerData = playersMap.get(user_id);
+    const playerData = activePlayersMap.get(user_id);
     playerData.games[gameId] = { status, gameType, gameSpeed, game_lang };
-    playersMap.set(user_id, playerData);
+    activePlayersMap.set(user_id, playerData);
 }
 
 module.exports = {
     createGameAndAssignPlayers,
     activeGames,
-    playersMap,
+    activePlayersMap,
 };

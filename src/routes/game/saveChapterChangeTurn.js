@@ -79,7 +79,7 @@ router.post("/:gameId", checkAuth, async (req, res) => {
 
     game.turnIndex = (turnIndex + 1) % game.turnOrder.length;
 
-    startCountdown(gameId);
+    startCountdown(gameId, false);
 
     req.io.to(gameId).emit("nextChapterUpdate", {
         gameId: gameId,
