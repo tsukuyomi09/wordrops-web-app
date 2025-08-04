@@ -1,6 +1,68 @@
+const confirmPasswordInput = document.getElementById("confirm-password");
+const loginBtn = document.getElementById("login-btn");
+const registerBtn = document.getElementById("register-btn");
+const googleLog = document.getElementById("buttonDiv");
+const toggleText = document.getElementById("toggle-text");
+const toggleButton = document.getElementById("toggle-button");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const errorEl = document.getElementById("login-error");
+const registrationForm = document.getElementById("registrationForm");
+const matchMsg = document.getElementById("password-match-msg");
+
+let isRegistering = false;
+
+function toggleMode() {
+    isRegistering = !isRegistering;
+
+    if (isRegistering) {
+        confirmPasswordInput.classList.remove("hidden");
+        loginBtn.classList.add("hidden");
+        googleLog.classList.add("hidden");
+        registerBtn.classList.remove("hidden");
+
+        toggleText.textContent = "Already have an account?";
+        toggleButton.textContent = "Login";
+    } else {
+        confirmPasswordInput.classList.add("hidden");
+        loginBtn.classList.remove("hidden");
+        googleLog.classList.remove("hidden");
+        registerBtn.classList.add("hidden");
+
+        toggleText.textContent = "Don't have an account?";
+        toggleButton.textContent = "Create one";
+    }
+}
+
+confirmPasswordInput.addEventListener("input", () => {
+    if (confirmPasswordInput.value === "") {
+        confirmPasswordInput.classList.remove(
+            "border-red-500",
+            "border-green-500"
+        );
+        matchMsg.classList.add("hidden");
+        return;
+    }
+
+    if (confirmPasswordInput.value === passwordInput.value) {
+        confirmPasswordInput.classList.remove("border-red-500");
+        confirmPasswordInput.classList.add("border-green-500");
+        matchMsg.classList.add("hidden");
+    } else {
+        confirmPasswordInput.classList.remove("border-green-500");
+        confirmPasswordInput.classList.add("border-red-500");
+        matchMsg.classList.remove("hidden");
+    }
+});
+
 async function registerUser() {
-    const userEmail = document.getElementById("email").value;
-    const userPassword = document.getElementById("password").value;
+    const userEmail = emailInput.value;
+    const userPassword = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (userPassword !== confirmPassword) {
+        return;
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const lang = urlParams.get("lang") || "en";
@@ -35,8 +97,8 @@ async function registerUser() {
 }
 
 async function loginUser() {
-    const userEmail = document.getElementById("email").value;
-    const userPassword = document.getElementById("password").value;
+    const userEmail = emailInput.value;
+    const userPassword = passwordInput.value;
 
     try {
         const response = await fetch("/auth/login", {

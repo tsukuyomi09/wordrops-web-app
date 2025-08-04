@@ -150,34 +150,53 @@
                             id="password"
                             class="p-2 rounded-lg mb-4 border border-blue-400 w-full"
                             type="password"
-                            placeholder="Password"
+                            placeholder="password"
                             autocomplete="new-password"
                             required
                         />
-                        <br />
-                        <div
-                            style="
-                                display: flex;
-                                gap: 16px;
-                                align-items: center;
-                            "
+                        <input
+                            id="confirm-password"
+                            class="p-2 rounded-lg mb-4 border border-blue-400 w-full hidden"
+                            type="password"
+                            placeholder="Confirm Password"
+                            autocomplete="new-password"
+                        />
+                        <span
+                            id="password-match-msg"
+                            class="text-red-500 text-sm mb-2 hidden"
                         >
-                            <button
-                                class="cursor-pointer p-2 border-2 w-full font-semibold rounded-lg px-4 text-sg text-white bg-blue-400 hover:bg-blue-600"
-                                type="button"
-                                onclick="registerUser()"
-                            >
-                                CREATE
-                            </button>
-                            <button
-                                class="cursor-pointer p-2 border-2 w-full font-semibold rounded-lg px-4 text-sg text-white bg-green-400 hover:bg-green-500"
-                                type="button"
-                                onclick="loginUser()"
-                            >
-                                LOGIN
-                            </button>
-                        </div>
+                            Passwords do not match
+                        </span>
+                        <br />
+                        <button
+                            id="register-btn"
+                            class="cursor-pointer p-2 border-2 w-full font-semibold rounded-lg px-4 text-sg text-white bg-blue-400 hover:bg-blue-600 hidden"
+                            type="button"
+                            onclick="registerUser()"
+                        >
+                            CREATE
+                        </button>
+                        <button
+                            id="login-btn"
+                            class="cursor-pointer p-2 border-2 w-full font-semibold rounded-lg px-4 text-sg text-white bg-green-400 hover:bg-green-500"
+                            type="button"
+                            onclick="loginUser()"
+                        >
+                            LOGIN
+                        </button>
                     </form>
+                    <div class="w-full h-px bg-gray-200 my-6"></div>
+
+                    <p class="text-sm text-gray-600">
+                        <span id="toggle-text">Don't have an account?</span>
+                        <button
+                            id="toggle-button"
+                            class="text-blue-600 underline ml-1 cursor-pointer"
+                            onclick="toggleMode()"
+                        >
+                            Create one
+                        </button>
+                    </p>
 
                     <div
                         id="buttonDiv"
